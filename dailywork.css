@@ -1,0 +1,505 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#cho
+{
+    display: flex;
+    gap: 50px;
+    margin-bottom: 100px;
+}
+#typech
+{
+  width: 350px; /* Set the desired width */
+  height: 50px; /* Set the desired height */
+  font-size: 24px; /* Adjust font size for better readability */
+  padding: 5px;
+}
+#com {
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+img {
+    border-radius: 35px;
+}
+
+h2 {
+    font-size: 15px;
+    font-weight: 1900;
+}
+
+#userForm1 {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+#userForm2 {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    margin-left: 450px;
+}
+ @page {
+    size: landscape;
+  }
+#userForm5 {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    margin-left: 300px;
+}
+
+
+#customerTable1 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    
+}
+
+#captureDiv1 table {
+  width: 100%; /* or fixed width if needed */
+  border-collapse: collapse;
+}
+
+#captureDiv1 th,
+#captureDiv1 td {
+  padding: 16px;         /* increases space inside cells */
+  font-size: 16px;       /* optional: larger text */
+  height: 50px;          /* increase row height */
+  border: 1px solid #000;
+}
+td {
+    border: 1px solid #ccc;
+    padding: 10px 12px;
+    text-align: center;
+}
+
+th {
+    background-color: green;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+    transition: background-color 0.2s ease-in-out;
+}
+
+td select,
+td input.finalPrice {
+    padding: 4px 6px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+#customerTable1 .finalPrice {
+    background-color: #e6f7ff;
+    font-weight: bold;
+    color: red;
+}
+
+#customeralldata
+{
+    margin-bottom: 250px;
+}
+#customerallamt
+{
+    margin-bottom: 100px;
+}
+#userForm3 {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    margin-left: 450px;
+}
+#btn43
+{
+    display: flex;
+    gap: 150px;
+    margin-top: 50px;
+}
+#userForm4 {
+    background-color: #ffffff;
+    padding: 20px;
+    padding-right: 60px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    margin-left: 250px;
+}
+
+#btn {
+    display: flex;
+    gap: 20px;
+}
+
+#ledger {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 30px;
+}
+
+#am {
+    font-size: 20px;
+}
+
+#col {
+    font-size: 36px;
+}
+
+#csize {
+    width: 120px;
+}
+
+#bal1 {
+    width: 130px;
+}
+
+#csize1 {
+    width: 200px;
+}
+#csize2 {
+    width: 350px;
+    /* Adjusted width for mobile */
+}
+
+
+
+#tally {
+    padding-top: 150px;
+    padding-bottom: 50px;
+}
+
+#search {
+    display: none;
+    width: 400px;
+    height: 60px;
+    border-radius: 25px;
+    outline: 5px solid lightgreen;
+    margin-bottom: 80px;
+    margin-top: 50px;
+    font-size: 25px;
+}
+
+#daycnt {
+    margin-left: 60px;
+    margin-top: 100px;
+    margin-bottom: 50px;
+}
+
+ #tday,
+    #wday,
+    #hday,
+    #twrk,
+    #proft,
+    #oil,
+    #avghrs,
+    #perdayhrs,
+    #imphrs {
+        font-size: 30px;
+    }
+
+button {
+    border-radius: 25px;
+}
+
+th,
+td {
+    height: 60px;
+    border: 2px solid black;
+    text-align: center;
+    vertical-align: middle;
+    border-spacing: 10px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 18px;
+}
+#submit4
+{
+    margin-left: 20px;
+}
+#name3
+{
+     width: 120%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 18px;
+}
+
+.round-image {
+    margin-left: 15px;
+    width: 100px;
+    height: 100px;
+    padding-bottom: 50px;
+}
+
+input[type="checkbox"] {
+    transform: scale(1.5);
+    -webkit-transform: scale(1.5);
+    margin-right: 40px;
+    height: 20px;
+    width: 20px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 30px 30px 30px 120px;
+    border: 1px solid #888;
+    width: 50%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+ 
+.container{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Creates 3 equal-width columns */
+  gap:50px;
+  margin-bottom: 100px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+#userForm{
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+#formContainer,
+#cardContainer,
+#popup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+    padding-bottom: 150px;
+}
+
+input,
+select {
+    border: 1px solid #cccccc;
+}
+
+input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+input[type="button"] {
+    border: none;
+    background-color: #007bff;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+input[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+h1 {
+    font-size: 20px;
+}
+
+/* .container {
+    margin-left: 110px;
+    display: flex;
+    gap: 20px;
+} */
+
+.box {
+    border: none;
+    border-radius: 10px;
+    width: 200px;
+    height: 150px;
+    text-align: center;
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+.box:hover {
+    transform: translateY(-10px);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.4), -10px -10px 20px rgba(255, 255, 255, 0.6);
+}
+
+.box h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    color: #333;
+}
+.row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.row input {
+    margin-right: 10px;
+    padding: 5px;
+}
+.add-button {
+    padding: 15px 10px;
+    background-color: #4CAF50;
+    color: white;
+    width:100%;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+.remove-button {
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 3px;
+}
+#total-trips {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    #ledger {
+        margin-top: 50px;
+    }
+
+    #com,
+    #userForm,
+    #btn,
+    #ledger,
+    .container {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #csize {
+        width: 80px;
+        /* Adjusted width for mobile */
+    }
+
+    #bal1 {
+        width: 90px;
+        /* Adjusted width for mobile */
+    }
+
+    #csize1 {
+        width: 150px;
+        /* Adjusted width for mobile */
+    }
+    #csize2 {
+        width: 200px;
+        /* Adjusted width for mobile */
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    #col,
+    #am {
+        font-size: 24px;
+    }
+
+    #search {
+        width: 80%;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .box {
+        width: 100%;
+    }
+
+    #popup {
+        width: 90%;
+    }
+
+    input[type="button"] {
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    #tday,
+    #wday,
+    #hday,
+    #twrk,
+    #proft,
+    #oil,
+    #avghrs,
+    #perdayhrs,
+    #imphrs {
+        font-size: 30px;
+    }
+   
+}

@@ -1,0 +1,96 @@
+ body {
+  font-family: sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+header {
+  background-color:rgb(148, 211, 227);
+  color: #ffffff;
+  padding: 20px;
+}
+
+
+nav {
+  background-color: #ffffff;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav a {
+  color: #000000;
+  text-decoration: none;
+  padding: 10px;
+}
+
+nav a:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+section {
+  padding: 20px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+p {
+  font-size: 16px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.section-home {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.section-about {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.section-resume {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.section-certificate {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.section-certificate img {
+  width: 100%;
+}
+
+.section-certificate h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.section-certificate p {
+  font-size: 16px;
+}
+
+.section-achievements {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.section-contacts {
+  background-color: #ffffff;
+  color: #000000;
+}

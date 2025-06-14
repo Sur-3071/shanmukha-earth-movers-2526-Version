@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Work Data</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dailywork.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/x-icon" href="">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti/dist/confetti.browser.min.js"></script>
+    <!-- Include confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <script type="module">
+
+        const triggerConfetti = () => {
+            confetti({
+                particleCount: 100,
+                spread: 90,
+                origin: { y: 0.6 },
+                colors: ['#FF4500', '#FF8C00', '#FFD700', '#32CD32', '#00CED1'],
+            });
+        };
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "tractor-driver-data.firebaseapp.com",
+            projectId: "tractor-driver-data",
+            storageBucket: "tractor-driver-data.appspot.com",
+            messagingSenderId: "688935767962",
+            appId: "1:688935767962:web:d3d8d7569fd2470dfef423"
+        };
+
+        const names = [];
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db2 = getDatabase(app);
+
+        async function DayCountcal() {
+            try {
+                // Access the database and retrieve data
+                const dataRefget = ref(db2, `Daily Work`);
+                const snapshot = await get(dataRefget);
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    generateTable(data);
+                } else {
+                    alert("No data available.");
+                }
+            } catch (error) {
+                alert("Error occurred while fetching data 3071");
+            }
+        }
+
+        async function selectnames() {
+            try {
+                const dataRefget = ref(db2, `Customers`);
+                const snapshot = await get(dataRefget);
+
+                // Check if data exists
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    generateName(data);
+                } else {
+
+                    alert("No data available for the selected date.");
+                }
+            } catch (error) {
+                console.error("Detailed error: ", error);
+                alert("Error occurred while fetching data 1234");
+            }
+        }
+
+        function generateName(data) {
+            for (const customerPhone in data) {
+                if (data.hasOwnProperty(customerPhone)) {
+                    const activity = data[customerPhone];
+                    if (customerPhone !== "Customers" && activity.Name !== undefined) {
+                        names.push(activity.Name);
+                    }
+                }
+            }
+            names.sort();
+            const selectElement = document.getElementById("name");
+
+            // Add a placeholder option at the top (optional)
+            const placeholderOption = document.createElement("option");
+            placeholderOption.value = "";
+            placeholderOption.text = "Select Customer Name";
+            placeholderOption.disabled = true;
+            placeholderOption.selected = true;
+            selectElement.appendChild(placeholderOption);
+
+            // Add each name as an optionv
+            // console.log("values are: " + names);
+            names.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.text = name;
+                selectElement.appendChild(option);
+            });
+            const selectElement1 = document.getElementById("name2");
+
+            // Add a placeholder option at the top (optional)
+            const placeholderOption1 = document.createElement("option");
+            placeholderOption1.value = "";
+            placeholderOption1.text = "Select Customer Name";
+            placeholderOption1.disabled = true;
+            placeholderOption1.selected = true;
+            selectElement1.appendChild(placeholderOption1);
+
+            // Add each name as an option
+            // console.log("values are: " + names);
+            names.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.text = name;
+                selectElement1.appendChild(option);
+            });
+            const selectElement2 = document.getElementById("name3");
+
+            // Add a placeholder option at the top (optional)
+            const placeholderOption2 = document.createElement("option");
+            placeholderOption2.value = "";
+            placeholderOption2.text = "Select Customer Name";
+            placeholderOption2.disabled = true;
+            placeholderOption2.selected = true;
+            selectElement2.appendChild(placeholderOption2);
+
+            // Add each name as an option
+            // console.log("values are: " + names);
+            names.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.text = name;
+                selectElement2.appendChild(option);
+            });
+
+            const selectElement3 = document.getElementById("name4");
+
+            // Add a placeholder option at the top (optional)
+            const placeholderOption3 = document.createElement("option");
+            placeholderOption3.value = "";
+            placeholderOption3.text = "Select Customer Name";
+            placeholderOption3.disabled = true;
+            placeholderOption3.selected = true;
+            selectElement3.appendChild(placeholderOption3);
+
+            // Add each name as an option
+            // console.log("values are: " + names);
+            names.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.text = name;
+                selectElement3.appendChild(option);
+            });
+            // console.log(names);
+        }
+
+
+
+        function generateTable(data) {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+
+            var l = [];
+            var workday = 0;
+            var months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            var oil = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            var totalDays = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            var worked = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            var holiday = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            var profit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            var recovery = 0;
+            for (const customerPhone in data) {
+                if (data.hasOwnProperty(customerPhone)) {
+                    const activity = data[customerPhone];
+                    if (activity.Payment === "UnPaid") {
+                        recovery += parseInt(activity.Price);
+                    }
+                    var dte = parseInt(activity.Date[8] + activity.Date[9]);
+                    var mon = parseInt(activity.Date[5] + activity.Date[6]);
+                    // if (dte < 10 || (dte >= 10 && parseInt(month) != mon)) {
+                    if (dte < 10) {
+                        if (mon === 1) {
+                            mon = 13
+                        }
+                        // console.log(activity.Date,activity.Price);
+                        var amt = months[mon - 1] + parseInt(activity.Price);
+                        var oilamt = oil[mon - 1] + parseInt(activity.Disel);
+                        months[mon - 1] = amt;
+                        oil[mon - 1] = oilamt;
+
+                    }
+                    else {
+                        // console.log(activity.Date,activity.Price);
+                        var amt = months[mon] + parseInt(activity.Price);
+                        var oilamt = oil[mon] + parseInt(activity.Disel);
+                        months[mon] = amt;
+                        oil[mon] = oilamt;
+
+                    }
+                    if (!l.includes(activity.Date)) {
+                        workday += 1;
+                        l.push(activity.Date);
+                    }
+
+                    // }
+                }
+            }
+            for (const dtss of l) {
+                var dte1 = parseInt(dtss.slice(8, 10));  // Extract day
+                var mon1 = parseInt(dtss.slice(5, 7));   // Extract month
+                if (dte1 < 10) {
+                    if (mon1 === 1) {
+                        mon1 = 13;
+                    }
+                    worked[mon1 - 1] += 1;
+                }
+                else {
+                    worked[mon1] += 1;
+
+                }
+            }
+            for (var i = 1; i < 13; i++) {
+                holiday[i] = totalDays[i] - worked[i];
+                profit[i] = months[i] - oil[i] - worked[i] * 335 - totalDays[i] * 2534;
+
+            }
+
+            const sortedDates = l.sort((a, b) => new Date(a) - new Date(b));
+            var dat1 = sortedDates[0];
+            var dat2 = year + "-" + month + "-" + day;
+            const date1 = new Date(dat1);
+            const date2 = new Date(dat2);
+            const differenceInMilliseconds = date2 - date1;
+            const differenceInDays = (differenceInMilliseconds / (1000 * 60 * 60 * 24)) + 1;
+            const holidays = differenceInDays - workday;
+            document.getElementById("tday").innerText = differenceInDays;
+            document.getElementById("tday").style.color = "red";
+            document.getElementById("hday").style.color = "green";
+            document.getElementById("wday").innerText = workday;
+            document.getElementById("hday").innerText = holidays;
+            const startConfetti = () => {
+                let count = 0;
+                const interval = setInterval(() => {
+                    triggerConfetti();
+                    count++;
+                    if (count >= 2) {
+                        clearInterval(interval); // Stop after 5 times
+                    }
+                }, 2000); // 2000 milliseconds = 2 seconds
+            };
+            startConfetti();
+            document.querySelector('.confet').addEventListener('click', startConfetti);
+            const labels = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+
+
+            const income = months.slice(1);
+
+            const customData = profit.slice(1).map((p, i) => ({
+                profit: p,
+                worked: worked[i + 1],
+                totalDays: totalDays[i + 1],
+                holiday: holiday[i + 1],
+                oil: oil[i + 1]
+            }));
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Income',
+                        data: income,
+                        backgroundColor: profit.slice(1).map(p => p >= 0 ? 'rgba(0, 200, 100, 0.7)' : 'rgba(255, 50, 50, 0.7)'),
+                        custom: customData
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            max: 350000,
+                            ticks: {
+                                stepSize: 25000
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const index = context.dataIndex;
+                                    const dataset = context.dataset;
+                                    const income = dataset.data[index];
+                                    const custom = dataset.custom[index];
+                                    const profitVal = custom.profit;
+                                    const profitLabel = profitVal >= 0
+                                        ? `Profit: ₹${profitVal.toLocaleString()}`
+                                        : `Loss: ₹${Math.abs(profitVal).toLocaleString()}`;
+
+                                    const totalMinutes = income / 16.6;
+                                    const hours = Math.floor((totalMinutes / custom.totalDays) / 60);
+                                    const minutes = Math.round((totalMinutes / custom.totalDays) % 60);
+
+                                    const Totalhrs = Math.round(income / 1000);
+                                    const disel = Math.round(custom.oil / Totalhrs);
+                                    return [
+                                        `Income: ₹${income.toLocaleString()}`,
+                                        profitLabel,
+                                        `Total Hrs: ${Totalhrs}Hrs`,
+                                        `Avg Hrs: ${hours}hrs ${minutes}min`,
+                                        `Oil/Hrs: ${disel} RS`,
+                                        `Total Days: ${custom.totalDays}`,
+                                        `Days Worked: ${custom.worked}`,
+                                        `Holidays: ${custom.holiday}`,
+                                        `Oil Used: ${custom.oil} RS`
+                                    ];
+                                },
+                                labelTextColor: function (context) {
+                                    const profit = context.dataset.custom[context.dataIndex].profit;
+                                    return profit >= 0 ? 'green' : 'red';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            var totalwork = 0;
+            var proft = 0;
+            var oila = 0;
+            for (var i = 0; i < 13; i++) {
+                totalwork += months[i];
+                oila += oil[i];
+            }
+            var avghrss = parseInt((totalwork / 1000) / differenceInDays);
+            var avgmin = parseInt((((totalwork / 1000) % differenceInDays) / differenceInDays) * 60);
+            var percen = parseInt(((totalwork) / (differenceInDays * 8000)) * 100);
+            var imprhrs = parseInt((((365 * 8000) - totalwork) / (365 - differenceInDays)) / 1000)
+            var impmin = parseInt((((((365 * 8000) - totalwork) / (365 - differenceInDays)) / 1000) - imprhrs) * 60)
+            proft = totalwork - workday * 335 - differenceInDays * 2534 - oila;
+            // console.log(profit);
+            document.getElementById("twrk").innerHTML = moneyconvert(totalwork);
+            document.getElementById("proft").innerHTML = moneyconvert(proft);
+            document.getElementById("oil").innerHTML = moneyconvert(oila);
+            document.getElementById("avghrs").innerHTML = avghrss + "Hrs  " + avgmin + "Min";
+            document.getElementById("perdayhrs").innerHTML = moneyconvert(recovery);
+            document.getElementById("imphrs").innerHTML = imprhrs + " Hrs   " + impmin + " Min";
+            document.getElementById("proft").style.color = "skyblue";
+            document.getElementById("imphrs").style.color = "red";
+            document.getElementById("avghrs").style.color = "green";
+        }
+        // Call DayCountcal when the page is loaded
+        window.addEventListener('load', DayCountcal);
+        window.addEventListener('load', selectnames);
+    </script>
+</head>
+
+<body style="background-color: antiquewhite;">
+    <div id="home">
+        <div id="com">
+            <img src="company.png" style="padding-left: 20px;">
+        </div>
+        <h2 align="center" style="font-size: 35px;" id="heading">Daily Work Data</h2>
+    </div>
+    <div id="cho">
+        <input type="button" value="Add Customer" id="addcus" class="confet">
+        <input type="button" value="Add Work" id="addwork" class="confet">
+        <input type="button" value="Work analysis" id="analytics" class="confet">
+        <input type="button" value="Add Customer Amount" id="addcusamt" class="confet">
+        <input type="button" value="Customer Data" id="cusdta" class="confet" onclick="showCustomerData()">
+        <input type="button" value="Customer Bill" id="cusbill" class="confet" onclick="showCustomerBill()">
+    </div>
+    <div id="daycnt" style="display: none;">
+        <div class="container">
+            <!-- <div class="box" >
+                    <h2 style="color: rgb(75, 166, 236);">JCB Operator</h2>
+                    <img src="OPERATOR CHINNA.png" align="left" alt="Sample Image" class="round-image">
+                </div> -->
+            <div class="box" id="clickableImage">
+                <h2 style="color: rgb(75, 166, 236);">Total Days</h2>
+                <h1 id="tday"></h1>
+            </div>
+            <div class="box">
+                <h2 style="color: rgb(75, 166, 236);">Working Days</h2>
+                <h1 id="wday"></h1>
+            </div>
+            <div class="box">
+                <h2 style="color: rgb(75, 166, 236);">Holidays</h2>
+                <h1 id="hday"></h1>
+            </div>
+            <div class="box">
+                <h2 style="color: rgb(75, 166, 236);">Total Work Done</h2>
+                <h1 id="twrk"></h1>
+            </div>
+            <div class="box">
+                <h2 style="color: rgb(37, 188, 230);">Total Profit</h2>
+                <h1 id="proft"></h1>
+            </div>
+            <div class="box">
+                <h2 style="color: rgb(75, 166, 236);">Recovery Amount</h2>
+                <h1 id="perdayhrs"></h1>
+            </div>
+            <div class="box">
+                <h2 style="color: rgb(75, 166, 236);">Average Hours</h2>
+                <h1 id="avghrs"></h1>
+            </div>
+            <div class="box">
+                <h2 style="color: rgb(75, 166, 236);">Oil Amount</h2>
+                <h1 id="oil"></h1>
+            </div>
+            <div class="box">
+                <h2 style="color: rgb(75, 166, 236);">Improvement Hours</h2>
+                <h1 id="imphrs"></h1>
+            </div>
+        </div>
+
+    </div>
+    <canvas id="myChart" width="900" height="400" style="display: none;"></canvas>
+
+    <div id="formContainer" style="display: none;">
+        <form id="userForm1">
+            <input type="date" id="dat" name="dat" placeholder="Date" required>
+            <select id="name" name="name" placeholder="Customer Name" required></select>
+            <input type="text" id="vill" name="vill" placeholder="Village Name" required readonly>
+            <input type="tel" id="dis" name="dis" placeholder="Enter Disel Amount" required>
+            <input type="text" id="wid" name="wid" placeholder="Work Id" required>
+            <select id="worktype" required onchange="addflow()">
+                <option hidden>select Work Type</option>
+                <option>Hours</option>
+                <option>Loading</option>
+                <option>Contract</option>
+            </select>
+            <div id="hours" style="display: none;">
+                <input type="text" id="hrsrate" name="hrsrate" placeholder="Hours Price" onkeyup="timecal()" required>
+                <input type="time" id="stime" name="stime" placeholder="Starting Time" onchange="timecal()" required>
+                <input type="time" id="etime" name="etime" placeholder="Ending Time" onchange="timecal()" required>
+                <input type="text" id="ttime" name="ttime" placeholder="Total Time" readonly required>
+            </div>
+            <div id="loading" style="display: none;">
+                <input type="text" id="trprate" name="trprate" placeholder="Trip Price" onkeyup="tripprice()" required>
+                <div id="container1">
+                    <div class="row">
+                        <button class="add-button" onclick="addRow()">Add Driver</button>
+                    </div>
+                </div>
+                <textarea id="output" placeholder="All Drivers list" rows="4" cols="35"
+                    style="font-size: 20px; display: none;" readonly></textarea>
+                <input type="text" id="trips" placeholder="Number of Trips" readonly required>
+            </div>
+            <div id="contract" style="display: none;">
+                <input type="text" id="con" name="con" placeholder="Contract Amount" onkeyup="conprice()" required>
+            </div>
+            <input type="text" id="rate" name="rate" placeholder="Price" readonly required>
+            <input type="button" value="Add Data" id="submit1">
+        </form>
+    </div>
+    <div id="custContainer" style="display: none;">
+        <form id="userForm2">
+            <input type="text" id="name1" name="name" placeholder="Customer Name" required>
+            <input type="text" id="vil1" class=village name="vil" placeholder="Village" required>
+            <input type="text" id="cid" name="cid" placeholder="Customer Id" required readonly>
+            <input type="button" value="Add Data" id="submit2">
+        </form>
+    </div>
+    <div id="custamountcontainer" style="display: none;">
+        <form id="userForm3">
+            <input type="date" id="dat1" name="dat" placeholder="Date" required>
+            <select id="name2" name="name2" placeholder="Customer Name" required></select>
+            <input type="text" id="vil2" name="vil" class=village placeholder="Village" required readonly>
+            <input type="text" id="amt" name="amt" placeholder="Amount" required>
+            <input type="text" id="cid1" name="cid1" placeholder="Amount Id" required readonly>
+            <input type="button" value="Add Amount" id="submit3">
+        </form>
+    </div>
+    <div id="customerdata" style="display: none;">
+        <form id="userForm4">
+            <select id="name3" name="name3" placeholder="Customer Name"></select>
+            <input type="button" onclick="transalate()" value="Get Customer Data" id="submit4">
+        </form>
+    </div>
+
+    <div id="customerreceipt" style="display: none;">
+        <form id="userForm5">
+            <select id="name4" name="name4" placeholder="Customer Name"></select>
+            <input type="button" value="Get Customer Bill" id="submit5">
+        </form>
+    </div>
+    <div style="display: none;" id="nodata">
+        <h1 style="color: red;font-size: 50px;padding-left: 120px;">Customer Already Exist</h1>
+    </div>
+    <div style="display: none;" id="nodata1">
+        <img src="nodata.png">
+    </div>
+    <div style="margin-top: 100px;" id="captureDiv">
+        <h1 class="heading" id="cusname" style="font-size: 50px;  color: green;" align="center"></h1>
+        <div id="customeralldata">
+        </div>
+
+        <div>
+            <div id="customerallamt" style="width: 50%; margin-left: 400px;">
+            </div>
+        </div>
+        <div>
+            <div id="ledger" style="width: 50%; margin-left: 400px;">
+            </div>
+            <input type="button" class="heading" id="dnw3" onclick="captureDiv()" value="Screen Shot"
+                style="display: none; width: 150px; margin-left: 700px;"></input>
+
+        </div>
+    </div>
+
+    <div style="margin-top: 100px;" id="captureDiv1">
+        <h1 class="heading" id="cusname" style="font-size: 50px;  color: green;" align="center"></h1>
+        <div id="customeralldata2">
+        </div>
+
+        <div>
+            <div id="customerallamt2">
+            </div>
+        </div>
+        <div>
+            <div id="ledger2">
+            </div>
+        </div>
+        <div id="btn43">
+            <input type="button" class="heading" id="dnw1" style="display: none;" onclick="captureDiv1()"
+                value="Screen Shot"></input>
+            <input type="button" class="heading" id="dnw2" style="display: none;" onclick="updateTable()"
+                value="Update Table"></input>
+            <input type="button" class="heading" value="Modify Table" style="display: none;" id="submit6"></input>
+
+        </div>
+    </div>
+
+    <img src="done1.png" id="done" style="display: none;" height="100px" width="100px">
+
+
+    <marquee behavior="scroll" direction="left" scrollamount="10">
+        <img src="jcb.png" height="500px" width="500px" id="jcb">
+    </marquee>
+    <!-- Load the main script as a module -->
+    <script type="module" src="dailyworkdatabase.js"></script>
+    <script type="module" src="dailyworkid_retrive.js"></script>
+    <script src="dailywork.js"></script>
+    <script src="proxyurl.js"></script>
+    <script>
+
+        function showCustomerData() {
+            // Show customer data div
+            document.getElementById("captureDiv").style.display = "block";
+            document.getElementById("captureDiv1").style.display = "none";
+            document.getElementById("dnw1").style.display = "none";
+            document.getElementById("dnw2").style.display = "none";
+            document.getElementById("submit6").style.display = "none";
+
+
+            // Clear the contents of captureDiv1
+            document.getElementById("customeralldata2").innerHTML = "";
+            document.getElementById("customerallamt2").innerHTML = "";
+            document.getElementById("ledger2").innerHTML = "";
+        }
+
+        function showCustomerBill() {
+            // Show customer bill div
+            document.getElementById("captureDiv1").style.display = "block";
+            document.getElementById("captureDiv").style.display = "none";
+            document.getElementById("dnw3").style.display = "none";
+            document.getElementById("cusname").style.display = "none";
+            // Clear the contents of captureDiv
+            document.getElementById("customeralldata").innerHTML = "";
+            document.getElementById("customerallamt").innerHTML = "";
+            document.getElementById("ledger").innerHTML = "";
+        }
+        function captureDiv() {
+            const element = document.getElementById("captureDiv");
+
+            html2canvas(element, { scale: 2 }).then((canvas) => {
+                const link = document.createElement("a");
+                link.download = "screenshot.png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+        function captureDiv1() {
+            const element = document.getElementById("captureDiv1");
+
+            html2canvas(element, { scale: 2 }).then((canvas) => {
+                const link = document.createElement("a");
+                link.download = "screenshot.png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+
+        function preparePrintView() {
+            const cho = document.querySelector('#cho');
+            const userForm4 = document.querySelector('#userForm4');
+            const userForm5 = document.querySelector('#userForm5');
+            const download = document.querySelector('#dnw1');
+            const update = document.querySelector('#dnw2');
+            const down1 = document.querySelector('#dnw3');
+            const modify = document.querySelector('#submit6');
+
+            // Use visibility instead of display
+            cho.style.visibility = 'hidden';
+            userForm4.style.visibility = 'hidden';
+            userForm5.style.visibility = 'hidden';
+            download.style.visibility = 'hidden';
+            update.style.visibility = 'hidden';
+            modify.style.visibility = 'hidden';
+            down1.style.visibility = 'hidden';
+
+            window.onafterprint = function () {
+                // Restore visibility
+                cho.style.visibility = 'visible';
+                userForm4.style.visibility = 'visible';
+                userForm5.style.visibility = 'visible';
+                download.style.visibility = 'visible';
+                update.style.visibility = 'visible';
+                modify.style.visibility = 'visible';
+                down1.style.visibility = 'visible';
+            };
+
+            window.print();
+        }
+
+        function calculateFinalPrice(selectElem) {
+            const row = selectElem.closest("tr");
+            const type = row.getAttribute("data-type");
+            const trips = parseInt(row.getAttribute("data-trips") || "0");
+            const mins = parseInt(row.getAttribute("data-mins") || "0");
+            const rate = parseInt(selectElem.value);
+            let finalPrice = 0;
+
+            if (type === "Trips") {
+                finalPrice = rate * trips;
+            } else if (type === "Hours") {
+                finalPrice = Math.round((mins / 60) * rate);
+            }
+
+            const input = row.querySelector(".finalPrice");
+            input.value = finalPrice;
+
+            calculateTotalBill();
+        }
+
+        function calculateTotalBill() {
+            let sum = 0;
+            document.querySelectorAll(".finalPrice").forEach(input => {
+                sum += parseInt(input.value) || 0;
+            });
+            document.getElementById("totalBill").innerText = `₹${sum}`;
+        }
+
+        function updateTable() {
+            const table = document.getElementById("customerTable1");
+
+            for (let row of table.rows) {
+                for (let cell of row.cells) {
+                    const select = cell.querySelector("select");
+                    if (select) {
+                        const selectedValue = select.value;
+                        cell.textContent = selectedValue;  // Replace <select> with text
+                    }
+                }
+            }
+        }
+
+
+    </script>
+
+
+    <script>
+
+
+        function moneyconvert(number) {
+            let formatted = number.toLocaleString('en-IN');
+            return formatted;
+        }
+        // Button event listeners
+
+        document.getElementById('addwork').addEventListener('click', function () {
+            document.getElementById('formContainer').style.display = 'block';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('custamountcontainer').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+            let elements = document.getElementsByClassName("heading");
+
+
+        });
+        document.getElementById('cusbill').addEventListener('click', function () {
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('custamountcontainer').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'block';
+            let elements = document.getElementsByClassName("heading");
+
+
+        });
+
+        document.getElementById('addcus').addEventListener('click', function () {
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('custContainer').style.display = 'block';
+            document.getElementById('custamountcontainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+            let elements = document.getElementsByClassName("heading");
+
+
+        });
+        document.getElementById('addcusamt').addEventListener('click', function () {
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('custamountcontainer').style.display = 'block';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+            let elements = document.getElementsByClassName("heading");
+
+
+        });
+        document.getElementById('analytics').addEventListener('click', function () {
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'block';
+            document.getElementById('myChart').style.display = 'block';
+            document.getElementById('custamountcontainer').style.display = 'none'
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+            let elements = document.getElementsByClassName("heading");
+
+
+        });
+        document.getElementById('cusdta').addEventListener('click', function () {
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('custamountcontainer').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'block';
+            document.getElementById('customeralldata').style.display = 'block';
+            document.getElementById('customerallamt').style.display = 'block';
+            document.getElementById('ledger').style.display = 'block';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+
+
+
+        });
+
+
+    </script>
+</body>
+
+</html>

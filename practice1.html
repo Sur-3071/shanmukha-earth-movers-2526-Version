@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Screenshot Specific Div</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    #captureDiv {
+      width: 300px;
+      padding: 20px;
+      border: 2px solid #333;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    #screenshotBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #screenshotBtn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="captureDiv">
+    <h2>Hello Screenshot</h2>
+    <p>This is the content inside the div that will be captured.</p>
+  </div>
+
+  <button id="screenshotBtn" onclick="captureDiv()">Take Screenshot</button>
+
+  <script>
+    function captureDiv() {
+      const element = document.getElementById("captureDiv");
+
+      html2canvas(element, { scale: 2 }).then((canvas) => {
+        const link = document.createElement("a");
+        link.download = "screenshot.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+  </script>
+
+</body>
+</html>
