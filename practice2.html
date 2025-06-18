@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Financial Year Comparison Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef1f5;
+            margin: 0;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2b2b2b;
+            margin-bottom: 30px;
+        }
+
+        #chart-container {
+            width: 100%;
+            max-width: 1600px;
+            /* Increased width */
+            background: #ffffff;
+            margin: 40px auto;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        canvas#myChart {
+            width: 100% !important;
+            height: 500px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Financial Year Comparison (Aug–Jul)</h2>
+    <div id="chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        const months = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+
+        // Static Previous Year Data (2023–24)
+        const prevIncome = [120000, 85000, 130000, 75000, 125000, 100000, 90000, 140000, 135000, 115000, 105000, 80000];
+        const prevWorked = [26, 24, 27, 23, 25, 26, 24, 28, 27, 26, 25, 22];
+        const prevOil = [120000, 85000, 10000, 7000, 11000, 9500, 8000, 12500, 11500, 10800, 10000, 7800];
+        const totalDays = [31, 30, 31, 30, 31, 31, 29, 31, 30, 31, 30, 31];
+
+        const PER_DAY_COST = 2534;
+        const PER_WORKDAY_COST = 335;
+
+        const prevCustom = prevIncome.map((income, i) => {
+            const profit = income - (prevWorked[i] * PER_WORKDAY_COST + totalDays[i] * PER_DAY_COST + prevOil[i]);
+            return {
+                profit: profit,
+                worked: prevWorked[i],
+                totalDays: totalDays[i],
+                holiday: totalDays[i] - prevWorked[i],
+                oil: prevOil[i]
+            };
+        });
+
+        // These should come from generateTable(data) dynamically
+        // Here are dummy placeholders (you must replace these with actual logic in generateTable)
+        const currentIncome = [130000, 102000, 145000, 70000, 138000, 110000, 99000, 155000, 148000, 90000, 110000, 85000];
+        const currentWorked = [25, 26, 25, 24, 26, 26, 23, 29, 28, 24, 26, 23];
+        const currentOil = [11000, 9000, 11000, 6500, 12000, 10000, 8800, 13000, 11800, 9700, 10500, 7900];
+
+        const currentCustom = currentIncome.map((income, i) => {
+            const profit = income - (currentWorked[i] * PER_WORKDAY_COST + totalDays[i] * PER_DAY_COST + currentOil[i]);
+            return {
+                profit: profit,
+                worked: currentWorked[i],
+                totalDays: totalDays[i],
+                holiday: totalDays[i] - currentWorked[i],
+                oil: currentOil[i]
+            };
+        });
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        label: '2023–24',
+                        data: prevIncome,
+                        backgroundColor: prevCustom.map(val =>
+                            val.profit >= 0 ? 'rgba(0, 200, 100, 0.8)' : 'rgba(255, 70, 70, 0.8)'
+                        ),
+                        custom: prevCustom,
+                        categoryPercentage: 0.45,
+                        barPercentage: 0.9
+                    },
+                    {
+                        label: '2024–25',
+                        data: currentIncome,
+                        backgroundColor: currentCustom.map(val =>
+                            val.profit >= 0 ? 'rgba(0, 200, 100, 0.8)' : 'rgba(255, 70, 70, 0.8)'
+                        ),
+                        custom: currentCustom,
+                        categoryPercentage: 0.45,
+                        barPercentage: 0.9
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: false,
+                        ticks: { font: { size: 16 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 200000,
+                        ticks: {
+                            stepSize: 25000,
+                            font: { size: 14 }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Income (₹)',
+                            font: { size: 16 }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const index = context.dataIndex;
+                                const dataset = context.dataset;
+                                const income = dataset.data[index];
+                                const custom = dataset.custom[index];
+                                const profitVal = custom.profit;
+
+                                const profitLabel = profitVal >= 0
+                                    ? `Profit: ₹${profitVal.toLocaleString()}`
+                                    : `Loss: ₹${Math.abs(profitVal).toLocaleString()}`;
+
+                                const totalMinutes = income / 16.6;
+                                const hours = Math.floor((totalMinutes / custom.totalDays) / 60);
+                                const minutes = Math.round((totalMinutes / custom.totalDays) % 60);
+
+                                const Totalhrs = Math.round(income / 1000);
+                                const disel = Math.round(custom.oil / Totalhrs);
+
+                                return [
+                                    `Income: ₹${income.toLocaleString()}`,
+                                    profitLabel,
+                                    `Total Hrs: ${Totalhrs} hrs`,
+                                    `Avg Hrs: ${hours} hrs ${minutes} min`,
+                                    `Oil/Hrs: ₹${disel}`,
+                                    `Total Days: ${custom.totalDays}`,
+                                    `Worked: ${custom.worked}`,
+                                    `Holidays: ${custom.holiday}`,
+                                    `Oil Used: ₹${custom.oil}`
+                                ];
+                            }
+                        }
+                    },
+                    legend: {
+                        labels: { font: { size: 16 } }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,55 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Screenshot Specific Div</title>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <meta charset="UTF-8" />
+  <title>Financial Year Comparison Chart</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
   <style>
-    #captureDiv {
-      width: 300px;
-      padding: 20px;
-      border: 2px solid #333;
-      background-color: #f0f0f0;
-      font-family: Arial, sans-serif;
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #eef1f5;
+      margin: 0;
+      padding: 40px;
+      text-align: center;
     }
 
-    #screenshotBtn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
+    h2 {
+      color: #2b2b2b;
+      margin-bottom: 30px;
     }
 
-    #screenshotBtn:hover {
-      background-color: #0056b3;
+    #chart-container {
+      width: 95%;
+      max-width: 1600px;
+      margin: auto;
+      background: #ffffff;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    canvas {
+      height: 800px !important;
     }
   </style>
 </head>
 <body>
-
-  <div id="captureDiv">
-    <h2>Hello Screenshot</h2>
-    <p>This is the content inside the div that will be captured.</p>
+  <h2>Financial Year Comparison (Aug–Jul)</h2>
+  <div id="chart-container">
+    <canvas id="myChart"></canvas>
   </div>
 
-  <button id="screenshotBtn" onclick="captureDiv()">Take Screenshot</button>
-
   <script>
-    function captureDiv() {
-      const element = document.getElementById("captureDiv");
+    const months = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
 
-      html2canvas(element, { scale: 2 }).then((canvas) => {
-        const link = document.createElement("a");
-        link.download = "screenshot.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      });
-    }
+    const year1 = [120000, 85000, 130000, 75000, 125000, 100000, 90000, 140000, 135000, 115000, 105000, 80000];
+    const year2 = [130000, 102000, 145000, 70000, 138000, 110000, 99000, 155000, 148000, 90000, 110000, 85000];
+
+    const customYear1 = year1.map((val, i) => ({
+      profit: val - (i === 1 || i === 3 || i === 11 ? 125000 : 50000),
+      worked: 25,
+      totalDays: 31,
+      holiday: 6,
+      oil: 15000
+    }));
+
+    const customYear2 = year2.map((val, i) => ({
+      profit: val - (i === 3 || i === 9 || i === 11 ? 140000 : 55000),
+      worked: 26,
+      totalDays: 31,
+      holiday: 5,
+      oil: 16000
+    }));
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [
+          {
+            label: '2023–24',
+            data: year1,
+            backgroundColor: customYear1.map(val =>
+              val.profit >= 0 ? 'rgba(0, 200, 100, 0.8)' : 'rgba(255, 70, 70, 0.8)'
+            ),
+            custom: customYear1,
+            datalabels: {
+              anchor: 'end',
+              align: 'start',
+              formatter: (value, context) => {
+                const i = context.dataIndex;
+                const c = context.dataset.custom[i];
+                const income = value;
+                const profit = c.profit;
+                const profitLabel = profit >= 0 ? `Profit: ₹${profit.toLocaleString()}` : `Loss: ₹${Math.abs(profit).toLocaleString()}`;
+
+                const totalMinutes = income / 16.6;
+                const hours = Math.floor((totalMinutes / c.totalDays) / 60);
+                const minutes = Math.round((totalMinutes / c.totalDays) % 60);
+
+                const totalHrs = Math.round(income / 1000);
+                const disel = Math.round(c.oil / totalHrs);
+
+                return [
+                  `Income: ₹${income.toLocaleString()}`,
+                  profitLabel,
+                  `Total Hrs: ${totalHrs} hrs`,
+                  `Avg Hrs: ${hours} hrs ${minutes} min`,
+                  `Oil/Hrs: ₹${disel}`,
+                  `Total Days: ${c.totalDays}`,
+                  `Worked: ${c.worked}`,
+                  `Holidays: ${c.holiday}`,
+                  `Oil Used: ₹${c.oil}`
+                ];
+              },
+              color: '#000',
+              font: {
+                size: 11,
+                weight: 'normal'
+              }
+            },
+            categoryPercentage: 0.5,
+            barPercentage: 0.9
+          },
+          {
+            label: '2024–25',
+            data: year2,
+            backgroundColor: customYear2.map(val =>
+              val.profit >= 0 ? 'rgba(0, 200, 100, 0.8)' : 'rgba(255, 70, 70, 0.8)'
+            ),
+            custom: customYear2,
+            datalabels: {
+              anchor: 'end',
+              align: 'start',
+              formatter: (value, context) => {
+                const i = context.dataIndex;
+                const c = context.dataset.custom[i];
+                const income = value;
+                const profit = c.profit;
+                const profitLabel = profit >= 0 ? `Profit: ₹${profit.toLocaleString()}` : `Loss: ₹${Math.abs(profit).toLocaleString()}`;
+
+                const totalMinutes = income / 16.6;
+                const hours = Math.floor((totalMinutes / c.totalDays) / 60);
+                const minutes = Math.round((totalMinutes / c.totalDays) % 60);
+
+                const totalHrs = Math.round(income / 1000);
+                const disel = Math.round(c.oil / totalHrs);
+
+                return [
+                  `Income: ₹${income.toLocaleString()}`,
+                  profitLabel,
+                  `Total Hrs: ${totalHrs} hrs`,
+                  `Avg Hrs: ${hours} hrs ${minutes} min`,
+                  `Oil/Hrs: ₹${disel}`,
+                  `Total Days: ${c.totalDays}`,
+                  `Worked: ${c.worked}`,
+                  `Holidays: ${c.holiday}`,
+                  `Oil Used: ₹${c.oil}`
+                ];
+              },
+              color: '#000',
+              font: {
+                size: 11,
+                weight: 'normal'
+              }
+            },
+            categoryPercentage: 0.5,
+            barPercentage: 0.9
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            stacked: false,
+            ticks: {
+              font: {
+                size: 16
+              }
+            }
+          },
+          y: {
+            beginAtZero: true,
+            max: 200000,
+            ticks: {
+              stepSize: 25000,
+              font: {
+                size: 14
+              }
+            },
+            title: {
+              display: true,
+              text: 'Income (₹)',
+              font: {
+                size: 16
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            enabled: false
+          },
+          legend: {
+            labels: {
+              font: {
+                size: 16
+              }
+            }
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
   </script>
-
 </body>
 </html>

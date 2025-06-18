@@ -70,6 +70,13 @@ h2 {
     
 }
 
+#cho{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Creates 3 equal-width columns */
+  gap:50px;
+  margin-bottom: 100px;
+}
+
 #captureDiv1 table {
   width: 100%; /* or fixed width if needed */
   border-collapse: collapse;
@@ -125,6 +132,8 @@ td input.finalPrice {
 #customerallamt
 {
     margin-bottom: 100px;
+    width: 65%; 
+    margin-left: 250px;
 }
 #userForm3 {
     background-color: #ffffff;

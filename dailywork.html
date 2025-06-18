@@ -11,6 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti/dist/confetti.browser.min.js"></script>
     <!-- Include confetti library -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
 
     <script type="module">
 
@@ -288,16 +290,6 @@
                     }]
                 },
                 options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            min: 0,
-                            max: 350000,
-                            ticks: {
-                                stepSize: 25000
-                            }
-                        }
-                    },
                     plugins: {
                         tooltip: {
                             callbacks: {
@@ -314,9 +306,9 @@
                                     const totalMinutes = income / 16.6;
                                     const hours = Math.floor((totalMinutes / custom.totalDays) / 60);
                                     const minutes = Math.round((totalMinutes / custom.totalDays) % 60);
-
                                     const Totalhrs = Math.round(income / 1000);
                                     const disel = Math.round(custom.oil / Totalhrs);
+
                                     return [
                                         `Income: ₹${income.toLocaleString()}`,
                                         profitLabel,
@@ -334,10 +326,43 @@
                                     return profit >= 0 ? 'green' : 'red';
                                 }
                             }
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'start',
+                            color: 'black',
+                            font: {
+                                weight: 'bold',
+                                size: 12
+                            },
+                            formatter: function (value, context) {
+                                if (value === 0) return null; // Skip label if income is 0
+
+                                const index = context.dataIndex;
+                                const custom = context.dataset.custom[index];
+                                return [
+                                    `In: ₹${value.toLocaleString()}`,
+                                    `Oil: ₹${custom.oil}`,
+                                    `${custom.worked} days`
+                                ];
+                            }
+                        }
+
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            max: 350000,
+                            ticks: {
+                                stepSize: 25000
+                            }
                         }
                     }
-                }
+                },
+                plugins: [ChartDataLabels] // <-- Important
             });
+
             var totalwork = 0;
             var proft = 0;
             var oila = 0;
@@ -376,10 +401,10 @@
         <h2 align="center" style="font-size: 35px;" id="heading">Daily Work Data</h2>
     </div>
     <div id="cho">
-        <input type="button" value="Add Customer" id="addcus" class="confet">
-        <input type="button" value="Add Work" id="addwork" class="confet">
-        <input type="button" value="Work analysis" id="analytics" class="confet">
-        <input type="button" value="Add Customer Amount" id="addcusamt" class="confet">
+        <input type="button" value="Add Customer" id="addcus" class="confet" onclick="remainingbuttons()">
+        <input type="button" value="Add Work" id="addwork" class="confet" onclick="remainingbuttons()">
+        <input type="button" value="Work analysis" id="analytics" class="confet" onclick="remainingbuttons()">
+        <input type="button" value="Add Customer Amount" id="addcusamt" class="confet" onclick="remainingbuttons()">
         <input type="button" value="Customer Data" id="cusdta" class="confet" onclick="showCustomerData()">
         <input type="button" value="Customer Bill" id="cusbill" class="confet" onclick="showCustomerBill()">
     </div>
@@ -510,14 +535,14 @@
         </div>
 
         <div>
-            <div id="customerallamt" style="width: 50%; margin-left: 400px;">
+            <div id="customerallamt">
             </div>
         </div>
         <div>
-            <div id="ledger" style="width: 50%; margin-left: 400px;">
+            <div id="ledger" style="width: 50%; margin-left: 370px;">
             </div>
             <input type="button" class="heading" id="dnw3" onclick="captureDiv()" value="Screen Shot"
-                style="display: none; width: 150px; margin-left: 700px;"></input>
+                style="display: none; width: 150px; margin-left: 650px;"></input>
 
         </div>
     </div>
@@ -583,6 +608,23 @@
             document.getElementById("customeralldata").innerHTML = "";
             document.getElementById("customerallamt").innerHTML = "";
             document.getElementById("ledger").innerHTML = "";
+        }
+
+        function remainingbuttons() {
+            document.getElementById("captureDiv1").style.display = "none";
+            document.getElementById("captureDiv").style.display = "none";
+            document.getElementById("dnw3").style.display = "none";
+            document.getElementById("cusname").style.display = "none";
+            document.getElementById("customeralldata").innerHTML = "";
+            document.getElementById("customerallamt").innerHTML = "";
+            document.getElementById("ledger").innerHTML = "";
+            document.getElementById("dnw1").style.display = "none";
+            document.getElementById("dnw2").style.display = "none";
+            document.getElementById("submit6").style.display = "none";
+            document.getElementById("customeralldata2").innerHTML = "";
+            document.getElementById("customerallamt2").innerHTML = "";
+            document.getElementById("ledger2").innerHTML = "";
+
         }
         function captureDiv() {
             const element = document.getElementById("captureDiv");
