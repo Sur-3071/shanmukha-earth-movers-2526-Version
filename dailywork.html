@@ -328,18 +328,35 @@
                             }
                         },
                         datalabels: {
-                            anchor: 'end',
-                            align: 'start',
-                            color: 'black',
-                            font: {
-                                weight: 'bold',
-                                size: 12
+                            anchor: 'end',     // Sits on top of the bar
+                            align: 'end',      // Just above the bar
+                            offset: 6,         // Small gap between bar and label
+                            backgroundColor: 'rgba(255, 255, 255, 0.85)', // Soft white background
+                            color: '#04adf0',     // Dark gray text for readability
+                            borderRadius: 6,   // Smooth corners
+                            borderColor: '#ccc',
+                            borderWidth: 1,    // Thin border
+                            padding: {
+                                top: 6,
+                                bottom: 6,
+                                left: 10,
+                                right: 10
+                            },
+                            font: function (context) {
+                                const width = context.chart.width;
+                                if (width < 400) {
+                                    return { size: 9, weight: 'bold' };
+                                } else if (width < 600) {
+                                    return { size: 11, weight: 'bold' };
+                                }
+                                return { size: 13, weight: 'bold' };
                             },
                             formatter: function (value, context) {
-                                if (value === 0) return null; // Skip label if income is 0
+                                if (value === 0) return null;
 
                                 const index = context.dataIndex;
                                 const custom = context.dataset.custom[index];
+
                                 return [
                                     `In: ₹${value.toLocaleString()}`,
                                     `Oil: ₹${custom.oil}`,
@@ -347,7 +364,6 @@
                                 ];
                             }
                         }
-
                     },
                     scales: {
                         y: {
@@ -453,7 +469,7 @@
         </div>
 
     </div>
-    <canvas id="myChart" width="900" height="400" style="display: none;"></canvas>
+    <canvas id="myChart" style="display: none;"></canvas>
 
     <div id="formContainer" style="display: none;">
         <form id="userForm1">
