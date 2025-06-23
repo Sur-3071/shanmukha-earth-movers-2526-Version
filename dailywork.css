@@ -447,6 +447,12 @@ h1 {
         flex-direction: column;
         align-items: center;
     }
+    #customerallamt
+{
+    margin-bottom: 100px;
+    width: 65%; 
+    margin-left: 100px;
+}
 
     #csize {
         width: 80px;
