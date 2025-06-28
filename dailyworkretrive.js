@@ -43,7 +43,7 @@ async function RePrint() {
             alert("No data available for the selected date.");
         }
     } catch (error) {
-        alert("Error occurred while fetching data");
+        alert("Error occurred while fetching data 2730936");
     }
 }
 document.getElementById("search").addEventListener("change", async function (e1) {
@@ -136,6 +136,15 @@ function generateTable(data) {
             // {
             //     alert(activity.Drivers);
             // }
+            const payment = activity.Payment.trim().toLowerCase();
+
+            // Determine color based on payment
+            let bgColor = "";
+            if (payment === "paid") {
+                bgColor = "green";
+            } else if (payment === "unpaid") {
+                bgColor = "red";
+            }
 
             out += `<tr>
                         <td>${customerPhone}</td>
@@ -148,11 +157,19 @@ function generateTable(data) {
                         <td>${activity.Starting}</td>
                         <td>${activity.Ending}</td>
                         <td>${activity.TotalTime}</td>
-                        <td><button type="button" class="pay" id=${customerPhone}>${activity.Payment}</button></td>
-                        <td><button type="button" id=${editid} class="edit">Edit</button></td>
+                        <td><button type="button" class="pay" id="${customerPhone}"
+            style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
+            ${activity.Payment}                        <td><button type="button" id=${editid} class="edit">Edit</button></td>
                         <td>${activity.Price}</td>
                         <td>${amount}</td>
                     </tr>`;
+
+
+
+
+
+
+
         }
     }
     var mintohou = parseInt(mint / 60);
@@ -247,8 +264,8 @@ document.addEventListener("click", async function (e1) {
         var output = data.Drivers;
         var Starting = data.Starting;
         var TotalTime = data.TotalTime;
-        var hrsamt=data.HoursPrice;
-        var trpamt=data.TripsPrice;
+        var hrsamt = data.HoursPrice;
+        var trpamt = data.TripsPrice;
         var Trips = data.Trips;
         var Villagename = data.Villagename
         if (Trips === "--" && Contract === "--") {
@@ -266,7 +283,7 @@ document.addEventListener("click", async function (e1) {
         }
         // alert(worktype);
         // var worktype="Contarct";
-        
+
         document.getElementById("dat").value = Date;
         document.getElementById("wid").value = id;
         document.getElementById("name").value = Name;
@@ -324,26 +341,26 @@ document.addEventListener("click", async function (e1) {
 })
 function editData() {
     // preventDefault();
-  const container = document.getElementById('container1');
-  const rawText = document.getElementById('output').value.trim();
-  container.innerHTML =  `<button class="add-button" onclick="addRow()">Add</button>`;
+    const container = document.getElementById('container1');
+    const rawText = document.getElementById('output').value.trim();
+    container.innerHTML = `<button class="add-button" onclick="addRow()">Add</button>`;
 
-  const lines = rawText.split('\n');
+    const lines = rawText.split('\n');
 
-  lines.forEach(line => {
-    const [driver, trips] = line.split('=').map(item => item.trim());
+    lines.forEach(line => {
+        const [driver, trips] = line.split('=').map(item => item.trim());
 
-    if (driver && trips) {
-      const newRow = document.createElement('div');
-      newRow.className = 'row';
-      newRow.innerHTML = `
+        if (driver && trips) {
+            const newRow = document.createElement('div');
+            newRow.className = 'row';
+            newRow.innerHTML = `
         <input type="text" placeholder="Driver Name" name="driverName[]" value="${driver}" onchange="removereadonly()" required>
         <input type="number" placeholder="Trips" name="trips[]" value="${trips}" readonly required onkeyup="updateTotalTrips()">
         <button class="remove-button" onclick="removeRow(this)">X</button>
       `;
-      container.appendChild(newRow);
-    }
-  });
+            container.appendChild(newRow);
+        }
+    });
 }
 
 function SearchTable(data) {
@@ -423,6 +440,15 @@ function SearchTable(data) {
                 hou += parseInt(v[0]);
                 mint += parseInt(v[1]);
             }
+            const payment = activity.Payment.trim().toLowerCase();
+
+            let bgColor = "";
+            if (payment === "paid") {
+                bgColor = "green";
+            } else if (payment === "unpaid") {
+                bgColor = "red";
+            }
+
 
             var amount = activity.Payment === "Paid" ? 0 : activity.Price;
             recovery += parseInt(amount);
@@ -438,8 +464,9 @@ function SearchTable(data) {
                 <td>${activity.Starting}</td>
                 <td>${activity.Ending}</td>
                 <td>${activity.TotalTime}</td>
-                <td><button type="button" class="pay" id=${customerPhone}>${activity.Payment}</button></td>
-                <td><button type="button" id=${editid} class="edit">Edit</button></td>
+                <td><button type="button" class="pay" id="${customerPhone}"
+            style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
+            ${activity.Payment}                <td><button type="button" id=${editid} class="edit">Edit</button></td>
                 <td>${activity.Price}</td>
                 <td>${amount}</td>
             </tr>`;
@@ -649,6 +676,7 @@ document.addEventListener("click", async function (e1) {
             payment = "UnPaid";
         }
         document.getElementById(id).textContent = payment;
+
         const db1 = "Daily Work";
         const paymentstatus = ref(db, `${db1}/${id}`);
         await set(paymentstatus, {
@@ -856,25 +884,21 @@ function generateHomeTableSearch(data, v1) {
             }
         }
     }
-    if(v1==="Farming")
-    {
-        j1=0;
-        h1=0;
-        f1=c;
+    if (v1 === "Farming") {
+        j1 = 0;
+        h1 = 0;
+        f1 = c;
     }
-    else
-    {
-        if(v1==="Jcb")
-        {
-            h1=0;
-            f1=0;
-            j1=c;
+    else {
+        if (v1 === "Jcb") {
+            h1 = 0;
+            f1 = 0;
+            j1 = c;
         }
-        else
-        {
-            f1=0;
-            j1=0;
-            h1=c;
+        else {
+            f1 = 0;
+            j1 = 0;
+            h1 = c;
         }
     }
     out += `<tr>

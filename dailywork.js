@@ -125,3 +125,19 @@ function addflow()
         }
 
 }
+document.addEventListener("click", function(event) {
+    // Check if a button with class "pay" was clicked
+    if (event.target.classList.contains("pay")) {
+        const button = event.target; // the clicked button
+        const payment = button.textContent.trim();
+
+        if (payment.toLowerCase() === "paid") {
+            button.style.backgroundColor = "red";
+            button.style.color = "white";
+        } else if (payment.toLowerCase() === "unpaid") {
+            button.style.backgroundColor = "green";
+            button.style.color = "white";
+        }
+    }
+});
+

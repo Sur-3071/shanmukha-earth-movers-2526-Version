@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Toggle</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      padding: 40px;
+      text-align: center;
+    }
+
+    table {
+      margin: auto;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 14px 24px;
+      font-size: 15px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #333;
+      color: white;
+    }
+
+    /* Common button base */
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px; /* rectangle shape */
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.1s;
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    /* Dynamic payment colors (added via JS) */
+    .pay-paid {
+      background-color: #28a745;
+    }
+
+    .pay-unpaid {
+      background-color: #dc3545;
+    }
+
+    .edit {
+      background-color: #007bff;
+    }
+
+    .edit:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Customer Payments</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Payment</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+      <!-- This row is rendered dynamically using the exact structure you requested -->
+    </tbody>
+  </table>
+
+  <script>
+    // Your sample dynamic data
+    const data = [
+      { customerPhone: "9876543210", Payment: "Paid", editid: "edit1" },
+      { customerPhone: "9876543211", Payment: "Unpaid", editid: "edit2" },
+      { customerPhone: "9876543212", Payment: "Paid", editid: "edit3" },
+    ];
+
+    const tableBody = document.getElementById("table-body");
+
+    // Render table rows using exact td HTML (not changed)
+    data.forEach(activity => {
+      const row = document.createElement("tr");
+      const customerPhone = activity.customerPhone;
+      const editid = activity.editid;
+
+      row.innerHTML = `
+        <td><button type="button" class="pay" id=${customerPhone}>${activity.Payment}</button></td>
+        <td><button type="button" id=${editid} class="edit">Edit</button></td>
+      `;
+
+      tableBody.appendChild(row);
+    });
+
+    // Apply initial color classes and toggle logic
+    document.querySelectorAll('.pay').forEach(button => {
+      // Initial state
+      if (button.textContent.trim().toLowerCase() === 'paid') {
+        button.classList.add('pay-paid');
+      } else {
+        button.classList.add('pay-unpaid');
+      }
+
+      // Toggle on click
+      button.addEventListener('click', function () {
+        if (this.classList.contains('pay-paid')) {
+          this.classList.remove('pay-paid');
+          this.classList.add('pay-unpaid');
+          this.textContent = 'Unpaid';
+        } else {
+          this.classList.remove('pay-unpaid');
+          this.classList.add('pay-paid');
+          this.textContent = 'Paid';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

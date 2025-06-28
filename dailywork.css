@@ -198,7 +198,31 @@ table {
     width: 350px;
     /* Adjusted width for mobile */
 }
+ button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px; /* rectangle shape */
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.1s;
+    }
 
+    button:active {
+      transform: scale(0.96);
+    }
+
+    /* Dynamic payment colors (added via JS) */
+
+    .edit {
+      background-color: #007bff;
+    }
+
+    .edit:hover {
+      background-color: #0056b3;
+    }
 
 
 #tally {
@@ -235,9 +259,9 @@ table {
         font-size: 30px;
     }
 
-button {
+/* button {
     border-radius: 25px;
-}
+} */
 
 th,
 td {
@@ -432,6 +456,7 @@ h1 {
     font-size: 18px;
     font-weight: bold;
 }
+
 /* Mobile View Adjustments */
 @media (max-width: 768px) {
     #ledger {
