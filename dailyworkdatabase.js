@@ -201,6 +201,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
             if (await RePrint7() === "1") {
                 document.getElementById("userForm2").reset();
                 document.getElementById("nodata").style.display = "none";
+
                 if (work_snapshot.exists()) {
                     var workid = parseInt(work_snapshot.val());
 
@@ -255,44 +256,11 @@ document.getElementById('submit3').addEventListener('click', async function (e) 
     const wid = document.getElementById("cid1").value;
     const Amount = document.getElementById("amt").value;
     const villname = document.getElementById("vil2").value;
+    // alert("iam coming 1");
     document.getElementById("userForm3").reset();
     if (name.length > 0) {
         if (Amount.length > 0) {
-            const db1 = "CustomersAmount";
-            const db2 = "CustomersAmount_Id";
-
-            const w_id = ref(db, `${db1}/${db2}`);
-            const dataRefset = ref(db, `${db1}/${wid}`);
-            const work_snapshot = await get(w_id);
-
-            if (work_snapshot.exists()) {
-                var workid = parseInt(work_snapshot.val());
-
-                try {
-                    if (workid === parseInt(wid)) {
-                        await set(w_id, workid + 1);
-                    }
-
-                    await set(dataRefset, {
-                        Date: dte,
-                        Name: name,
-                        Villagename: villname,
-                        Amouont: Amount
-                    });
-
-                    document.getElementById("done").style.display = "block";
-                    removedone();
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
-                } catch (error) {
-                    console.log("Error updating Firebase data:", error);
-                }
-            }
-            else {
-                alert("Error ", speakText("Error"));
-                datarebuild();
-            }
+            getExtraAmount(Amount, name, wid, dte, villname);
         }
         else {
             alert("Please Enter Amount", speakText("Please Enter Amouont"));
@@ -304,6 +272,137 @@ document.getElementById('submit3').addEventListener('click', async function (e) 
         datarebuild();
     }
 });
+
+
+async function getExtraAmount(Amount, name, wid, dte, villname) {
+    const db1 = "CustomersAmount";
+    const db2 = "ExtraAmount";
+    const db3 = name;
+    const customerRef = ref(db, `${db1}/${name}`);
+    const customerSnapshot = await get(customerRef);
+    if (!customerSnapshot.exists()) {
+        // Add ExtraAmount: 0 only the first time
+        await set(customerRef, {
+            ExtraAmount: 0
+        });
+    }
+
+    const Extraamount = ref(db, `${db1}/${db3}/${db2}`);
+    const amount_snapshot = await get(Extraamount);
+
+    if (amount_snapshot.exists()) {
+        // alert("iam coming 2");
+        var extramoney = parseInt(amount_snapshot.val());
+        var totalded = parseInt(extramoney) + parseInt(Amount);
+        // console.log(totalded);
+        FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount)
+    }
+
+}
+async function FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount) {
+
+    try {
+        // Access the database and retrieve data
+        const db2 = getDatabase(app);
+        const dataRefget = ref(db2, `Daily Work`);
+        const snapshot = await get(dataRefget);
+
+        // Check if data exists
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount);
+
+        } else {
+            alert("No data available");
+        }
+    } catch (error) {
+        alert("Error occurred while fetching data");
+    }
+}
+async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount) {
+    const db1 = "Daily Work";
+    const db2 = "CustomersAmount";
+    // alert("Iam coming");
+    var k = 0;
+    for (const workId in data) {
+        if (data.hasOwnProperty(workId)) {
+            const activity = data[workId];
+
+            // Only target work entries (skip ExtraAmount key)
+            if (activity?.Name.trim().toLowerCase() === name.trim().toLowerCase() && activity?.Payment === "UnPaid") {
+                k = 1;
+                const price = parseInt(activity.Price);
+                if (totalded >= price) {
+                    totalded -= price;
+
+                    // Update full object, just changing Payment to "Paid"
+                    const updatedData = {
+                        Contract: activity.Contract,
+                        Date: activity.Date,
+                        Disel: activity.Disel,
+                        Ending: activity.Ending,
+                        Name: activity.Name,
+                        Payment: "Paid", // change here
+                        PhoneNumber: activity.PhoneNumber,
+                        Price: activity.Price,
+                        Shift: activity.Shift,
+                        Starting: activity.Starting,
+                        TotalTime: activity.TotalTime,
+                        Trips: activity.Trips,
+                        Villagename: activity.Villagename
+                    };
+
+                    const transactionRef = ref(db, `${db1}/${workId}`);
+                    await set(transactionRef, updatedData);
+                }
+            }
+        }
+    }
+    if (k == 0) {
+        document.getElementById("nodata1").style.display = "block";
+        setTimeout(() => {
+            document.getElementById("nodata1").style.display = "none";
+        }, 5000);
+    }
+    else {
+        const db1 = "CustomersAmount";
+        const db3 = "CustomersAmount_Id";
+        const w_id = ref(db, `${db1}/${db3}`);
+        const work_snapshot = await get(w_id);
+
+        if (work_snapshot.exists()) {
+            var workid = parseInt(work_snapshot.val());
+            const dataRefset = ref(db, `${db1}/${name}/${workid}`);
+            try {
+                if (workid === parseInt(wid)) {
+                    await set(w_id, workid + 1);
+                }
+
+                await set(dataRefset, {
+                    Date: dte,
+                    Name: name,
+                    Villagename: villname,
+                    Amouont: Amount
+                });
+                setTimeout(() => {
+                    location.reload();
+                }, 10000);
+            } catch (error) {
+                console.log("Error updating Firebase data:", error);
+            }
+        }
+        else {
+            alert("Error ", speakText("Error"));
+            datarebuild();
+        }
+        // Save leftover amount as ExtraAmount
+        const extraRef = ref(db, `${db2}/${name}/ExtraAmount`);
+        await set(extraRef, totalded);
+        document.getElementById("done").style.display = "block";
+        removedone();
+    }
+}
+
 
 document.getElementById('submit4').addEventListener('click', async function (e) {
     e.preventDefault();
@@ -324,6 +423,7 @@ document.getElementById('submit5').addEventListener('click', async function (e) 
     // document.getElementById("userForm4").reset();
     if (name.length > 0) {
         RePrint51();
+
     }
     else {
         alert("Please Enter Customer Name Or place Or Location Name", speakText("Please Enter Customer Name Or place Or Location Name"));
@@ -358,7 +458,7 @@ async function RePrint5() {
             generateCustomerTable(data);
             // generateTable(data);
         } else {
-            alert("No data available for the selected date.");
+            alert("No data available");
         }
     } catch (error) {
         alert("Error occurred while fetching data 989");
@@ -377,9 +477,10 @@ async function RePrint51() {
             const data = snapshot1.val();
             // console.log(data);
             generateCustomerTable1(data);
+            getExtraAmountofuser();
             // generateTable(data);
         } else {
-            alert("No data available for the selected date.");
+            alert("No data available");
         }
     } catch (error) {
         alert("Error occurred while fetching data 989");
@@ -387,16 +488,21 @@ async function RePrint51() {
 }
 async function RePrint6(amt) {
     try {
+        var formname1 = document.getElementById("name3").value;
         const db2 = getDatabase(app);
-        const dataRefget2 = ref(db2, `CustomersAmount`);
+        const dataRefget2 = ref(db2, `CustomersAmount/${formname1}`);
         const snapshot2 = await get(dataRefget2);
-
         // Check if data exists
         if (snapshot2.exists()) {
             const data1 = snapshot2.val();
+            // alert(data1);
             generateCustomeramtTable(data1, amt);
+
         } else {
-            alert("No data available for the selected date.");
+            alert("No data available");
+            document.getElementById("customerallamt").style.display = "none";
+            document.getElementById("ledger").style.display = "none";
+
         }
     } catch (error) {
         alert("Error occurred while fetching data");
@@ -418,7 +524,7 @@ async function RePrint7() {
             return checkcustomer(data);
             // generateTable(data);
         } else {
-            alert("No data available for the selected date.");
+            alert("No data available ");
         }
     } catch (error) {
         alert("Error occurred while fetching data ");
@@ -452,6 +558,7 @@ function checkcustomer(data) {
 
 }
 
+
 function generateCustomerTable(data) {
     var collection = 0;
     var recovery = 0;
@@ -481,6 +588,7 @@ function generateCustomerTable(data) {
     var totalcontarct = 0;
     var formname = document.getElementById("name3").value.toLowerCase();
     // console.log(formname);
+    var rec = 0;
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
@@ -509,6 +617,11 @@ function generateCustomerTable(data) {
                 }
                 collection += parseInt(activity.Price);
                 // console.log(activity);
+                var bal = 0;
+                if (activity.Payment !== "Paid") {
+                    bal = activity.Price;
+                }
+                rec += parseInt(bal);
                 let color = activity.Payment === "Paid" ? "green" : "red";
                 out += `<tr>
                         <td>${customerPhone}</td>
@@ -551,8 +664,9 @@ function formatDate(isoDate) {
     return `${day}-${month}-${year}`;
 }
 
+
 function generateCustomerTable1(data) {
-    let out="";
+    let out = "";
 
     out += `<table border="1px" id="customerTable1">
     <tr>
@@ -633,7 +747,7 @@ function generateCustomerTable1(data) {
                     <td>${activity.Ending}</td>
                     <td>${activity.TotalTime}</td>
                     <td>
-                        <select class="rateDropdown" onchange="calculateFinalPrice(this)" ${type === "Contract" ? "disabled" : ""}>
+                        <select class="rateDropdown" onchange="calculateFinalPrice(this); formeldger2();" ${type === "Contract" ? "disabled" : ""}>
                             ${dropdown}
                         </select>
                         <div style="font-size:10px;color:gray;">(${type})</div>
@@ -667,6 +781,38 @@ function generateCustomerTable1(data) {
     calculateTotalBill();
 }
 
+async function getExtraAmountofuser() {
+    var formname1 = document.getElementById("name4").value;
+    const db1 = "CustomersAmount";
+    const db21 = "ExtraAmount";
+    const db3 = formname1;
+    const customerRef = ref(db, `${db1}/${formname1}`);
+    const customerSnapshot = await get(customerRef);
+    if (!customerSnapshot.exists()) {
+        // Add ExtraAmount: 0 only the first time
+        await set(customerRef, {
+            ExtraAmount: 0
+        });
+    }
+
+    const Extraamount = ref(db, `${db1}/${db3}/${db21}`);
+    const amount_snapshot = await get(Extraamount);
+    var extramoney =0;
+    if (amount_snapshot.exists()) {
+        // alert("iam coming 2");
+        extramoney = parseInt(amount_snapshot.val());
+        // console.log(totalded);
+    }
+      setTimeout(() => {
+        formeldger2();
+    }, 5000);
+    localStorage.setItem("extramoney", extramoney);
+
+
+}
+
+
+
 
 function moneyconvert(number) {
     let formatted = number.toLocaleString('en-IN');
@@ -692,7 +838,8 @@ function generateCustomeramtTable(data, amt) {
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
-            if (activity.Name !== undefined && activity.Name.toLowerCase().trim() == formname.trim()) {
+            var rec = 0;
+            if (activity.Name !== undefined && customerPhone !== "ExtraAmount" && activity.Name.toLowerCase().trim() == formname.trim()) {
                 // console.log(activity.Name);
                 collection1 += parseInt(activity.Amouont);
                 out1 += `<tr>

@@ -64,6 +64,7 @@ async function RePrintSearch() {
         if (snapshot.exists()) {
             const data = snapshot.val();
             SearchTable(data);
+            
         } else {
             alert("No data available for the selected date.");
         }
@@ -365,18 +366,16 @@ function editData() {
 
 function SearchTable(data) {
     var d = document.getElementById("ledger");
-    var name = document.getElementById("search").value;
+    var name = document.getElementById("search").value.trim();
     console.log(name.length);
 
     if (name.length > 0) {
         d.style.display = "none";
-        var collection = 0;
-        var recovery = 0;
-        var totaltime = 0;
-        var hou = 0;
-        var mint = 0;
-        var totaltrips = 0;
-        var totalcontarct = 0;
+
+        var collection = 0, recovery = 0;
+        var totalhou = 0, totalmint = 0;
+        var totaltrips = 0, totalcontarct = 0, disel = 0;
+
         let out = `<table border="1px">
         <tr>
             <th id="csize">Customer Id</th>
@@ -395,106 +394,148 @@ function SearchTable(data) {
             <th id="csize">Recovery Amount</th>
         </tr>`;
 
-        var disel = 0;
+        // Group by Name
+        let groupedData = {};
 
-        // 1. Collect filtered entries in array
-        let matchedEntries = [];
         for (const customerPhone in data) {
             if (data.hasOwnProperty(customerPhone)) {
                 const activity = data[customerPhone];
                 if (
-                    activity.Name.indexOf(name) !== -1 ||
-                    activity.Villagename.indexOf(name) !== -1 ||
+                    activity.Name.includes(name) ||
+                    activity.Villagename.includes(name) ||
                     activity.Payment === name
                 ) {
-                    matchedEntries.push({ id: customerPhone, activity });
+                    if (!groupedData[activity.Name]) {
+                        groupedData[activity.Name] = [];
+                    }
+                    groupedData[activity.Name].push({ id: customerPhone, activity });
                 }
             }
         }
 
-        // 2. Sort matched entries by Name
-        matchedEntries.sort((a, b) =>
-            a.activity.Name.localeCompare(b.activity.Name)
+        // ✅ Sort Names A–Z
+        const sortedNames = Object.keys(groupedData).sort((a, b) =>
+            a.toLowerCase().localeCompare(b.toLowerCase())
         );
 
-        // 3. Loop through sorted entries
-        matchedEntries.forEach(entry => {
-            const customerPhone = entry.id;
-            const activity = entry.activity;
+        // Loop through sorted names
+        sortedNames.forEach(personName => {
+            const entries = groupedData[personName];
 
-            disel += parseInt(activity.Disel);
-            var editid = customerPhone + "v";
-            collection += parseInt(activity.Price);
+            // ✅ Sort person's entries by Date
+            entries.sort((a, b) => new Date(a.activity.Date) - new Date(b.activity.Date));
 
-            if (activity.Trips !== "--") {
-                totaltrips += parseInt(activity.Trips);
-            }
+            // Subtotals
+            let subDisel = 0, subTrips = 0, subContract = 0, subPrice = 0, subRecovery = 0;
+            let subHou = 0, subMint = 0;
 
-            if (activity.Contract !== "--") {
-                totalcontarct += parseInt(activity.Contract);
-            }
+            // Header row for person
+            out += `<tr><td colspan="14" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
 
-            if (activity.Starting !== "--") {
-                var timesplit = activity.TotalTime;
-                var v = timesplit.split(':');
-                hou += parseInt(v[0]);
-                mint += parseInt(v[1]);
-            }
-            const payment = activity.Payment.trim().toLowerCase();
+            entries.forEach(entry => {
+                const customerPhone = entry.id;
+                const activity = entry.activity;
 
-            let bgColor = "";
-            if (payment === "paid") {
-                bgColor = "green";
-            } else if (payment === "unpaid") {
-                bgColor = "red";
-            }
+                const thisDisel = parseInt(activity.Disel || 0);
+                const thisPrice = parseInt(activity.Price || 0);
+                const thisTrips = activity.Trips !== "--" ? parseInt(activity.Trips) : 0;
+                const thisContract = activity.Contract !== "--" ? parseInt(activity.Contract) : 0;
 
+                disel += thisDisel;
+                collection += thisPrice;
+                totaltrips += thisTrips;
+                totalcontarct += thisContract;
 
-            var amount = activity.Payment === "Paid" ? 0 : activity.Price;
-            recovery += parseInt(amount);
+                subDisel += thisDisel;
+                subPrice += thisPrice;
+                subTrips += thisTrips;
+                subContract += thisContract;
 
-            out += `<tr>
-                <td>${customerPhone}</td>
-                <td>${activity.Date}</td>
-                <td>${activity.Name}</td>
-                <td>${activity.Villagename}</td>
-                <td>${activity.Disel}</td>
-                <td>${activity.Trips}</td>
-                <td>${activity.Contract}</td>
-                <td>${activity.Starting}</td>
-                <td>${activity.Ending}</td>
-                <td>${activity.TotalTime}</td>
-                <td><button type="button" class="pay" id="${customerPhone}"
-            style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
-            ${activity.Payment}                <td><button type="button" id=${editid} class="edit">Edit</button></td>
-                <td>${activity.Price}</td>
-                <td>${amount}</td>
+                if (activity.Starting !== "--") {
+                    const v = activity.TotalTime.split(':');
+                    const h = parseInt(v[0]);
+                    const m = parseInt(v[1]);
+                    totalhou += h;
+                    totalmint += m;
+                    subHou += h;
+                    subMint += m;
+                }
+
+                const payment = activity.Payment.trim().toLowerCase();
+                const bgColor = payment === "paid" ? "green" : (payment === "unpaid" ? "red" : "");
+
+                const amount = activity.Payment === "Paid" ? 0 : thisPrice;
+                recovery += amount;
+                subRecovery += amount;
+
+                const editid = customerPhone + "v";
+
+                out += `<tr>
+                    <td>${customerPhone}</td>
+                    <td>${activity.Date}</td>
+                    <td>${activity.Name}</td>
+                    <td>${activity.Villagename}</td>
+                    <td>${activity.Disel}</td>
+                    <td>${activity.Trips}</td>
+                    <td>${activity.Contract}</td>
+                    <td>${activity.Starting}</td>
+                    <td>${activity.Ending}</td>
+                    <td>${activity.TotalTime}</td>
+                    <td><button type="button" class="pay" id="${customerPhone}"
+                        style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
+                        ${activity.Payment}</button></td>
+                    <td><button type="button" id=${editid} class="edit">Edit</button></td>
+                    <td>${activity.Price}</td>
+                    <td>${amount}</td>
+                </tr>`;
+            });
+
+            // Subtotal time
+            const subMinToHou = Math.floor(subMint / 60);
+            subMint = subMint % 60;
+            subHou += subMinToHou;
+            const subTime = subHou + ":" + (subMint < 10 ? "0" + subMint : subMint);
+
+            // Subtotal row
+            out += `<tr style="background-color:#f0f0f0; font-weight:bold;">
+                <td colspan="4">Subtotal for ${personName}</td>
+                <td>${subDisel}</td>
+                <td>${subTrips}</td>
+                <td>${subContract}</td>
+                <td colspan="3">${subTime}</td>
+                <td colspan="2">Sub Total</td>
+                <td>${subPrice}</td>
+                <td>${subRecovery}</td>
             </tr>`;
         });
 
-        var mintohou = parseInt(mint / 60);
-        mint = mint - 60 * mintohou;
-        hou += mintohou;
-        totaltime = hou + ":" + mint;
+        // Convert total minutes
+        const mintohou = Math.floor(totalmint / 60);
+        totalmint = totalmint % 60;
+        totalhou += mintohou;
+        const totaltime = totalhou + ":" + (totalmint < 10 ? "0" + totalmint : totalmint);
 
-        out += `<tr>
+        // Grand total row
+        out += `<tr style="background-color:#d0ffd0; font-weight:bold;">
             <td colspan="4" id="col">Total Work Analysis</td>
             <td id="am">${disel}</td>
             <td id="am">${totaltrips}</td>
             <td id="am">${totalcontarct}</td>
             <td id="am" colspan="3">${totaltime}</td>
-            <td id="am" colspan="2">Work In Price</td>
+            <td id="am" colspan="2">Grand Total</td>
             <td id="am">${collection}</td>
             <td id="am">${recovery}</td>
         </tr>`;
-        out += `</table>`;
 
+        out += `</table>`;
         document.getElementById("enterdata").innerHTML = out;
     } else {
         d.style.display = "block";
         RePrint();
     }
 }
+
+
 
 
 document.getElementById("submit1").addEventListener("click", async function (e1) {

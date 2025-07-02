@@ -44,6 +44,9 @@
 
         async function DayCountcal() {
             try {
+                localStorage.setItem("editbill", 0);
+                localStorage.setItem("extramoney", 0);
+
                 // Access the database and retrieve data
                 const dataRefget = ref(db2, `Daily Work`);
                 const snapshot = await get(dataRefget);
@@ -77,6 +80,7 @@
                 alert("Error occurred while fetching data 1234");
             }
         }
+
 
         function generateName(data) {
             for (const customerPhone in data) {
@@ -526,7 +530,12 @@
             <input type="button" value="Add Amount" id="submit3">
         </form>
     </div>
+    <div style="display: none;" id="nodata1">
+        <h1 style="color: red;font-size: 50px;padding-left: 120px;">No Work For This User !!</h1>
+    </div>
     <div id="customerdata" style="display: none;">
+
+
         <form id="userForm4">
             <select id="name3" name="name3" placeholder="Customer Name"></select>
             <input type="button" onclick="transalate()" value="Get Customer Data" id="submit4">
@@ -538,7 +547,10 @@
             <select id="name4" name="name4" placeholder="Customer Name"></select>
             <input type="button" value="Get Customer Bill" id="submit5">
         </form>
+
     </div>
+    </div>
+
     <div style="display: none;" id="nodata">
         <h1 style="color: red;font-size: 50px;padding-left: 120px;">Customer Already Exist</h1>
     </div>
@@ -695,6 +707,25 @@
             window.print();
         }
 
+        function formeldger2() {
+            let led = `<table border="1px">
+                <tr>
+                    <th id="bal1">Total Work Amount</th>
+                    <th id="bal1">Previous Balance</th>
+                    <th id="bal1">Total Balanace</th>
+
+                </tr>`;
+            var bal1 = parseInt(localStorage.getItem("editbill"));
+            var extramoney = parseInt(localStorage.getItem("extramoney"));
+            led += `<tr>
+            <td class="lsize" style="font-size:30px;">${moneyconvert(bal1)}</td>
+            <td style="font-size:30px;">${moneyconvert(extramoney)}</td>
+            <td style="font-size:30px;">${moneyconvert(bal1 - extramoney)}</td>
+            </tr>`;
+            led += `</table>`;
+            document.getElementById("ledger2").innerHTML = led;
+
+        }
         function calculateFinalPrice(selectElem) {
             const row = selectElem.closest("tr");
             const type = row.getAttribute("data-type");
@@ -720,8 +751,14 @@
             document.querySelectorAll(".finalPrice").forEach(input => {
                 sum += parseInt(input.value) || 0;
             });
-            document.getElementById("totalBill").innerText = `₹${sum}`;
+            document.getElementById("totalBill").innerText = `${sum}`;
+            localStorage.setItem("editbill", sum);
+
+            // Call async function at the end
         }
+
+
+
 
         function updateTable() {
             const table = document.getElementById("customerTable1");

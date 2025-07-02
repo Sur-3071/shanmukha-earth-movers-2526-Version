@@ -10,6 +10,10 @@ body {
     gap: 50px;
     margin-bottom: 100px;
 }
+#ledger2
+{
+    margin-top: 100px;
+}
 #typech
 {
   width: 350px; /* Set the desired width */
