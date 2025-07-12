@@ -12,19 +12,14 @@ var totalamount = 0;
 var totaltrips = 0;
 var name1 = "";
 var balance = totalamount - amounttaken;
-// window.onload = function () {
-//     const session = localStorage.getItem('session');
-//     if (session === '0') {
-//         window.location.href = 'TractorLogin.html'
-//     }
-//     localStorage.setItem('session', 1);
-// }
-// document.addEventListener("visibilitychange", function () {
-//     if (document.visibilityState === 'hidden') {
-//         localStorage.setItem('session', 0);
-//         window.location.href = 'TractorLogin.html';
-//     }
-// });
+function formatDateToNormal(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+}
+
 var list = {
     "Def": "def",
     "Sai": "sai",
@@ -180,6 +175,7 @@ function removedone() {
     }, 2000);
 }
 function displaytripsdata(data) {
+    document.getElementById("screenshot").style.display="block";
     var r = document.getElementById("tripsdata");
     r.innerHTML = "";
 
@@ -212,8 +208,8 @@ function displaytripsdata(data) {
                             s += (trips * amount);
                             out += `<tr>
                                 <td>` + sno + `</td>
-                                <td>` + date + `</td>
-                                <td>` + name + `</td>
+                                <td>` + formatDateToNormal(date) + `</td>
+                                <td style="font-weight:bold">` + name + `</td>
                                 <td>` + activity + `</td>
                                 <td>` + activities[activity]['Price'] + `</td>
                                 <td>` + activities[activity]['Trips'] + `</td>
@@ -241,6 +237,7 @@ function displaytripsdata(data) {
     r.style.display = "block";
 }
 
+
 function displayamountdata(data) {
     console.log(data);
     var r = document.getElementById("amountdata");
@@ -267,8 +264,8 @@ function displayamountdata(data) {
             s += amount
             out += `<tr>
                     <td>` + sno + `</td>
-                    <td>` + date + `</td>
-                    <td>` + data[date]['Purpose'] + `</td>
+                    <td>` + formatDateToNormal(date) + `</td>
+                    <td style="font-weight:bold">` + data[date]['Purpose'] + `</td>
                     <td>` + data[date]['Amount'] + `</td>
                 </tr>`;
 
@@ -368,17 +365,17 @@ function NoDatatrips() {
     var p1 = document.getElementById("tripsdata");
     var d = document.getElementById("def1");
     d.style.display = "block";
-    p1.style.display = "block";
+    // p1.style.display = "block";
 }
 function NoDataamount() {
     var d = document.getElementById("def2");
     var p1 = document.getElementById("amountdata");
     d.style.display = "block";
-    p1.style.display = "block";
+    // p1.style.display = "block";
 }
 function NoDatabal() {
     var d = document.getElementById("def3");
     var p1 = document.getElementById("driverbal");
     d.style.display = "block";
-    p1.style.display = "block";
+    // p1.style.display = "block";
 }
