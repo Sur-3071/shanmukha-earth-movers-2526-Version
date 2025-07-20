@@ -486,6 +486,11 @@ h1 {
     font-weight: bold;
 }
 
+table {
+    overflow-x: auto;
+    width: 100%;
+}
+
 /* Mobile View Adjustments */
 @media (max-width: 768px) {
     #ledger {
@@ -561,9 +566,8 @@ h1 {
     }
 
     table {
-        display: block;
         overflow-x: auto;
-        white-space: nowrap;
+        width: 100%;
     }
 
     #tday,
