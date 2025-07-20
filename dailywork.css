@@ -4,23 +4,27 @@ body {
     align-items: center;
     justify-content: center;
 }
-#cho
-{
+
+#cho {
     display: flex;
     gap: 50px;
     margin-bottom: 100px;
 }
-#ledger2
-{
+
+#ledger2 {
     margin-top: 100px;
 }
-#typech
-{
-  width: 350px; /* Set the desired width */
-  height: 50px; /* Set the desired height */
-  font-size: 24px; /* Adjust font size for better readability */
-  padding: 5px;
+
+#typech {
+    width: 350px;
+    /* Set the desired width */
+    height: 50px;
+    /* Set the desired height */
+    font-size: 24px;
+    /* Adjust font size for better readability */
+    padding: 5px;
 }
+
 #com {
     border-radius: 25px;
     display: flex;
@@ -43,6 +47,7 @@ h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
 }
+
 #userForm2 {
     background-color: #ffffff;
     padding: 20px;
@@ -51,9 +56,11 @@ h2 {
     width: 30%;
     margin-left: 450px;
 }
- @page {
+
+@page {
     size: landscape;
-  }
+}
+
 #userForm5 {
     background-color: #ffffff;
     padding: 20px;
@@ -70,29 +77,35 @@ h2 {
     margin-top: 20px;
     font-family: Arial, sans-serif;
     font-size: 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
 }
 
-#cho{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Creates 3 equal-width columns */
-  gap:50px;
-  margin-bottom: 100px;
+#cho {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Creates 3 equal-width columns */
+    gap: 50px;
+    margin-bottom: 100px;
 }
 
 #captureDiv1 table {
-  width: 100%; /* or fixed width if needed */
-  border-collapse: collapse;
+    width: 100%;
+    /* or fixed width if needed */
+    border-collapse: collapse;
 }
 
 #captureDiv1 th,
 #captureDiv1 td {
-  padding: 16px;         /* increases space inside cells */
-  font-size: 16px;       /* optional: larger text */
-  height: 50px;          /* increase row height */
-  border: 1px solid #000;
+    padding: 16px;
+    /* increases space inside cells */
+    font-size: 16px;
+    /* optional: larger text */
+    height: 50px;
+    /* increase row height */
+    border: 1px solid #000;
 }
+
 td {
     border: 1px solid #ccc;
     padding: 10px 12px;
@@ -129,16 +142,16 @@ td input.finalPrice {
     color: red;
 }
 
-#customeralldata
-{
+#customeralldata {
     margin-bottom: 250px;
 }
-#customerallamt
-{
+
+#customerallamt {
     margin-bottom: 100px;
-    width: 65%; 
+    width: 65%;
     margin-left: 250px;
 }
+
 #userForm3 {
     background-color: #ffffff;
     padding: 20px;
@@ -147,12 +160,13 @@ td input.finalPrice {
     width: 30%;
     margin-left: 450px;
 }
-#btn43
-{
+
+#btn43 {
     display: flex;
     gap: 150px;
     margin-top: 50px;
 }
+
 #userForm4 {
     background-color: #ffffff;
     padding: 20px;
@@ -198,35 +212,38 @@ table {
 #csize1 {
     width: 200px;
 }
+
 #csize2 {
     width: 350px;
     /* Adjusted width for mobile */
 }
- button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px; /* rectangle shape */
-      font-size: 14px;
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s ease, transform 0.1s;
-    }
 
-    button:active {
-      transform: scale(0.96);
-    }
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    /* rectangle shape */
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.1s;
+}
 
-    /* Dynamic payment colors (added via JS) */
+button:active {
+    transform: scale(0.96);
+}
 
-    .edit {
-      background-color: #007bff;
-    }
+/* Dynamic payment colors (added via JS) */
 
-    .edit:hover {
-      background-color: #0056b3;
-    }
+.edit {
+    background-color: #007bff;
+}
+
+.edit:hover {
+    background-color: #0056b3;
+}
 
 
 #tally {
@@ -251,17 +268,17 @@ table {
     margin-bottom: 50px;
 }
 
- #tday,
-    #wday,
-    #hday,
-    #twrk,
-    #proft,
-    #oil,
-    #avghrs,
-    #perdayhrs,
-    #imphrs {
-        font-size: 30px;
-    }
+#tday,
+#wday,
+#hday,
+#twrk,
+#proft,
+#oil,
+#avghrs,
+#perdayhrs,
+#imphrs {
+    font-size: 30px;
+}
 
 /* button {
     border-radius: 25px;
@@ -285,13 +302,13 @@ select {
     box-sizing: border-box;
     font-size: 18px;
 }
-#submit4
-{
+
+#submit4 {
     margin-left: 20px;
 }
-#name3
-{
-     width: 120%;
+
+#name3 {
+    width: 120%;
     padding: 10px;
     margin: 10px 0;
     border-radius: 5px;
@@ -340,12 +357,13 @@ input[type="checkbox"] {
     font-size: 28px;
     font-weight: bold;
 }
- 
-.container{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Creates 3 equal-width columns */
-  gap:50px;
-  margin-bottom: 100px;
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Creates 3 equal-width columns */
+    gap: 50px;
+    margin-bottom: 100px;
 }
 
 .close:hover,
@@ -354,13 +372,15 @@ input[type="checkbox"] {
     text-decoration: none;
     cursor: pointer;
 }
-#userForm{
+
+#userForm {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
 }
+
 #formContainer,
 #cardContainer,
 #popup {
@@ -426,26 +446,30 @@ h1 {
     font-size: 18px;
     color: #333;
 }
+
 .row {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 }
+
 .row input {
     margin-right: 10px;
     padding: 5px;
 }
+
 .add-button {
     padding: 15px 10px;
     background-color: #4CAF50;
     color: white;
-    width:100%;
+    width: 100%;
     border: none;
     cursor: pointer;
     font-size: 18px;
     border-radius: 3px;
     margin-right: 10px;
 }
+
 .remove-button {
     padding: 5px 10px;
     background-color: #f44336;
@@ -455,6 +479,7 @@ h1 {
     font-size: 18px;
     border-radius: 3px;
 }
+
 #total-trips {
     margin-top: 20px;
     font-size: 18px;
@@ -476,12 +501,12 @@ h1 {
         flex-direction: column;
         align-items: center;
     }
-    #customerallamt
-{
-    margin-bottom: 100px;
-    width: 65%; 
-    margin-left: 100px;
-}
+
+    #customerallamt {
+        margin-bottom: 100px;
+        width: 65%;
+        margin-left: 100px;
+    }
 
     #csize {
         width: 80px;
@@ -497,6 +522,7 @@ h1 {
         width: 150px;
         /* Adjusted width for mobile */
     }
+
     #csize2 {
         width: 200px;
         /* Adjusted width for mobile */
@@ -534,6 +560,12 @@ h1 {
         font-size: 24px;
     }
 
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
     #tday,
     #wday,
     #hday,
@@ -545,5 +577,5 @@ h1 {
     #imphrs {
         font-size: 30px;
     }
-   
+
 }

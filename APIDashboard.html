@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>API Development Tracker</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+    }
+    input, select, button {
+      margin: 5px;
+      padding: 6px;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    select {
+      width: 100%;
+    }
+    .delete-btn {
+      background-color: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>API Development Tracker</h2>
+
+  <div>
+    <input type="text" id="apiName" placeholder="API Name" required>
+    <input type="text" id="method" placeholder="HTTP Method (GET, POST...)" required>
+    <input type="text" id="sprint" placeholder="Sprint Number" required>
+
+    <select id="typeOfApi">
+      <option value="New Development">New Development</option>
+      <option value="Already Developed">Already Developed</option>
+      <option value="Defect">Defect</option>
+    </select>
+
+    <button onclick="addApi()">Add API</button>
+  </div>
+
+  <table id="apiTable">
+    <thead>
+      <tr>
+        <th>API Name</th>
+        <th>HTTP Method</th>
+        <th>Sprint</th>
+        <th>Type of API</th>
+        <th>Status</th>
+        <th>JUnits</th>
+        <th>Demo</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const statusOptions = ["Yet to Start", "In Progress", "Completed"];
+    const junitDemoOptions = ["Yet to Start", "Pending", "Done"];
+    const apiTypeOptions = ["New Development", "Already Developed", "Defect"];
+
+    function saveToLocalStorage(data) {
+      localStorage.setItem('apiData', JSON.stringify(data));
+    }
+
+    function getFromLocalStorage() {
+      return JSON.parse(localStorage.getItem('apiData')) || [];
+    }
+
+    function createDropdown(options, selectedValue, rowIndex, field) {
+      const select = document.createElement("select");
+      options.forEach(opt => {
+        const option = document.createElement("option");
+        option.value = opt;
+        option.text = opt;
+        if (opt === selectedValue) option.selected = true;
+        select.appendChild(option);
+      });
+
+      select.addEventListener("change", () => {
+        const data = getFromLocalStorage();
+        data[rowIndex][field] = select.value;
+        saveToLocalStorage(data);
+      });
+
+      return select;
+    }
+
+    function deleteApi(index) {
+      const data = getFromLocalStorage();
+      data.splice(index, 1);
+      saveToLocalStorage(data);
+      renderTable();
+    }
+
+    function renderTable() {
+      const tableBody = document.getElementById("apiTable").getElementsByTagName("tbody")[0];
+      tableBody.innerHTML = '';
+      const data = getFromLocalStorage();
+
+      data.forEach((item, index) => {
+        const row = tableBody.insertRow();
+
+        row.insertCell().textContent = item.apiName;
+        row.insertCell().textContent = item.method;
+        row.insertCell().textContent = item.sprint;
+
+        const typeSelect = createDropdown(apiTypeOptions, item.typeOfApi, index, 'typeOfApi');
+        row.insertCell().appendChild(typeSelect);
+
+        row.insertCell().appendChild(createDropdown(statusOptions, item.status, index, 'status'));
+        row.insertCell().appendChild(createDropdown(junitDemoOptions, item.junits, index, 'junits'));
+        row.insertCell().appendChild(createDropdown(junitDemoOptions, item.demo, index, 'demo'));
+
+        const deleteCell = row.insertCell();
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "🗑️ Delete";
+        deleteBtn.className = "delete-btn";
+        deleteBtn.onclick = () => deleteApi(index);
+        deleteCell.appendChild(deleteBtn);
+      });
+    }
+
+    function addApi() {
+      const name = document.getElementById("apiName").value.trim();
+      const method = document.getElementById("method").value.trim();
+      const sprint = document.getElementById("sprint").value.trim();
+      const typeOfApi = document.getElementById("typeOfApi").value;
+
+      if (!name || !method || !sprint) {
+        alert("API Name, Method, and Sprint Number are required.");
+        return;
+      }
+
+      const data = getFromLocalStorage();
+      data.push({
+        apiName: name,
+        method: method,
+        sprint: sprint,
+        typeOfApi: typeOfApi,
+        status: "Yet to Start",
+        junits: "Yet to Start",
+        demo: "Yet to Start"
+      });
+      saveToLocalStorage(data);
+      renderTable();
+
+      // Clear form
+      document.getElementById("apiName").value = '';
+      document.getElementById("method").value = '';
+      document.getElementById("sprint").value = '';
+      document.getElementById("typeOfApi").value = 'New Development';
+    }
+
+    window.onload = () => {
+      renderTable();
+    }
+  </script>
+
+</body>
+</html>
