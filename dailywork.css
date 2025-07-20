@@ -487,8 +487,9 @@ h1 {
 }
 
 table {
-    overflow-x: auto;
-    width: 100%;
+    transform: scale(0.7);
+    transform-origin: top left;
+    width: 142.85%;/
 }
 
 /* Mobile View Adjustments */
