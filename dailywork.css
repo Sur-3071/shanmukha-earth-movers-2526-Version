@@ -3,25 +3,24 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 0; /* Added to prevent default margins */
 }
 
 #cho {
-    display: flex;
-    gap: 50px;
-    margin-bottom: 100px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; /* Reduced from 50px */
+    margin-bottom: 30px; /* Reduced from 100px */
 }
 
 #ledger2 {
-    margin-top: 100px;
+    margin-top: 20px; /* Reduced from 50px */
 }
 
 #typech {
     width: 350px;
-    /* Set the desired width */
     height: 50px;
-    /* Set the desired height */
     font-size: 24px;
-    /* Adjust font size for better readability */
     padding: 5px;
 }
 
@@ -37,78 +36,53 @@ img {
 
 h2 {
     font-size: 15px;
-    font-weight: 1900;
+    font-weight: 700; /* Simplified from 1900 (invalid value) */
 }
 
-#userForm1 {
+#userForm1, #userForm3, #userForm4, #userForm5 {
     background-color: #ffffff;
-    padding: 20px;
+    padding: 15px; /* Reduced from 20px */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
+    max-width: 400px; /* Standardized width */
+    margin: 0 auto; /* Centered, removed excessive margin-left */
 }
 
 #userForm2 {
     background-color: #ffffff;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 30%;
-    margin-left: 450px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
 }
-
-@page {
-    size: landscape;
-}
-
-#userForm5 {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 30%;
-    margin-left: 300px;
-}
-
 
 #customerTable1 {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 10px; /* Reduced from 20px */
     font-family: Arial, sans-serif;
     font-size: 14px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-}
-
-#cho {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    /* Creates 3 equal-width columns */
-    gap: 50px;
-    margin-bottom: 100px;
 }
 
 #captureDiv1 table {
     width: 100%;
-    /* or fixed width if needed */
     border-collapse: collapse;
 }
 
-#captureDiv1 th,
-#captureDiv1 td {
-    padding: 16px;
-    /* increases space inside cells */
+#captureDiv1 th, #captureDiv1 td {
+    padding: 12px; /* Reduced from 16px */
     font-size: 16px;
-    /* optional: larger text */
-    height: 50px;
-    /* increase row height */
+    height: 40px; /* Reduced from 50px */
     border: 1px solid #000;
 }
 
 td {
     border: 1px solid #ccc;
-    padding: 10px 12px;
+    padding: 8px; /* Reduced from 10px 12px */
     text-align: center;
 }
 
@@ -116,7 +90,7 @@ th {
     background-color: green;
     color: white;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px; /* Reduced from 18px */
 }
 
 tr:nth-child(even) {
@@ -128,8 +102,7 @@ tr:hover {
     transition: background-color 0.2s ease-in-out;
 }
 
-td select,
-td input.finalPrice {
+td select, td input.finalPrice {
     padding: 4px 6px;
     border: 1px solid #bbb;
     border-radius: 4px;
@@ -143,86 +116,66 @@ td input.finalPrice {
 }
 
 #customeralldata {
-    margin-bottom: 250px;
+    margin-bottom: 50px; /* Reduced from 250px */
 }
 
 #customerallamt {
-    margin-bottom: 100px;
-    width: 65%;
-    margin-left: 250px;
-}
-
-#userForm3 {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 30%;
-    margin-left: 450px;
+    margin-bottom: 30px; /* Reduced from 100px */
+    width: 100%;
+    max-width: 600px; /* Adjusted for consistency */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #btn43 {
     display: flex;
-    gap: 150px;
-    margin-top: 50px;
-}
-
-#userForm4 {
-    background-color: #ffffff;
-    padding: 20px;
-    padding-right: 60px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 30%;
-    margin-left: 250px;
+    gap: 30px; /* Reduced from 150px */
+    margin-top: 20px; /* Reduced from 50px */
 }
 
 #btn {
     display: flex;
-    gap: 20px;
+    gap: 10px; /* Reduced from 20px */
 }
 
 #ledger {
-    margin-top: 100px;
-    margin-bottom: 100px;
+    margin: 20px 0; /* Reduced from 50px top/bottom */
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    border-spacing: 30px;
+    border-spacing: 0; /* Corrected from 30px (invalid for border-collapse) */
 }
 
 #am {
-    font-size: 20px;
+    font-size: 18px; /* Reduced from 20px */
 }
 
 #col {
-    font-size: 36px;
+    font-size: 30px; /* Reduced from 36px */
 }
 
 #csize {
-    width: 120px;
+    width: 100px; /* Reduced from 120px */
 }
 
 #bal1 {
-    width: 130px;
+    width: 110px; /* Reduced from 130px */
 }
 
 #csize1 {
-    width: 200px;
+    width: 180px; /* Reduced from 200px */
 }
 
 #csize2 {
-    width: 350px;
-    /* Adjusted width for mobile */
+    width: 300px; /* Reduced from 350px */
 }
 
 button {
-    padding: 10px 20px;
+    padding: 8px 16px; /* Reduced from 10px 20px */
     border: none;
     border-radius: 6px;
-    /* rectangle shape */
     font-size: 14px;
     font-weight: bold;
     color: white;
@@ -235,8 +188,6 @@ button:active {
     transform: scale(0.96);
 }
 
-/* Dynamic payment colors (added via JS) */
-
 .edit {
     background-color: #007bff;
 }
@@ -245,90 +196,70 @@ button:active {
     background-color: #0056b3;
 }
 
-
 #tally {
-    padding-top: 150px;
-    padding-bottom: 50px;
+    padding: 50px 0; /* Reduced from 150px top, 50px bottom */
 }
 
 #search {
     display: none;
-    width: 400px;
-    height: 60px;
+    width: 100%;
+    max-width: 350px; /* Reduced from 400px */
+    height: 50px; /* Reduced from 60px */
     border-radius: 25px;
-    outline: 5px solid lightgreen;
-    margin-bottom: 80px;
-    margin-top: 50px;
-    font-size: 25px;
+    outline: 3px solid lightgreen; /* Reduced from 5px */
+    margin: 20px 0; /* Reduced from 50px top, 80px bottom */
+    font-size: 20px; /* Reduced from 25px */
 }
 
 #daycnt {
-    margin-left: 60px;
-    margin-top: 100px;
-    margin-bottom: 50px;
+    margin: 30px 0; /* Reduced from 100px top, 50px bottom, 60px left */
 }
 
-#tday,
-#wday,
-#hday,
-#twrk,
-#proft,
-#oil,
-#avghrs,
-#perdayhrs,
-#imphrs {
-    font-size: 30px;
+#tday, #wday, #hday, #twrk, #proft, #oil, #avghrs, #perdayhrs, #imphrs {
+    font-size: 24px; /* Reduced from 30px */
 }
 
-/* button {
-    border-radius: 25px;
-} */
-
-th,
-td {
-    height: 60px;
+th, td {
+    height: 50px; /* Reduced from 60px */
     border: 2px solid black;
     text-align: center;
     vertical-align: middle;
-    border-spacing: 10px;
 }
 
-input,
-select {
+input, select {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
+    padding: 8px; /* Reduced from 10px */
+    margin: 5px 0; /* Reduced from 10px */
     border-radius: 5px;
     box-sizing: border-box;
-    font-size: 18px;
+    font-size: 16px; /* Reduced from 18px */
 }
 
 #submit4 {
-    margin-left: 20px;
+    margin-left: 10px; /* Reduced from 20px */
 }
 
 #name3 {
-    width: 120%;
-    padding: 10px;
-    margin: 10px 0;
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
     border-radius: 5px;
     box-sizing: border-box;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .round-image {
-    margin-left: 15px;
-    width: 100px;
-    height: 100px;
-    padding-bottom: 50px;
+    margin-left: 10px; /* Reduced from 15px */
+    width: 80px; /* Reduced from 100px */
+    height: 80px;
+    padding-bottom: 20px; /* Reduced from 50px */
 }
 
 input[type="checkbox"] {
-    transform: scale(1.5);
-    -webkit-transform: scale(1.5);
-    margin-right: 40px;
-    height: 20px;
-    width: 20px;
+    transform: scale(1.3); /* Reduced from 1.5 */
+    margin-right: 20px; /* Reduced from 40px */
+    height: 18px; /* Reduced from 20px */
+    width: 18px;
 }
 
 .modal {
@@ -345,56 +276,44 @@ input[type="checkbox"] {
 
 .modal-content {
     background-color: white;
-    margin: 15% auto;
-    padding: 30px 30px 30px 120px;
+    margin: 10% auto; /* Reduced from 15% */
+    padding: 20px; /* Reduced and standardized from 30px 30px 30px 120px */
     border: 1px solid #888;
-    width: 50%;
+    width: 80%; /* Adjusted for flexibility */
+    max-width: 500px;
 }
 
 .close {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 24px; /* Reduced from 28px */
     font-weight: bold;
 }
 
 .container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    /* Creates 3 equal-width columns */
-    gap: 50px;
-    margin-bottom: 100px;
+    gap: 20px; /* Reduced from 50px */
+    margin-bottom: 30px; /* Reduced from 100px */
 }
 
-.close:hover,
-.close:focus {
+.close:hover, .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
 }
 
-#userForm {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-}
-
-#formContainer,
-#cardContainer,
-#popup {
+#formContainer, #cardContainer, #popup {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 400px;
-    margin-bottom: 20px;
-    padding-bottom: 150px;
+    max-width: 350px; /* Reduced from 400px */
+    margin-bottom: 10px; /* Reduced from 20px */
+    padding-bottom: 50px; /* Reduced from 150px */
 }
 
-input,
-select {
+input, select {
     border: 1px solid #cccccc;
 }
 
@@ -416,20 +335,14 @@ input[type="button"]:hover {
 }
 
 h1 {
-    font-size: 20px;
+    font-size: 18px; /* Reduced from 20px */
 }
-
-/* .container {
-    margin-left: 110px;
-    display: flex;
-    gap: 20px;
-} */
 
 .box {
     border: none;
     border-radius: 10px;
-    width: 200px;
-    height: 150px;
+    width: 180px; /* Reduced from 200px */
+    height: 120px; /* Reduced from 150px */
     text-align: center;
     background: linear-gradient(145deg, #ffffff, #e6e6e6);
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.5);
@@ -437,133 +350,133 @@ h1 {
 }
 
 .box:hover {
-    transform: translateY(-10px);
+    transform: translateY(-5px); /* Reduced from -10px */
     box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.4), -10px -10px 20px rgba(255, 255, 255, 0.6);
 }
 
 .box h3 {
-    margin: 0 0 10px;
-    font-size: 18px;
+    margin: 0 0 8px; /* Reduced from 10px */
+    font-size: 16px; /* Reduced from 18px */
     color: #333;
 }
 
 .row {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 8px; /* Reduced from 10px */
 }
 
 .row input {
-    margin-right: 10px;
-    padding: 5px;
+    margin-right: 8px; /* Reduced from 10px */
+    padding: 4px; /* Reduced from 5px */
 }
 
 .add-button {
-    padding: 15px 10px;
+    padding: 10px; /* Reduced from 15px 10px */
     background-color: #4CAF50;
     color: white;
     width: 100%;
     border: none;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px; /* Reduced from 18px */
     border-radius: 3px;
-    margin-right: 10px;
+    margin-right: 8px; /* Reduced from 10px */
 }
 
 .remove-button {
-    padding: 5px 10px;
+    padding: 4px 8px; /* Reduced from 5px 10px */
     background-color: #f44336;
     color: white;
     border: none;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px; /* Reduced from 18px */
     border-radius: 3px;
 }
 
 #total-trips {
-    margin-top: 20px;
-    font-size: 18px;
+    margin-top: 10px; /* Reduced from 20px */
+    font-size: 16px; /* Reduced from 18px */
     font-weight: bold;
 }
 
 table {
-    transform: scale(0.7);
-    transform-origin: top left;
-    width: 142.85%;/
+    transform: none; /* Removed scaling for better readability */
+    width: 100%;
+}
+#userForm {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 /* Mobile View Adjustments */
 @media (max-width: 768px) {
     #ledger {
-        margin-top: 50px;
+        margin: 20px 0; /* Consistent with desktop */
     }
 
-    #com,
-    #userForm,
-    #btn,
-    #ledger,
-    .container {
+    #com, #btn, #ledger, .container {
         width: 100%;
         flex-direction: column;
         align-items: center;
     }
 
+
     #customerallamt {
-        margin-bottom: 100px;
-        width: 65%;
-        margin-left: 100px;
+        margin-bottom: 30px;
+        width: 90%; /* Adjusted for mobile */
+        margin-left: auto;
+        margin-right: auto;
     }
 
     #csize {
-        width: 80px;
-        /* Adjusted width for mobile */
+        width: 70px; /* Reduced from 80px */
     }
 
     #bal1 {
-        width: 90px;
-        /* Adjusted width for mobile */
+        width: 80px; /* Reduced from 90px */
     }
 
     #csize1 {
-        width: 150px;
-        /* Adjusted width for mobile */
+        width: 130px; /* Reduced from 150px */
     }
 
     #csize2 {
-        width: 200px;
-        /* Adjusted width for mobile */
+        width: 180px; /* Reduced from 200px */
     }
 
     table {
-        font-size: 14px;
+        font-size: 12px; /* Reduced from 14px */
     }
 
-    #col,
-    #am {
-        font-size: 24px;
+    #col, #am {
+        font-size: 20px; /* Reduced from 24px */
     }
 
     #search {
-        width: 80%;
-        height: 50px;
-        font-size: 20px;
+        width: 90%;
+        height: 40px; /* Reduced from 50px */
+        font-size: 18px; /* Reduced from 20px */
     }
 
     .box {
         width: 100%;
+        max-width: 160px; /* Reduced from default */
     }
 
     #popup {
-        width: 90%;
+        width: 95%;
     }
 
     input[type="button"] {
-        padding: 10px;
-        font-size: 16px;
+        padding: 8px; /* Reduced from 10px */
+        font-size: 14px; /* Reduced from 16px */
     }
 
     h1 {
-        font-size: 24px;
+        font-size: 20px; /* Adjusted from 24px */
     }
 
     table {
@@ -571,16 +484,7 @@ table {
         width: 100%;
     }
 
-    #tday,
-    #wday,
-    #hday,
-    #twrk,
-    #proft,
-    #oil,
-    #avghrs,
-    #perdayhrs,
-    #imphrs {
-        font-size: 30px;
+    #tday, #wday, #hday, #twrk, #proft, #oil, #avghrs, #perdayhrs, #imphrs {
+        font-size: 20px; /* Reduced from 30px */
     }
-
 }

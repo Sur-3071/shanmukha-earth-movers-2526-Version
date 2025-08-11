@@ -74,7 +74,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                         const db2 = "Work_Count";
                         const db3 = "Sethu_Id";
                         const db4 = "Work_Id";
-                        const db5 = "Daily Work";
+                        const db5 = "Daily Work-2025-2026";
                         const w_id = ref(db, `${db2}`);
                         const dataRefset = ref(db, `${db5}/${wid}`);
                         var sethu_databasecount = ref(db, `${db2}/${db3}`);
@@ -304,7 +304,7 @@ async function FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount)
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work`);
+        const dataRefget = ref(db2, `Daily Work-2025-2026`);
         const snapshot = await get(dataRefget);
 
         // Check if data exists
@@ -320,7 +320,7 @@ async function FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount)
     }
 }
 async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount) {
-    const db1 = "Daily Work";
+    const db1 = "Daily Work-2025-2026";
     const db2 = "CustomersAmount";
     // alert("Iam coming");
     var k = 0;
@@ -448,7 +448,7 @@ async function RePrint5() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget1 = ref(db2, `Daily Work`);
+        const dataRefget1 = ref(db2, `Daily Work-2025-2026`);
         const snapshot1 = await get(dataRefget1);
 
         // Check if data exists
@@ -469,7 +469,7 @@ async function RePrint51() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget1 = ref(db2, `Daily Work`);
+        const dataRefget1 = ref(db2, `Daily Work-2025-2026`);
         const snapshot1 = await get(dataRefget1);
 
         // Check if data exists

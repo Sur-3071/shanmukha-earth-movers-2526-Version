@@ -44,7 +44,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
         if (name.length > 0) {
             if (villname.length > 0) {
 
-                const db1 = "Daily Work";
+                const db1 = "Daily Work-2025-2026";
                 const db2 = "Work_Count";
                 const db3 = "Work_Id";
                 const w_id = ref(db, `${db2}`);

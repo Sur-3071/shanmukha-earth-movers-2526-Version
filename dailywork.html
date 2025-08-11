@@ -48,7 +48,7 @@
                 localStorage.setItem("extramoney", 0);
 
                 // Access the database and retrieve data
-                const dataRefget = ref(db2, `Daily Work`);
+                const dataRefget = ref(db2, `Daily Work-2025-2026`);
                 const snapshot = await get(dataRefget);
 
                 if (snapshot.exists()) {
@@ -243,11 +243,12 @@
 
             const sortedDates = l.sort((a, b) => new Date(a) - new Date(b));
             var dat1 = sortedDates[0];
-            var dat2 = year + "-" + month + "-" + day;
+            var dat2 = year + "-08-09";
             const date1 = new Date(dat1);
             const date2 = new Date(dat2);
             const differenceInMilliseconds = date2 - date1;
             const differenceInDays = (differenceInMilliseconds / (1000 * 60 * 60 * 24)) + 1;
+            console.log(differenceInDays, differenceInMilliseconds, dat1);
             const holidays = differenceInDays - workday;
             document.getElementById("tday").innerText = differenceInDays;
             document.getElementById("tday").style.color = "red";
@@ -349,11 +350,11 @@
                             font: function (context) {
                                 const width = context.chart.width;
                                 if (width < 400) {
-                                    return { size: 9, weight: 'bold' };
+                                    return { size: 7, weight: 'bold' };
                                 } else if (width < 600) {
-                                    return { size: 11, weight: 'bold' };
+                                    return { size: 9, weight: 'bold' };
                                 }
-                                return { size: 13, weight: 'bold' };
+                                return { size: 11, weight: 'bold' };
                             },
                             formatter: function (value, context) {
                                 if (value === 0) return null;
@@ -361,12 +362,19 @@
                                 const index = context.dataIndex;
                                 const custom = context.dataset.custom[index];
 
+                                const monthprofit = value
+                                    - parseInt(custom.oil)
+                                    - (parseInt(custom.worked) * 335)
+                                    - (parseInt(custom.totalDays) * 2534);
+
                                 return [
                                     `In: ₹${value.toLocaleString()}`,
-                                    `Oil: ₹${custom.oil}`,
+                                    `Oil: ₹${parseInt(custom.oil).toLocaleString()}`,
+                                    `Profit: ₹${monthprofit.toLocaleString()}`,
                                     `${custom.worked} days`
                                 ];
                             }
+
                         }
                     },
                     scales: {
@@ -393,10 +401,13 @@
             var avghrss = parseInt((totalwork / 1000) / differenceInDays);
             var avgmin = parseInt((((totalwork / 1000) % differenceInDays) / differenceInDays) * 60);
             var percen = parseInt(((totalwork) / (differenceInDays * 8000)) * 100);
-            var imprhrs = parseInt((((365 * 8000) - totalwork) / (365 - differenceInDays)) / 1000)
-            var impmin = parseInt((((((365 * 8000) - totalwork) / (365 - differenceInDays)) / 1000) - imprhrs) * 60)
+            var remin = 365 - differenceInDays;
+            if (remin == 0) {
+                remin = 1;
+            }
+            var imprhrs = parseInt((((365 * 8000) - totalwork) / (remin)) / 1000)
+            var impmin = parseInt((((((365 * 8000) - totalwork) / (remin)) / 1000) - imprhrs) * 60)
             proft = totalwork - workday * 335 - differenceInDays * 2534 - oila;
-            // console.log(profit);
             document.getElementById("twrk").innerHTML = moneyconvert(totalwork);
             document.getElementById("proft").innerHTML = moneyconvert(proft);
             document.getElementById("oil").innerHTML = moneyconvert(oila);
@@ -423,7 +434,7 @@
     <div id="cho">
         <input type="button" value="Add Customer" id="addcus" class="confet" onclick="remainingbuttons()">
         <input type="button" value="Add Work" id="addwork" class="confet" onclick="remainingbuttons()">
-        <input type="button" value="Work analysis" id="analytics" class="confet" onclick="remainingbuttons()">
+        <input type="button" value="Work analysis" id="analytics" class="confet" onclick="remainingbuttons1()">
         <input type="button" value="Add Customer Amount" id="addcusamt" class="confet" onclick="remainingbuttons()">
         <input type="button" value="Customer Data" id="cusdta" class="confet" onclick="showCustomerData()">
         <input type="button" value="Customer Bill" id="cusbill" class="confet" onclick="showCustomerBill()">
@@ -599,6 +610,15 @@
     </div>
 
     <img src="done1.png" id="done" style="display: none;" height="100px" width="100px">
+    <div
+        id="prevyear" style="height:200vh; display:flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; display: none;">
+        <h1 style="color: green; font-size: 3em; text-align: center; margin-top: 150px;">
+            Previous Year Works
+        </h1>
+
+        <img src="2024-work done.png" alt="Work Done" style="max-width:200%; max-height:300vh; display:block;margin-left: 150px;">
+        <img src="2024-jcb-bar.png" alt="JCB Bar" style="max-width:200%; max-height:90vh; display:block;">
+    </div>
 
 
     <marquee behavior="scroll" direction="left" scrollamount="10">
@@ -638,6 +658,23 @@
             document.getElementById("ledger").innerHTML = "";
         }
 
+        function remainingbuttons1() {
+            document.getElementById("captureDiv1").style.display = "none";
+            document.getElementById("captureDiv").style.display = "none";
+            document.getElementById("dnw3").style.display = "none";
+            document.getElementById("dnw3").style.display = "none";
+            document.getElementById("cusname").style.display = "none";
+            document.getElementById("customeralldata").innerHTML = "";
+            document.getElementById("customerallamt").innerHTML = "";
+            document.getElementById("ledger").innerHTML = "";
+            document.getElementById("dnw1").style.display = "none";
+            document.getElementById("dnw2").style.display = "none";
+            document.getElementById("submit6").style.display = "none";
+            document.getElementById("customeralldata2").innerHTML = "";
+            document.getElementById("customerallamt2").innerHTML = "";
+            document.getElementById("ledger2").innerHTML = "";
+
+        }
         function remainingbuttons() {
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("captureDiv").style.display = "none";
@@ -649,6 +686,7 @@
             document.getElementById("dnw1").style.display = "none";
             document.getElementById("dnw2").style.display = "none";
             document.getElementById("submit6").style.display = "none";
+            document.getElementById("prevyear").style.display = "none";
             document.getElementById("customeralldata2").innerHTML = "";
             document.getElementById("customerallamt2").innerHTML = "";
             document.getElementById("ledger2").innerHTML = "";
@@ -857,6 +895,7 @@
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'block';
             document.getElementById('myChart').style.display = 'block';
+            document.getElementById('prevyear').style.display = 'block';
             document.getElementById('custamountcontainer').style.display = 'none'
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';

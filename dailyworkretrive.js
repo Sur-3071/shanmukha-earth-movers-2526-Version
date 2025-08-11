@@ -32,7 +32,7 @@ async function RePrint() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work`);
+        const dataRefget = ref(db2, `Daily Work-2025-2026`);
         const snapshot = await get(dataRefget);
 
         // Check if data exists
@@ -57,7 +57,7 @@ async function RePrintSearch() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work`);
+        const dataRefget = ref(db2, `Daily Work-2025-2026`);
         const snapshot = await get(dataRefget);
 
         // Check if data exists
@@ -247,7 +247,7 @@ document.addEventListener("click", async function (e1) {
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work/${id}`);
+        const dataRefget = ref(db2, `Daily Work-2025-2026/${id}`);
         const snapshot = await get(dataRefget);
         var data;
         if (snapshot.exists()) {
@@ -551,7 +551,7 @@ async function RePrint1() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work`);
+        const dataRefget = ref(db2, `Daily Work-2025-2026`);
         const dataRefget1 = ref(db2, `Homeexp`);
         const snapshot = await get(dataRefget);
         const snapshot1 = await get(dataRefget1);
@@ -703,7 +703,7 @@ document.addEventListener("click", async function (e1) {
         e1.preventDefault();
         var id = e1.target.id;
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work/${id}`);
+        const dataRefget = ref(db2, `Daily Work-2025-2026/${id}`);
         const snapshot = await get(dataRefget);
         var data;
         if (snapshot.exists()) {
@@ -718,7 +718,7 @@ document.addEventListener("click", async function (e1) {
         }
         document.getElementById(id).textContent = payment;
 
-        const db1 = "Daily Work";
+        const db1 = "Daily Work-2025-2026";
         const paymentstatus = ref(db, `${db1}/${id}`);
         await set(paymentstatus, {
             Contract: data.Contract,
@@ -742,7 +742,7 @@ document.addEventListener("click", async function (e1) {
             e1.preventDefault();
             var id = e1.target.id;
             const db2 = getDatabase(app);
-            const dataRefget = ref(db2, `Daily Work/${id}`);
+            const dataRefget = ref(db2, `Daily Work-2025-2026/${id}`);
             const snapshot = await get(dataRefget);
             var data;
             if (snapshot.exists()) {
@@ -756,7 +756,7 @@ document.addEventListener("click", async function (e1) {
                 payment = "UnPaid";
             }
             document.getElementById(id).textContent = payment;
-            const db1 = "Daily Work";
+            const db1 = "Daily Work-2025-2026";
             const paymentstatus = ref(db, `${db1}/${id}`);
             await set(paymentstatus, {
                 Contract: data.Contract,
