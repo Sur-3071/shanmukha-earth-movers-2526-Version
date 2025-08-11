@@ -243,7 +243,17 @@
 
             const sortedDates = l.sort((a, b) => new Date(a) - new Date(b));
             var dat1 = sortedDates[0];
-            var dat2 = year + "-08-09";
+            var dat2 = year + "-" + month + "-" + day;
+            var compareDate = '2026-08-10';
+            var fallbackDate = '2025-08-10';
+
+            var d1 = new Date(dat2);
+            var d2 = new Date(compareDate);
+
+            if (d1 > d2) {
+                dat2 = fallbackDate;
+            }
+
             const date1 = new Date(dat1);
             const date2 = new Date(dat2);
             const differenceInMilliseconds = date2 - date1;
@@ -610,13 +620,14 @@
     </div>
 
     <img src="done1.png" id="done" style="display: none;" height="100px" width="100px">
-    <div
-        id="prevyear" style="height:200vh; display:flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; display: none;">
+    <div id="prevyear"
+        style="height:200vh; display:flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; display: none;">
         <h1 style="color: green; font-size: 3em; text-align: center; margin-top: 150px;">
             Previous Year Works
         </h1>
 
-        <img src="2024-work done.png" alt="Work Done" style="max-width:200%; max-height:300vh; display:block;margin-left: 150px;">
+        <img src="2024-work done.png" alt="Work Done"
+            style="max-width:200%; max-height:300vh; display:block;margin-left: 150px;">
         <img src="2024-jcb-bar.png" alt="JCB Bar" style="max-width:200%; max-height:90vh; display:block;">
     </div>
 
