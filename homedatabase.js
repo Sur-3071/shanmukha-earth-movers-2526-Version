@@ -21,7 +21,7 @@ document.getElementById('submit').addEventListener('click', async function (e) {
     const wid = document.getElementById("wid").value;
     const name = document.getElementById("name").value;
     const ptype = document.getElementById("type").value;
-    const disel = document.getElementById("dis").value;
+    var disel = document.getElementById("dis").value;
     document.getElementById("userForm").reset();
 
     function datarebuild() {
@@ -63,25 +63,58 @@ document.getElementById('submit').addEventListener('click', async function (e) {
                             var far = disel;
                             var jcb = 0;
                             var home = 0;
+                            var sal = 0;
+                            var salexp = 0;
                         }
                         else {
                             if (ptype === "Jcb") {
                                 var far = 0;
                                 var jcb = disel;
                                 var home = 0;
+                                var sal = 0;
+                                var salexp = 0;
                             }
                             else {
+                                if(ptype==="Home")
+                                {
                                 var far = 0;
                                 var jcb = 0;
                                 var home = disel;
+                                var sal = 0;
+                                var salexp = 0;
+                                }
+                                else
+                                {
+                                    if(ptype==="Salary")
+                                    {
+                                        var far = 0;
+                                        var jcb = 0;
+                                        var home = 0;
+                                        var sal = disel;
+                                        var salexp = 0;
+                                    }
+                                    else
+                                    {
+                                        var far = 0;
+                                        var jcb = 0;
+                                        var home = 0;
+                                        var sal = 0;
+                                        var salexp = disel;
+                                    }
+                                }
                             }
                         }
-
+                        if(ptype==="Salary")
+                        {
+                            disel=0;
+                        }
                         await set(dataRefset, {
                             Date: dat,
                             Name: name,
                             Price: disel,
                             Farming: far,
+                            Salary: sal,
+                            SalaryExp: salexp,
                             Jcb: jcb,
                             Home: home,
                             Type: ptype,

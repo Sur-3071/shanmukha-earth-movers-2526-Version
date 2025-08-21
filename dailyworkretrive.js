@@ -805,13 +805,21 @@ async function RePrintHome() {
         const db2 = getDatabase(app);
         const dataRefget = ref(db2, `Homeexp`);
         const snapshot = await get(dataRefget);
-
+        // alert("coming");
         // Check if data exists
         if (snapshot.exists()) {
+            // alert("coming");
             const data = snapshot.val();
-            console.log(data);
+            // console.log(data);
             var v1 = document.getElementById("typech").value;
-            if (v1.length > 0) {
+            // alert(v1);
+            if(v1==="")
+            {
+                // alert("comming");
+                v1="1";
+            }
+            // alert(v1.length);
+            if (v1.length > 1) {
                 generateHomeTableSearch(data, v1)
             }
             else {
@@ -821,7 +829,7 @@ async function RePrintHome() {
             alert("No data available for the selected date.");
         }
     } catch (error) {
-        alert("Error occurred while fetching data");
+        alert("Error occurred while fetching data ");
     }
 }
 function generateHomeTablebydate(data, startdate, enddate) {
@@ -837,6 +845,8 @@ function generateHomeTablebydate(data, startdate, enddate) {
             <th id="csize1">Home Expenses</th>
             <th id="csize1">Farming</th>
             <th id="csize1">Jcb</th>
+             <th id="csize1">Salary</th>
+            <th id="csize1">Salary Expenses</th>
             <th id="csize1">Amount
             </th>
         </tr>`;
@@ -844,6 +854,8 @@ function generateHomeTablebydate(data, startdate, enddate) {
     var f1 = 0;
     var j1 = 0;
     var h1 = 0;
+    var s1=0;
+    var s2=0;
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
@@ -858,7 +870,21 @@ function generateHomeTablebydate(data, startdate, enddate) {
                             j1 += parseInt(activity.Price);
                         }
                         else {
-                            h1 += parseInt(activity.Price);
+                            if(activity.Type === "Salary")
+                            {
+                            s1 += parseInt(activity.Salary);
+                            }
+                            else
+                            {
+                                if(activity.Type === "SalaryExp")
+                                {
+                                    s2 += parseInt(activity.SalaryExp);
+                                }
+                                else
+                                {
+                                    h1+=parseInt(activity.Home);
+                                }
+                            }
                         }
                     }
                     amt += parseInt(activity.Price);
@@ -870,6 +896,8 @@ function generateHomeTablebydate(data, startdate, enddate) {
                         <td>${activity.Home}</td>
                         <td>${activity.Farming}</td>
                         <td>${activity.Jcb}</td>
+                        <td>${activity.Salary}</td>
+                        <td>${activity.SalaryExp}</td>
                         <td>${activity.Price}</td>
                     </tr>`;
                 }
@@ -881,6 +909,8 @@ function generateHomeTablebydate(data, startdate, enddate) {
     <td id="am">${h1}</td>
     <td id="am">${f1}</td>
     <td id="am">${j1}</td>
+    <td id="am">${s1}</td>
+    <td id="am">${s2}</td>
     <td id="am">${amt}</td>
     </tr>`;
     out1 += `</table>`;
@@ -897,6 +927,8 @@ function generateHomeTableSearch(data, v1) {
             <th id="csize1">Home Expenses</th>
             <th id="csize1">Farming</th>
             <th id="csize1">Jcb</th>
+            <th id="csize1">Salary</th>
+            <th id="csize1">Salary Expenses</th>
             <th id="csize1">Amount</th>
         </tr>`;
     var amt = 0;
@@ -904,12 +936,25 @@ function generateHomeTableSearch(data, v1) {
     var j1 = 0;
     var h1 = 0;
     var c = 0;
+    var s1=0;
+    var s2=0;
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
+            // alert("yesss");
+            // console.log(activity);
             if (customerPhone !== "Home") {
+                // alert("yesss");
                 if (activity.Type === v1) {
-                    c += parseInt(activity.Price);
+                    console.log(activity.Type===v1);
+                    if(v1==="Salary")
+                    {
+                        c += parseInt(activity.Salary);
+                    }
+                    else
+                    {
+                        c += parseInt(activity.Price);
+                    }
                     amt += parseInt(activity.Price);
                     out += `<tr>
                         <td>${customerPhone}</td>
@@ -919,6 +964,8 @@ function generateHomeTableSearch(data, v1) {
                         <td>${activity.Home}</td>
                         <td>${activity.Farming}</td>
                         <td>${activity.Jcb}</td>
+                        <td>${activity.Salary}</td>
+                        <td>${activity.SalaryExp}</td>
                         <td>${activity.Price}</td>
                     </tr>`;
                 }
@@ -929,17 +976,46 @@ function generateHomeTableSearch(data, v1) {
         j1 = 0;
         h1 = 0;
         f1 = c;
+        s1= 0;
+        s2=0;
     }
     else {
         if (v1 === "Jcb") {
             h1 = 0;
             f1 = 0;
             j1 = c;
+            s1= 0;
+            s2=0;
         }
         else {
+            if(v1==="Home")
+            {
             f1 = 0;
             j1 = 0;
             h1 = c;
+            s1= 0;
+            s2=0;
+            }
+            else
+            {
+                if(v1==="Salary")
+                {
+                    f1 = 0;
+                    j1 = 0;
+                    h1 = 0;
+                    s1= c;
+                    s2=0;
+                }
+                else
+                {
+                    f1 = 0;
+                    j1 = 0;
+                    h1 = 0;
+                    s1= 0;
+                    s2=c;
+
+                }
+            }
         }
     }
     out += `<tr>
@@ -947,6 +1023,8 @@ function generateHomeTableSearch(data, v1) {
     <td id="am">${h1}</td>
     <td id="am">${f1}</td>
     <td id="am">${j1}</td>
+    <td id="am">${s1}</td>
+    <td id="am">${s2}</td>
     <td id="am">${amt}</td>
     </tr>`;
     out += `</table>`;
@@ -964,15 +1042,20 @@ function generateHomeTable(data) {
             <th id="csize1">Home Expenses</th>
             <th id="csize1">Farming</th>
             <th id="csize1">Jcb</th>
+            <th id="csize1">Salary</th>
+            <th id="csize1">Salary Expenses</th>
             <th id="csize1">Amount</th>
         </tr>`;
     var amt = 0;
     var f1 = 0;
     var j1 = 0;
     var h1 = 0;
+    var s1=0;
+    var s2=0;
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
+            // alert("function");
             if (customerPhone !== "Home") {
                 if (activity.Type === "Farming") {
                     f1 += parseInt(activity.Price);
@@ -982,7 +1065,24 @@ function generateHomeTable(data) {
                         j1 += parseInt(activity.Price);
                     }
                     else {
-                        h1 += parseInt(activity.Price);
+                         if(activity.Type === "Salary")
+                            {
+                                // alert("function12");
+                                // alert(activity.Salary);
+
+                            s1 += parseInt(activity.Salary);
+                            }
+                            else
+                            {
+                                if(activity.Type === "SalaryExp")
+                                {
+                                    s2 += parseInt(activity.SalaryExp);
+                                }
+                                else
+                                {
+                                    h1+=parseInt(activity.Home);
+                                }
+                            }
                     }
                 }
                 amt += parseInt(activity.Price);
@@ -994,6 +1094,8 @@ function generateHomeTable(data) {
                         <td>${activity.Home}</td>
                         <td>${activity.Farming}</td>
                         <td>${activity.Jcb}</td>
+                        <td>${activity.Salary}</td>
+                        <td>${activity.SalaryExp}</td>
                         <td>${activity.Price}</td>
                     </tr>`;
             }
@@ -1004,6 +1106,8 @@ function generateHomeTable(data) {
     <td id="am">${h1}</td>
     <td id="am">${f1}</td>
     <td id="am">${j1}</td>
+    <td id="am">${s1}</td>
+    <td id="am">${s2}</td>
     <td id="am">${amt}</td>
     </tr>`;
     out += `</table>`;

@@ -91,12 +91,17 @@
     <div>
         <input type="text" placeholder="Search Box" id="search">
     </div>
-    <select id="typech" required style="display: none;">
-        <option hidden>Select Purpose Type</option>
-        <option>Farming</option>
-        <option>Jcb</ption>
-        <option>Home</ption>
-    </select>
+
+<div class="select-wrapper" style="margin-left: 50px; margin-top: 100px;">
+  <select id="typech" name="purpose" required class="select" style="display: none;">
+    <option value="" selected disabled>Select Purpose Type</option>
+    <option value="Farming">Farming</option>
+    <option value="JCB">JCB</option>
+    <option value="Home">Home</option>
+    <option value="Salary">Salary</option>
+    <option value="Salary Expenses">Salary Expenses</option>
+  </select>
+</div>
     <img src="done1.png" id="done" style="display: none;" height="100px" width="100px">
     <div id="enterdata">
 

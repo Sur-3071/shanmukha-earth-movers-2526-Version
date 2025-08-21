@@ -209,7 +209,7 @@ function displaytripsdata(data) {
                             out += `<tr>
                                 <td>` + sno + `</td>
                                 <td>` + formatDateToNormal(date) + `</td>
-                                <td style="font-weight:bold">` + name + `</td>
+                                <td style="font-weight:bold;font-size:20px">` + name + `</td>
                                 <td>` + activity + `</td>
                                 <td>` + activities[activity]['Price'] + `</td>
                                 <td>` + activities[activity]['Trips'] + `</td>
