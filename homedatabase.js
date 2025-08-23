@@ -21,6 +21,8 @@ document.getElementById('submit').addEventListener('click', async function (e) {
     const wid = document.getElementById("wid").value;
     const name = document.getElementById("name").value;
     const ptype = document.getElementById("type").value;
+    const pertype = document.getElementById("persontype").value;
+    alert(pertype);
     var disel = document.getElementById("dis").value;
     document.getElementById("userForm").reset();
 
@@ -104,7 +106,7 @@ document.getElementById('submit').addEventListener('click', async function (e) {
                                 }
                             }
                         }
-                        if(ptype==="Salary")
+                        if(ptype==="Salary" || ptype==="Salary Expenses")
                         {
                             disel=0;
                         }
@@ -118,6 +120,7 @@ document.getElementById('submit').addEventListener('click', async function (e) {
                             Jcb: jcb,
                             Home: home,
                             Type: ptype,
+                            PersonType:pertype
                         });
 
                         document.getElementById("done").style.display = "block";
