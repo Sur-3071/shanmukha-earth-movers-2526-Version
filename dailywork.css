@@ -499,6 +499,24 @@ table {
         flex-direction: column;
         align-items: center;
     }
+      #prevyear {
+    min-height: auto;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  #prevyear h1 {
+    font-size: 2em;
+    margin-top: 50px;
+    text-align: center;
+  }
+
+  #prevyear img {
+    max-width: 100%;   /* Full width on tablet/mobile */
+    height: auto;
+    margin: 10px auto;
+    display: block;
+  }
 
 
     #customerallamt {

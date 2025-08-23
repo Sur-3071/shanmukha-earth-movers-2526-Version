@@ -510,7 +510,11 @@
                 <option>Contract</option>
             </select>
             <div id="hours" style="display: none;">
-                <input type="text" id="hrsrate" name="hrsrate" placeholder="Hours Price" onkeyup="timecal()" required>
+                <!-- <input type="text" id="hrsrate" name="hrsrate" placeholder="Hours Price" onkeyup="timecal()" required> -->
+                <select id="hrsrate" name="hrsrate" onchange="timecal()" required>
+                    <option value="" disabled selected>Select Hours Price</option>
+                    <!-- Options will be generated -->
+                </select>
                 <input type="time" id="stime" name="stime" placeholder="Starting Time" onchange="timecal()" required>
                 <input type="time" id="etime" name="etime" placeholder="Ending Time" onchange="timecal()" required>
                 <input type="text" id="ttime" name="ttime" placeholder="Total Time" readonly required>
@@ -641,6 +645,13 @@
     <script src="dailywork.js"></script>
     <script src="proxyurl.js"></script>
     <script>
+        const select = document.getElementById("hrsrate");
+        for (let rate = 800; rate <= 1500; rate += 50) {
+            let option = document.createElement("option");
+            option.value = rate;
+            option.textContent = rate;
+            select.appendChild(option);
+        }
 
         function showCustomerData() {
             // Show customer data div
@@ -649,6 +660,7 @@
             document.getElementById("dnw1").style.display = "none";
             document.getElementById("dnw2").style.display = "none";
             document.getElementById("submit6").style.display = "none";
+            document.getElementById("prevyear").style.display = "none";
 
 
             // Clear the contents of captureDiv1

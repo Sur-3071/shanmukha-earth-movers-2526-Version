@@ -499,7 +499,7 @@ async function RePrint6(amt) {
             generateCustomeramtTable(data1, amt);
 
         } else {
-            alert("No data available");
+            alert("No Amount is given by Customer");
             document.getElementById("customerallamt").style.display = "none";
             document.getElementById("ledger").style.display = "none";
 
