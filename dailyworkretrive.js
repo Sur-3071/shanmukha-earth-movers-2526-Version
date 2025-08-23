@@ -905,7 +905,6 @@ function generateHomeTablebydate(data, startdate, enddate) {
     <td id="am">${f1}</td>
     <td id="am">${j1}</td>
     <td id="am">${s1}</td>
-    <td id="am">${s2}</td>
     <td id="am">${amt}</td>
     </tr>`;
     out1 += `</table>`;
@@ -1076,7 +1075,6 @@ function generateHomeTableSearch(data, v1) {
     <td id="am">${f1}</td>
     <td id="am">${j1}</td>
     <td id="am">${s1}</td>
-    <td id="am">${s2}</td>
     <td id="am">${amt}</td>
     </tr>`;
     out += `</table>`;
@@ -1157,7 +1155,6 @@ function generateHomeTable(data) {
     <td id="am">${f1}</td>
     <td id="am">${j1}</td>
     <td id="am">${s1}</td>
-    <td id="am">${s2}</td>
     <td id="am">${amt}</td>
     </tr>`;
     out += `</table>`;
