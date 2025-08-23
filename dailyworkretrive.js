@@ -893,7 +893,6 @@ function generateHomeTablebydate(data, startdate, enddate) {
                         <td>${activity.Farming}</td>
                         <td>${activity.Jcb}</td>
                         <td>${activity.Salary}</td>
-                        <td>${activity.SalaryExp}</td>
                         <td>${activity.Price}</td>
                     </tr>`;
                 }
@@ -1021,7 +1020,6 @@ function generateHomeTableSearch(data, v1) {
                         <td>${activity.Farming}</td>
                         <td>${activity.Jcb}</td>
                         <td>${activity.Salary}</td>
-                        <td>${activity.SalaryExp}</td>
                         <td>${activity.Price}</td>
                     </tr>`;
                 }
@@ -1147,7 +1145,6 @@ function generateHomeTable(data) {
                         <td>${activity.Farming}</td>
                         <td>${activity.Jcb}</td>
                         <td>${activity.Salary}</td>
-                        <td>${activity.SalaryExp}</td>
                         <td>${activity.Price}</td>
                     </tr>`;
             }
