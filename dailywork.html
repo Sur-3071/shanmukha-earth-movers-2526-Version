@@ -41,7 +41,6 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db2 = getDatabase(app);
-
         async function DayCountcal() {
             try {
                 localStorage.setItem("editbill", 0);
@@ -54,6 +53,25 @@
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     generateTable(data);
+                } else {
+                    alert("No data available.");
+                }
+            } catch (error) {
+                alert("Error occurred while fetching data 3071");
+            }
+        }
+        async function Expensescal() {
+
+            try {
+
+                // Access the database and retrieve data
+                const dataRefget = ref(db2, `Homeexp`);
+                const snapshot = await get(dataRefget);
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    generateExpensesTable(data);
+                    // createexpensestable(data);
                 } else {
                     alert("No data available.");
                 }
@@ -81,6 +99,192 @@
             }
         }
 
+        function generateExpensesTable(data) {
+            // Initialize totals for Suresh and Dady
+            let sureshTotals = { Home: 0, Farming: 0, Jcb: 0, Salary: 0, SalaryExp: 0, Total: 0 };
+            let dadyTotals = { Home: 0, Farming: 0, Jcb: 0, Salary: 0, SalaryExp: 0, Total: 0 };
+            let total = { Home: 0, Farming: 0, Jcb: 0, Salary: 0, SalaryExp: 0, Total: 0 };
+
+            // Initialize table HTML for Suresh and Dady
+            let sureshTable = `<table border="1px">
+        <tr>
+            <th>Purpose Id</th>
+            <th>Date</th>
+            <th>Person Type</th>
+            <th>Purpose Type</th>
+            <th>Purpose</th>
+            <th>Home Expenses</th>
+            <th>Farming</th>
+            <th>Jcb</th>
+            <th>Amount</th>
+        </tr>`;
+            let dadyTable = `<table border="1px">
+        <tr>
+            <th>Purpose Id</th>
+            <th>Date</th>
+            <th>Person Type</th>
+            <th>Purpose Type</th>
+            <th>Purpose</th>
+            <th>Home Expenses</th>
+            <th>Farming</th>
+            <th>Jcb</th>
+            <th>Amount</th>
+        </tr>`;
+         let alldadyTable = `<table border="1px">
+        <tr>
+            <th>Purpose Id</th>
+            <th>Date</th>
+            <th>Person Type</th>
+            <th>Purpose Type</th>
+            <th>Purpose</th>
+            <th>Home Expenses</th>
+            <th>Farming</th>
+            <th>Jcb</th>
+            <th>Amount</th>
+        </tr>`;
+
+            const compareDate = new Date("2025-08-10");
+
+            // Iterate through data
+            for (const customerPhone in data) {
+                if (data.hasOwnProperty(customerPhone) && customerPhone !== "Home") {
+                    const activity = data[customerPhone];
+                    const activityDate = new Date(activity.Date);
+
+                    // Only process activities after the compare date
+                    if (activityDate > compareDate) {
+                        const personType = activity.PersonType;
+                        const purposeType = activity.Type;
+                        const amount = parseInt(activity.Price) || 0;
+                        const salary = parseInt(activity.Salary) || 0;
+                        const salaryExp = parseInt(activity.SalaryExp) || 0;
+                        const home = parseInt(activity.Home) || 0;
+                        const farming = parseInt(activity.Farming) || 0;
+                        const jcb = parseInt(activity.Jcb) || 0;
+
+                        // Determine which table and totals to update
+                        let table="";
+                        let totals=0;
+                        if (personType === "Suresh") {
+                            table = sureshTable;
+                            totals = sureshTotals;
+                            total.Home+=home;
+                            total.Farming+=farming;
+                            total.Jcb+=jcb;
+                            total.Total+=amount;
+                            sureshTable += `<tr>
+                            <td>${customerPhone}</td>
+                            <td>${activity.Date}</td>
+                            <td>${personType}</td>
+                            <td>${purposeType}</td>
+                            <td>${activity.Name || ''}</td>
+                            <td>${home}</td>
+                            <td>${farming}</td>
+                            <td>${jcb}</td>
+                            <td>${amount}</td>
+                        </tr>`;
+                        alldadyTable+=`<tr>
+                            <td>${customerPhone}</td>
+                            <td>${activity.Date}</td>
+                            <td>${personType}</td>
+                            <td>${purposeType}</td>
+                            <td>${activity.Name || ''}</td>
+                            <td>${home}</td>
+                            <td>${farming}</td>
+                            <td>${jcb}</td>
+                            <td>${amount}</td>
+                        </tr>`;
+                        }
+                        else {
+                            table = dadyTable;
+                            totals = dadyTotals;
+                             total.Home+=home;
+                            total.Farming+=farming;
+                            total.Jcb+=jcb;
+                            total.Total+=amount;
+                            dadyTable += `<tr>
+                                <td>${customerPhone}</td>
+                                <td>${activity.Date}</td>
+                                <td>${personType}</td>
+                                <td>${purposeType}</td>
+                                <td>${activity.Name || ''}</td>
+                                <td>${home}</td>
+                                <td>${farming}</td>
+                                <td>${jcb}</td>
+                                <td>${amount}</td>
+                            </tr>`;
+                           alldadyTable+=`<tr>
+                            <td>${customerPhone}</td>
+                            <td>${activity.Date}</td>
+                            <td>${personType}</td>
+                            <td>${purposeType}</td>
+                            <td>${activity.Name || ''}</td>
+                            <td>${home}</td>
+                            <td>${farming}</td>
+                            <td>${jcb}</td>
+                            <td>${amount}</td>
+                        </tr>`;
+                        }
+
+                        // let table = personType === "Suresh" ? sureshTable : dadyTable;
+                        // let totals = personType === "Suresh" ? sureshTotals : dadyTotals;
+
+                        // Update totals based on purpose type
+                        if (purposeType === "Home") totals.Home += home;
+                        else if (purposeType === "Farming") totals.Farming += farming;
+                        else if (purposeType === "Jcb")totals.Jcb += jcb;
+                        else if (purposeType === "Salary") totals.Salary += salary;
+                        else if (purposeType === "Salary Expenses") totals.SalaryExp += salaryExp;
+                        console.log(totals.Home);
+                        totals.Total += amount;
+
+                        // Add row to the appropriate table
+                    }
+                }
+            }
+            // Add total rows and close tables
+            sureshTable += `<tr>
+        <td colspan="5" id="col">Total Expenses</td>
+        <td id="am">${sureshTotals.Home}</td>
+        <td id="am">${sureshTotals.Farming}</td>
+        <td id="am">${sureshTotals.Jcb}</td>
+        <td id="am">${sureshTotals.Total}</td>
+    </tr></table>`;
+
+            dadyTable += `<tr>
+        <td colspan="5" id="col">Total Expenses</td>
+        <td id="am">${dadyTotals.Home}</td>
+        <td id="am">${dadyTotals.Farming}</td>
+        <td id="am">${dadyTotals.Jcb}</td>
+        <td id="am">${dadyTotals.Total}</td>
+    </tr></table>`;
+    // console.log(dadyTotals.Home,sureshTable.Home);
+     alldadyTable += `<tr>
+        <td colspan="5" id="col">Total Expenses</td>
+        <td id="am">${total.Home}</td>
+        <td id="am">${total.Farming}</td>
+        <td id="am">${total.Jcb}</td>
+        <td id="am">${total.Total}</td>
+    </tr></table>`;
+
+            // Update DOM elements
+            document.getElementById("exptable2").innerHTML = sureshTable;
+            document.getElementById("exptable1").innerHTML = dadyTable;
+            document.getElementById("exptable3").innerHTML = alldadyTable;
+            document.getElementById("dadyexp").innerHTML = moneyconvert(dadyTotals.Total);
+            document.getElementById("sureshexp").innerHTML = moneyconvert(sureshTotals.Total);
+            document.getElementById("allexp").innerHTML = moneyconvert(sureshTotals.Total + dadyTotals.Total);
+
+            // Apply styles
+            document.getElementById("dadyexp").style.color = "skyblue";
+            document.getElementById("sureshexp").style.color = "red";
+            document.getElementById("allexp").style.color = "green";
+        }
+
+        // Example moneyconvert function (implement as needed)
+        function moneyconvert(amount) {
+            return `₹${amount.toLocaleString('en-IN')}`; // Example: formats as Indian Rupees
+        }
 
         function generateName(data) {
             for (const customerPhone in data) {
@@ -431,6 +635,7 @@
         // Call DayCountcal when the page is loaded
         window.addEventListener('load', DayCountcal);
         window.addEventListener('load', selectnames);
+        window.addEventListener('load', Expensescal);
     </script>
 </head>
 
@@ -490,6 +695,50 @@
             <div class="box">
                 <h2 style="color: rgb(75, 166, 236);">Improvement Hours</h2>
                 <h1 id="imphrs"></h1>
+            </div>
+            <div class="box" id="Dady" onclick="openPopup1()">
+                <h2 style="color: rgb(75, 166, 236);">Dady Expenses</h2>
+                <h1 id="dadyexp">₹12,500</h1>
+            </div>
+
+            <!-- Popup -->
+            <div id="myModal1" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closePopup1()">&times;</span>
+                    <div id="exptable1">
+
+                    </div>
+                    <h2>Popup Opened Successfully dady🎉</h2>
+                    <p>Here you can present your matter, details, or any information.</p>
+                </div>
+            </div>
+            <div id="myModal2" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closePopup2()">&times;</span>
+                    <div id="exptable2">
+
+                    </div>
+                    <h2>Popup Opened Successfully suresh 🎉</h2>
+                    <p>Here you can present your matter, details, or any information.</p>
+                </div>
+            </div>
+            <div id="myModal3" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closePopup3()">&times;</span>
+                    <div id="exptable3">
+
+                    </div>
+                    <h2>Popup Opened Successfully 🎉</h2>
+                    <p>Here you can present your matter, details, or any information.</p>
+                </div>
+            </div>
+            <div class="box" id="suresh" onclick="openPopup2()">
+                <h2 style="color: rgb(75, 166, 236);">Suresh Expenses</h2>
+                <h1 id="sureshexp"></h1>
+            </div>
+            <div class="box" id="all" onclick="openPopup3()">
+                <h2 style="color: rgb(75, 166, 236);">Overall Expenses</h2>
+                <h1 id="allexp"></h1>
             </div>
         </div>
 
@@ -645,6 +894,32 @@
     <script src="dailywork.js"></script>
     <script src="proxyurl.js"></script>
     <script>
+
+        async function openPopup1() {
+            document.getElementById("myModal1").style.display = "flex";
+        }
+        async function openPopup2() {
+            document.getElementById("myModal2").style.display = "flex";
+        }
+        async function openPopup3() {
+            document.getElementById("myModal3").style.display = "flex";
+        }
+
+        function closePopup1() {
+            document.getElementById("myModal1").style.display = "none";
+        }
+        function closePopup2() {
+            document.getElementById("myModal2").style.display = "none";
+        }
+        function closePopup3() {
+            document.getElementById("myModal3").style.display = "none";
+        }
+        // Close popup when clicking outside
+        window.onclick = function (event) {
+            if (event.target == document.getElementById("myModal")) {
+                closePopup();
+            }
+        }
         const select = document.getElementById("hrsrate");
         for (let rate = 800; rate <= 1500; rate += 50) {
             let option = document.createElement("option");
