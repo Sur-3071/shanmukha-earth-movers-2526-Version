@@ -261,6 +261,13 @@ document.addEventListener("click", async function (e1) {
         // var PhoneNumber = data.PhoneNumber;
         var Disel = data.Disel;
         var Price = data.Price;
+        // alert(data.Description);
+        var desc="--";
+        if(data.Description!="undefined")
+        {
+            var desc=data.Description
+        }
+       
         // var Shift = data.Shift;
         var output = data.Drivers;
         var Starting = data.Starting;
@@ -292,6 +299,7 @@ document.addEventListener("click", async function (e1) {
         document.getElementById("hrsrate").value = hrsamt;
         document.getElementById("dis").value = Disel;
         document.getElementById("con").value = Contract;
+        document.getElementById("desc").value = desc;
         document.getElementById("stime").value = Starting
         document.getElementById("etime").value = Ending;
         document.getElementById("ttime").value = TotalTime;

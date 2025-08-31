@@ -24,6 +24,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     const pno = "**";
     const disel = document.getElementById("dis").value;
     var con = document.getElementById("con").value;
+    var desc=document.getElementById("desc").value;
     var stime = document.getElementById("stime").value;
     var etime = document.getElementById("etime").value;
     var ttime = document.getElementById("ttime").value;
@@ -100,6 +101,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 Contract: con,
                                 Payment: pay,
                                 Disel: disel,
+                                Description: desc,
                                 HoursPrice: hrsamt,
                                 TripsPrice: trpamt,
                                 Trips: trips,
@@ -149,6 +151,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
         document.getElementById("name").value = name;
         document.getElementById("vill").value = villname;
         document.getElementById("worktype").value = worktype;
+        document.getElementById("desc").value = desc;
         document.getElementById("hrsrate").value = hrsamt;
         document.getElementById("trprate").value = trpamt;
         document.getElementById("pno").value = pno;
@@ -564,13 +567,14 @@ function generateCustomerTable(data) {
     var recovery = 0;
     let out = `<table border="1px" background-color: cadetblue;" id="customerTable1">
     <tr>
-    <th colspan="11" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
+    <th colspan="12" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
     </tr>
         <tr>
             <th id="csize">Customer Id</th>
             <th id="csize1">Date</th>
             <th id="csize1">Customer Name</th>
             <th id="csize1">Village</th>
+            <th id="csize">Drivers</th>
             <th id="csize">Trips</th>
             <th id="csize">Contract</th>
             <th id="csize">Starting Time</th>
@@ -628,6 +632,7 @@ function generateCustomerTable(data) {
                         <td>${formatDate(activity.Date)}</td>
                         <td>${activity.Name}</td>
                         <td>${activity.Villagename}</td>
+                        <td>${activity.Drivers}</td>
                         <td>${activity.Trips}</td>
                         <td>${activity.Contract}</td>
                         <td>${activity.Starting}</td>
@@ -645,7 +650,7 @@ function generateCustomerTable(data) {
     hou += mintohou;
     totaltime = hou + ":" + mint;
     out += `<tr>
-            <td colspan="4" id="col">Total Work Analaysis</td>
+            <td colspan="5" id="col">Total Work Analaysis</td>
             <td  id="am" style="font-size:30px;">${totaltrips}</td>
             <td id="am" style="font-size:30px;">${totalcontarct}</td>
             <td id="am" colspan="3" style="font-size:30px;">${totaltime}</td>
@@ -670,12 +675,13 @@ function generateCustomerTable1(data) {
 
     out += `<table border="1px" id="customerTable1">
     <tr>
-    <th colspan="10" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
+    <th colspan="11" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
     </tr>
         <tr>
             <th>Date</th>
             <th>Name</th>
             <th>Village</th>
+            <th>Description</th>
             <th>Trips</th>
             <th>Contract</th>
             <th>Starting</th>
@@ -741,6 +747,7 @@ function generateCustomerTable1(data) {
                     <td>${activity.Date}</td>
                     <td>${activity.Name}</td>
                     <td>${activity.Villagename}</td>
+                    <td>${activity.Description}</td>
                     <td>${activity.Trips}</td>
                     <td>${activity.Contract}</td>
                     <td>${activity.Starting}</td>
@@ -763,7 +770,7 @@ function generateCustomerTable1(data) {
     hou += mintohou;
 
     out += `<tr>
-        <td colspan="3">Total Work</td>
+        <td colspan="4">Total Work</td>
         <td>${totaltrips}</td>
         <td>${totalcontract}</td>
         <td colspan="3">${hou}:${mint}</td>

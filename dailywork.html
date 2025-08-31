@@ -130,7 +130,7 @@
             <th>Jcb</th>
             <th>Amount</th>
         </tr>`;
-         let alldadyTable = `<table border="1px">
+            let alldadyTable = `<table border="1px">
         <tr>
             <th>Purpose Id</th>
             <th>Date</th>
@@ -163,15 +163,15 @@
                         const jcb = parseInt(activity.Jcb) || 0;
 
                         // Determine which table and totals to update
-                        let table="";
-                        let totals=0;
+                        let table = "";
+                        let totals = 0;
                         if (personType === "Suresh") {
                             table = sureshTable;
                             totals = sureshTotals;
-                            total.Home+=home;
-                            total.Farming+=farming;
-                            total.Jcb+=jcb;
-                            total.Total+=amount;
+                            total.Home += home;
+                            total.Farming += farming;
+                            total.Jcb += jcb;
+                            total.Total += amount;
                             sureshTable += `<tr>
                             <td>${customerPhone}</td>
                             <td>${activity.Date}</td>
@@ -183,7 +183,7 @@
                             <td>${jcb}</td>
                             <td>${amount}</td>
                         </tr>`;
-                        alldadyTable+=`<tr>
+                            alldadyTable += `<tr>
                             <td>${customerPhone}</td>
                             <td>${activity.Date}</td>
                             <td>${personType}</td>
@@ -198,10 +198,10 @@
                         else {
                             table = dadyTable;
                             totals = dadyTotals;
-                             total.Home+=home;
-                            total.Farming+=farming;
-                            total.Jcb+=jcb;
-                            total.Total+=amount;
+                            total.Home += home;
+                            total.Farming += farming;
+                            total.Jcb += jcb;
+                            total.Total += amount;
                             dadyTable += `<tr>
                                 <td>${customerPhone}</td>
                                 <td>${activity.Date}</td>
@@ -213,7 +213,7 @@
                                 <td>${jcb}</td>
                                 <td>${amount}</td>
                             </tr>`;
-                           alldadyTable+=`<tr>
+                            alldadyTable += `<tr>
                             <td>${customerPhone}</td>
                             <td>${activity.Date}</td>
                             <td>${personType}</td>
@@ -232,7 +232,7 @@
                         // Update totals based on purpose type
                         if (purposeType === "Home") totals.Home += home;
                         else if (purposeType === "Farming") totals.Farming += farming;
-                        else if (purposeType === "Jcb")totals.Jcb += jcb;
+                        else if (purposeType === "Jcb") totals.Jcb += jcb;
                         else if (purposeType === "Salary") totals.Salary += salary;
                         else if (purposeType === "Salary Expenses") totals.SalaryExp += salaryExp;
                         console.log(totals.Home);
@@ -258,8 +258,8 @@
         <td id="am">${dadyTotals.Jcb}</td>
         <td id="am">${dadyTotals.Total}</td>
     </tr></table>`;
-    // console.log(dadyTotals.Home,sureshTable.Home);
-     alldadyTable += `<tr>
+            // console.log(dadyTotals.Home,sureshTable.Home);
+            alldadyTable += `<tr>
         <td colspan="5" id="col">Total Expenses</td>
         <td id="am">${total.Home}</td>
         <td id="am">${total.Farming}</td>
@@ -441,7 +441,7 @@
             }
             for (var i = 1; i < 13; i++) {
                 holiday[i] = totalDays[i] - worked[i];
-                profit[i] = months[i] - oil[i] - worked[i] * 335 - totalDays[i] * 2534;
+                profit[i] = months[i] - oil[i] - worked[i] * 335 - totalDays[i] * 2534 - 20000;
 
             }
 
@@ -579,12 +579,12 @@
                                 const monthprofit = value
                                     - parseInt(custom.oil)
                                     - (parseInt(custom.worked) * 335)
-                                    - (parseInt(custom.totalDays) * 2534);
+                                    - (parseInt(custom.totalDays) * 2534) - 20000;
 
                                 return [
                                     `In: ₹${value.toLocaleString()}`,
                                     `Oil: ₹${parseInt(custom.oil).toLocaleString()}`,
-                                    `Profit: ₹${monthprofit.toLocaleString()}`,
+                                    `${monthprofit < 0 ? "Loss" : "Profit"}: ₹${Math.abs(monthprofit).toLocaleString()}`,
                                     `${custom.worked} days`
                                 ];
                             }
@@ -619,9 +619,10 @@
             if (remin == 0) {
                 remin = 1;
             }
+            var homeexp = 20000;
             var imprhrs = parseInt((((365 * 8000) - totalwork) / (remin)) / 1000)
             var impmin = parseInt((((((365 * 8000) - totalwork) / (remin)) / 1000) - imprhrs) * 60)
-            proft = totalwork - workday * 335 - differenceInDays * 2534 - oila;
+            proft = totalwork - workday * 335 - differenceInDays * 2534 - oila - homeexp;
             document.getElementById("twrk").innerHTML = moneyconvert(totalwork);
             document.getElementById("proft").innerHTML = moneyconvert(proft);
             document.getElementById("oil").innerHTML = moneyconvert(oila);
@@ -764,6 +765,7 @@
                     <option value="" disabled selected>Select Hours Price</option>
                     <!-- Options will be generated -->
                 </select>
+                <input type="text" id="desc" name="desc" placeholder="Description" value="--" required>
                 <input type="time" id="stime" name="stime" placeholder="Starting Time" onchange="timecal()" required>
                 <input type="time" id="etime" name="etime" placeholder="Ending Time" onchange="timecal()" required>
                 <input type="text" id="ttime" name="ttime" placeholder="Total Time" readonly required>

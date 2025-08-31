@@ -25,6 +25,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
     // const pno = document.getElementById("pno").value;
     const disel = document.getElementById("dis").value;
     var con = document.getElementById("con").value;
+     var desc = document.getElementById("desc").value;
     var stime = document.getElementById("stime").value;
     var etime = document.getElementById("etime").value;
     var ttime = document.getElementById("ttime").value;
@@ -64,6 +65,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
                         Villagename: villname,
                         PhoneNumber: "**",
                         Shift: "**",
+                        Description: desc,
                         Contract: con,
                         Payment: pay,
                         Disel: disel,
