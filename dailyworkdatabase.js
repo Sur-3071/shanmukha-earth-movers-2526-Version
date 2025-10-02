@@ -425,6 +425,7 @@ document.getElementById('submit5').addEventListener('click', async function (e) 
     const name = document.getElementById("name4").value;
     // document.getElementById("userForm4").reset();
     if (name.length > 0) {
+        // alert(name);
         RePrint51();
 
     }
@@ -671,6 +672,7 @@ function formatDate(isoDate) {
 
 
 function generateCustomerTable1(data) {
+    // console.log(data);
     let out = "";
 
     out += `<table border="1px" id="customerTable1">
@@ -694,10 +696,16 @@ function generateCustomerTable1(data) {
     let totaltrips = 0, totalcontract = 0, hou = 0, mint = 0;
 
     let formname = document.getElementById("name4").value.toLowerCase();
+    // alert(formname);
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
-            if (activity.Name.toLowerCase().trim() === formname && activity.Payment === "UnPaid") {
+            // console.log(formname,activity.Name.toLowerCase().trim(),activity.Name.toLowerCase().trim()===formname.trim());
+            // console.log(formname);
+            // alert(activity.Name.toLowerCase().trim(),activity.Name.toLowerCase().trim() === formname,formname);
+            // alert(activity.Name.toLowerCase().trim(),formname,formname.length,activity.Name.toLowerCase().trim().length);
+            if (activity.Name.toLowerCase().trim() === formname.trim() && activity.Payment === "UnPaid") {
+                // alert("is there");
                 let totalMins = 0;
                 if (activity.TotalTime !== "--") {
                     const [h, m] = activity.TotalTime.split(":").map(Number);
