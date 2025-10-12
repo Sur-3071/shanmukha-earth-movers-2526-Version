@@ -684,11 +684,12 @@ function generateTableByDate(data, startdate, enddate, data1) {
         <th id="bal1">Oil</th>
         <th id="bal1">Maintainance</th>
         <th id="bal1">JCB EMI</th>
+        <th id="bal1">Home Expenses</th>
         <th id="bal1">Salary</th>
         <th id="bal1">Profit</th>
 
     </tr>`;
-    var pro = collection - (disel) - (differenceInDays * 734) - (workday * 335) - (differenceInDays * 1800);
+    var pro = collection - (disel) - (differenceInDays * 734) - (workday * 335) - (differenceInDays * 1800)-20000;
     led += `<tr>
     <td>${collection}</td>
     <td>${collection - recovery}</td>
@@ -699,6 +700,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
     <td>${disel}</td>
     <td>${workday * 335}</td>
     <td>${differenceInDays * 1800}</td>
+    <td>20,000</td>
     <td>${differenceInDays * 734}</td>
     <td>${pro}</td>
     </tr>`;
