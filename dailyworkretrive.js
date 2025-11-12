@@ -72,6 +72,44 @@ async function RePrintSearch() {
         alert("Error occurred while fetching data");
     }
 }
+
+let extraAmountsCache = {}; // Example: { "Suresh": 1200, "Ravi": 0 }
+
+async function loadAllExtraAmountsOnce() {
+    const db1 = "CustomersAmount";
+    const customersRef = ref(db, db1);
+
+    try {
+        const snapshot = await get(customersRef);
+
+        if (!snapshot.exists()) {
+            extraAmountsCache = {};
+            return;
+        }
+
+        const data = snapshot.val();
+        const cache = {};
+
+        // Build map { username: amount }
+        for (const name in data) {
+            const customer = data[name];
+            cache[name] = customer.ExtraAmount || 0;
+        }
+
+        extraAmountsCache = cache; // assign final structure
+
+    } catch (error) {
+        console.error("Error loading ExtraAmounts:", error);
+        extraAmountsCache = {};
+    }
+}
+function getCachedExtraAmount(name) {
+    return extraAmountsCache[name] || 0;
+}
+
+await loadAllExtraAmountsOnce();
+
+
 function generateTable(data) {
     // Get today's date
     const today = new Date();
@@ -109,6 +147,8 @@ function generateTable(data) {
     var totaltrips = 0;
     var totalcontarct = 0;
     var disel = 0;
+    // alert("1");
+    const processedCustomers = new Set();
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
@@ -116,19 +156,37 @@ function generateTable(data) {
             var editid = customerPhone + "v";
             collection += parseInt(activity.Price);
             var amount = activity.Payment === "Paid" ? 0 : activity.Price
+            var balanaceamount=0;
+            var customerName=activity.Name;
+            // alert("2");
+            // alert(activity.Name);
+            // alert(!processedCustomers.has(customerName));
+            if (!processedCustomers.has(customerName) && activity.Payment==="UnPaid" ) {
+                
+                balanaceamount=getCachedExtraAmount(customerName);
+                processedCustomers.add(customerName);
+                amount=parseInt(amount)-parseInt(balanaceamount);
+            }
+            // alert("3===>"+amount);
+            // console.log(activity.Name+"=====>"+amount);
             recovery += parseInt(amount);
+                                    // alert("4");
+
             if (activity.Trips !== "--") {
                 totaltrips += parseInt(activity.Trips);
             }
             if (activity.Contract !== "--") {
                 totalcontarct += parseInt(activity.Contract);
             }
+                        // alert("4.5");
             if (activity.Starting !== "--") {
                 var timesplit = activity.TotalTime;
                 var v = timesplit.split(':');
                 hou += parseInt(v[0]);
                 mint += parseInt(v[1]);
             }
+                        // alert("5");
+
             if (!l.includes(activity.Date)) {
                 workday += 1;
                 l.push(activity.Date);
@@ -146,6 +204,8 @@ function generateTable(data) {
             } else if (payment === "unpaid") {
                 bgColor = "red";
             }
+                        // alert("6");
+
 
             out += `<tr>
                         <td>${customerPhone}</td>
@@ -404,7 +464,7 @@ function SearchTable(data) {
 
         // Group by Name
         let groupedData = {};
-
+            const processedCustomers = new Set();
         for (const customerPhone in data) {
             if (data.hasOwnProperty(customerPhone)) {
                 const activity = data[customerPhone];
@@ -472,7 +532,17 @@ function SearchTable(data) {
                 const payment = activity.Payment.trim().toLowerCase();
                 const bgColor = payment === "paid" ? "green" : (payment === "unpaid" ? "red" : "");
 
-                const amount = activity.Payment === "Paid" ? 0 : thisPrice;
+                var amount = activity.Payment === "Paid" ? 0 : thisPrice;
+                // alert("Iam coming..");
+                var customerName=personName;
+                var balanaceamount=0;
+                if (!processedCustomers.has(customerName) && activity.Payment==="UnPaid" ) {
+
+                balanaceamount=getCachedExtraAmount(customerName);
+                processedCustomers.add(customerName);
+                amount=parseInt(amount)-parseInt(balanaceamount);
+            }
+
                 recovery += amount;
                 subRecovery += amount;
 
@@ -615,11 +685,20 @@ function generateTableByDate(data, startdate, enddate, data1) {
     var totaltrips = 0;
     var totalcontarct = 0;
     var disel = 0;
+    const processedCustomers = new Set();
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
             if (activity.Date >= startdate && activity.Date <= enddate) {
                 var amount = activity.Payment === "Paid" ? 0 : activity.Price
+                var customerName=activity.Name;
+                var balanaceamount=0;
+                if (!processedCustomers.has(customerName) && activity.Payment==="UnPaid" ) {
+                
+                balanaceamount=getCachedExtraAmount(customerName);
+                processedCustomers.add(customerName);
+                amount=parseInt(amount)-parseInt(balanaceamount);
+            }
                 var editid = customerPhone + "v";
                 disel += parseInt(activity.Disel);
                 recovery += parseInt(amount);
@@ -730,6 +809,7 @@ document.addEventListener("click", async function (e1) {
 
         const db1 = "Daily Work-2025-2026";
         const paymentstatus = ref(db, `${db1}/${id}`);
+
         await set(paymentstatus, {
             Contract: data.Contract,
             Payment: payment,
@@ -741,6 +821,10 @@ document.addEventListener("click", async function (e1) {
             Price: data.Price,
             Shift: data.Shift,
             Starting: data.Starting,
+            Description:data.Description,
+            Drivers:data.Drivers,
+            HoursPrice:data.HoursPrice,
+            TripsPrice:data.TripsPrice,
             TotalTime: data.TotalTime,
             Trips: data.Trips,
             Villagename: data.Villagename

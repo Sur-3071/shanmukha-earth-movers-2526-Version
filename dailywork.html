@@ -37,6 +37,43 @@
             appId: "1:688935767962:web:d3d8d7569fd2470dfef423"
         };
 
+        let extraAmountsCache = {}; // Example: { "Suresh": 1200, "Ravi": 0 }
+
+        let extraamounttotal=0;
+
+        async function loadAllExtraAmountsOnce() {
+            const app = initializeApp(firebaseConfig);
+            const db1 = "CustomersAmount";
+            const db = getDatabase(app);
+            const customersRef = ref(db, db1);
+
+            try {
+                const snapshot = await get(customersRef);
+
+                if (!snapshot.exists()) {
+                    extraAmountsCache = {};
+                    return;
+                }
+
+                const data = snapshot.val();
+                const cache = {};
+
+                // Build map { username: amount }
+                for (const name in data) {
+                    const customer = data[name];
+                    cache[name] = customer.ExtraAmount || 0;
+                    extraamounttotal+=parseInt(customer.ExtraAmount || 0);
+                }
+
+                extraAmountsCache = cache; // assign final structure
+
+            } catch (error) {
+                console.error("Error loading ExtraAmounts:", error);
+                extraAmountsCache = {};
+            }
+        }
+
+
         const names = [];
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -627,13 +664,14 @@
             document.getElementById("proft").innerHTML = moneyconvert(proft);
             document.getElementById("oil").innerHTML = moneyconvert(oila);
             document.getElementById("avghrs").innerHTML = avghrss + "Hrs  " + avgmin + "Min";
-            document.getElementById("perdayhrs").innerHTML = moneyconvert(recovery);
+            document.getElementById("perdayhrs").innerHTML = moneyconvert(recovery-extraamounttotal);
             document.getElementById("imphrs").innerHTML = imprhrs + " Hrs   " + impmin + " Min";
             document.getElementById("proft").style.color = "skyblue";
             document.getElementById("imphrs").style.color = "red";
             document.getElementById("avghrs").style.color = "green";
         }
         // Call DayCountcal when the page is loaded
+        window.addEventListener('load', loadAllExtraAmountsOnce);
         window.addEventListener('load', DayCountcal);
         window.addEventListener('load', selectnames);
         window.addEventListener('load', Expensescal);

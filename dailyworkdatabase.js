@@ -187,6 +187,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     }
 });
 
+
 document.getElementById('submit2').addEventListener('click', async function (e) {
     e.preventDefault();
     const wid = document.getElementById("cid").value;
@@ -352,7 +353,11 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
                         Starting: activity.Starting,
                         TotalTime: activity.TotalTime,
                         Trips: activity.Trips,
-                        Villagename: activity.Villagename
+                        Villagename: activity.Villagename,
+                        Description: activity.Description,
+                        Drivers: activity.Drivers,
+                        HoursPrice: activity.HoursPrice,
+                        TripsPrice: activity.TripsPrice
                     };
 
                     const transactionRef = ref(db, `${db1}/${workId}`);
