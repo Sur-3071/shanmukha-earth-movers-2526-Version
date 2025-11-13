@@ -1,113 +1,413 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <title>TO DO LIST</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Salary & Leave Dashboard</title>
     <style>
-        #enter {
-            padding-top: 30px;
-        }
-
-        th {
-            color: green;
-        }
-
-        #work {
-            width: 200px;
-            height: 30px;
-        }
-
-        #work1 {
-            width: 200px;
-            height: 30px;
-        }
-
-        #list,
-        #list1 {
-            flex: 1;
-            margin: 0 100px;
-        }
-
-        #enter,
-        #enter1,
-        #year {
-            flex: 1;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f3f4f6, #e8ecf1);
+            margin: 0;
+            padding: 0;
         }
 
         h1 {
-            color: red;
-        }
-
-        #maindiv {
-            display: flex;
-
-        }
-
-        #container1 {
-            display: flex;
-
-        }
-
-        #year th,
-        #year td {
-            border: 1px solid black;
-            padding-left: 30px;
-            padding-right: 30px;
-            padding-top: 20px;
-            padding-bottom: 20px;
             text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        /* Grid for Monthly Cards */
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .month-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .month-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .month-header {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .month-details p {
+            margin: 8px 0;
+            font-size: 15px;
+            color: #444;
+        }
+
+        .month-details span {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* Forms Section */
+        .forms-section {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            width: 420px;
+        }
+
+        .form-container h2 {
+            color: #27ae60;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="date"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .form-container input[type="button"] {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .form-container input[type="button"]:hover {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+        }
+
+        /* ===== Modern Table Styling ===== */
+        .table-box {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 350px;
+            transition: transform 0.2s ease;
+        }
+
+        .table-box:hover {
+            transform: scale(1.02);
+        }
+
+        .table-box caption {
+            font-weight: bold;
+            padding: 12px;
+            font-size: 18px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .salary-table caption {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+        }
+
+        .leave-table caption {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+
+        .table-box table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .table-box th,
+        .table-box td {
+            padding: 10px 12px;
+            text-align: center;
+        }
+
+        .table-box tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .table-box tr:nth-child(odd) {
+            background: #eef3f7;
+        }
+
+        .table-box th {
+            font-weight: 600;
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .table-box td {
+            color: #34495e;
+            font-size: 14px;
+        }
+
+        .no-data {
+            text-align: center;
+            font-size: 15px;
+            color: #888;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Toggle button style */
+        #toggleBtn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+
+        #toggleBtn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Scrollable container */
+        .month-grid {
+            display: none;
+            /* Hidden initially */
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 95%;
+            cursor: grab;
+            scroll-behavior: smooth;
+            user-select: none;
+            scrollbar-width: none;
+            /* Hide Firefox scrollbar */
+        }
+
+        .month-grid::-webkit-scrollbar {
+            display: none;
+            /* Hide Chrome scrollbar */
+        }
+
+        /* Month cards */
+        .month-card {
+            flex: 0 0 220px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .month-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .month-header {
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 8px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .month-details p {
+            margin: 6px 0;
+            font-size: 14px;
+        }
+
+        #com {
+            border-radius: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        @media screen and (max-width: 900px) {
+            .forms-section {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div id="maindiv">
-        <div id="list" align="right">
-            <h1>Driver Leaves List</h1>
-            <form>
-                <table>
-                    <tr>
-                        <td>
-                            <lable>Enter date</lable>
-                            <input type="date" id='d1' placeholder="Enter Today Date">
-                        </td>
-                        <td>
-                            <input type="text" id="work" placeholder="Enter Reason">
-                            <button type="button" onclick="add()">Enter</button>
-                        </td>
-                    </tr>
-                </table>
+
+    <div id="com">
+            <img src="company.png" style="padding-left: 20px;">
+        </div>
+
+    <img src="done1.png" id="done" style="display: none; margin: 0 auto;" height="100px" width="100px">
+
+    <div class="forms-section">
+        <div class="form-container">
+            <h2>Driver Leave Entry</h2>
+            <form id="userForm1">
+                <input type="date" id='d1' placeholder="Enter Date" onchange="GetSystemId('wid1')">
+                <input type="text" id='wid1' placeholder="System Id" readonly>
+                <input type="text" id="work1" placeholder="Enter Reason">
+                <input type="button" value="Submit Leave" id="submit1">
             </form>
         </div>
-        <div id="list1" align="left">
-            <h1>Driver Salary List</h1>
-            <form>
-                <table>
-                    <tr>
-                        <td>
-                            <input type="date" id='d2' placeholder="Enter Today Date">
-                        </td>
-                        <td>
-                            <input type="text" id="work1" maxlength="5" placeholder="salary">
-                            <button type="button" onclick="addsalary()">Enter</button>
-                        </td>
-                    </tr>
-                </table>
+
+        <div class="form-container">
+            <h2>Driver Salary Entry</h2>
+            <form id="userForm2">
+                <input type="date" id='d2' placeholder="Enter Date" onchange="GetSystemId('wid2')">
+                <input type="text" id='wid2' placeholder="System Id" readonly>
+                <input type="text" id="work2" maxlength="6" placeholder="Enter Salary">
+                <input type="button" value="Submit Salary" id="submit2">
             </form>
         </div>
     </div>
-    <div id="container1">
-        <div id="enter" align="left">
 
-        </div>
-        <div id="year" align="center">
-        </div>
+    <button id="toggleBtn">Show Monthly Data</button>
 
-        <div id="enter1" align="right">
+    <div class="month-grid" id="monthGrid">
 
-        </div>
     </div>
-    <button type="button" onclick="storedef()">Click</button>
-    <script src="jcbdriverstatus.js"></script>
+
+    <div id="tablesContainer" style="display:flex; justify-content:center; gap:40px; flex-wrap:wrap;">
+        <div id="salaryTableContainer"></div>
+        <div id="leaveTableContainer"></div>
+    </div>
+
+     <marquee behavior="scroll" direction="left" scrollamount="10">
+        <img src="jcb.png" height="500px" width="500px" id="jcb">
+    </marquee>
+
 </body>
+</div>
+<script>
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    const grid = document.getElementById("monthGrid");
+    const toggleBtn = document.getElementById("toggleBtn");
+    const table = document.getElementById("tablesContainer");
+
+    const generateCards = () => {
+        grid.innerHTML = months.map(m => `
+    <div class="month-card" id="card-${m}">
+      <div class="month-header">${m}</div>
+      <div class="month-details">
+        <p>💰 Salary Taken: <span class="salary">₹0</span></p>
+        <p>💵 Remaining Salary: <span class="remaining-salary">₹0</span></p>
+        <p>📅 Leaves Taken: <span class="leaves">0</span> Days</p>
+        <p>⏳ Remaining Leaves: <span class="remaining-leaves">0</span> Days</p>
+        <p>🗓️ Extra Leaves: <span class="extra-leaves">0</span> Days</p>
+      </div>
+    </div>
+  `).join('');
+    };
+
+
+    // ✅ Toggle show/hide logic
+    toggleBtn.addEventListener("click", () => {
+        if (grid.style.display === "none" || grid.style.display === "") {
+            generateCards();
+            grid.style.display = "flex";
+            table.style.display = "flex";
+            toggleBtn.textContent = "Hide Monthly Data";
+        } else {
+            grid.style.display = "none";
+            table.style.display = "none";
+            toggleBtn.textContent = "Show Monthly Data";
+        }
+    });
+
+    // ✅ Drag-to-scroll logic
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    grid.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - grid.offsetLeft;
+        scrollLeft = grid.scrollLeft;
+        grid.style.cursor = 'grabbing';
+    });
+
+    grid.addEventListener('mouseleave', () => {
+        isDown = false;
+        grid.style.cursor = 'grab';
+    });
+
+    grid.addEventListener('mouseup', () => {
+        isDown = false;
+        grid.style.cursor = 'grab';
+    });
+
+    grid.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - grid.offsetLeft;
+        const walk = (x - startX) * 1.5; // scroll speed
+        grid.scrollLeft = scrollLeft - walk;
+    });
+
+    // ✅ Touch support (for mobile)
+    let touchStartX = 0;
+    grid.addEventListener("touchstart", e => {
+        touchStartX = e.touches[0].clientX;
+        scrollLeft = grid.scrollLeft;
+    });
+    grid.addEventListener("touchmove", e => {
+        const touchX = e.touches[0].clientX;
+        const move = (touchX - touchStartX) * 1.5;
+        grid.scrollLeft = scrollLeft - move;
+    });
+</script>
+<script type="module" src="jcbdriverdatabase.js"></script>
+<script src="jcbdriverstatus.js"></script>
+
 
 </html>

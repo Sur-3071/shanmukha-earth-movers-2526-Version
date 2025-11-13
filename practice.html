@@ -1,91 +1,176 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Monthly Income Chart with Oil Info</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draggable Scrollable Month Cards</title>
+
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background: #f3f4f6;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+  }
+
+  h2 {
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  /* Toggle button style */
+  #toggleBtn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+    transition: background 0.3s;
+  }
+
+  #toggleBtn:hover {
+    background-color: #0056b3;
+  }
+
+  /* Scrollable container */
+  .month-grid {
+    display: none; /* Hidden initially */
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 95%;
+    cursor: grab;
+    scroll-behavior: smooth;
+    user-select: none;
+    scrollbar-width: none; /* Hide Firefox scrollbar */
+  }
+
+  .month-grid::-webkit-scrollbar {
+    display: none; /* Hide Chrome scrollbar */
+  }
+
+  /* Month cards */
+  .month-card {
+    flex: 0 0 220px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .month-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+
+  .month-header {
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .month-details p {
+    margin: 6px 0;
+    font-size: 14px;
+  }
+</style>
 </head>
+
 <body>
+  <h2>📅 Monthly Data Dashboard</h2>
 
-<canvas id="myChart" width="800" height="400"></canvas>
+  <button id="toggleBtn">Show Monthly Data</button>
 
-<script>
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June',
-                  'July', 'August', 'September', 'October', 'November', 'December'];
+  <div class="month-grid" id="monthGrid"></div>
 
-  // All arrays start from index 1, so index 0 is placeholder
-  var months    = [0, 100000, 120000, 150000, 180000, 200000, 220000, 250000, 270000, 290000, 310000, 330000, 350000];
-  var profit    = [0, 20000, -25000, 30000, 32000, 40000, 41000, 44000, 47000, 49000, 52000, 54000, 60000];
-  var worked    = [0, 26, 24, 27, 28, 26, 25, 27, 29, 26, 28, 27, 30];
-  var totalDays = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  var holidays  = [0, 6, 4, 2, 2, 2, 5, 7, 9, 6, 8, 2, 3];
-  var oil       = [0, 12, 10, 14, 13, 15, 11, 10, 16, 18, 12, 14, 15]; // oil usage per month
+  <script>
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
 
-  const income = months.slice(1);
+    const grid = document.getElementById("monthGrid");
+    const toggleBtn = document.getElementById("toggleBtn");
 
-  const customData = profit.slice(1).map((p, i) => ({
-    profit: p,
-    worked: worked[i + 1],
-    totalDays: totalDays[i + 1],
-    holidays: holidays[i + 1],
-    oil: oil[i + 1]
-  }));
+    // Generate month cards dynamically
+    const generateCards = () => {
+      grid.innerHTML = months.map(m => `
+        <div class="month-card">
+          <div class="month-header">${m}</div>
+          <div class="month-details">
+            <p>💰 Salary Taken: <span>₹0</span></p>
+            <p>💵 Remaining Salary: <span>₹0</span></p>
+            <p>📅 Leaves Taken: <span>0</span> Days</p>
+            <p>⏳ Remaining Leaves: <span>0</span> Days</p>
+            <p>🗓️ Extra Leaves: <span>0</span> Days</p>
+          </div>
+        </div>
+      `).join('');
+    };
 
-  const ctx = document.getElementById('myChart').getContext('2d');
-
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Income',
-        data: income,
-        backgroundColor: profit.slice(1).map(p => p >= 0 ? 'rgba(0, 200, 100, 0.7)' : 'rgba(255, 50, 50, 0.7)'),
-        custom: customData
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          min: 0,
-          max: 350000,
-          ticks: {
-            stepSize: 25000
-          }
-        }
-      },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              const index = context.dataIndex;
-              const dataset = context.dataset;
-              const income = dataset.data[index];
-              const custom = dataset.custom[index];
-              const profitVal = custom.profit;
-              const profitLabel = profitVal >= 0
-                ? `Profit: ₹${profitVal.toLocaleString()}`
-                : `Loss: ₹${Math.abs(profitVal).toLocaleString()}`;
-
-              return [
-                `Income: ₹${income.toLocaleString()}`,
-                profitLabel,
-                `Total Days: ${custom.totalDays}`,
-                `Days Worked: ${custom.worked}`,
-                `Holidays: ${custom.holidays}`,
-                `Oil Used: ${custom.oil} L`
-              ];
-            },
-            labelTextColor: function(context) {
-              const profit = context.dataset.custom[context.dataIndex].profit;
-              return profit >= 0 ? 'green' : 'red';
-            }
-          }
-        }
+    // ✅ Toggle show/hide logic
+    toggleBtn.addEventListener("click", () => {
+      if (grid.style.display === "none" || grid.style.display === "") {
+        generateCards();
+        grid.style.display = "flex";
+        toggleBtn.textContent = "Hide Monthly Data";
+      } else {
+        grid.style.display = "none";
+        toggleBtn.textContent = "Show Monthly Data";
       }
-    }
-  });
-</script>
+    });
 
+    // ✅ Drag-to-scroll logic
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    grid.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - grid.offsetLeft;
+      scrollLeft = grid.scrollLeft;
+      grid.style.cursor = 'grabbing';
+    });
+
+    grid.addEventListener('mouseleave', () => {
+      isDown = false;
+      grid.style.cursor = 'grab';
+    });
+
+    grid.addEventListener('mouseup', () => {
+      isDown = false;
+      grid.style.cursor = 'grab';
+    });
+
+    grid.addEventListener('mousemove', (e) => {
+      if(!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - grid.offsetLeft;
+      const walk = (x - startX) * 1.5; // scroll speed
+      grid.scrollLeft = scrollLeft - walk;
+    });
+
+    // ✅ Touch support (for mobile)
+    let touchStartX = 0;
+    grid.addEventListener("touchstart", e => {
+      touchStartX = e.touches[0].clientX;
+      scrollLeft = grid.scrollLeft;
+    });
+    grid.addEventListener("touchmove", e => {
+      const touchX = e.touches[0].clientX;
+      const move = (touchX - touchStartX) * 1.5;
+      grid.scrollLeft = scrollLeft - move;
+    });
+  </script>
 </body>
 </html>
