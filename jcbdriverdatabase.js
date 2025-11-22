@@ -324,7 +324,7 @@ function updateMonthCards(monthlySummary) {
             salarycut.textContent = `₹${salaryCutAmount.toLocaleString("en-IN")}`;
 
             // Calculate remaining salary after deduction
-            const finalRemainingSalary = totalSalaryTaken - salaryCutAmount;
+            const finalRemainingSalary = 16000-totalSalaryTaken - salaryCutAmount;
             remainingSalaryEl.textContent = `₹${finalRemainingSalary.toLocaleString("en-IN")}`;
 
         }
