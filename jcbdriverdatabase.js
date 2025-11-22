@@ -289,34 +289,46 @@ function generateTable(data) {
 // 🔄 Update Month Cards dynamically
 // 🔄 Update Month Cards dynamically based on driver data
 function updateMonthCards(monthlySummary) {
-  const driverSalary = 16000;   // fixed base salary per month
-  const allowedLeaves = 2;      // standard allowed leaves per month
+    const driverSalary = 16000;   // fixed base salary per month
+    const allowedLeaves = 2;      // standard allowed leaves per month
 
-  monthlySummary.forEach(summary => {
-    const card = document.getElementById(`card-${summary.month}`);
-    if (card) {
-      const salaryEl = card.querySelector(".salary");
-      const remainingSalaryEl = card.querySelector(".remaining-salary");
-      const leavesEl = card.querySelector(".leaves");
-      const remainingLeavesEl = card.querySelector(".remaining-leaves");
-      const extraLeavesEl = card.querySelector(".extra-leaves");
+    monthlySummary.forEach(summary => {
+        const card = document.getElementById(`card-${summary.month}`);
+        if (card) {
+            const salaryEl = card.querySelector(".salary");
+            const salarycut = card.querySelector(".cut-salary");
+            const remainingSalaryEl = card.querySelector(".remaining-salary");
+            const leavesEl = card.querySelector(".leaves");
+            const remainingLeavesEl = card.querySelector(".remaining-leaves");
+            const extraLeavesEl = card.querySelector(".extra-leaves");
 
-      // 🧮 Core calculations
-      const totalSalaryTaken = summary.totalSalary || 0;
-      const totalLeaves = summary.totalLeaves || 0;
+            // 🧮 Core calculations
+            const totalSalaryTaken = summary.totalSalary || 0;
+            const totalLeaves = summary.totalLeaves || 0;
 
-      const remainingSalary = Math.max(0, driverSalary - totalSalaryTaken);
-      const remainingLeaves = Math.max(0, allowedLeaves - totalLeaves);
-      const extraLeaves = totalLeaves > allowedLeaves ? totalLeaves - allowedLeaves : 0;
+            const remainingSalary = Math.max(0, driverSalary - totalSalaryTaken);
+            const remainingLeaves = Math.max(0, allowedLeaves - totalLeaves);
+            const extraLeaves = totalLeaves > allowedLeaves ? totalLeaves - allowedLeaves : 0;
 
-      // 🪄 Update values in UI
-      salaryEl.textContent = `₹${totalSalaryTaken.toLocaleString("en-IN")}`;
-      remainingSalaryEl.textContent = `₹${remainingSalary.toLocaleString("en-IN")}`;
-      leavesEl.textContent = `${totalLeaves}`;
-      remainingLeavesEl.textContent = `${remainingLeaves}`;
-      extraLeavesEl.textContent = `${extraLeaves}`;
-    }
-  });
+            // 🪄 Update values in UI
+            salaryEl.textContent = `₹${totalSalaryTaken.toLocaleString("en-IN")}`;
+            leavesEl.textContent = `${totalLeaves}`;
+            remainingLeavesEl.textContent = `${remainingLeaves}`;
+            extraLeavesEl.textContent = `${extraLeaves}`;
+
+            // Calculate per-day salary
+            const perDaySalary = 534;
+
+            // Calculate salary cut
+            const salaryCutAmount = perDaySalary * extraLeaves;
+            salarycut.textContent = `₹${salaryCutAmount.toLocaleString("en-IN")}`;
+
+            // Calculate remaining salary after deduction
+            const finalRemainingSalary = totalSalaryTaken - salaryCutAmount;
+            remainingSalaryEl.textContent = `₹${finalRemainingSalary.toLocaleString("en-IN")}`;
+
+        }
+    });
 }
 
 
