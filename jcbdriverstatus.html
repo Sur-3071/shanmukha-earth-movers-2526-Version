@@ -150,7 +150,7 @@
 
         .table-box th,
         .table-box td {
-            padding: 10px 12px;
+            padding: 10px 8px;
             text-align: center;
         }
 
@@ -298,6 +298,21 @@
             display: block;
             font-weight: bold;
         }
+        th, td {
+            padding: 12px 55px;   /* vertical 12px, horizontal 16px */
+            text-align: left;     /* optional */
+            border: 1px solid #ccc; /* optional */
+            }    
+
+            #salaryTableContainer
+            {
+                margin-right: 250px;
+            }
+
+            #tablesContainer
+            {
+                margin-top: 50px;
+            }
 
         @media screen and (max-width: 900px) {
             .forms-section {
@@ -318,19 +333,6 @@
 
     <div class="forms-section">
         <div class="form-container">
-            <h2>Driver Leave Entry</h2>
-            <form id="userForm1">
-                <input type="date" id='d1' placeholder="Enter Date" onchange="GetSystemId('wid1')">
-                <select id="monthDropdown">
-                    <option value="" disabled selected>Select Month</option>
-                </select>
-                <input type="text" id='wid1' placeholder="System Id" readonly>
-                <input type="text" id="work1" placeholder="Enter Reason">
-                <input type="button" value="Submit Leave" id="submit1">
-            </form>
-        </div>
-
-        <div class="form-container">
             <h2>Driver Salary Entry</h2>
             <form id="userForm2">
                 <input type="date" id='d2' placeholder="Enter Date" onchange="GetSystemId('wid2')">
@@ -340,6 +342,19 @@
                 <input type="text" id='wid2' placeholder="System Id" readonly>
                 <input type="text" id="work2" maxlength="6" placeholder="Enter Salary">
                 <input type="button" value="Submit Salary" id="submit2">
+            </form>
+        </div>
+
+         <div class="form-container">
+            <h2>Driver Leave Entry</h2>
+            <form id="userForm1">
+                <input type="date" id='d1' placeholder="Enter Date" onchange="GetSystemId('wid1')">
+                <select id="monthDropdown">
+                    <option value="" disabled selected>Select Month</option>
+                </select>
+                <input type="text" id='wid1' placeholder="System Id" readonly>
+                <input type="text" id="work1" placeholder="Enter Reason">
+                <input type="button" value="Submit Leave" id="submit1">
             </form>
         </div>
     </div>

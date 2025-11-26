@@ -14,6 +14,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // Get a reference to the database service
 const db = getDatabase(app);
+const monthsMap = {
+  "January":  [0, 0],
+  "February": [0, 0],
+  "March":    [0, 0],
+  "April":    [0, 0],
+  "May":      [0, 0],
+  "June":     [0, 0],
+  "July":     [0, 0],
+  "August":   [0, 0],
+  "September":[0, 0],
+  "October":  [0, 0],
+  "November": [0, 0],
+  "December": [0, 0]
+};
+
 
 document.getElementById('submit1').addEventListener('click', async function (e) {
     e.preventDefault();
@@ -26,28 +41,36 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     document.getElementById("userForm1").reset();
 
     if (dat.length > 0) {
-        if (purpose.length > 0) {
-            const db1 = "JcbDriverData";
-            const db2 = "Leaves";
-            const dataRefset = ref(db, `${db1}/${db2}/${wid}`);
-            try {
-                await set(dataRefset, {
-                    Date: dat,
-                    Month:monthname,
-                    Purpose: purpose
-                });
-                document.getElementById("done").style.display = "block";
-                setTimeout(() => {
-                    removedone();
-                }, 2500);
+        if(monthname.length>0)
+        {
+            if (purpose.length > 0) {
+                const db1 = "JcbDriverData";
+                const db2 = "Leaves";
+                const dataRefset = ref(db, `${db1}/${db2}/${wid}`);
+                try {
+                    await set(dataRefset, {
+                        Date: dat,
+                        Month:monthname,
+                        Purpose: purpose
+                    });
+                    document.getElementById("done").style.display = "block";
+                    setTimeout(() => {
+                        removedone();
+                    }, 2500);
 
-            } catch (error) {
-                alert("An error occurred. Please try again.");
+                } catch (error) {
+                    alert("An error occurred. Please try again.");
+                }
+            }
+            else {
+                alert("Please Enter purpose of Leave");
+                datarebuild();
             }
         }
-        else {
-            alert("Please Enter purpose of Leave");
-            datarebuild();
+        else
+        {
+            alert("Please Select Month");
+                datarebuild();
         }
     }
     else {
@@ -71,38 +94,44 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
     const wid = document.getElementById("wid2").value;
     const amount = document.getElementById("work2").value;
     const monthname=document.getElementById("monthDropdown1").value;
-
     document.getElementById("userForm2").reset();
 
     if (dat.length > 0) {
-        if (amount.length > 0) {
-            if (isAllDigits(amount)) {
-                const db1 = "JcbDriverData";
-                const db2 = "Salary";
-                const dataRefset = ref(db, `${db1}/${db2}/${wid}`);
-                try {
-                    await set(dataRefset, {
-                        Date: dat,
-                        Month:monthname,
-                        Salary: amount
-                    });
-                    document.getElementById("done").style.display = "block";
-                    setTimeout(() => {
-                        removedone();
-                    }, 2500);
+        if(monthname.length>0)
+        {
+            if (amount.length > 0) {
+                if (isAllDigits(amount)) {
+                    const db1 = "JcbDriverData";
+                    const db2 = "Salary";
+                    const dataRefset = ref(db, `${db1}/${db2}/${wid}`);
+                    try {
+                        await set(dataRefset, {
+                            Date: dat,
+                            Month:monthname,
+                            Salary: amount
+                        });
+                        document.getElementById("done").style.display = "block";
+                        setTimeout(() => {
+                            removedone();
+                        }, 2500);
 
-                } catch (error) {
-                    alert("An error occurred. Please try again.");
+                    } catch (error) {
+                        alert("An error occurred. Please try again.");
+                    }
+                }
+                else {
+                    alert("The Amount Must be in Integer");
+                    datarebuild();
                 }
             }
             else {
-                alert("The Amount Must be in Integer");
+                alert("Please Enter Amount");
                 datarebuild();
             }
         }
-        else {
-            alert("Please Enter Amount");
-            datarebuild();
+        else{
+            alert("Please Select Month");
+                datarebuild();
         }
     }
     else {
@@ -147,7 +176,7 @@ document.getElementById('toggleBtn').addEventListener('click', async function (e
 });
 
 function generateTable(data) {
-    console.log("📦 Incoming Data:", data);
+    // console.log("📦 Incoming Data:", data);
 
     const salaryDiv = document.getElementById("salaryTableContainer");
     const leaveDiv = document.getElementById("leaveTableContainer");
@@ -174,7 +203,7 @@ function generateTable(data) {
             const row = document.createElement("tr");
             const amount = parseFloat(entry.Salary) || 0;
             totalSalary += amount;
-
+            monthsMap[entry.Month][0] += parseInt(amount);
             row.innerHTML = `
                 <td>${entry.Date}</td>
                 <td>${amount.toLocaleString("en-IN")}</td>
@@ -194,7 +223,17 @@ function generateTable(data) {
         box.appendChild(table);
         salaryDiv.appendChild(box);
     } else {
-        salaryDiv.innerHTML = `<div class="no-data">No Salary Records Found</div>`;
+        salaryDiv.innerHTML = `<div style="padding: 10px; 
+                                     font-size: 14px; 
+                                     font-weight: 600; 
+                                     color: #b00020; 
+                                     background: #ffe5e8; 
+                                     border: 1px solid #ffb3bd; 
+                                     border-radius: 8px; 
+                                     text-align: center;
+                                     margin-top: 8px;">
+                           No Salary Records Found
+                       </div>`;
     }
 
     // 🌴 LEAVE TABLE (Date + Purpose)
@@ -215,8 +254,9 @@ function generateTable(data) {
 
         Object.values(data.Leaves).forEach(entry => {
             const row = document.createElement("tr");
+            monthsMap[entry.Month][1] += 1;
             row.innerHTML = `
-                <td>${entry.Date}</td>
+                <td >${entry.Date}</td>
                 <td>${entry.Purpose}</td>
             `;
             table.appendChild(row);
@@ -227,7 +267,7 @@ function generateTable(data) {
         const totalRow = document.createElement("tr");
         totalRow.classList.add("total-row");
         totalRow.innerHTML = `
-            <td>Total Leaves</td>
+            <td>Total</td>
             <td>${totalLeaves}</td>
         `;
         table.appendChild(totalRow);
@@ -235,68 +275,28 @@ function generateTable(data) {
         box.appendChild(table);
         leaveDiv.appendChild(box);
     } else {
-        leaveDiv.innerHTML = `<div class="no-data">No Leave Records Found</div>`;
+        leaveDiv.innerHTML = `<div style="padding: 10px; 
+                                     font-size: 14px; 
+                                     font-weight: 600; 
+                                     color: #b00020; 
+                                     background: #ffe5e8; 
+                                     border: 1px solid #ffb3bd; 
+                                     border-radius: 8px; 
+                                     text-align: center;
+                                     margin-top: 8px;">
+                           No Leave Records Found
+                       </div>`;
     }
-
-    // 🧮 EXTENSION: MONTHLY SUMMARY GENERATION (Without changing old logic)
-    const months = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
-
-    const year = new Date().getFullYear();
-
-    function getMonthRange(monthIndex, year) {
-        const startMonth = monthIndex === 0 ? 11 : monthIndex - 1;
-        const startYear = monthIndex === 0 ? year - 1 : year;
-        const endMonth = monthIndex;
-        const endYear = year;
-        return {
-            start: new Date(startYear, startMonth, 26),
-            end: new Date(endYear, endMonth, 25)
-        };
-    }
-
-    const salaryEntries = Object.values(data.Salary || {});
-    const leaveEntries = Object.values(data.Leaves || {});
-
-    const monthlySummary = [];
-
-    months.forEach((month, i) => {
-        const { start, end } = getMonthRange(i, year);
-
-        const salaryTotal = salaryEntries
-            .filter(e => {
-                const d = new Date(e.Date);
-                return d >= start && d <= end;
-            })
-            .reduce((sum, e) => sum + (parseFloat(e.Salary) || 0), 0);
-
-        const leaveCount = leaveEntries.filter(e => {
-            const d = new Date(e.Date);
-            return d >= start && d <= end;
-        }).length;
-
-        monthlySummary.push({
-            month,
-            range: `${start.toDateString()} - ${end.toDateString()}`,
-            totalSalary: salaryTotal,
-            totalLeaves: leaveCount
-        });
-        console.log(monthlySummary);
-    });
-    updateMonthCards(monthlySummary);
-
+    updateMonthCards(monthsMap);
+// 
 }
-
-// 🔄 Update Month Cards dynamically
-// 🔄 Update Month Cards dynamically based on driver data
 function updateMonthCards(monthlySummary) {
     const driverSalary = 16000;   // fixed base salary per month
     const allowedLeaves = 2;      // standard allowed leaves per month
 
-    monthlySummary.forEach(summary => {
-        const card = document.getElementById(`card-${summary.month}`);
+   Object.keys(monthsMap).forEach(month => {
+    const card = document.getElementById(`card-${month}`);
+    console.log(month);
         if (card) {
             const salaryEl = card.querySelector(".salary");
             const salarycut = card.querySelector(".cut-salary");
@@ -306,8 +306,8 @@ function updateMonthCards(monthlySummary) {
             const extraLeavesEl = card.querySelector(".extra-leaves");
 
             // 🧮 Core calculations
-            const totalSalaryTaken = summary.totalSalary || 0;
-            const totalLeaves = summary.totalLeaves || 0;
+            const totalSalaryTaken = monthsMap[month][0];
+            const totalLeaves = monthsMap[month][1];
 
             const remainingSalary = Math.max(0, driverSalary - totalSalaryTaken);
             const remainingLeaves = Math.max(0, allowedLeaves - totalLeaves);
