@@ -29,10 +29,11 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
         if (purpose.length > 0) {
             const db1 = "JcbDriverData";
             const db2 = "Leaves";
-            const dataRefset = ref(db, `${db1}/${db2}/${monthname}/${wid}`);
+            const dataRefset = ref(db, `${db1}/${db2}/${wid}`);
             try {
                 await set(dataRefset, {
                     Date: dat,
+                    Month:monthname,
                     Purpose: purpose
                 });
                 document.getElementById("done").style.display = "block";
@@ -78,10 +79,11 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
             if (isAllDigits(amount)) {
                 const db1 = "JcbDriverData";
                 const db2 = "Salary";
-                const dataRefset = ref(db, `${db1}/${db2}/${monthname}/${wid}`);
+                const dataRefset = ref(db, `${db1}/${db2}/${wid}`);
                 try {
                     await set(dataRefset, {
                         Date: dat,
+                        Month:monthname,
                         Salary: amount
                     });
                     document.getElementById("done").style.display = "block";
