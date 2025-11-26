@@ -20,6 +20,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     const dat = document.getElementById("d1").value;
     const wid = document.getElementById("wid1").value;
     const purpose = document.getElementById("work1").value;
+    const monthname=document.getElementById("monthDropdown").value;
 
 
     document.getElementById("userForm1").reset();
@@ -28,7 +29,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
         if (purpose.length > 0) {
             const db1 = "JcbDriverData";
             const db2 = "Leaves";
-            const dataRefset = ref(db, `${db1}/${db2}/${wid}`);
+            const dataRefset = ref(db, `${db1}/${db2}/${monthname}/${wid}`);
             try {
                 await set(dataRefset, {
                     Date: dat,
@@ -68,7 +69,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
     const dat = document.getElementById("d2").value;
     const wid = document.getElementById("wid2").value;
     const amount = document.getElementById("work2").value;
-
+    const monthname=document.getElementById("monthDropdown1").value;
 
     document.getElementById("userForm2").reset();
 
@@ -77,7 +78,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
             if (isAllDigits(amount)) {
                 const db1 = "JcbDriverData";
                 const db2 = "Salary";
-                const dataRefset = ref(db, `${db1}/${db2}/${wid}`);
+                const dataRefset = ref(db, `${db1}/${db2}/${monthname}/${wid}`);
                 try {
                     await set(dataRefset, {
                         Date: dat,
@@ -135,7 +136,7 @@ document.getElementById('toggleBtn').addEventListener('click', async function (e
             generateTable(data);
 
         } else {
-            alert("No data available for the selected date.");
+            alert("Zero Leaves and Zero salary.");
         }
     } catch (error) {
         alert("Error occurred while fetching data");
@@ -152,7 +153,6 @@ function generateTable(data) {
     salaryDiv.innerHTML = "";
     leaveDiv.innerHTML = "";
 
-    // 💰 SALARY TABLE (Date + Amount)
     if (data.Salary && Object.keys(data.Salary).length > 0) {
         const box = document.createElement("div");
         box.classList.add("table-box", "salary-table");
@@ -281,6 +281,7 @@ function generateTable(data) {
             totalSalary: salaryTotal,
             totalLeaves: leaveCount
         });
+        console.log(monthlySummary);
     });
     updateMonthCards(monthlySummary);
 

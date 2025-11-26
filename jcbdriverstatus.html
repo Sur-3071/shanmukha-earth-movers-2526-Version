@@ -268,6 +268,37 @@
             justify-content: center;
         }
 
+        .container {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        select {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            outline: none;
+            cursor: pointer;
+            transition: 0.3s ease;
+            width: 400px;
+        }
+
+        select:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+        }
+
+        label {
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: block;
+            font-weight: bold;
+        }
+
         @media screen and (max-width: 900px) {
             .forms-section {
                 flex-direction: column;
@@ -280,8 +311,8 @@
 <body style="background-color: antiquewhite;">
 
     <div id="com">
-            <img src="company.png" style="padding-left: 20px;">
-        </div>
+        <img src="company.png" style="padding-left: 20px;">
+    </div>
 
     <img src="done1.png" id="done" style="display: none; margin: 0 auto;" height="100px" width="100px">
 
@@ -290,6 +321,9 @@
             <h2>Driver Leave Entry</h2>
             <form id="userForm1">
                 <input type="date" id='d1' placeholder="Enter Date" onchange="GetSystemId('wid1')">
+                <select id="monthDropdown">
+                    <option value="" disabled selected>Select Month</option>
+                </select>
                 <input type="text" id='wid1' placeholder="System Id" readonly>
                 <input type="text" id="work1" placeholder="Enter Reason">
                 <input type="button" value="Submit Leave" id="submit1">
@@ -300,6 +334,9 @@
             <h2>Driver Salary Entry</h2>
             <form id="userForm2">
                 <input type="date" id='d2' placeholder="Enter Date" onchange="GetSystemId('wid2')">
+                <select id="monthDropdown1">
+                    <option value="" disabled selected>Select Month</option>
+                </select>
                 <input type="text" id='wid2' placeholder="System Id" readonly>
                 <input type="text" id="work2" maxlength="6" placeholder="Enter Salary">
                 <input type="button" value="Submit Salary" id="submit2">
@@ -318,7 +355,7 @@
         <div id="leaveTableContainer"></div>
     </div>
 
-     <marquee behavior="scroll" direction="left" scrollamount="10">
+    <marquee behavior="scroll" direction="left" scrollamount="10">
         <img src="jcb.png" height="500px" width="500px" id="jcb">
     </marquee>
 
@@ -329,6 +366,24 @@
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
+
+    const dropdown = document.getElementById("monthDropdown");
+    const dropdown1 = document.getElementById("monthDropdown1");
+
+    months.forEach(month => {
+        const option = document.createElement("option");
+        option.text = month;
+        option.value = month;
+        dropdown.add(option);
+        
+    });
+    months.forEach(month => {
+        const option = document.createElement("option");
+        option.text = month;
+        option.value = month;
+        dropdown1.add(option);
+        
+    });
 
     const grid = document.getElementById("monthGrid");
     const toggleBtn = document.getElementById("toggleBtn");
