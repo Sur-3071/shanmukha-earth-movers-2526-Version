@@ -1031,7 +1031,7 @@ async function RePrintHome() {
 }
 function generateHomeTablebydate(data, startdate, enddate) {
 
-    console.log(data);
+    // console.log(data);
 
     let out1 = `<table border="1px">
         <tr>

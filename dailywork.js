@@ -24,7 +24,7 @@ function timecal() {
     // Calculate the total minutes and price
     var tmin = diffHours * 60 + diffMinutes;
     var pri = tmin * c3/60;
-    alert(pri);
+    // alert(pri);
     document.getElementById("ttime").value = totalTime;
     // alert(pri+" "+amt);
     var type=document.getElementById("worktype").value;
@@ -93,7 +93,7 @@ function addRow() {
     container.appendChild(newRow);
 }
 function addRow1() {
-    alert("row1");
+    // alert("row1");
     const container1 = document.getElementById('container2');
     const newRow1 = document.createElement('div');
     newRow1.className = 'row1';
@@ -130,7 +130,7 @@ function updateTotalTrips() {
 }
 function updateTotalTrips1() {
     // alert("hi");
-    alert("row1");
+    // alert("row1");
     const tripInputs = document.querySelectorAll('input[name="trips1[]"]');
     let total = 0;
     tripInputs.forEach(input => {
@@ -164,7 +164,7 @@ function generateOutput() {
 }
 function tripprice1()
 {
-    alert("row1");
+    // alert("row1");
     var c1=document.getElementById("trips1").value;
     var c3=parseInt(document.getElementById("trprate1").value);
     var c2=parseInt(c1)*c3;
