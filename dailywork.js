@@ -24,7 +24,7 @@ function timecal() {
     // Calculate the total minutes and price
     var tmin = diffHours * 60 + diffMinutes;
     var pri = tmin * c3/60;
-    // alert(pri===NaN+" "+pri.length+" ");
+    alert(pri);
     document.getElementById("ttime").value = totalTime;
     // alert(pri+" "+amt);
     var type=document.getElementById("worktype").value;

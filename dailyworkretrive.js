@@ -209,6 +209,8 @@ function generateTable(data) {
             // if (activity.Beta !== undefined && activity.Beta !== "undefined" && activity.Beta !== null) {
             //     amount=parseInt(amount)+parseInt(activity.Beta);
             // }
+            var beta=activity.Beta==="undefined" || activity.Beta===undefined?0:activity.Beta
+            // console.log(beta);
             out += `<tr>
                         <td>${customerPhone}</td>
                         <td>${activity.Date}</td>
@@ -220,7 +222,7 @@ function generateTable(data) {
                         <td>${activity.Starting}</td>
                         <td>${activity.Ending}</td>
                         <td>${activity.TotalTime}</td>
-                        <td>${activity.Beta}</td>
+                        <td>${beta}</td>
                         <td><button type="button" class="pay" id="${customerPhone}"
             style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
             ${activity.Payment}                        <td><button type="button" id=${editid} class="edit">Edit</button></td>
@@ -337,15 +339,16 @@ document.addEventListener("click", async function (e1) {
         var output = data.Drivers;
         var Starting = data.Starting;
         var TotalTime = data.TotalTime;
-        var hrsamt = data.HoursPrice;
+        var hrsamt = data.HoursPrice==="undefined" || data.HoursPrice===undefined?0:data.HoursPrice;
         var trpamt = data.TripsPrice;
         var jcbtrpamt = data.JcbTripPrice;
         var Trips = data.Trips;
         var Villagename = data.Villagename;
-        var beta = data.Beta;
-        var hourstrpamt = data.HoursTripsAmount;
-        var hoursdrivers = data.HoursDrivers;
-        var hourstrips = data.HoursTrips;
+        // alert(data.Beta==="undefined"?0:data.Beta);
+        var beta = data.Beta==="undefined" || data.Beta===undefined?0:data.Beta;
+        var hourstrpamt = data.HoursTripsAmount==="undefined" || data.HoursTripsAmount===undefined?0:data.HoursTripsAmount;
+        var hoursdrivers = data.HoursDrivers==="undefined" || data.HoursDrivers===undefined?0:data.HoursDrivers;
+        var hourstrips = data.HoursTrips==="undefined" || data.HoursTrips===undefined?0:data.HoursTrips;
         if (Trips === "--" && Contract === "--") {
             var worktype = "Hours";
         }
