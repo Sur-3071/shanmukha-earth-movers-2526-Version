@@ -296,7 +296,7 @@ function updateMonthCards(monthlySummary) {
 
    Object.keys(monthsMap).forEach(month => {
     const card = document.getElementById(`card-${month}`);
-    console.log(month);
+    // console.log(month);
         if (card) {
             const salaryEl = card.querySelector(".salary");
             const salarycut = card.querySelector(".cut-salary");

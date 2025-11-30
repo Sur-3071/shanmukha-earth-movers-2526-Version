@@ -32,9 +32,14 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
     const rate = document.getElementById("rate").value;
     var hrsamt = document.getElementById("hrsrate").value;
     var trpamt = document.getElementById("trprate").value;
+    var jcbtrpamt = document.getElementById("jcbtrprate").value;
     var trips = document.getElementById("trips").value;
     var output = document.getElementById("output").value;
     var pay = document.getElementById("pay").value;
+    const beta = document.getElementById("beta").value;
+    var hourstrpamt = document.getElementById("trprate1").value;
+    var hoursdrivers = document.getElementById("output1").value;
+    var hourstrips = document.getElementById("trips1").value;
     if (stime.length === 0) {
 
         stime = "--";
@@ -65,6 +70,10 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
                         Villagename: villname,
                         PhoneNumber: "**",
                         Shift: "**",
+                        Beta: beta,
+                        HoursTrips:hourstrips,
+                        HoursTripsAmount:hourstrpamt,
+                        HoursDrivers:hoursdrivers,
                         Description: desc,
                         Contract: con,
                         Payment: pay,
@@ -73,6 +82,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
                         Drivers: output,
                         HoursPrice:hrsamt,
                         TripsPrice:trpamt,
+                        JcbTripPrice: jcbtrpamt,
                         Starting: stime,
                         Ending: etime,
                         TotalTime: ttime,

@@ -38,7 +38,7 @@ function getvillage(data) {
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
-            console.log(activity,customerPhone)
+            // console.log(activity,customerPhone)
             if (customerPhone !== "Customers_Id" && cusname===activity.Name) {
                document.getElementById("vill").value=activity. Villagename;
                break;
@@ -70,7 +70,7 @@ function getvillage1(data) {
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
-            console.log(activity,customerPhone)
+            // console.log(activity,customerPhone)
             if (customerPhone !== "Customers_Id" && cusname===activity.Name) {
                document.getElementById("vil2").value=activity. Villagename;
                break;
@@ -109,7 +109,7 @@ document.getElementById("name1").addEventListener("change", async function (e1) 
         // Check if data exists
         if (snapshot.exists()) {
             const data = snapshot.val();
-            console.log(data);
+            // console.log(data);
             document.getElementById("cid").value = data;
         } else {
             alert("No data available");
@@ -131,7 +131,7 @@ document.getElementById("name2").addEventListener("change", async function (e1) 
         // Check if data exists
         if (snapshot.exists()) {
             const data = snapshot.val();
-            console.log(data);
+            // console.log(data);
             document.getElementById("cid1").value = data;
         } else {
             alert("No data available");

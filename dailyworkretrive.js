@@ -134,6 +134,7 @@ function generateTable(data) {
             <th id="csize">Starting Time</th>
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
+            <th id="csize">Driver Beta</th>
             <th id="csize">Payment Status</th>
             <th id="csize">Edit Data</th>
             <th id="csize">Price</th>
@@ -156,21 +157,21 @@ function generateTable(data) {
             var editid = customerPhone + "v";
             collection += parseInt(activity.Price);
             var amount = activity.Payment === "Paid" ? 0 : activity.Price
-            var balanaceamount=0;
-            var customerName=activity.Name;
+            var balanaceamount = 0;
+            var customerName = activity.Name;
             // alert("2");
             // alert(activity.Name);
             // alert(!processedCustomers.has(customerName));
-            if (!processedCustomers.has(customerName) && activity.Payment==="UnPaid" ) {
-                
-                balanaceamount=getCachedExtraAmount(customerName);
+            if (!processedCustomers.has(customerName) && activity.Payment === "UnPaid") {
+
+                balanaceamount = getCachedExtraAmount(customerName);
                 processedCustomers.add(customerName);
-                amount=parseInt(amount)-parseInt(balanaceamount);
+                amount = parseInt(amount) - parseInt(balanaceamount);
             }
             // alert("3===>"+amount);
             // console.log(activity.Name+"=====>"+amount);
             recovery += parseInt(amount);
-                                    // alert("4");
+            // alert("4");
 
             if (activity.Trips !== "--") {
                 totaltrips += parseInt(activity.Trips);
@@ -178,14 +179,14 @@ function generateTable(data) {
             if (activity.Contract !== "--") {
                 totalcontarct += parseInt(activity.Contract);
             }
-                        // alert("4.5");
+            // alert("4.5");
             if (activity.Starting !== "--") {
                 var timesplit = activity.TotalTime;
                 var v = timesplit.split(':');
                 hou += parseInt(v[0]);
                 mint += parseInt(v[1]);
             }
-                        // alert("5");
+            // alert("5");
 
             if (!l.includes(activity.Date)) {
                 workday += 1;
@@ -204,9 +205,10 @@ function generateTable(data) {
             } else if (payment === "unpaid") {
                 bgColor = "red";
             }
-                        // alert("6");
-
-
+            var totalamount = parseInt(activity.Price);
+            // if (activity.Beta !== undefined && activity.Beta !== "undefined" && activity.Beta !== null) {
+            //     amount=parseInt(amount)+parseInt(activity.Beta);
+            // }
             out += `<tr>
                         <td>${customerPhone}</td>
                         <td>${activity.Date}</td>
@@ -218,10 +220,11 @@ function generateTable(data) {
                         <td>${activity.Starting}</td>
                         <td>${activity.Ending}</td>
                         <td>${activity.TotalTime}</td>
+                        <td>${activity.Beta}</td>
                         <td><button type="button" class="pay" id="${customerPhone}"
             style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
             ${activity.Payment}                        <td><button type="button" id=${editid} class="edit">Edit</button></td>
-                        <td>${activity.Price}</td>
+                        <td>${totalamount}</td>
                         <td>${amount}</td>
                     </tr>`;
 
@@ -243,7 +246,7 @@ function generateTable(data) {
     <td  id="am">${totaltrips}</td>
     <td id="am">${totalcontarct}</td>
     <td id="am" colspan="3">${totaltime}</td>
-    <td id="am" colspan="2">Work In Price</td>
+    <td id="am" colspan="3">Work In Price</td>
     <td id="am">${collection}</td>
     <td id="am">${recovery}</td>
     </tr>`;
@@ -270,11 +273,12 @@ function generateTable(data) {
         <th id="bal1">Oil</th>
         <th id="bal1">Maintainance</th>
         <th id="bal1">JCB EMI</th>
+        <th id="bal1">Home Expenses</th>
         <th id="bal1">Salary</th>
         <th id="bal1">Profit</th>
 
     </tr>`;
-    var pro = collection - (disel) - (differenceInDays * 734) - (workday * 335) - (differenceInDays * 1800);
+    var pro = collection - (disel) - (differenceInDays * 734) - (workday * 335) - (differenceInDays * 1800)-(differenceInDays*667);
     led += `<tr>
     <td class="lsize">${collection}</td>
     <td>${collection - recovery}</td>
@@ -285,6 +289,7 @@ function generateTable(data) {
     <td>${disel}</td>
     <td>${workday * 335}</td>
     <td>${differenceInDays * 1800}</td>
+    <td>${differenceInDays * 667}</td>
     <td>${differenceInDays * 734}</td>
     <td>${pro}</td>
     </tr>`;
@@ -313,6 +318,7 @@ document.addEventListener("click", async function (e1) {
         if (snapshot.exists()) {
             data = snapshot.val();
         }
+        // console.log(data);
         let payment = data.Payment;
         var Contract = data.Contract;
         var Date = data.Date;
@@ -322,20 +328,24 @@ document.addEventListener("click", async function (e1) {
         var Disel = data.Disel;
         var Price = data.Price;
         // alert(data.Description);
-        var desc="--";
-        if(data.Description!="undefined")
-        {
-            var desc=data.Description
+        var desc = "--";
+        if (data.Description != "undefined") {
+            var desc = data.Description
         }
-       
+
         // var Shift = data.Shift;
         var output = data.Drivers;
         var Starting = data.Starting;
         var TotalTime = data.TotalTime;
         var hrsamt = data.HoursPrice;
         var trpamt = data.TripsPrice;
+        var jcbtrpamt = data.JcbTripPrice;
         var Trips = data.Trips;
-        var Villagename = data.Villagename
+        var Villagename = data.Villagename;
+        var beta = data.Beta;
+        var hourstrpamt = data.HoursTripsAmount;
+        var hoursdrivers = data.HoursDrivers;
+        var hourstrips = data.HoursTrips;
         if (Trips === "--" && Contract === "--") {
             var worktype = "Hours";
         }
@@ -365,11 +375,17 @@ document.addEventListener("click", async function (e1) {
         document.getElementById("ttime").value = TotalTime;
         document.getElementById("rate").value = Price;
         document.getElementById("trprate").value = trpamt;
+        document.getElementById("jcbtrprate").value = jcbtrpamt;
         document.getElementById("trips").value = Trips;
         document.getElementById("output").value = output;
         document.getElementById("worktype").value = worktype;
         document.getElementById("pay").value = payment;
+        document.getElementById("beta").value = beta;
+        document.getElementById("trprate1").value = hourstrpamt;
+        document.getElementById("output1").value = hoursdrivers;
+        document.getElementById("trips1").value = hourstrips;
         editData();
+        editData1();
         if (worktype == "Hours") {
             document.getElementById("loading").style.display = "none";
             document.getElementById("contract").style.display = "none";
@@ -410,7 +426,7 @@ document.addEventListener("click", async function (e1) {
 })
 function editData() {
     // preventDefault();
-    const container = document.getElementById('container1');
+    const container = document.getElementById('container43');
     const rawText = document.getElementById('output').value.trim();
     container.innerHTML = `<button class="add-button" onclick="addRow()">Add</button>`;
 
@@ -424,8 +440,32 @@ function editData() {
             newRow.className = 'row';
             newRow.innerHTML = `
         <input type="text" placeholder="Driver Name" name="driverName[]" value="${driver}" onchange="removereadonly()" required>
-        <input type="number" placeholder="Trips" name="trips[]" value="${trips}" readonly required onkeyup="updateTotalTrips()">
+        <input type="number" placeholder="Trips" name="trips[]" value="${trips}"  required onkeyup="updateTotalTrips()">
         <button class="remove-button" onclick="removeRow(this)">X</button>
+      `;
+            container.appendChild(newRow);
+        }
+    });
+}
+
+function editData1() {
+    // preventDefault();
+    const container = document.getElementById('container2');
+    const rawText = document.getElementById('output1').value.trim();
+    container.innerHTML = `<button class="add-button" onclick="addRow()">Add</button>`;
+
+    const lines = rawText.split('\n');
+
+    lines.forEach(line => {
+        const [driver, trips] = line.split('=').map(item => item.trim());
+
+        if (driver && trips) {
+            const newRow = document.createElement('div');
+            newRow.className = 'row';
+            newRow.innerHTML = `
+        <input type="text" placeholder="Driver Name" name="driverName1[]" value="${driver}" onchange="removereadonly()" required>
+        <input type="number" placeholder="Trips" name="trips1[]" value="${trips}"  required onkeyup="updateTotalTrips1()">
+        <button class="remove-button" onclick="removeRow1(this)">X</button>
       `;
             container.appendChild(newRow);
         }
@@ -435,7 +475,7 @@ function editData() {
 function SearchTable(data) {
     var d = document.getElementById("ledger");
     var name = document.getElementById("search").value.trim();
-    console.log(name.length);
+    // console.log(name.length);
 
     if (name.length > 0) {
         d.style.display = "none";
@@ -456,6 +496,7 @@ function SearchTable(data) {
             <th id="csize">Starting Time</th>
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
+            <th id="csize">Driver Beta</th>
             <th id="csize">Payment Status</th>
             <th id="csize">Edit Data</th>
             <th id="csize">Price</th>
@@ -464,7 +505,7 @@ function SearchTable(data) {
 
         // Group by Name
         let groupedData = {};
-            const processedCustomers = new Set();
+        const processedCustomers = new Set();
         for (const customerPhone in data) {
             if (data.hasOwnProperty(customerPhone)) {
                 const activity = data[customerPhone];
@@ -498,7 +539,7 @@ function SearchTable(data) {
             let subHou = 0, subMint = 0;
 
             // Header row for person
-            out += `<tr><td colspan="14" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
+            out += `<tr><td colspan="15" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
 
             entries.forEach(entry => {
                 const customerPhone = entry.id;
@@ -534,14 +575,14 @@ function SearchTable(data) {
 
                 var amount = activity.Payment === "Paid" ? 0 : thisPrice;
                 // alert("Iam coming..");
-                var customerName=personName;
-                var balanaceamount=0;
-                if (!processedCustomers.has(customerName) && activity.Payment==="UnPaid" ) {
+                var customerName = personName;
+                var balanaceamount = 0;
+                if (!processedCustomers.has(customerName) && activity.Payment === "UnPaid") {
 
-                balanaceamount=getCachedExtraAmount(customerName);
-                processedCustomers.add(customerName);
-                amount=parseInt(amount)-parseInt(balanaceamount);
-            }
+                    balanaceamount = getCachedExtraAmount(customerName);
+                    processedCustomers.add(customerName);
+                    amount = parseInt(amount) - parseInt(balanaceamount);
+                }
 
                 recovery += amount;
                 subRecovery += amount;
@@ -559,6 +600,7 @@ function SearchTable(data) {
                     <td>${activity.Starting}</td>
                     <td>${activity.Ending}</td>
                     <td>${activity.TotalTime}</td>
+                    <td>${activity.Beta}</td>
                     <td><button type="button" class="pay" id="${customerPhone}"
                         style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
                         ${activity.Payment}</button></td>
@@ -581,7 +623,7 @@ function SearchTable(data) {
                 <td>${subTrips}</td>
                 <td>${subContract}</td>
                 <td colspan="3">${subTime}</td>
-                <td colspan="2">Sub Total</td>
+                <td colspan="3">Sub Total</td>
                 <td>${subPrice}</td>
                 <td>${subRecovery}</td>
             </tr>`;
@@ -600,7 +642,7 @@ function SearchTable(data) {
             <td id="am">${totaltrips}</td>
             <td id="am">${totalcontarct}</td>
             <td id="am" colspan="3">${totaltime}</td>
-            <td id="am" colspan="2">Grand Total</td>
+            <td id="am" colspan="3">Grand Total</td>
             <td id="am">${collection}</td>
             <td id="am">${recovery}</td>
         </tr>`;
@@ -663,6 +705,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
             <th id="csize">Starting Time</th>
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
+            <th id="csize">Driver Beta</th>
             <th id="csize">Price</th>
             <th id="csize">Recovery</th>
         </tr>`;
@@ -691,14 +734,14 @@ function generateTableByDate(data, startdate, enddate, data1) {
             const activity = data[customerPhone];
             if (activity.Date >= startdate && activity.Date <= enddate) {
                 var amount = activity.Payment === "Paid" ? 0 : activity.Price
-                var customerName=activity.Name;
-                var balanaceamount=0;
-                if (!processedCustomers.has(customerName) && activity.Payment==="UnPaid" ) {
-                
-                balanaceamount=getCachedExtraAmount(customerName);
-                processedCustomers.add(customerName);
-                amount=parseInt(amount)-parseInt(balanaceamount);
-            }
+                var customerName = activity.Name;
+                var balanaceamount = 0;
+                if (!processedCustomers.has(customerName) && activity.Payment === "UnPaid") {
+
+                    balanaceamount = getCachedExtraAmount(customerName);
+                    processedCustomers.add(customerName);
+                    amount = parseInt(amount) - parseInt(balanaceamount);
+                }
                 var editid = customerPhone + "v";
                 disel += parseInt(activity.Disel);
                 recovery += parseInt(amount);
@@ -730,6 +773,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
                         <td>${activity.Starting}</td>
                         <td>${activity.Ending}</td>
                         <td>${activity.TotalTime}</td>
+                        <td>${activity.Beta}</td>
                         <td>${activity.Price}</td>
                         <td>${amount}</td>
 
@@ -746,7 +790,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
             <td id="am">${disel}</td>
             <td id="am">${totaltrips}</td>
             <td id="am">${totalcontarct}</td>
-            <td id="am" colspan="3">${totaltime}</td>
+            <td id="am" colspan="4">${totaltime}</td>
             <td id="am">${collection}</td>
             <td id="am">${recovery}</td>
             </tr>`;
@@ -768,7 +812,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
         <th id="bal1">Profit</th>
 
     </tr>`;
-    var pro = collection - (disel) - (differenceInDays * 734) - (workday * 335) - (differenceInDays * 1800)-20000;
+    var pro = collection - (disel) - (differenceInDays * 734) - (workday * 335) - (differenceInDays * 1800) - (differenceInDays * 667);
     led += `<tr>
     <td>${collection}</td>
     <td>${collection - recovery}</td>
@@ -779,7 +823,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
     <td>${disel}</td>
     <td>${workday * 335}</td>
     <td>${differenceInDays * 1800}</td>
-    <td>20,000</td>
+    <td>${differenceInDays * 667}</td>
     <td>${differenceInDays * 734}</td>
     <td>${pro}</td>
     </tr>`;
@@ -789,6 +833,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
 }
 document.addEventListener("click", async function (e1) {
     if (e1.target && e1.target.className === "pay") {
+        // alert("its editing point...");
         e1.preventDefault();
         var id = e1.target.id;
         const db2 = getDatabase(app);
@@ -809,6 +854,28 @@ document.addEventListener("click", async function (e1) {
 
         const db1 = "Daily Work-2025-2026";
         const paymentstatus = ref(db, `${db1}/${id}`);
+        var beta = 0;
+        var HoursTrips = 0;
+        var HoursTripsAmount = 0;
+        var HoursDrivers = 0;
+        var jcbtripprice = 0;
+        if (data.Beta !== undefined) {
+            beta = data.Beta;
+        }
+        if (data.HoursTrips !== undefined) {
+            HoursTrips = data.HoursTrips;
+        }
+        if (data.HoursTripsAmount !== undefined) {
+            HoursTripsAmount = data.HoursTripsAmount;
+        }
+        if (data.HoursDrivers !== undefined) {
+            HoursDrivers = data.HoursDrivers;
+        }
+        if (data.JcbTripPrice !== undefined) {
+            jcbtripprice = data.JcbTripPrice;
+        }
+        // alert(beta);
+
 
         await set(paymentstatus, {
             Contract: data.Contract,
@@ -817,14 +884,19 @@ document.addEventListener("click", async function (e1) {
             Ending: data.Ending,
             Name: data.Name,
             PhoneNumber: data.PhoneNumber,
+            Beta: beta,
+            HoursTrips: HoursTrips,
+            HoursTripsAmount: HoursTripsAmount,
+            HoursDrivers: HoursDrivers,
+            JcbTripPrice: jcbtripprice,
             Disel: data.Disel,
             Price: data.Price,
             Shift: data.Shift,
             Starting: data.Starting,
-            Description:data.Description,
-            Drivers:data.Drivers,
-            HoursPrice:data.HoursPrice,
-            TripsPrice:data.TripsPrice,
+            Description: data.Description,
+            Drivers: data.Drivers,
+            HoursPrice: data.HoursPrice,
+            TripsPrice: data.TripsPrice,
             TotalTime: data.TotalTime,
             Trips: data.Trips,
             Villagename: data.Villagename
@@ -851,6 +923,26 @@ document.addEventListener("click", async function (e1) {
             }
             document.getElementById(id).textContent = payment;
             const db1 = "Daily Work-2025-2026";
+            var beta = 0;
+            var HoursTrips = 0;
+            var HoursTripsAmount = 0;
+            var HoursDrivers = 0;
+            var jcbtripprice = 0;
+            if (data.Beta !== undefined) {
+                beta = data.Beta;
+            }
+            if (data.HoursTrips !== undefined) {
+                HoursTrips = data.HoursTrips;
+            }
+            if (data.HoursTripsAmount !== undefined) {
+                HoursTripsAmount = data.HoursTripsAmount;
+            }
+            if (data.HoursDrivers !== undefined) {
+                HoursDrivers = data.HoursDrivers;
+            }
+            if (data.JcbTripPrice !== undefined) {
+                jcbtripprice = data.JcbTripPrice;
+            }
             const paymentstatus = ref(db, `${db1}/${id}`);
             await set(paymentstatus, {
                 Contract: data.Contract,
@@ -859,10 +951,19 @@ document.addEventListener("click", async function (e1) {
                 Ending: data.Ending,
                 Name: data.Name,
                 PhoneNumber: data.PhoneNumber,
+                Beta: beta,
+                HoursTrips: HoursTrips,
+                HoursTripsAmount: HoursTripsAmount,
+                HoursDrivers: HoursDrivers,
                 Disel: data.Disel,
                 Price: data.Price,
                 Shift: data.Shift,
                 Starting: data.Starting,
+                Description: data.Description,
+                Drivers: data.Drivers,
+                HoursPrice: data.HoursPrice,
+                TripsPrice: data.TripsPrice,
+                JcbTripPrice: jcbtripprice,
                 TotalTime: data.TotalTime,
                 Trips: data.Trips,
                 Villagename: data.Villagename
@@ -940,8 +1041,7 @@ function generateHomeTablebydate(data, startdate, enddate) {
             <th id="csize1">Farming</th>
             <th id="csize1">Jcb</th>
              <th id="csize1">Salary</th>
-            <th id="csize1">Amount
-            </th>
+            <th id="csize1">Amount</th>
         </tr>`;
     var amt = 0;
     var f1 = 0;
@@ -1062,37 +1162,36 @@ function generateHomeTableSearch(data, v1) {
                         }
                     }
                 }
-                else
-                {
-                     if (v1 === "Dady") {
-                    if (activity.Type === "Farming" && activity.PersonType === "Dady") {
-                        f1 += parseInt(activity.Price);
-                    }
-                    else {
-                        if (activity.Type === "Jcb" && activity.PersonType === "Dady") {
-                            j1 += parseInt(activity.Price);
+                else {
+                    if (v1 === "Dady") {
+                        if (activity.Type === "Farming" && activity.PersonType === "Dady") {
+                            f1 += parseInt(activity.Price);
                         }
                         else {
-                            if (activity.Type === "Salary" && activity.PersonType === "Dady") {
-                                // alert("function12");
-                                // alert(activity.Salary);
-
-                                s1 += parseInt(activity.Salary);
+                            if (activity.Type === "Jcb" && activity.PersonType === "Dady") {
+                                j1 += parseInt(activity.Price);
                             }
                             else {
-                                if (activity.Type === "Salary Expenses" && activity.PersonType === "Dady") {
-                                    s2 += parseInt(activity.SalaryExp);
+                                if (activity.Type === "Salary" && activity.PersonType === "Dady") {
+                                    // alert("function12");
+                                    // alert(activity.Salary);
+
+                                    s1 += parseInt(activity.Salary);
                                 }
                                 else {
-                                    if (activity.Type === "Home" && activity.PersonType === "Dady") {
+                                    if (activity.Type === "Salary Expenses" && activity.PersonType === "Dady") {
+                                        s2 += parseInt(activity.SalaryExp);
+                                    }
+                                    else {
+                                        if (activity.Type === "Home" && activity.PersonType === "Dady") {
 
-                                        h1 += parseInt(activity.Home);
+                                            h1 += parseInt(activity.Home);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
                 }
 
                 if (activity.Type === v1 || activity.PersonType === v1) {

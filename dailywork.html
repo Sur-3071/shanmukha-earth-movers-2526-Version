@@ -39,7 +39,7 @@
 
         let extraAmountsCache = {}; // Example: { "Suresh": 1200, "Ravi": 0 }
 
-        let extraamounttotal=0;
+        let extraamounttotal = 0;
 
         async function loadAllExtraAmountsOnce() {
             const app = initializeApp(firebaseConfig);
@@ -62,7 +62,7 @@
                 for (const name in data) {
                     const customer = data[name];
                     cache[name] = customer.ExtraAmount || 0;
-                    extraamounttotal+=parseInt(customer.ExtraAmount || 0);
+                    extraamounttotal += parseInt(customer.ExtraAmount || 0);
                 }
 
                 extraAmountsCache = cache; // assign final structure
@@ -272,7 +272,7 @@
                         else if (purposeType === "Jcb") totals.Jcb += jcb;
                         else if (purposeType === "Salary") totals.Salary += salary;
                         else if (purposeType === "Salary Expenses") totals.SalaryExp += salaryExp;
-                        console.log(totals.Home);
+                        // console.log(totals.Home);
                         totals.Total += amount;
 
                         // Add row to the appropriate table
@@ -499,7 +499,7 @@
             const date2 = new Date(dat2);
             const differenceInMilliseconds = date2 - date1;
             const differenceInDays = (differenceInMilliseconds / (1000 * 60 * 60 * 24)) + 1;
-            console.log(differenceInDays, differenceInMilliseconds, dat1);
+            // console.log(differenceInDays, differenceInMilliseconds, dat1);
             const holidays = differenceInDays - workday;
             document.getElementById("tday").innerText = differenceInDays;
             document.getElementById("tday").style.color = "red";
@@ -659,12 +659,12 @@
             var homeexp = 20000;
             var imprhrs = parseInt((((365 * 8000) - totalwork) / (remin)) / 1000)
             var impmin = parseInt((((((365 * 8000) - totalwork) / (remin)) / 1000) - imprhrs) * 60)
-            proft = totalwork - workday * 335 - differenceInDays * 2534 - oila - homeexp;
+            proft = totalwork - workday * 335 - differenceInDays * 2534 - oila - differenceInDays*667;
             document.getElementById("twrk").innerHTML = moneyconvert(totalwork);
             document.getElementById("proft").innerHTML = moneyconvert(proft);
             document.getElementById("oil").innerHTML = moneyconvert(oila);
             document.getElementById("avghrs").innerHTML = avghrss + "Hrs  " + avgmin + "Min";
-            document.getElementById("perdayhrs").innerHTML = moneyconvert(recovery-extraamounttotal);
+            document.getElementById("perdayhrs").innerHTML = moneyconvert(recovery - extraamounttotal);
             document.getElementById("imphrs").innerHTML = imprhrs + " Hrs   " + impmin + " Min";
             document.getElementById("proft").style.color = "skyblue";
             document.getElementById("imphrs").style.color = "red";
@@ -695,10 +695,6 @@
     </div>
     <div id="daycnt" style="display: none;">
         <div class="container">
-            <!-- <div class="box" >
-                    <h2 style="color: rgb(75, 166, 236);">JCB Operator</h2>
-                    <img src="OPERATOR CHINNA.png" align="left" alt="Sample Image" class="round-image">
-                </div> -->
             <div class="box" id="clickableImage">
                 <h2 style="color: rgb(75, 166, 236);">Total Days</h2>
                 <h1 id="tday"></h1>
@@ -797,20 +793,33 @@
                 <option>Loading</option>
                 <option>Contract</option>
             </select>
+            <input type="text" id="beta" name="beta" placeholder="Driver Beta" value="0" onchange="timecal()">
             <div id="hours" style="display: none;">
-                <!-- <input type="text" id="hrsrate" name="hrsrate" placeholder="Hours Price" onkeyup="timecal()" required> -->
                 <select id="hrsrate" name="hrsrate" onchange="timecal()" required>
                     <option value="" disabled selected>Select Hours Price</option>
                     <!-- Options will be generated -->
                 </select>
+                <div id="loading1">
+                    <input type="text" id="trprate1" name="trprate1" placeholder="Trip Price" onkeyup="tripprice1()" value="0" required>
+                    <div id="container2">
+                        <div class="row1">
+                            <button class="add-button" onclick="addRow1()">Add Driver</button>
+                        </div>
+                    </div>
+                    <textarea id="output1" placeholder="All Drivers list" rows="4" cols="30"
+                        style="font-size: 20px; display: none;" readonly></textarea>
+                    <input type="text" id="trips1" placeholder="Number of Trips" readonly required value="0">
+                    <input type="text" id="alltrprate" name="alltrprate" placeholder="Total Trip Price" required value="0">
+                </div>
                 <input type="text" id="desc" name="desc" placeholder="Description" value="--" required>
                 <input type="time" id="stime" name="stime" placeholder="Starting Time" onchange="timecal()" required>
                 <input type="time" id="etime" name="etime" placeholder="Ending Time" onchange="timecal()" required>
                 <input type="text" id="ttime" name="ttime" placeholder="Total Time" readonly required>
             </div>
             <div id="loading" style="display: none;">
-                <input type="text" id="trprate" name="trprate" placeholder="Trip Price" onkeyup="tripprice()" required>
-                <div id="container1">
+                <input type="text" id="jcbtrprate" name="jcbtrprate" placeholder="JCB Trip Price" onkeyup="tripprice()" required>
+                <input type="text" id="trprate" name="trprate" placeholder="Trip Price" required>
+                <div id="container43">
                     <div class="row">
                         <button class="add-button" onclick="addRow()">Add Driver</button>
                     </div>
@@ -822,7 +831,7 @@
             <div id="contract" style="display: none;">
                 <input type="text" id="con" name="con" placeholder="Contract Amount" onkeyup="conprice()" required>
             </div>
-            <input type="text" id="rate" name="rate" placeholder="Price" readonly required>
+            <input type="text" id="rate" name="rate" placeholder="Price" readonly required value="0">
             <input type="button" value="Add Data" id="submit1">
         </form>
     </div>
@@ -1106,7 +1115,8 @@
             document.getElementById("ledger2").innerHTML = led;
 
         }
-        function calculateFinalPrice(selectElem) {
+        function calculateFinalPrice(selectElem,beta,htrip,tracttrips,htriprate) {
+            // alert(beta+" "+htrip+" "+tracttrips);
             const row = selectElem.closest("tr");
             const type = row.getAttribute("data-type");
             const trips = parseInt(row.getAttribute("data-trips") || "0");
@@ -1115,9 +1125,9 @@
             let finalPrice = 0;
 
             if (type === "Trips") {
-                finalPrice = rate * trips;
+                finalPrice = ((rate+parseInt(tracttrips)) * trips)+parseInt(beta);
             } else if (type === "Hours") {
-                finalPrice = Math.round((mins / 60) * rate);
+                finalPrice = Math.round((mins / 60) * rate)+parseInt(beta)+(parseInt(htrip)*parseInt(htriprate));
             }
 
             const input = row.querySelector(".finalPrice");

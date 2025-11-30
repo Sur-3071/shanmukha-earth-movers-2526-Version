@@ -35,7 +35,7 @@ async function RePrintHome() {
         // Check if data exists
         if (snapshot.exists()) {
             const data = snapshot.val();
-            console.log(data);
+            // console.log(data);
             generateHomeTable(data);
         } else {
             alert("No data available for the selected date.");

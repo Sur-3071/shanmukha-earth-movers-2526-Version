@@ -20,21 +20,51 @@ function timecal() {
 
     // Format the total time as HH:MM
     var totalTime = diffHours.toString().padStart(2, '0') + ':' + diffMinutes.toString().padStart(2, '0');
-        var c3=parseInt(document.getElementById("hrsrate").value);
+    var c3=parseInt(document.getElementById("hrsrate").value);
     // Calculate the total minutes and price
     var tmin = diffHours * 60 + diffMinutes;
     var pri = tmin * c3/60;
-
+    // alert(pri===NaN+" "+pri.length+" ");
     document.getElementById("ttime").value = totalTime;
-    document.getElementById("rate").value = parseInt(pri);
+    // alert(pri+" "+amt);
+    var type=document.getElementById("worktype").value;
+    var beta=parseInt(document.getElementById("beta").value);
+    var rate=parseInt(document.getElementById("rate").value);
+    if(type==="Hours")
+    {
+        rate = (isNaN(pri)?beta:parseInt(pri)+beta);
+        document.getElementById("rate").value=rate;
+    }
+    else
+    {
+        if(type==="Loading")
+        {
+            var triprate=parseInt(document.getElementById("trips").value);
+            var jcbtriprate=parseInt(document.getElementById("jcbtrprate").value);
+            var trippri=(triprate*jcbtriprate);
+            rate = (isNaN(trippri)?beta:parseInt(trippri)+beta);
+            document.getElementById("rate").value=rate;
+        }
+        else
+        {
+            if(type==="Contract")
+            {
+                var conamouont=parseInt(document.getElementById("con").value);
+                rate = (isNaN(conamouont)?beta:parseInt(conamouont)+beta);
+                document.getElementById("rate").value=rate;
+
+            }
+        }
+    }
 }
 
 
 
 function conprice()
 {
+    var beta=parseInt(document.getElementById("beta").value);
     var c1=document.getElementById("con").value;
-    document.getElementById("rate").value=c1;
+    document.getElementById("rate").value=parseInt(c1)+beta;
 }
 function removedone() {
     setTimeout(function () {
@@ -51,21 +81,40 @@ function removereadonly()
 }
 
 function addRow() {
-    const container = document.getElementById('container1');
+    // alert("row");
+    const container = document.getElementById('container43');
     const newRow = document.createElement('div');
     newRow.className = 'row';
     newRow.innerHTML = `
-       <input type="text" placeholder="Driver Name" name="driverName[]"  onchange="removereadonly()" required>
+       <input type="text" placeholder="Driver Name" name="driverName[]"  onchange="removereadonly()">
        <input type="number" placeholder="Trips" name="trips[]"  readonly required onkeyup="updateTotalTrips()">
        <button class="remove-button" onclick="removeRow(this)">X</button>
     `;
     container.appendChild(newRow);
+}
+function addRow1() {
+    alert("row1");
+    const container1 = document.getElementById('container2');
+    const newRow1 = document.createElement('div');
+    newRow1.className = 'row1';
+    newRow1.innerHTML = `
+       <input type="text" placeholder="Driver Name" name="driverName1[]"  onchange="removereadonly()">
+       <input type="number" placeholder="Trips" name="trips1[]"  readonly required onkeyup="updateTotalTrips1()">
+       <button class="remove-button" onclick="removeRow1(this)">X</button>
+    `;
+    container1.appendChild(newRow1);
 }
 
 function removeRow(button) {
     const row = button.parentElement;
     row.remove();
     updateTotalTrips();
+}
+
+function removeRow1(button) {
+    const row = button.parentElement;
+    row.remove();
+    updateTotalTrips1();
 }
 
 function updateTotalTrips() {
@@ -79,18 +128,54 @@ function updateTotalTrips() {
     document.getElementById('trips').value= total;
     tripprice();
 }
+function updateTotalTrips1() {
+    // alert("hi");
+    alert("row1");
+    const tripInputs = document.querySelectorAll('input[name="trips1[]"]');
+    let total = 0;
+    tripInputs.forEach(input => {
+        const value = parseInt(input.value) || 0;
+        total += value;
+    });
+    document.getElementById('trips1').value= total;
+    tripprice1();
+}
 function tripprice()
 {
     var c1=document.getElementById("trips").value;
-    var c3=parseInt(document.getElementById("trprate").value);
+    var c3=parseInt(document.getElementById("jcbtrprate").value);
     var c2=parseInt(c1)*c3;
-    document.getElementById("rate").value=c2;
+    var beta=document.getElementById("beta").value;
+    var fin=isNaN(c2)?parseInt(beta):(parseInt(beta)+c2);
+    document.getElementById("rate").value=fin;
     generateOutput();
 }
 function generateOutput() {
     const driverNames = document.querySelectorAll('input[name="driverName[]"]');
     const trips = document.querySelectorAll('input[name="trips[]"]');
     const outputDiv = document.getElementById('output');
+    outputDiv.value = "";
+    driverNames.forEach((driverName, index) => {
+        const trip = trips[index].value || 0;
+        const name = driverName.value || "Unknown Driver";
+        const line = `${name} = ${trip}`;
+        outputDiv.value += line+" "+ "\n";
+    });
+}
+function tripprice1()
+{
+    alert("row1");
+    var c1=document.getElementById("trips1").value;
+    var c3=parseInt(document.getElementById("trprate1").value);
+    var c2=parseInt(c1)*c3;
+    document.getElementById("alltrprate").value=c2;
+    generateOutput1();
+}
+
+function generateOutput1() {
+    const driverNames = document.querySelectorAll('input[name="driverName1[]"]');
+    const trips = document.querySelectorAll('input[name="trips1[]"]');
+    const outputDiv = document.getElementById('output1');
     outputDiv.value = "";
     driverNames.forEach((driverName, index) => {
         const trip = trips[index].value || 0;

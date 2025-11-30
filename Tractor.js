@@ -239,7 +239,7 @@ function displaytripsdata(data) {
 
 
 function displayamountdata(data) {
-    console.log(data);
+    // console.log(data);
     var r = document.getElementById("amountdata");
     r.innerHTML = "";
 
@@ -257,7 +257,7 @@ function displayamountdata(data) {
     var s = 0;
     // Iterate over the dates in the data object
     for (const date in data) {
-        console.log(date[0]);
+        // console.log(date[0]);
         if (data.hasOwnProperty(date)) {
             // Iterate over the names within each date
             var amount = parseInt(data[date]['Amount'])
@@ -286,11 +286,11 @@ function displayamountdata(data) {
     r.style.display = "block";
 }
 function done() {
-    console.log("drivername" + name1);
-    console.log("total trips: " + totaltrips);
-    console.log("amounttaken: " + amounttaken);
-    console.log("totalamount: " + totalamount);
-    console.log("bal: " + (totalamount - amounttaken));
+    // console.log("drivername" + name1);
+    // console.log("total trips: " + totaltrips);
+    // console.log("amounttaken: " + amounttaken);
+    // console.log("totalamount: " + totalamount);
+    // console.log("bal: " + (totalamount - amounttaken));
 }
 function displaybal1(data, n) {
     name1 = n;
@@ -361,7 +361,7 @@ function displaybalanacedata() {
     r.style.display = "block";
 }
 function NoDatatrips() {
-    console.log("hi no data");
+    // console.log("hi no data");
     var p1 = document.getElementById("tripsdata");
     var d = document.getElementById("def1");
     d.style.display = "block";

@@ -15,6 +15,6 @@ function transalate() {
             let text = data.responseData.translatedText;
             // alert(text);
             convert.innerHTML = text;
-            console.log(text);
+            // console.log(text);
         });
     }

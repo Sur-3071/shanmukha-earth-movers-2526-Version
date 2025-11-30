@@ -24,7 +24,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     const pno = "**";
     const disel = document.getElementById("dis").value;
     var con = document.getElementById("con").value;
-    var desc=document.getElementById("desc").value;
+    var desc = document.getElementById("desc").value;
     var stime = document.getElementById("stime").value;
     var etime = document.getElementById("etime").value;
     var ttime = document.getElementById("ttime").value;
@@ -34,8 +34,13 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     const worktype = document.getElementById("worktype").value;
     var trips = document.getElementById("trips").value;
     var hrsamt = document.getElementById("hrsrate").value;
+    var jcbtrpamt = document.getElementById("jcbtrprate").value;
     var trpamt = document.getElementById("trprate").value;
-
+    const beta = document.getElementById("beta").value;
+    var hourstrpamt = document.getElementById("trprate1").value;
+    var hoursdrivers = document.getElementById("output1").value;
+    var hourstrips = document.getElementById("trips1").value;
+    // alert(beta,hourstrpamt,hoursdrivers,hourstrips);
     document.getElementById("userForm1").reset();
     setTimeout(() => {
         location.reload();
@@ -97,6 +102,10 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 Name: name,
                                 Villagename: villname,
                                 PhoneNumber: pno,
+                                Beta: beta,
+                                HoursTrips: hourstrips,
+                                HoursTripsAmount: hourstrpamt,
+                                HoursDrivers: hoursdrivers,
                                 Shift: shift,
                                 Contract: con,
                                 Payment: pay,
@@ -104,6 +113,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 Description: desc,
                                 HoursPrice: hrsamt,
                                 TripsPrice: trpamt,
+                                JcbTripPrice: jcbtrpamt,
                                 Trips: trips,
                                 Drivers: drivers,
                                 Starting: stime,
@@ -150,10 +160,12 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
         document.getElementById("wid").value = wid;
         document.getElementById("name").value = name;
         document.getElementById("vill").value = villname;
+        document.getElementById("beta").value = beta;
         document.getElementById("worktype").value = worktype;
         document.getElementById("desc").value = desc;
         document.getElementById("hrsrate").value = hrsamt;
         document.getElementById("trprate").value = trpamt;
+        document.getElementById("jcbtrprate").value = jcbtrpamt;
         document.getElementById("pno").value = pno;
         document.getElementById("dis").value = disel;
         document.getElementById("con").value = con;
@@ -325,6 +337,7 @@ async function FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount)
 }
 async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount) {
     const db1 = "Daily Work-2025-2026";
+    alert("this is the customet payment");
     const db2 = "CustomersAmount";
     // alert("Iam coming");
     var k = 0;
@@ -338,7 +351,27 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
                 const price = parseInt(activity.Price);
                 if (totalded >= price) {
                     totalded -= price;
-
+                    var beta = 0;
+                    var HoursTrips = 0;
+                    var HoursTripsAmount = 0;
+                    var HoursDrivers = 0;
+                    var jcbtripprice = 0;
+                    if (activity.Beta !== undefined) {
+                        beta = activity.Beta;
+                    }
+                    if (activity.HoursTrips !== undefined) {
+                        HoursTrips = activity.HoursTrips;
+                    }
+                    if (activity.HoursTripsAmount !== undefined) {
+                        HoursTripsAmount = activity.HoursTripsAmount;
+                    }
+                    if (activity.HoursDrivers !== undefined) {
+                        HoursDrivers = activity.HoursDrivers;
+                    }
+                    if (activity.JcbTripPrice !== undefined) {
+                        jcbtripprice = activity.JcbTripPrice;
+                    }
+                    alert(jcbtripprice+" "+activity.JcbTripPrice !== undefined);
                     // Update full object, just changing Payment to "Paid"
                     const updatedData = {
                         Contract: activity.Contract,
@@ -357,7 +390,12 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
                         Description: activity.Description,
                         Drivers: activity.Drivers,
                         HoursPrice: activity.HoursPrice,
-                        TripsPrice: activity.TripsPrice
+                        TripsPrice: activity.TripsPrice,
+                        Beta: beta,
+                        HoursTrips: HoursTrips,
+                        HoursTripsAmount: HoursTripsAmount,
+                        HoursDrivers: HoursDrivers,
+                        JcbTripPrice: jcbtripprice
                     };
 
                     const transactionRef = ref(db, `${db1}/${workId}`);
@@ -660,7 +698,7 @@ function generateCustomerTable(data) {
             <td  id="am" style="font-size:30px;">${totaltrips}</td>
             <td id="am" style="font-size:30px;">${totalcontarct}</td>
             <td id="am" colspan="3" style="font-size:30px;">${totaltime}</td>
-            <td  id="col">Bill</td>
+            <td  id="col" colspan="1">Bill</td>
             <td id="col">${moneyconvert(collection)}</td>
             </tr>`;
     out += `</table>`;
@@ -677,40 +715,43 @@ function formatDate(isoDate) {
 
 
 function generateCustomerTable1(data) {
-    // console.log(data);
+    // alert("i am coming");
     let out = "";
 
     out += `<table border="1px" id="customerTable1">
     <tr>
-    <th colspan="11" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
+    <th colspan="14" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red" id="heading">మొత్తం పని </h1></th>
     </tr>
         <tr>
             <th>Date</th>
-            <th>Name</th>
-            <th>Village</th>
-            <th>Description</th>
+            <th>HDrivers</th>
+            <th>LDrivers</th>
             <th>Trips</th>
             <th>Contract</th>
             <th>Starting</th>
             <th>Ending</th>
-            <th>Total Time</th>
-            <th>Rate</th>
+            <th>TotalTime</th>
+            <th>HTrips</th>
+            <th>HTripRate</th>
+            <th>Beta</th>
+            <th>Trip Rate</th>
+            <th>Jcb Rate</th>
             <th>Final Price</th>
         </tr>`;
 
+        let headname="";
     let totaltrips = 0, totalcontract = 0, hou = 0, mint = 0;
-
+    //  alert("i am coming");
     let formname = document.getElementById("name4").value.toLowerCase();
     // alert(formname);
+    let k=0;
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
-            // console.log(formname,activity.Name.toLowerCase().trim(),activity.Name.toLowerCase().trim()===formname.trim());
-            // console.log(formname);
-            // alert(activity.Name.toLowerCase().trim(),activity.Name.toLowerCase().trim() === formname,formname);
-            // alert(activity.Name.toLowerCase().trim(),formname,formname.length,activity.Name.toLowerCase().trim().length);
-            if (activity.Name.toLowerCase().trim() === formname.trim() && activity.Payment === "UnPaid") {
+           if (activity.Name.toLowerCase().trim() === formname.trim() && activity.Payment === "UnPaid") {
                 // alert("is there");
+                headname=activity.Name;
+    
                 let totalMins = 0;
                 if (activity.TotalTime !== "--") {
                     const [h, m] = activity.TotalTime.split(":").map(Number);
@@ -725,12 +766,65 @@ function generateCustomerTable1(data) {
 
                 // 👇 New logic to get default rate properly
                 let defaultRate = 0;
+                let tracttrips=0;
                 if (activity.Contract !== "--") {
                     defaultRate = parseInt(activity.Contract);
                 } else if (activity.Trips !== "--") {
-                    defaultRate = parseInt(activity.TripsPrice || "150");
+                    defaultRate = parseInt(activity.JcbTripPrice || "150");
+                    tracttrips=parseInt(activity.TripsPrice || "150");
                 } else {
                     defaultRate = parseInt(activity.HoursPrice || "1000");
+                }
+
+                var beta = 0;
+                var HoursTrips = 0;
+                var HoursTripsAmount = 0;
+                var HoursDrivers = 0;
+                var jcbtripprice=0;
+                if (activity.JcbTripPrice !== undefined && activity.JcbTripPrice !== "undefined" && activity.JcbTripPrice !== null) {
+                    jcbtripprice = activity.JcbTripPrice;
+                }
+                if (activity.Beta !== undefined && activity.Beta !== "undefined" && activity.Beta !== null) {
+                    beta = activity.Beta;
+                }
+                if (activity.HoursTrips !== undefined && activity.HoursTrips !== "undefined" && activity.HoursTrips !== null) {
+                    HoursTrips = activity.HoursTrips;
+                }
+                // console.log(activity.HoursTripsAmount !== "undefined" );
+                if (activity.HoursTripsAmount !== undefined && activity.HoursTripsAmount !== "undefined" && activity.HoursTripsAmount !== null) {
+                    HoursTripsAmount = activity.HoursTripsAmount;
+                }
+                if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
+                    let str = activity.HoursDrivers;
+
+                    let arr = str.split(" ");
+                    let result = "";
+
+                    for (let i = 0; i < arr.length; i += 3) {
+                        if (arr[i] && arr[i + 2]) {       // <— check before adding
+                            result += arr[i] + " = " + arr[i + 2] + "\n";
+                        }
+                    }
+
+                    result = result.replace(/\n/g, "<br>");
+                    HoursDrivers = result;
+                }
+                // console.log(HoursTripsAmount+" "+HoursTrips);
+                var LDrivers = 0;
+                if (activity.Drivers !== undefined) {
+                    let str = activity.Drivers;
+
+                    let arr = str.split(" ");
+                    let result = "";
+
+                    for (let i = 0; i < arr.length; i += 3) {
+                        if (arr[i] && arr[i + 2]) {       // <— check before adding
+                            result += arr[i] + " = " + arr[i + 2] + "\n";
+                        }
+                    }
+
+                    result = result.replace(/\n/g, "<br>");
+                    LDrivers = result;
                 }
 
                 // alert(defaultRate);
@@ -739,35 +833,38 @@ function generateCustomerTable1(data) {
                     type = "Contract";
                     let contractAmt = parseInt(activity.Contract);
                     dropdown = `<option value="${contractAmt}" selected>₹${contractAmt}</option>`;
-                    finalAmount = contractAmt;
-                    totalcontract += 1;
+                    finalAmount = parseInt(contractAmt) + parseInt(beta);
+                    totalcontract += parseInt(contractAmt);
                 } else if (activity.Trips !== "--") {
                     type = "Trips";
                     for (let i = 100; i <= 1000; i += 10) {
                         dropdown += `<option value="${i}" ${i === defaultRate ? "selected" : ""}>₹${i}</option>`;
                     }
-                    finalAmount = parseInt(activity.Trips) * defaultRate;
+                    finalAmount = (parseInt(activity.Trips) * (defaultRate+tracttrips)) + parseInt(beta);
                     totaltrips += parseInt(activity.Trips);
                 } else {
                     type = "Hours";
                     for (let i = 800; i <= 2000; i += 100) {
                         dropdown += `<option value="${i}" ${i === defaultRate ? "selected" : ""}>₹${i}</option>`;
                     }
-                    finalAmount = Math.round((totalMins / 60) * defaultRate);
+                    finalAmount = Math.round((totalMins / 60) * defaultRate) + parseInt(beta) + (parseInt(HoursTrips) * parseInt(HoursTripsAmount));
                 }
 
                 out += `<tr data-type="${type}" data-trips="${activity.Trips}" data-mins="${totalMins}">
                     <td>${activity.Date}</td>
-                    <td>${activity.Name}</td>
-                    <td>${activity.Villagename}</td>
-                    <td>${activity.Description}</td>
+                    <td>${HoursDrivers}</td>
+                    <td>${LDrivers}</td>
                     <td>${activity.Trips}</td>
                     <td>${activity.Contract}</td>
                     <td>${activity.Starting}</td>
                     <td>${activity.Ending}</td>
                     <td>${activity.TotalTime}</td>
+                    <td>${HoursTrips}</td>
+                    <td>${HoursTripsAmount}</td>
+                    <td>${beta}</td>
+                    <td>${activity.TripsPrice}</td>
                     <td>
-                        <select class="rateDropdown" onchange="calculateFinalPrice(this); formeldger2();" ${type === "Contract" ? "disabled" : ""}>
+                        <select class="rateDropdown" onchange="calculateFinalPrice(this,'${beta}', '${HoursTrips}','${tracttrips}', '${HoursTripsAmount}'); formeldger2();" ${type === "Contract" ? "disabled" : ""}>
                             ${dropdown}
                         </select>
                         <div style="font-size:10px;color:gray;">(${type})</div>
@@ -787,12 +884,14 @@ function generateCustomerTable1(data) {
         <td>${totaltrips}</td>
         <td>${totalcontract}</td>
         <td colspan="3">${hou}:${mint}</td>
-        <td>Bill</td>
+        <td colspan="4">Bill</td>
         <td id="totalBill">--</td>
     </tr>`;
+    let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
+${headname}</h1>`;
 
     out += `</table>`;
-    document.getElementById("customeralldata2").innerHTML = out;
+    document.getElementById("customeralldata2").innerHTML = heading+out;
     document.getElementsByClassName("heading")[3].style.display = "block";
     document.getElementsByClassName("heading")[4].style.display = "block";
     document.getElementsByClassName("heading")[5].style.display = "block";
@@ -817,13 +916,13 @@ async function getExtraAmountofuser() {
 
     const Extraamount = ref(db, `${db1}/${db3}/${db21}`);
     const amount_snapshot = await get(Extraamount);
-    var extramoney =0;
+    var extramoney = 0;
     if (amount_snapshot.exists()) {
         // alert("iam coming 2");
         extramoney = parseInt(amount_snapshot.val());
         // console.log(totalded);
     }
-      setTimeout(() => {
+    setTimeout(() => {
         formeldger2();
     }, 5000);
     localStorage.setItem("extramoney", extramoney);

@@ -91,7 +91,7 @@ getDataBtn.addEventListener('click', function () {
             .then((snapshot) => {
                 if (snapshot.exists()) {
                     const data = snapshot.val();
-                    console.log(data);
+                    // console.log(data);
                     displaytripsdata(data)
 
                 } else {

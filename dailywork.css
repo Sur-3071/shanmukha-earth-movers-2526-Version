@@ -21,7 +21,6 @@ body {
 /* Popup modal styles */
 .modal {
   display: none;
-  position: fixed;
   z-index: 1000;
   left: 0;
   top: 0;
@@ -43,6 +42,7 @@ body {
   overflow-y: auto;        /* scroll vertically if too tall */
   overflow-x: auto;        /* scroll horizontally if content too wide */
   text-align: center;
+  margin-left: 50px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
@@ -405,6 +405,7 @@ input[type="checkbox"] {
     margin: 10% auto; /* Reduced from 15% */
     padding: 20px; /* Reduced and standardized from 30px 30px 30px 120px */
     border: 1px solid #888;
+    margin-left: 160px;
     width: 80%; /* Adjusted for flexibility */
     max-width: 500px;
 }
@@ -423,6 +424,7 @@ input[type="checkbox"] {
     margin-bottom: 30px; /* Reduced from 100px */
 }
 
+
 .close:hover, .close:focus {
     color: black;
     text-decoration: none;
@@ -437,6 +439,7 @@ input[type="checkbox"] {
     max-width: 350px; /* Reduced from 400px */
     margin-bottom: 10px; /* Reduced from 20px */
     padding-bottom: 50px; /* Reduced from 150px */
+    margin-left: 260px;
 }
 
 input, select {
@@ -491,8 +494,17 @@ h1 {
     align-items: center;
     margin-bottom: 8px; /* Reduced from 10px */
 }
+.row1 {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px; /* Reduced from 10px */
+}
 
 .row input {
+    margin-right: 8px; /* Reduced from 10px */
+    padding: 4px; /* Reduced from 5px */
+}
+.row1 input {
     margin-right: 8px; /* Reduced from 10px */
     padding: 4px; /* Reduced from 5px */
 }
