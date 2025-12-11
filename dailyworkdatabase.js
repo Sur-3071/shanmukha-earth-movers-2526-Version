@@ -880,11 +880,11 @@ function generateCustomerTable1(data) {
     hou += mintohou;
 
     out += `<tr>
-        <td colspan="4">Total Work</td>
+        <td colspan="3">Total Work</td>
         <td>${totaltrips}</td>
         <td>${totalcontract}</td>
         <td colspan="3">${hou}:${mint}</td>
-        <td colspan="4">Bill</td>
+        <td colspan="5">Bill</td>
         <td id="totalBill">--</td>
     </tr>`;
     let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
