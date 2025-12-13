@@ -371,7 +371,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
                     if (activity.JcbTripPrice !== undefined) {
                         jcbtripprice = activity.JcbTripPrice;
                     }
-                    alert(jcbtripprice+" "+activity.JcbTripPrice !== undefined);
+                    alert(jcbtripprice + " " + activity.JcbTripPrice !== undefined);
                     // Update full object, just changing Payment to "Paid"
                     const updatedData = {
                         Contract: activity.Contract,
@@ -739,19 +739,19 @@ function generateCustomerTable1(data) {
             <th>Final Price</th>
         </tr>`;
 
-        let headname="";
+    let headname = "";
     let totaltrips = 0, totalcontract = 0, hou = 0, mint = 0;
     //  alert("i am coming");
     let formname = document.getElementById("name4").value.toLowerCase();
     // alert(formname);
-    let k=0;
+    let k = 0;
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
-           if (activity.Name.toLowerCase().trim() === formname.trim() && activity.Payment === "UnPaid") {
+            if (activity.Name.toLowerCase().trim() === formname.trim() && activity.Payment === "UnPaid") {
                 // alert("is there");
-                headname=activity.Name;
-    
+                headname = activity.Name;
+
                 let totalMins = 0;
                 if (activity.TotalTime !== "--") {
                     const [h, m] = activity.TotalTime.split(":").map(Number);
@@ -766,12 +766,12 @@ function generateCustomerTable1(data) {
 
                 // 👇 New logic to get default rate properly
                 let defaultRate = 0;
-                let tracttrips=0;
+                let tracttrips = 0;
                 if (activity.Contract !== "--") {
                     defaultRate = parseInt(activity.Contract);
                 } else if (activity.Trips !== "--") {
                     defaultRate = parseInt(activity.JcbTripPrice || "150");
-                    tracttrips=parseInt(activity.TripsPrice || "150");
+                    tracttrips = parseInt(activity.TripsPrice || "150");
                 } else {
                     defaultRate = parseInt(activity.HoursPrice || "1000");
                 }
@@ -780,7 +780,7 @@ function generateCustomerTable1(data) {
                 var HoursTrips = 0;
                 var HoursTripsAmount = 0;
                 var HoursDrivers = 0;
-                var jcbtripprice=0;
+                var jcbtripprice = 0;
                 if (activity.JcbTripPrice !== undefined && activity.JcbTripPrice !== "undefined" && activity.JcbTripPrice !== null) {
                     jcbtripprice = activity.JcbTripPrice;
                 }
@@ -795,36 +795,64 @@ function generateCustomerTable1(data) {
                     HoursTripsAmount = activity.HoursTripsAmount;
                 }
                 if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
-                    let str = activity.HoursDrivers;
+                    let str = activity.HoursDrivers || "";
+                    // alert(str);
+                    let count = 0;
 
-                    let arr = str.split(" ");
-                    let result = "";
-
-                    for (let i = 0; i < arr.length; i += 3) {
-                        if (arr[i] && arr[i + 2]) {       // <— check before adding
-                            result += arr[i] + " = " + arr[i + 2] + "\n";
+                    for (let i = 0; i < str.length; i++) {
+                        if (str[i] === "=") {
+                            count++;
                         }
                     }
 
-                    result = result.replace(/\n/g, "<br>");
-                    HoursDrivers = result;
+                    if (count > 1) {
+
+                        let arr = str.split(" ");
+                        let result = "";
+
+                        for (let i = 0; i < arr.length; i += 3) {
+                            if (arr[i] && arr[i + 2]) {       // <— check before adding
+                                result += arr[i] + " = " + arr[i + 2] + "\n";
+                            }
+                        }
+                        // console.log(result);
+
+                        result = result.replace(/\n/g, "<br>");
+                        HoursDrivers = result;
+
+                    }
+                    else {
+                        HoursDrivers = str;
+                    }
+
                 }
                 // console.log(HoursTripsAmount+" "+HoursTrips);
                 var LDrivers = 0;
                 if (activity.Drivers !== undefined) {
                     let str = activity.Drivers;
+                    let count1 = 0;
 
-                    let arr = str.split(" ");
-                    let result = "";
-
-                    for (let i = 0; i < arr.length; i += 3) {
-                        if (arr[i] && arr[i + 2]) {       // <— check before adding
-                            result += arr[i] + " = " + arr[i + 2] + "\n";
+                    for (let i = 0; i < str.length; i++) {
+                        if (str[i] === "=") {
+                            count1++;
                         }
                     }
+                    if (count1 > 1) {
+                        let arr = str.split(" ");
+                        let result = "";
 
-                    result = result.replace(/\n/g, "<br>");
-                    LDrivers = result;
+                        for (let i = 0; i < arr.length; i += 3) {
+                            if (arr[i] && arr[i + 2]) {       // <— check before adding
+                                result += arr[i] + " = " + arr[i + 2] + "\n";
+                            }
+                        }
+
+                        result = result.replace(/\n/g, "<br>");
+                        LDrivers = result;
+                    }
+                    else {
+                        LDrivers = str;
+                    }
                 }
 
                 // alert(defaultRate);
@@ -840,7 +868,7 @@ function generateCustomerTable1(data) {
                     for (let i = 100; i <= 1000; i += 10) {
                         dropdown += `<option value="${i}" ${i === defaultRate ? "selected" : ""}>₹${i}</option>`;
                     }
-                    finalAmount = (parseInt(activity.Trips) * (defaultRate+tracttrips)) + parseInt(beta);
+                    finalAmount = (parseInt(activity.Trips) * (defaultRate + tracttrips)) + parseInt(beta);
                     totaltrips += parseInt(activity.Trips);
                 } else {
                     type = "Hours";
@@ -891,7 +919,7 @@ function generateCustomerTable1(data) {
 ${headname}</h1>`;
 
     out += `</table>`;
-    document.getElementById("customeralldata2").innerHTML = heading+out;
+    document.getElementById("customeralldata2").innerHTML = heading + out;
     document.getElementsByClassName("heading")[3].style.display = "block";
     document.getElementsByClassName("heading")[4].style.display = "block";
     document.getElementsByClassName("heading")[5].style.display = "block";
