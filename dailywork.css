@@ -559,11 +559,244 @@ table {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
 }
+/* Modal Background */
+
+/* Modal Content Box */
+
+
+/* Close Button */
+#myModal4 .close {
+    color: #888;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#myModal4 .close:hover {
+    color: #ff4d4f;
+}
+
+/* Quarter Title & Subtitle */
+#myModal4 .quarter-title {
+    color: #4ba6ec;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+#myModal4 .quarter-subtitle {
+    color: #555;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Quarter Table Items */
+#Qutertable {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#Qutertable .quarter-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #f9f9f9;
+    border-left: 5px solid #4ba6ec;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#Qutertable .quarter-item:hover {
+    transform: translateX(3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Profit & Loss Coloring */
+#Qutertable .profit {
+    border-left-color: #28a745; /* green for profit */
+}
+
+#Qutertable .loss {
+    border-left-color: #ff4d4f; /* red for loss */
+}
+
+/* Labels and Values */
+#Qutertable .quarter-item span:first-child {
+    font-weight: 500;
+    color: #333;
+}
+
+#Qutertable .quarter-item span:last-child {
+    font-weight: 600;
+    color: #111;
+}
+/* Quarter Title - Big, Gradient, Glow */
+#quarterTitle {
+    font-size: 36px; /* big font */
+    font-weight: 900;
+    text-align: center;
+    background: linear-gradient(135deg, #4ba6ec, #28a745, #f39c12);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+    position: relative;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    animation: titleFadeIn 0.8s ease forwards;
+}
+
+/* Animated underline */
+#quarterTitle::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 5px;
+    background: linear-gradient(90deg, #4ba6ec, #28a745, #f39c12);
+    border-radius: 2px;
+    margin: 12px auto 0 auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transform: scaleX(0);
+    transform-origin: center;
+    animation: underlineGrow 0.8s forwards 0.3s;
+}
+
+/* Subtitle - Elegant, Shadowed */
+#quarterSubtitle {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    color: #555;
+    font-style: italic;
+    margin-bottom: 30px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+/* Subtitle hover effect */
+#quarterSubtitle:hover {
+    color: #28a745;
+    transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes titleFadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes underlineGrow {
+    0% { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
+}
+
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+    #myModal4 .modal-content {
+        padding: 20px 25px;
+    }
+}
+
+
+/* Animation */
+@keyframes modal4Scale {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Close button */
+#myModal4 .close {
+    float: right;
+    font-size: 26px;
+    cursor: pointer;
+    color: #999;
+}
+#myModal4 .close:hover {
+    color: #000;
+}
+
+/* Title */
+#myModal4 .quarter-title {
+    text-align: center;
+    color: #4ba6ec;
+    margin-bottom: 5px;
+}
+
+/* Subtitle */
+#myModal4 .quarter-subtitle {
+    text-align: center;
+    color: #777;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+/* Grid container */
+#myModal4 #Qutertable {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+/* Each row */
+#myModal4 .quarter-item {
+    display: flex;
+    justify-content: space-between;
+    background: #f5f9ff;
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+/* Labels */
+#myModal4 .quarter-item span:first-child {
+    color: #555;
+    font-weight: 600;
+}
+
+/* Values */
+#myModal4 .quarter-item span:last-child {
+    color: #222;
+    font-weight: 700;
+}
+
+/* Profit row */
+#myModal4 .quarter-item.profit {
+    background: #e6fff2;
+    color: #0a8f4e;
+}
+
+/* Loss row */
+#myModal4 .quarter-item.loss {
+    background: #ffeaea;
+    color: #d32f2f;
+}
+
+/* Mobile responsive */
+
+
 
 /* Mobile View Adjustments */
 @media (max-width: 768px) {
     #ledger {
         margin: 20px 0; /* Consistent with desktop */
+    }
+    #myModal4 .modal-content {
+        width: 90%;
+        margin-top: 20%;
     }
 
     #com, #btn, #ledger, .container {

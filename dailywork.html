@@ -409,6 +409,13 @@
             // console.log(names);
         }
 
+        var months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var oil = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var totalDays = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        var worked = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var holiday = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var profit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
 
 
         function generateTable(data) {
@@ -419,12 +426,12 @@
 
             var l = [];
             var workday = 0;
-            var months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            var oil = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            var totalDays = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            var worked = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            var holiday = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            var profit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            // var months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            // var oil = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            // var totalDays = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            // var worked = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            // var holiday = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            // var profit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             var recovery = 0;
             for (const customerPhone in data) {
                 if (data.hasOwnProperty(customerPhone)) {
@@ -659,7 +666,7 @@
             var homeexp = 20000;
             var imprhrs = parseInt((((365 * 8000) - totalwork) / (remin)) / 1000)
             var impmin = parseInt((((((365 * 8000) - totalwork) / (remin)) / 1000) - imprhrs) * 60)
-            proft = totalwork - workday * 335 - differenceInDays * 2534 - oila - differenceInDays*667;
+            proft = totalwork - workday * 335 - differenceInDays * 2534 - oila - differenceInDays * 667;
             document.getElementById("twrk").innerHTML = moneyconvert(totalwork);
             document.getElementById("proft").innerHTML = moneyconvert(proft);
             document.getElementById("oil").innerHTML = moneyconvert(oila);
@@ -670,6 +677,60 @@
             document.getElementById("imphrs").style.color = "red";
             document.getElementById("avghrs").style.color = "green";
         }
+
+        //calculating quter results
+
+        function calculateQuarterWiseResult() {
+
+            return {
+                Q1: calculate([8, 9, 10, 11], "Quarter 1", "August – November"),
+                Q2: calculate([12, 1, 2, 3], "Quarter 2", "December – March"),
+                Q3: calculate([4, 5, 6, 7], "Quarter 3", "April – July")
+            };
+
+            function calculate(indexes, title, monthsLabel) {
+
+                let income = 0,
+                    oilUsed = 0,
+                    total = 0,
+                    workedDays = 0,
+                    holidays = 0,
+                    profitSum = 0;
+
+                indexes.forEach(i => {
+                    // console.log(months[i]);
+                    income += months[i];
+                    oilUsed += oil[i];
+                    total += totalDays[i];
+                    workedDays += worked[i];
+                    holidays += holiday[i];
+                    profitSum += profit[i];
+                });
+
+                return {
+                    title,
+                    months: monthsLabel,
+                    data: {
+                        income,
+                        Oil: oilUsed,
+                        totalDays: total,
+                        workedDays,
+                        holidays,
+                        totalHours: income / 1000,
+                        profit: profitSum
+                    }
+                };
+            }
+        }
+        setTimeout(() => {
+            const quarterResult = calculateQuarterWiseResult();
+            // store in localStorage
+            localStorage.setItem("quarterResult", JSON.stringify(quarterResult));
+
+        }, 5000);
+
+
+
         // Call DayCountcal when the page is loaded
         window.addEventListener('load', loadAllExtraAmountsOnce);
         window.addEventListener('load', DayCountcal);
@@ -731,10 +792,27 @@
                 <h2 style="color: rgb(75, 166, 236);">Improvement Hours</h2>
                 <h1 id="imphrs"></h1>
             </div>
+            <div class="box" onclick="openQuarter(1)">
+                <h2 style="color: rgb(75, 166, 236);"> Quarter 1</h2>
+                <h2 style="color: rgb(75, 166, 236);">(August – November)</h2>
+                <h1 id="quat1"></h1>
+            </div>
+            <div class="box" onclick="openQuarter(2)">
+                <h2 style="color: rgb(75, 166, 236);">Quarter 2 </h2>
+                <h2 style="color: rgb(75, 166, 236);">(December – March)</h2>
+                <h1 id="quat2"></h1>
+            </div>
+            <div class="box" onclick="openQuarter(3)">
+                <h2 style="color: rgb(75, 166, 236);">Quarter 3 </h2>
+                <h2 style="color: rgb(75, 166, 236);">(April – July)</h2>
+                <h1 id="quat3"></h1>
+            </div>
             <div class="box" id="Dady" onclick="openPopup1()">
                 <h2 style="color: rgb(75, 166, 236);">Dady Expenses</h2>
-                <h1 id="dadyexp">₹12,500</h1>
+                <h1 id="dadyexp"></h1>
             </div>
+
+
 
             <!-- Popup -->
             <div id="myModal1" class="modal">
@@ -743,8 +821,6 @@
                     <div id="exptable1">
 
                     </div>
-                    <h2>Popup Opened Successfully dady🎉</h2>
-                    <p>Here you can present your matter, details, or any information.</p>
                 </div>
             </div>
             <div id="myModal2" class="modal">
@@ -753,8 +829,6 @@
                     <div id="exptable2">
 
                     </div>
-                    <h2>Popup Opened Successfully suresh 🎉</h2>
-                    <p>Here you can present your matter, details, or any information.</p>
                 </div>
             </div>
             <div id="myModal3" class="modal">
@@ -763,10 +837,150 @@
                     <div id="exptable3">
 
                     </div>
-                    <h2>Popup Opened Successfully 🎉</h2>
-                    <p>Here you can present your matter, details, or any information.</p>
                 </div>
             </div>
+            <div id="myModal4" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closePopup4()">&times;</span>
+
+                    <h2 id="quarterTitle" class="quarter-title"></h2>
+                    <p id="quarterSubtitle" class="quarter-subtitle"></p>
+
+                    <div id="Qutertable"></div>
+                </div>
+            </div>
+            <script>
+                // List all modal IDs
+                const modals = [
+                    document.getElementById("myModal1"),
+                    document.getElementById("myModal2"),
+                    document.getElementById("myModal3"),
+                    document.getElementById("myModal4")
+                ];
+
+                // Close modal if user clicks outside modal content
+                window.addEventListener("click", function (event) {
+                    modals.forEach(modal => {
+                        if (event.target === modal) {
+                            modal.style.display = "none";
+                        }
+                    });
+                });
+
+                // Optional: ESC key closes all open modals
+                window.addEventListener("keydown", function (event) {
+                    if (event.key === "Escape") {
+                        modals.forEach(modal => modal.style.display = "none");
+                    }
+                });
+
+
+                function incomeToHoursMinutes(income) {
+                    const totalHoursDecimal = income / 1000; // divide by 1000
+                    const hours = Math.floor(totalHoursDecimal); // integer hours
+                    const minutes = Math.round((totalHoursDecimal - hours) * 60); // remaining minutes
+                    return `${hours} Hrs ${minutes} Min`;
+                }
+
+                function averageHoursPerDay(income, totalDays) {
+                    if (!totalDays || totalDays <= 0) return "0 Hrs 0 Min"; // safety check
+
+                    const totalHoursDecimal = income / 1000; // total hours from income
+                    const avgHoursDecimal = totalHoursDecimal / totalDays; // average per day
+
+                    const hours = Math.floor(avgHoursDecimal);
+                    const minutes = Math.round((avgHoursDecimal - hours) * 60);
+
+                    return `${hours} Hrs ${minutes} Min`;
+                }
+
+                function getQuarterConfigFromStorage() {
+                    const storedQuarter = localStorage.getItem("quarterResult");
+                    if (!storedQuarter) return null;
+
+                    const qData = JSON.parse(storedQuarter);
+
+                    const quarters = {};
+
+                    Object.keys(qData).forEach((qKey, index) => {
+                        const q = qData[qKey];
+                        const d = q.data || {};
+
+                        const income = d.income || 0;
+                        const expense = d.Oil || 0;
+                        const workedDays = d.workedDays || 0;
+                        const totalHours = incomeToHoursMinutes(income) || 0;
+                        const profit = d.profit || 0;
+                        const totaldays = d.totalDays || 0;
+                        const profitType = profit >= 0 ? "profit" : "loss";
+                        const profitLabel = profit >= 0 ? "Profit" : "Loss";
+                        const salary = totaldays * 734;
+                        const jcbemi = totaldays * 1800;
+                        const maintaince = workedDays * 335;
+                        const home = 80000;
+                        const holidays = totaldays - workedDays;
+                        const totalexpenses = expense + salary + jcbemi + maintaince + home;
+                        const avghrs = averageHoursPerDay(income, totaldays) || 0;
+                        quarters[index + 1] = {
+                            title: q.title || "",
+                            months: q.months || "",
+                            data: [
+                                { label: "Income", value: `₹${income.toLocaleString()}` },
+                                { label: "Disel", value: `₹${expense.toLocaleString()}` },
+                                { label: "Total Days", value: `${totaldays} Days` },
+                                { label: "Working Days", value: `${workedDays} Days` },
+                                { label: "Holidays", value: `${totaldays - workedDays} Days` },
+                                { label: "Total Hours", value: `${totalHours}` },
+                                { label: "Average Hours Per Day", value: `${avghrs}` },
+                                { label: "JCb EMI", value: `₹${jcbemi.toLocaleString()}` },
+                                { label: "JCb Operator Salary", value: `₹${salary.toLocaleString()}` },
+                                { label: "JCb Maintaince", value: `₹${maintaince.toLocaleString()}` },
+                                { label: "Home Expenses", value: `₹${home.toLocaleString()}` },
+                                { label: "Total Expenses", value: `₹${totalexpenses.toLocaleString()}` },
+                                { label: profitLabel, value: `₹${Math.abs(profit).toLocaleString()}`, type: profitType }
+                            ]
+                        };
+                    });
+
+                    return quarters;
+                }
+
+                let quarterConfig;
+
+                setTimeout(() => {
+                    quarterConfig = getQuarterConfigFromStorage();
+
+                }, 10000);
+
+
+                function openQuarter(qNo) {
+
+                    const q = quarterConfig[qNo];
+
+                    document.getElementById("quarterTitle").innerText = q.title;
+                    document.getElementById("quarterSubtitle").innerText = q.months;
+
+                    const container = document.getElementById("Qutertable");
+                    container.innerHTML = "";
+
+                    q.data.forEach(item => {
+                        const row = document.createElement("div");
+                        row.className = `quarter-item ${item.type || ""}`;
+                        row.innerHTML = `
+            <span>${item.label}</span>
+            <span>${item.value}</span>
+        `;
+                        container.appendChild(row);
+                    });
+
+                    document.getElementById("myModal4").style.display = "block";
+                }
+
+                function closePopup4() {
+                    document.getElementById("myModal4").style.display = "none";
+                }
+            </script>
+
             <div class="box" id="suresh" onclick="openPopup2()">
                 <h2 style="color: rgb(75, 166, 236);">Suresh Expenses</h2>
                 <h1 id="sureshexp"></h1>
@@ -800,7 +1014,8 @@
                     <!-- Options will be generated -->
                 </select>
                 <div id="loading1">
-                    <input type="text" id="trprate1" name="trprate1" placeholder="Trip Price" onkeyup="tripprice1()" value="0" required>
+                    <input type="text" id="trprate1" name="trprate1" placeholder="Trip Price" onkeyup="tripprice1()"
+                        value="0" required>
                     <div id="container2">
                         <div class="row1">
                             <button class="add-button" onclick="addRow1()">Add Driver</button>
@@ -809,7 +1024,8 @@
                     <textarea id="output1" placeholder="All Drivers list" rows="4" cols="30"
                         style="font-size: 20px; display: none;" readonly></textarea>
                     <input type="text" id="trips1" placeholder="Number of Trips" readonly required value="0">
-                    <input type="text" id="alltrprate" name="alltrprate" placeholder="Total Trip Price" required value="0">
+                    <input type="text" id="alltrprate" name="alltrprate" placeholder="Total Trip Price" required
+                        value="0">
                 </div>
                 <input type="text" id="desc" name="desc" placeholder="Description" value="--" required>
                 <input type="time" id="stime" name="stime" placeholder="Starting Time" onchange="timecal()" required>
@@ -817,7 +1033,8 @@
                 <input type="text" id="ttime" name="ttime" placeholder="Total Time" readonly required>
             </div>
             <div id="loading" style="display: none;">
-                <input type="text" id="jcbtrprate" name="jcbtrprate" placeholder="JCB Trip Price" onkeyup="tripprice()" required>
+                <input type="text" id="jcbtrprate" name="jcbtrprate" placeholder="JCB Trip Price" onkeyup="tripprice()"
+                    required>
                 <input type="text" id="trprate" name="trprate" placeholder="Trip Price" required>
                 <div id="container43">
                     <div class="row">
@@ -953,6 +1170,9 @@
         async function openPopup3() {
             document.getElementById("myModal3").style.display = "flex";
         }
+        async function openPopup4() {
+            document.getElementById("myModal4").style.display = "flex";
+        }
 
         function closePopup1() {
             document.getElementById("myModal1").style.display = "none";
@@ -962,6 +1182,9 @@
         }
         function closePopup3() {
             document.getElementById("myModal3").style.display = "none";
+        }
+        function closePopup4() {
+            document.getElementById("myModal4").style.display = "none";
         }
         // Close popup when clicking outside
         window.onclick = function (event) {
@@ -1115,7 +1338,7 @@
             document.getElementById("ledger2").innerHTML = led;
 
         }
-        function calculateFinalPrice(selectElem,beta,htrip,tracttrips,htriprate) {
+        function calculateFinalPrice(selectElem, beta, htrip, tracttrips, htriprate) {
             // alert(beta+" "+htrip+" "+tracttrips);
             const row = selectElem.closest("tr");
             const type = row.getAttribute("data-type");
@@ -1125,9 +1348,9 @@
             let finalPrice = 0;
 
             if (type === "Trips") {
-                finalPrice = ((rate+parseInt(tracttrips)) * trips)+parseInt(beta);
+                finalPrice = ((rate + parseInt(tracttrips)) * trips) + parseInt(beta);
             } else if (type === "Hours") {
-                finalPrice = Math.round((mins / 60) * rate)+parseInt(beta)+(parseInt(htrip)*parseInt(htriprate));
+                finalPrice = Math.round((mins / 60) * rate) + parseInt(beta) + (parseInt(htrip) * parseInt(htriprate));
             }
 
             const input = row.querySelector(".finalPrice");

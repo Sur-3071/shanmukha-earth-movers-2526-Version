@@ -337,7 +337,7 @@ async function FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount)
 }
 async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount) {
     const db1 = "Daily Work-2025-2026";
-    alert("this is the customet payment");
+    // alert("this is the customet payment");
     const db2 = "CustomersAmount";
     // alert("Iam coming");
     var k = 0;
@@ -371,7 +371,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
                     if (activity.JcbTripPrice !== undefined) {
                         jcbtripprice = activity.JcbTripPrice;
                     }
-                    alert(jcbtripprice + " " + activity.JcbTripPrice !== undefined);
+                    // alert(jcbtripprice + " " + activity.JcbTripPrice !== undefined);
                     // Update full object, just changing Payment to "Paid"
                     const updatedData = {
                         Contract: activity.Contract,
