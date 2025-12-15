@@ -638,6 +638,38 @@ table {
     color: #111;
 }
 /* Quarter Title - Big, Gradient, Glow */
+#Qutertable {
+    margin: 20px auto;
+    padding: 18px 26px;
+    max-width: 420px;
+
+    background: linear-gradient(135deg, #e6f0ff, #f9fbff);
+    color: #0047ab;
+
+    font-size: 20px;
+    font-weight: 600;
+    font-family: "Segoe UI", sans-serif;
+
+    border-left: 6px solid #0047ab;
+    border-radius: 12px;
+
+    text-align: center;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 #quarterTitle {
     font-size: 36px; /* big font */
     font-weight: 900;
@@ -702,13 +734,6 @@ table {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-/* Responsive */
-@media screen and (max-width: 600px) {
-    #myModal4 .modal-content {
-        padding: 20px 25px;
-    }
 }
 
 
@@ -791,6 +816,10 @@ table {
 
 /* Mobile View Adjustments */
 @media (max-width: 768px) {
+
+    #myModal4 .modal-content {
+        padding: 20px 25px;
+    }
     #ledger {
         margin: 20px 0; /* Consistent with desktop */
     }
