@@ -807,7 +807,7 @@ function generateCustomerTable1(data) {
 
                     if (count > 1) {
 
-                        let arr = str.split(" ");
+                        let arr = str.split(" ").filter(Boolean);
                         let result = "";
 
                         for (let i = 0; i < arr.length; i += 3) {
@@ -826,7 +826,7 @@ function generateCustomerTable1(data) {
                     }
 
                 }
-                // console.log(HoursTripsAmount+" "+HoursTrips);
+                // console.log(activity.Drivers);
                 var LDrivers = 0;
                 if (activity.Drivers !== undefined) {
                     let str = activity.Drivers;
@@ -838,7 +838,8 @@ function generateCustomerTable1(data) {
                         }
                     }
                     if (count1 > 1) {
-                        let arr = str.split(" ");
+                        // alert("yes more then two drivers");
+                        let arr = str.split(" ").filter(Boolean);
                         let result = "";
 
                         for (let i = 0; i < arr.length; i += 3) {
