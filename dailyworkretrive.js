@@ -130,7 +130,7 @@ function generateTable(data) {
             <th id="csize1">Village</th>
             <th id="csize">Disel</th>
             <th id="csize">Trips</th>
-            <th id="csize">Drivers</th>
+            <th id="csize1">Drivers</th>
             <th id="csize">Trips Price</th>
             <th id="csize">Contract</th>
             <th id="csize">Starting Time</th>
@@ -164,6 +164,69 @@ function generateTable(data) {
             // alert("2");
             // alert(activity.Name);
             // alert(!processedCustomers.has(customerName));
+            var LDrivers = 0;
+            var HoursDrivers = 0;
+            if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
+                let str = activity.HoursDrivers || "";
+                // alert(str);
+                let count = 0;
+
+                for (let i = 0; i < str.length; i++) {
+                    if (str[i] === "=") {
+                        count++;
+                    }
+                }
+
+                if (count > 1) {
+
+                    let arr = str.split(" ").filter(Boolean);
+                    let result = "";
+
+                    for (let i = 0; i < arr.length; i += 3) {
+                        if (arr[i] && arr[i + 2]) {       // <— check before adding
+                            result += arr[i] + " = " + arr[i + 2] + "\n";
+                        }
+                    }
+                    // console.log(result);
+
+                    result = result.replace(/\n/g, "<br>");
+                    HoursDrivers = result;
+
+                }
+                else {
+                    HoursDrivers = str;
+                }
+
+            }
+            // console.log(activity.Drivers);
+            var LDrivers = 0;
+            if (activity.Drivers !== undefined) {
+                let str = activity.Drivers;
+                let count1 = 0;
+
+                for (let i = 0; i < str.length; i++) {
+                    if (str[i] === "=") {
+                        count1++;
+                    }
+                }
+                if (count1 > 1) {
+                    // alert("yes more then two drivers");
+                    let arr = str.split(" ").filter(Boolean);
+                    let result = "";
+
+                    for (let i = 0; i < arr.length; i += 3) {
+                        if (arr[i] && arr[i + 2]) {       // <— check before adding
+                            result += arr[i] + " = " + arr[i + 2] + "\n";
+                        }
+                    }
+
+                    result = result.replace(/\n/g, "<br>");
+                    LDrivers = result;
+                }
+                else {
+                    LDrivers = str;
+                }
+            }
             if (!processedCustomers.has(customerName) && activity.Payment === "UnPaid") {
 
                 balanaceamount = getCachedExtraAmount(customerName);
@@ -211,19 +274,17 @@ function generateTable(data) {
             // if (activity.Beta !== undefined && activity.Beta !== "undefined" && activity.Beta !== null) {
             //     amount=parseInt(amount)+parseInt(activity.Beta);
             // }
-            var beta=activity.Beta==="undefined" || activity.Beta===undefined?0:activity.Beta
+            var beta = activity.Beta === "undefined" || activity.Beta === undefined ? 0 : activity.Beta
             // console.log(beta);
-            var drivers="";
-            var tripamount="";
-            if(activity.Drivers==="--")
-            {
-                drivers=activity.HoursDrivers;
-                tripamount=activity.HoursTripsAmount
+            var drivers = "";
+            var tripamount = "";
+            if (activity.Drivers === "--") {
+                drivers = HoursDrivers;
+                tripamount = activity.HoursTripsAmount
             }
-            else
-            {
-                drivers=activity.Drivers;
-                tripamount=activity.TripsPrice;
+            else {
+                drivers = LDrivers;
+                tripamount = activity.TripsPrice;
             }
             console.log()
 
@@ -299,7 +360,7 @@ function generateTable(data) {
         <th id="bal1">Profit</th>
 
     </tr>`;
-    var pro = collection - (disel) - (differenceInDays * 734) - (workday * 335) - (differenceInDays * 1800)-(differenceInDays*667);
+    var pro = collection - (disel) - (differenceInDays * 734) - (workday * 335) - (differenceInDays * 1800) - (differenceInDays * 667);
     led += `<tr>
     <td class="lsize">${collection}</td>
     <td>${collection - recovery}</td>
@@ -358,16 +419,16 @@ document.addEventListener("click", async function (e1) {
         var output = data.Drivers;
         var Starting = data.Starting;
         var TotalTime = data.TotalTime;
-        var hrsamt = data.HoursPrice==="undefined" || data.HoursPrice===undefined?0:data.HoursPrice;
+        var hrsamt = data.HoursPrice === "undefined" || data.HoursPrice === undefined ? 0 : data.HoursPrice;
         var trpamt = data.TripsPrice;
         var jcbtrpamt = data.JcbTripPrice;
         var Trips = data.Trips;
         var Villagename = data.Villagename;
         // alert(data.Beta==="undefined"?0:data.Beta);
-        var beta = data.Beta==="undefined" || data.Beta===undefined?0:data.Beta;
-        var hourstrpamt = data.HoursTripsAmount==="undefined" || data.HoursTripsAmount===undefined?0:data.HoursTripsAmount;
-        var hoursdrivers = data.HoursDrivers==="undefined" || data.HoursDrivers===undefined?0:data.HoursDrivers;
-        var hourstrips = data.HoursTrips==="undefined" || data.HoursTrips===undefined?0:data.HoursTrips;
+        var beta = data.Beta === "undefined" || data.Beta === undefined ? 0 : data.Beta;
+        var hourstrpamt = data.HoursTripsAmount === "undefined" || data.HoursTripsAmount === undefined ? 0 : data.HoursTripsAmount;
+        var hoursdrivers = data.HoursDrivers === "undefined" || data.HoursDrivers === undefined ? 0 : data.HoursDrivers;
+        var hourstrips = data.HoursTrips === "undefined" || data.HoursTrips === undefined ? 0 : data.HoursTrips;
         if (Trips === "--" && Contract === "--") {
             var worktype = "Hours";
         }
