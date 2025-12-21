@@ -35,7 +35,9 @@ var list = {
     "chanti": "chanti",
     "Govindu": "govind",
     "(Pun)Nagu": "nagu2",
-    "Nani": "nani"
+    "Nani": "nani",
+    "Chittibabu":"chittibabu",
+    "Ungarala Srinu":"usrinu"
 };
 function box1() {
     var d = document.getElementById('dname1').value;

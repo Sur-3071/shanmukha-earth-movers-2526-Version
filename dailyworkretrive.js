@@ -122,7 +122,7 @@ function generateTable(data) {
     // Print today's date in YYYY-MM-DD format
     var collection = 0;
     var recovery = 0;
-    let out = `<table border="1px">
+    let out = `<table border="1px" class="wide-table">
         <tr>
             <th id="csize">Customer Id</th>
             <th id="csize1">Date</th>
@@ -130,6 +130,8 @@ function generateTable(data) {
             <th id="csize1">Village</th>
             <th id="csize">Disel</th>
             <th id="csize">Trips</th>
+            <th id="csize">Drivers</th>
+            <th id="csize">Trips Price</th>
             <th id="csize">Contract</th>
             <th id="csize">Starting Time</th>
             <th id="csize">Ending Time</th>
@@ -211,6 +213,20 @@ function generateTable(data) {
             // }
             var beta=activity.Beta==="undefined" || activity.Beta===undefined?0:activity.Beta
             // console.log(beta);
+            var drivers="";
+            var tripamount="";
+            if(activity.Drivers==="--")
+            {
+                drivers=activity.HoursDrivers;
+                tripamount=activity.HoursTripsAmount
+            }
+            else
+            {
+                drivers=activity.Drivers;
+                tripamount=activity.TripsPrice;
+            }
+            console.log()
+
             out += `<tr>
                         <td>${customerPhone}</td>
                         <td>${activity.Date}</td>
@@ -218,6 +234,8 @@ function generateTable(data) {
                         <td>${activity.Villagename}</td>
                         <td>${activity.Disel}</td>
                         <td>${activity.Trips}</td>
+                        <td>${drivers}</td>
+                        <td>${tripamount}</td>
                         <td>${activity.Contract}</td>
                         <td>${activity.Starting}</td>
                         <td>${activity.Ending}</td>
@@ -246,6 +264,7 @@ function generateTable(data) {
     <td colspan="4" id="col">Total Work Analaysis</td>
     <td id="am">${disel}</td>
     <td  id="am">${totaltrips}</td>
+    <td colspan="2" id="col">Drivers</td>
     <td id="am">${totalcontarct}</td>
     <td id="am" colspan="3">${totaltime}</td>
     <td id="am" colspan="3">Work In Price</td>

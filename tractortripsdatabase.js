@@ -19,6 +19,7 @@ submit.addEventListener('click', function (e) {
     e.preventDefault();
     const d = document.getElementById("d1").value;
     const drivername = document.getElementById("dname1").value;
+
     const customer = document.getElementById("cname").value;
     const day = document.getElementById("time").value;
     const price = document.getElementById("aname").value;
@@ -165,3 +166,4 @@ getbal.addEventListener('click', function () {
         alert("Plesae Select Driver Name");
     }
 });
+
