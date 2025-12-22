@@ -188,8 +188,8 @@ function displaytripsdata(data) {
         <th>తేదీ</th>
         <th>వినియోగదారుని పేరు</th>
         <th>పగలు/రాత్రి</th>
-        <th>ధర</th>
         <th>ట్రిప్పులు</th>
+        <th>ధర</th>
         <th>మొత్తం</th>
     </tr>`;
 
@@ -213,8 +213,8 @@ function displaytripsdata(data) {
                                 <td>` + formatDateToNormal(date) + `</td>
                                 <td style="font-weight:bold;font-size:20px">` + name + `</td>
                                 <td>` + activity + `</td>
-                                <td>` + activities[activity]['Price'] + `</td>
                                 <td>` + activities[activity]['Trips'] + `</td>
+                                <td>` + activities[activity]['Price'] + `</td>
                                 <td>` + trips * amount + `</td>
                             </tr>`;
 
