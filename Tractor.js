@@ -197,6 +197,7 @@ function displaytripsdata(data) {
     var sno = 1;
     var s = 0;
     // Iterate over the dates in the data object
+    var totaltrips=0;
     for (const date in data) {
         if (data.hasOwnProperty(date)) {
             // Iterate over the names within each date
@@ -206,6 +207,8 @@ function displaytripsdata(data) {
                     for (const activity in activities) {
                         if (activities.hasOwnProperty(activity)) {
                             var trips = parseInt(activities[activity]['Trips']);
+                            // console.log(parseInt(activities[activity]['Trips']));
+                            totaltrips+=trips;
                             var amount = parseInt(activities[activity]['Price']);
                             s += (trips * amount);
                             out += `<tr>
@@ -228,8 +231,9 @@ function displaytripsdata(data) {
     }
 
     out += `<tr>
-        <td colspan="6">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
-        <td colspan="1">` + s + `</td>
+        <td colspan="4">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
+        <td colspan="1">` + totaltrips + `</td>
+        <td colspan="2">` + s + `</td>
     </tr>`
     // Close the table structure
     out += "</table>";
