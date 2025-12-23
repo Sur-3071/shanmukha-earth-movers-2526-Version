@@ -130,12 +130,14 @@ function generateTable(data) {
             <th id="csize1">Village</th>
             <th id="csize">Disel</th>
             <th id="csize">Trips</th>
-            <th id="csize1">Drivers</th>
+            <th id="csize2">Drivers</th>
             <th id="csize">Trips Price</th>
+            <th id="csize">JCB Trips Price</th>
             <th id="csize">Contract</th>
             <th id="csize">Starting Time</th>
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
+            <th id="csize">HoursPrice</th>
             <th id="csize">Driver Beta</th>
             <th id="csize">Payment Status</th>
             <th id="csize">Edit Data</th>
@@ -180,6 +182,7 @@ function generateTable(data) {
                 if (count > 1) {
 
                     let arr = str.split(" ").filter(Boolean);
+                    // console.log(arr);
                     let result = "";
 
                     for (let i = 0; i < arr.length; i += 3) {
@@ -278,6 +281,7 @@ function generateTable(data) {
             // console.log(beta);
             var drivers = "";
             var tripamount = "";
+            var jcbtripamount="--";
             if (activity.Drivers === "--") {
                 drivers = HoursDrivers;
                 tripamount = activity.HoursTripsAmount
@@ -285,6 +289,7 @@ function generateTable(data) {
             else {
                 drivers = LDrivers;
                 tripamount = activity.TripsPrice;
+                jcbtripamount=activity.jcbtripamount;
             }
             console.log()
 
@@ -297,10 +302,12 @@ function generateTable(data) {
                         <td>${activity.Trips}</td>
                         <td>${drivers}</td>
                         <td>${tripamount}</td>
+                        <td>${jcbtripamount}</td>
                         <td>${activity.Contract}</td>
                         <td>${activity.Starting}</td>
                         <td>${activity.Ending}</td>
                         <td>${activity.TotalTime}</td>
+                        <td>${activity.HoursPrice}</td>
                         <td>${beta}</td>
                         <td><button type="button" class="pay" id="${customerPhone}"
             style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
@@ -325,9 +332,9 @@ function generateTable(data) {
     <td colspan="4" id="col">Total Work Analaysis</td>
     <td id="am">${disel}</td>
     <td  id="am">${totaltrips}</td>
-    <td colspan="2" id="col">Drivers</td>
+    <td colspan="3" id="col">Drivers</td>
     <td id="am">${totalcontarct}</td>
-    <td id="am" colspan="3">${totaltime}</td>
+    <td id="am" colspan="4">${totaltime}</td>
     <td id="am" colspan="3">Work In Price</td>
     <td id="am">${collection}</td>
     <td id="am">${recovery}</td>

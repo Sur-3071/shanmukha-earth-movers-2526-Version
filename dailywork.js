@@ -157,7 +157,7 @@ function generateOutput() {
     outputDiv.value = "";
     driverNames.forEach((driverName, index) => {
         const trip = trips[index].value || 0;
-        const name = driverName.value || "Unknown Driver";
+        const name = (driverName.value || "Unknown Driver").trim().replace(/\s+/g, "_");
         const line = `${name} = ${trip}`;
         outputDiv.value += line+" "+ "\n";
     });
@@ -179,7 +179,7 @@ function generateOutput1() {
     outputDiv.value = "";
     driverNames.forEach((driverName, index) => {
         const trip = trips[index].value || 0;
-        const name = driverName.value || "Unknown Driver";
+        const name = (driverName.value || "Unknown Driver").trim().replace(/\s+/g, "_");
         const line = `${name} = ${trip}`;
         outputDiv.value += line+" "+ "\n";
     });
@@ -225,4 +225,3 @@ document.addEventListener("click", function(event) {
         }
     }
 });
-

@@ -826,7 +826,7 @@ function generateCustomerTable1(data) {
                     }
 
                 }
-                // console.log(activity.Drivers);
+                // console.log(HoursTripsAmount+" "+HoursTrips);
                 var LDrivers = 0;
                 if (activity.Drivers !== undefined) {
                     let str = activity.Drivers;
@@ -838,8 +838,7 @@ function generateCustomerTable1(data) {
                         }
                     }
                     if (count1 > 1) {
-                        // alert("yes more then two drivers");
-                        let arr = str.split(" ").filter(Boolean);
+                        let arr =  str.split(" ").filter(Boolean);
                         let result = "";
 
                         for (let i = 0; i < arr.length; i += 3) {
