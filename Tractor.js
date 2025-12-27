@@ -36,8 +36,8 @@ var list = {
     "Govindu": "govind",
     "(Pun)Nagu": "nagu2",
     "Nani": "nani",
-    "Chittibabu":"chittibabu",
-    "Ungarala Srinu":"usrinu"
+    "Chittibabu": "chittibabu",
+    "Ungarala Srinu": "usrinu"
 };
 function box1() {
     var d = document.getElementById('dname1').value;
@@ -176,8 +176,15 @@ function removedone() {
         v7.style.display = "none";
     }, 2000);
 }
-function displaytripsdata(data) {
-    document.getElementById("screenshot").style.display="block";
+function removedone1() {
+    setTimeout(function () {
+        var v7 = document.getElementById("done5");
+        v7.style.display = "none";
+    }, 2000);
+}
+function displaytripsdata(data, drivername) {
+    driver = drivername;
+    document.getElementById("screenshot").style.display = "block";
     var r = document.getElementById("tripsdata");
     r.innerHTML = "";
 
@@ -188,8 +195,9 @@ function displaytripsdata(data) {
         <th>తేదీ</th>
         <th>వినియోగదారుని పేరు</th>
         <th>పగలు/రాత్రి</th>
-        <th>ట్రిప్పులు</th>
+        <th>సవరించు</th>
         <th>ధర</th>
+        <th>ట్రిప్పులు</th>
         <th>మొత్తం</th>
     </tr>`;
 
@@ -197,7 +205,7 @@ function displaytripsdata(data) {
     var sno = 1;
     var s = 0;
     // Iterate over the dates in the data object
-    var totaltrips=0;
+    var totaltrips = 0;
     for (const date in data) {
         if (data.hasOwnProperty(date)) {
             // Iterate over the names within each date
@@ -207,8 +215,9 @@ function displaytripsdata(data) {
                     for (const activity in activities) {
                         if (activities.hasOwnProperty(activity)) {
                             var trips = parseInt(activities[activity]['Trips']);
+                            var daytype = activities[activity];
                             // console.log(parseInt(activities[activity]['Trips']));
-                            totaltrips+=trips;
+                            totaltrips += trips;
                             var amount = parseInt(activities[activity]['Price']);
                             s += (trips * amount);
                             out += `<tr>
@@ -216,8 +225,10 @@ function displaytripsdata(data) {
                                 <td>` + formatDateToNormal(date) + `</td>
                                 <td style="font-weight:bold;font-size:20px">` + name + `</td>
                                 <td>` + activity + `</td>
-                                <td>` + activities[activity]['Trips'] + `</td>
+                                <td style="display:none;">`+ drivername + `</td>
+                                <td><button type="button" class="edit" onclick="openPopup1(this)">Edit</button></td>
                                 <td>` + activities[activity]['Price'] + `</td>
+                                <td>` + activities[activity]['Trips'] + `</td>
                                 <td>` + trips * amount + `</td>
                             </tr>`;
 
@@ -231,7 +242,7 @@ function displaytripsdata(data) {
     }
 
     out += `<tr>
-        <td colspan="4">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
+        <td colspan="6">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
         <td colspan="1">` + totaltrips + `</td>
         <td colspan="2">` + s + `</td>
     </tr>`
@@ -242,6 +253,8 @@ function displaytripsdata(data) {
     r.innerHTML = out;
     r.style.display = "block";
 }
+
+
 
 
 function displayamountdata(data) {
@@ -368,7 +381,6 @@ function displaybalanacedata() {
 }
 function NoDatatrips() {
     // console.log("hi no data");
-    var p1 = document.getElementById("tripsdata");
     var d = document.getElementById("def1");
     d.style.display = "block";
     // p1.style.display = "block";

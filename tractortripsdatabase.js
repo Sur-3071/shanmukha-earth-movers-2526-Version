@@ -15,7 +15,8 @@ const app = initializeApp(firebaseConfig);
 // Get a reference to the database service
 const db = getDatabase(app);
 
-submit.addEventListener('click', function (e) {
+document.getElementById('submit').addEventListener('click', function (e) {
+    // alert(" hi its coming");
     e.preventDefault();
     const d = document.getElementById("d1").value;
     const drivername = document.getElementById("dname1").value;
@@ -50,6 +51,49 @@ submit.addEventListener('click', function (e) {
         alert("Please Enter All The Fields Properly");
     }
 });
+
+export function editDriverData(e){
+    e.preventDefault();
+    const d = document.getElementById("editdate").value;
+    // alert(d);
+    const drivername = document.getElementById("drivername").value;
+    const customer = document.getElementById("ecname").value;
+    const day = document.getElementById("daytype").value;
+    const price = document.getElementById("eprice").value;
+    const trips = document.getElementById("etrips").value;
+    // alert(price+" "+trips);
+    // alert(drivername);
+    const db1 = "Trips";
+    const db2 = "Amount";
+    // alert(d.length+" "+drivername.length+" "+customer.length+" "+price.length+" "+trips.length);
+    if (d.length > 0 && drivername.length > 0 && customer.length > 0 && price.length > 0 && trips.length > 0) {
+        // Set data to Firebase database
+        const dataRefget = ref(db, `${db1}/${drivername}/`);
+        const dataRefset = ref(db, `${db1}/${drivername}/${d}/${customer}/${day}`);
+
+        set(dataRefset, {
+            Price: price,
+            Trips: trips
+        })
+            .then(() => {
+                document.getElementById("form").reset();
+                var d = document.getElementById("done5");
+                d.style.display = "block";
+                removedone1()
+                getDataBtn.click();
+                getamount.click();
+                getbal.click();
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+                alert("An error occurred. Please try again.");
+            });
+    }
+    else {
+        alert("Please Enter All The Fields Properly");
+    }
+}
+window.editDriverData = editDriverData;
 amountdataentry.addEventListener('click', function (e) {
     e.preventDefault();
     const d = document.getElementById("d2").value;
@@ -93,7 +137,7 @@ getDataBtn.addEventListener('click', function () {
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     // console.log(data);
-                    displaytripsdata(data)
+                    displaytripsdata(data,drivername)
 
                 } else {
                     alert("No data available");
@@ -107,6 +151,7 @@ getDataBtn.addEventListener('click', function () {
         alert("Please Select Driver Name");
     }
 });
+
 getamount.addEventListener('click', function () {
     const drivername = document.getElementById("dname2").value;
     const db1 = "Amount";
@@ -166,4 +211,6 @@ getbal.addEventListener('click', function () {
         alert("Plesae Select Driver Name");
     }
 });
+
+
 
