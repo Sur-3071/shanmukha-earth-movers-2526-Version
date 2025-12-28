@@ -380,6 +380,7 @@ function done() {
     // console.log("bal: " + (totalamount - amounttaken));
 }
 function displaybal1(data, n) {
+    amounttaken = 0;
     name1 = n;
     totaltrips = 0;
     totalamount = 0;

@@ -221,7 +221,7 @@ getbal.addEventListener('click', function () {
         get(dataRefget1).then((snapshot1) => {
             if (snapshot1.exists()) {
                 const data = snapshot1.val();
-                displaybal2(data)
+                displaybal2(data);
             }
             else {
                 alert("No data available");
