@@ -81,8 +81,6 @@ export function editDriverData(e){
                 d.style.display = "block";
                 removedone1()
                 getDataBtn.click();
-                getamount.click();
-                getbal.click();
             })
             .catch((error) => {
                 console.error("Error adding document: ", error);
