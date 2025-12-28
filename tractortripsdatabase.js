@@ -152,6 +152,32 @@ getDataBtn.addEventListener('click', function () {
     }
 });
 
+updatebtn.addEventListener('click', function () {
+    const drivername = document.getElementById("dname2").value;
+    const db1 = "Trips";
+    if (drivername != "select Driver Name") {
+        const dataRefget = ref(db, `${db1}/${drivername}/`);
+
+        get(dataRefget)
+            .then((snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    // console.log(data);
+                    displayUpdatedtripsdata(data)
+
+                } else {
+                    alert("No data available");
+                }
+            })
+            .catch((error) => {
+                console.error("Error occurred while fetching data: ", error);
+            });
+    }
+    else {
+        alert("Please Select Driver Name");
+    }
+});
+
 getamount.addEventListener('click', function () {
     const drivername = document.getElementById("dname2").value;
     const db1 = "Amount";

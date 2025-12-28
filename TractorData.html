@@ -27,6 +27,14 @@
         border-radius: 6px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
+    #form2 {
+        max-width: 800px;
+        margin: auto;
+        background-color: #fff;
+        padding: 25px;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
     table {
         width: 100%;
@@ -316,6 +324,7 @@
 }
 
 
+
 </style>
 <script>
     function showPage(pageId) {
@@ -450,11 +459,11 @@
 
             <div id="list2" align="center" style="display: none;">
                 <h1 align="center">Display Driver Data</h1>
-                <form align="center" id="form">
+                <form align="center" id="form2">
                     <table align="center">
                         <tr>
                             <td>
-                                <select id="dname2" onchange="box2()" style="width: 300%;">
+                                <select id="dname2" onchange="box2()" style="width: 400%;">
                                     <option hidden>select Driver Name</option>
                                     <option>Ungarala Srinu</option>
                                     <option>Chittibabu</option>
@@ -477,7 +486,10 @@
                         </tr>
                         <tr>
                             <td>
-                                <button type="button" value="click" class="sub" id="getDataBtn">Trips Data</button>
+                                <button type="button" value="click" class="sub" id="getDataBtn">Edit Trips Data</button>
+                            </td>
+                             <td>
+                                <button type="button" value="click" class="sub" id="updatebtn">Updated Data</button>
                             </td>
                             <td>
                                 <button type="button" value="click" class="sub" id="getamount">Amount Data</button>

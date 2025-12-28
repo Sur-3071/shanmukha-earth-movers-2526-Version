@@ -30,7 +30,7 @@ function openPopup1(btn) {
         <div class="modal-content"
              style="
                 background:#fff;
-                width:420px;
+                width:820px;
                 padding:25px;
                 border-radius:12px;
                 position:relative;
@@ -58,7 +58,7 @@ function openPopup1(btn) {
             </span>
 
             <h2 style="text-align:center; margin-bottom:20px;">
-                Trips Data
+                Editing Trips Data
             </h2>
 
             <form id="form" style="text-align:center;">
@@ -126,17 +126,3 @@ function openPopup1(btn) {
 function closePopup1() {
     document.getElementById("popupContainer").innerHTML = "";
 }
-// document.addEventListener("click", closePopup1);
-// const modals = [
-//     document.getElementById("popupContainer"),
-// ];
-
-// // Close modal if user clicks outside modal content
-// window.addEventListener("click", function (event) {
-//     // this.alert("screen touch");
-//     modals.forEach(modal => {
-//         if (event.target === modal) {
-//             modal.style.display = "none";
-//         }
-//     });
-// });

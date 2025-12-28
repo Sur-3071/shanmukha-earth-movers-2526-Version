@@ -182,6 +182,74 @@ function removedone1() {
         v7.style.display = "none";
     }, 2000);
 }
+function displayUpdatedtripsdata(data)
+{
+     document.getElementById("screenshot").style.display = "block";
+    var r = document.getElementById("tripsdata");
+    r.innerHTML = "";
+
+    // Initialize the table structure
+    var out = `<table border="1px" >
+    <tr>
+        <th>తోలకం</th>
+        <th>తేదీ</th>
+        <th>వినియోగదారుని పేరు</th>
+        <th>పగలు/రాత్రి</th>
+        <th>ధర</th>
+        <th>ట్రిప్పులు</th>
+        <th>మొత్తం</th>
+    </tr>`;
+
+    // Initialize the counter for Sno
+    var sno = 1;
+    var s = 0;
+    // Iterate over the dates in the data object
+    var totaltrips = 0;
+    for (const date in data) {
+        if (data.hasOwnProperty(date)) {
+            // Iterate over the names within each date
+            for (const name in data[date]) {
+                if (data[date].hasOwnProperty(name)) {
+                    const activities = data[date][name];
+                    for (const activity in activities) {
+                        if (activities.hasOwnProperty(activity)) {
+                            var trips = parseInt(activities[activity]['Trips']);
+                            var daytype = activities[activity];
+                            // console.log(parseInt(activities[activity]['Trips']));
+                            totaltrips += trips;
+                            var amount = parseInt(activities[activity]['Price']);
+                            s += (trips * amount);
+                            out += `<tr>
+                                <td>` + sno + `</td>
+                                <td>` + formatDateToNormal(date) + `</td>
+                                <td style="font-weight:bold;font-size:20px">` + name + `</td>
+                                <td>` + activity + `</td>
+                                <td>` + activities[activity]['Price'] + `</td>
+                                <td>` + activities[activity]['Trips'] + `</td>
+                                <td>` + trips * amount + `</td>
+                            </tr>`;
+
+                            // Increment the Sno counter
+                            sno++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    out += `<tr>
+        <td colspan="5">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
+        <td colspan="1">` + totaltrips + `</td>
+        <td colspan="1">` + s + `</td>
+    </tr>`
+    // Close the table structure
+    out += "</table>";
+
+    // Update the innerHTML of the element
+    r.innerHTML = out;
+    r.style.display = "block";
+}
 function displaytripsdata(data, drivername) {
     driver = drivername;
     document.getElementById("screenshot").style.display = "block";
@@ -244,7 +312,7 @@ function displaytripsdata(data, drivername) {
     out += `<tr>
         <td colspan="6">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
         <td colspan="1">` + totaltrips + `</td>
-        <td colspan="2">` + s + `</td>
+        <td colspan="1">` + s + `</td>
     </tr>`
     // Close the table structure
     out += "</table>";
