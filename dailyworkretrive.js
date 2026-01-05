@@ -289,7 +289,7 @@ function generateTable(data) {
             else {
                 drivers = LDrivers;
                 tripamount = activity.TripsPrice;
-                jcbtripamount=activity.jcbtripamount;
+                jcbtripamount=activity.JcbTripPrice;
             }
             console.log()
 
