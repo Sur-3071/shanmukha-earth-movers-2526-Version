@@ -281,7 +281,7 @@ function generateTable(data) {
             // console.log(beta);
             var drivers = "";
             var tripamount = "";
-            var jcbtripamount="--";
+            var jcbtripamount = "--";
             if (activity.Drivers === "--") {
                 drivers = HoursDrivers;
                 tripamount = activity.HoursTripsAmount
@@ -289,9 +289,9 @@ function generateTable(data) {
             else {
                 drivers = LDrivers;
                 tripamount = activity.TripsPrice;
-                jcbtripamount=activity.JcbTripPrice;
+                jcbtripamount = activity.JcbTripPrice;
             }
-            console.log()
+            // console.log()
 
             out += `<tr>
                         <td>${customerPhone}</td>
@@ -578,14 +578,18 @@ function SearchTable(data) {
         <tr>
             <th id="csize">Customer Id</th>
             <th id="csize1">Date</th>
-            <th id="csize">Customer Name</th>
-            <th id="csize">Village</th>
-            <th id="csize1">Disel</th>
+            <th id="csize1">Customer Name</th>
+            <th id="csize1">Village</th>
+            <th id="csize">Disel</th>
             <th id="csize">Trips</th>
+            <th id="csize2">Drivers</th>
+            <th id="csize">Trips Price</th>
+            <th id="csize">JCB Trips Price</th>
             <th id="csize">Contract</th>
             <th id="csize">Starting Time</th>
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
+            <th id="csize">HoursPrice</th>
             <th id="csize">Driver Beta</th>
             <th id="csize">Payment Status</th>
             <th id="csize">Edit Data</th>
@@ -629,7 +633,7 @@ function SearchTable(data) {
             let subHou = 0, subMint = 0;
 
             // Header row for person
-            out += `<tr><td colspan="15" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
+            out += `<tr><td colspan="19" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
 
             entries.forEach(entry => {
                 const customerPhone = entry.id;
@@ -674,30 +678,133 @@ function SearchTable(data) {
                     amount = parseInt(amount) - parseInt(balanaceamount);
                 }
 
+                var LDrivers = 0;
+            var HoursDrivers = 0;
+            if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
+                let str = activity.HoursDrivers || "";
+                // alert(str);
+                let count = 0;
+
+                for (let i = 0; i < str.length; i++) {
+                    if (str[i] === "=") {
+                        count++;
+                    }
+                }
+
+                if (count > 1) {
+
+                    let arr = str.split(" ").filter(Boolean);
+                    // console.log(arr);
+                    let result = "";
+
+                    for (let i = 0; i < arr.length; i += 3) {
+                        if (arr[i] && arr[i + 2]) {       // <— check before adding
+                            result += arr[i] + " = " + arr[i + 2] + "\n";
+                        }
+                    }
+                    // console.log(result);
+
+                    result = result.replace(/\n/g, "<br>");
+                    HoursDrivers = result;
+
+                }
+                else {
+                    HoursDrivers = str;
+                }
+
+            }
+            // console.log(activity.Drivers);
+            var LDrivers = 0;
+            if (activity.Drivers !== undefined) {
+                let str = activity.Drivers;
+                let count1 = 0;
+
+                for (let i = 0; i < str.length; i++) {
+                    if (str[i] === "=") {
+                        count1++;
+                    }
+                }
+                if (count1 > 1) {
+                    // alert("yes more then two drivers");
+                    let arr = str.split(" ").filter(Boolean);
+                    let result = "";
+
+                    for (let i = 0; i < arr.length; i += 3) {
+                        if (arr[i] && arr[i + 2]) {       // <— check before adding
+                            result += arr[i] + " = " + arr[i + 2] + "\n";
+                        }
+                    }
+
+                    result = result.replace(/\n/g, "<br>");
+                    LDrivers = result;
+                }
+                else {
+                    LDrivers = str;
+                }
+            }
+                var drivers = "";
+                var tripamount = "";
+                var jcbtripamount = "--";
+                
+                if (activity.Drivers === "--") {
+                    drivers = HoursDrivers;
+                    tripamount = activity.HoursTripsAmount
+                }
+                else {
+                    drivers = LDrivers;
+                    tripamount = activity.TripsPrice;
+                    jcbtripamount = activity.JcbTripPrice;
+                }
+                // alert("hi");
+
                 recovery += amount;
                 subRecovery += amount;
 
                 const editid = customerPhone + "v";
 
+                // out += `<tr>
+                //     <td>${customerPhone}</td>
+                //     <td>${activity.Date}</td>
+                //     <td>${activity.Name}</td>
+                //     <td>${activity.Villagename}</td>
+                //     <td>${activity.Disel}</td>
+                //     <td>${activity.Trips}</td>
+                //     <td>${activity.Contract}</td>
+                //     <td>${activity.Starting}</td>
+                //     <td>${activity.Ending}</td>
+                //     <td>${activity.TotalTime}</td>
+                //     <td>${activity.Beta}</td>
+                //     <td><button type="button" class="pay" id="${customerPhone}"
+                //         style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
+                //         ${activity.Payment}</button></td>
+                //     <td><button type="button" id=${editid} class="edit">Edit</button></td>
+                //     <td>${activity.Price}</td>
+                //     <td>${amount}</td>
+                // </tr>`;
+
                 out += `<tr>
-                    <td>${customerPhone}</td>
-                    <td>${activity.Date}</td>
-                    <td>${activity.Name}</td>
-                    <td>${activity.Villagename}</td>
-                    <td>${activity.Disel}</td>
-                    <td>${activity.Trips}</td>
-                    <td>${activity.Contract}</td>
-                    <td>${activity.Starting}</td>
-                    <td>${activity.Ending}</td>
-                    <td>${activity.TotalTime}</td>
-                    <td>${activity.Beta}</td>
-                    <td><button type="button" class="pay" id="${customerPhone}"
+                        <td>${customerPhone}</td>
+                        <td>${activity.Date}</td>
+                        <td>${activity.Name}</td>
+                        <td>${activity.Villagename}</td>
+                        <td>${activity.Disel}</td>
+                        <td>${activity.Trips}</td>
+                        <td>${drivers}</td>
+                        <td>${tripamount}</td>
+                        <td>${jcbtripamount}</td>
+                        <td>${activity.Contract}</td>
+                        <td>${activity.Starting}</td>
+                        <td>${activity.Ending}</td>
+                        <td>${activity.TotalTime}</td>
+                        <td>${activity.HoursPrice}</td>
+                        <td>${activity.Beta}</td>
+                        <td><button type="button" class="pay" id="${customerPhone}"
                         style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
                         ${activity.Payment}</button></td>
                     <td><button type="button" id=${editid} class="edit">Edit</button></td>
-                    <td>${activity.Price}</td>
-                    <td>${amount}</td>
-                </tr>`;
+                        <td>${activity.Price}</td>
+                        <td>${amount}</td>
+                    </tr>`;
             });
 
             // Subtotal time
@@ -711,8 +818,9 @@ function SearchTable(data) {
                 <td colspan="4">Subtotal for ${personName}</td>
                 <td>${subDisel}</td>
                 <td>${subTrips}</td>
+                <td colspan="3">Loading</td>
                 <td>${subContract}</td>
-                <td colspan="3">${subTime}</td>
+                <td colspan="4">${subTime}</td>
                 <td colspan="3">Sub Total</td>
                 <td>${subPrice}</td>
                 <td>${subRecovery}</td>
@@ -730,8 +838,9 @@ function SearchTable(data) {
             <td colspan="4" id="col">Total Work Analysis</td>
             <td id="am">${disel}</td>
             <td id="am">${totaltrips}</td>
+            <td colspan="3">Loading</td>
             <td id="am">${totalcontarct}</td>
-            <td id="am" colspan="3">${totaltime}</td>
+            <td id="am" colspan="4">${totaltime}</td>
             <td id="am" colspan="3">Grand Total</td>
             <td id="am">${collection}</td>
             <td id="am">${recovery}</td>

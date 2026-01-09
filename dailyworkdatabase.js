@@ -720,7 +720,7 @@ function generateCustomerTable1(data) {
 
     out += `<table border="1px" id="customerTable1">
     <tr>
-    <th colspan="14" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red" id="heading">మొత్తం పని </h1></th>
+    <th colspan="13" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red" id="heading">మొత్తం పని </h1></th>
     </tr>
         <tr>
             <th>Date</th>
@@ -734,8 +734,7 @@ function generateCustomerTable1(data) {
             <th>HTrips</th>
             <th>HTripRate</th>
             <th>Beta</th>
-            <th>Trip Rate</th>
-            <th>Jcb Rate</th>
+            <th>Total Price</th>
             <th>Final Price</th>
         </tr>`;
 
@@ -854,6 +853,7 @@ function generateCustomerTable1(data) {
                         LDrivers = str;
                     }
                 }
+                var totalpriceload=0;
 
                 // alert(defaultRate);
                 // 👇 Rate type handling
@@ -865,8 +865,9 @@ function generateCustomerTable1(data) {
                     totalcontract += parseInt(contractAmt);
                 } else if (activity.Trips !== "--") {
                     type = "Trips";
-                    for (let i = 100; i <= 1000; i += 10) {
-                        dropdown += `<option value="${i}" ${i === defaultRate ? "selected" : ""}>₹${i}</option>`;
+                    totalpriceload=(defaultRate + tracttrips);
+                    for (let i = 100; i <=5000; i += 10) {
+                        dropdown += `<option value="${i}" ${i === totalpriceload ? "selected" : ""}>₹${i}</option>`;
                     }
                     finalAmount = (parseInt(activity.Trips) * (defaultRate + tracttrips)) + parseInt(beta);
                     totaltrips += parseInt(activity.Trips);
@@ -890,7 +891,6 @@ function generateCustomerTable1(data) {
                     <td>${HoursTrips}</td>
                     <td>${HoursTripsAmount}</td>
                     <td>${beta}</td>
-                    <td>${activity.TripsPrice}</td>
                     <td>
                         <select class="rateDropdown" onchange="calculateFinalPrice(this,'${beta}', '${HoursTrips}','${tracttrips}', '${HoursTripsAmount}'); formeldger2();" ${type === "Contract" ? "disabled" : ""}>
                             ${dropdown}
@@ -912,7 +912,7 @@ function generateCustomerTable1(data) {
         <td>${totaltrips}</td>
         <td>${totalcontract}</td>
         <td colspan="3">${hou}:${mint}</td>
-        <td colspan="5">Bill</td>
+        <td colspan="4">Bill</td>
         <td id="totalBill">--</td>
     </tr>`;
     let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
