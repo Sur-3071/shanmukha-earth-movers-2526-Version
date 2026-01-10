@@ -189,15 +189,15 @@ function displayUpdatedtripsdata(data)
     r.innerHTML = "";
 
     // Initialize the table structure
-    var out = `<table border="1px" >
+    var out = `<table border="1px" class="blodfont">
     <tr>
-        <th>తోలకం</th>
-        <th>తేదీ</th>
-        <th>వినియోగదారుని పేరు</th>
-        <th>పగలు/రాత్రి</th>
-        <th>ధర</th>
-        <th>ట్రిప్పులు</th>
-        <th>మొత్తం</th>
+        <th style="font-weight:bold;font-size:25px">తోలకం</th>
+        <th style="font-weight:bold;font-size:25px">తేదీ</th>
+        <th style="font-weight:bold;font-size:25px">వినియోగదారుని పేరు</th>
+        <th style="font-weight:bold;font-size:25px">పగలు/రాత్రి</th>
+        <th style="font-weight:bold;font-size:25px">ధర</th>
+        <th style="font-weight:bold;font-size:25px">ట్రిప్పులు</th>
+        <th style="font-weight:bold;font-size:25px">మొత్తం</th>
     </tr>`;
 
     // Initialize the counter for Sno
@@ -220,13 +220,13 @@ function displayUpdatedtripsdata(data)
                             var amount = parseInt(activities[activity]['Price']);
                             s += (trips * amount);
                             out += `<tr>
-                                <td>` + sno + `</td>
-                                <td>` + formatDateToNormal(date) + `</td>
-                                <td style="font-weight:bold;font-size:20px">` + name + `</td>
-                                <td>` + activity + `</td>
-                                <td>` + activities[activity]['Price'] + `</td>
-                                <td>` + activities[activity]['Trips'] + `</td>
-                                <td>` + trips * amount + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + sno + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + formatDateToNormal(date) + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + name + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + activity + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + activities[activity]['Price'] + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + activities[activity]['Trips'] + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + trips * amount + `</td>
                             </tr>`;
 
                             // Increment the Sno counter
@@ -239,9 +239,9 @@ function displayUpdatedtripsdata(data)
     }
 
     out += `<tr>
-        <td colspan="5">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
-        <td colspan="1">` + totaltrips + `</td>
-        <td colspan="1">` + s + `</td>
+        <td colspan="5" style="font-weight:bold;font-size:25px">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
+        <td colspan="1" style="font-weight:bold;font-size:25px">` + totaltrips + `</td>
+        <td colspan="1" style="font-weight:bold;font-size:25px">` + s + `</td>
     </tr>`
     // Close the table structure
     out += "</table>";
@@ -257,16 +257,16 @@ function displaytripsdata(data, drivername) {
     r.innerHTML = "";
 
     // Initialize the table structure
-    var out = `<table border="1px" >
+    var out = `<table border="1px" class="blodfont">
     <tr>
-        <th>తోలకం</th>
-        <th>తేదీ</th>
-        <th>వినియోగదారుని పేరు</th>
-        <th>పగలు/రాత్రి</th>
-        <th>సవరించు</th>
-        <th>ధర</th>
-        <th>ట్రిప్పులు</th>
-        <th>మొత్తం</th>
+        <th style="font-weight:bold;font-size:25px">తోలకం</th>
+        <th style="font-weight:bold;font-size:25px">తేదీ</th>
+        <th style="font-weight:bold;font-size:25px">వినియోగదారుని పేరు</th>
+        <th style="font-weight:bold;font-size:25px">పగలు/రాత్రి</th>
+        <th style="font-weight:bold;font-size:25px">సవరించు</th>
+        <th style="font-weight:bold;font-size:25px">ధర</th>
+        <th style="font-weight:bold;font-size:25px">ట్రిప్పులు</th>
+        <th style="font-weight:bold;font-size:25px">మొత్తం</th>
     </tr>`;
 
     // Initialize the counter for Sno
@@ -289,15 +289,15 @@ function displaytripsdata(data, drivername) {
                             var amount = parseInt(activities[activity]['Price']);
                             s += (trips * amount);
                             out += `<tr>
-                                <td>` + sno + `</td>
-                                <td>` + formatDateToNormal(date) + `</td>
-                                <td style="font-weight:bold;font-size:20px">` + name + `</td>
-                                <td>` + activity + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + sno + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + formatDateToNormal(date) + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + name + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + activity + `</td>
                                 <td style="display:none;">`+ drivername + `</td>
-                                <td><button type="button" class="edit" onclick="openPopup1(this)">Edit</button></td>
-                                <td>` + activities[activity]['Price'] + `</td>
-                                <td>` + activities[activity]['Trips'] + `</td>
-                                <td>` + trips * amount + `</td>
+                                <td style="font-weight:bold;font-size:25px"><button type="button" class="edit" onclick="openPopup1(this)">Edit</button></td>
+                                <td style="font-weight:bold;font-size:25px">` + activities[activity]['Price'] + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + activities[activity]['Trips'] + `</td>
+                                <td style="font-weight:bold;font-size:25px">` + trips * amount + `</td>
                             </tr>`;
 
                             // Increment the Sno counter
@@ -310,9 +310,9 @@ function displaytripsdata(data, drivername) {
     }
 
     out += `<tr>
-        <td colspan="6">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
-        <td colspan="1">` + totaltrips + `</td>
-        <td colspan="1">` + s + `</td>
+        <td colspan="6" style="font-weight:bold;font-size:25px">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
+        <td colspan="1" style="font-weight:bold;font-size:25px">` + totaltrips + `</td>
+        <td colspan="1" style="font-weight:bold;font-size:25px">` + s + `</td>
     </tr>`
     // Close the table structure
     out += "</table>";
@@ -331,12 +331,12 @@ function displayamountdata(data) {
     r.innerHTML = "";
 
     // Initialize the table structure
-    var out = `<table border="1px" >
+    var out = `<table border="1px" class="blodfont">
     <tr>
-    <th>తోలకం</th>
-    <th>తేదీ</th>
-    <th>కారణం</th>
-    <th>డబ్బులు తీసుకున్నవి</th>
+    <th style="font-weight:bold;font-size:25px">తోలకం</th>
+    <th style="font-weight:bold;font-size:25px">తేదీ</th>
+    <th style="font-weight:bold;font-size:25px">కారణం</th>
+    <th style="font-weight:bold;font-size:25px">డబ్బులు తీసుకున్నవి</th>
 </tr>`;
 
     // Initialize the counter for Sno
@@ -350,10 +350,10 @@ function displayamountdata(data) {
             var amount = parseInt(data[date]['Amount'])
             s += amount
             out += `<tr>
-                    <td>` + sno + `</td>
-                    <td>` + formatDateToNormal(date) + `</td>
-                    <td style="font-weight:bold">` + data[date]['Purpose'] + `</td>
-                    <td>` + data[date]['Amount'] + `</td>
+                    <td style="font-weight:bold;font-size:25px">` + sno + `</td>
+                    <td style="font-weight:bold;font-size:25px">` + formatDateToNormal(date) + `</td>
+                    <td style="font-weight:bold;font-size:25px">` + data[date]['Purpose'] + `</td>
+                    <td style="font-weight:bold;font-size:25px">` + data[date]['Amount'] + `</td>
                 </tr>`;
 
             // Increment the Sno counter
@@ -362,8 +362,8 @@ function displayamountdata(data) {
         }
     }
     out += `<tr>
-          <td colspan="3">మొత్తాO డబ్బులు తీసుకున్నవి</td>
-          <td colspan="1">`+ s + `</td>
+          <td colspan="3" style="font-weight:bold;font-size:25px">మొత్తాO డబ్బులు తీసుకున్నవి</td>
+          <td colspan="1" style="font-weight:bold;font-size:25px">`+ s + `</td>
         </tr>`
     // Close the table structure
     out += "</table>";
@@ -426,20 +426,20 @@ function displaybalanacedata() {
     r.innerHTML = "";
 
     // Initialize the table structure
-    var out = `<table border="1px" >
+    var out = `<table border="1px" class="blodfont1">
     <tr>
-    <th>యజమాని పేరు</th>
-    <th>ట్రిప్పులు</th>
-    <th>మొత్తం డబ్బులు</th>
-    <th>డబ్బులు ఇచ్చినవి</th>
-    <th>ఇవ్వాల్సిన డబ్బులు</th>
+    <th style="font-weight:bold;font-size:25px" >యజమాని పేరు</th>
+    <th style="font-weight:bold;font-size:25px">ట్రిప్పులు</th>
+    <th style="font-weight:bold;font-size:25px">మొత్తం డబ్బులు</th>
+    <th style="font-weight:bold;font-size:25px">డబ్బులు ఇచ్చినవి</th>
+    <th style="font-weight:bold;font-size:25px">ఇవ్వాల్సిన డబ్బులు</th>
 </tr>`;
-    out += `<tr>
-        <td>` + name1 + `</td>
-        <td>` + totaltrips + `</td>
-        <td>` + totalamount + `</td>
-        <td>` + amounttaken + `</td>
-        <td>` + (totalamount - amounttaken) + `</td>
+    out += `<tr class="blodfont">
+        <td style="font-weight:bold;font-size:25px">` + name1 + `</td>
+        <td style="font-weight:bold;font-size:25px">` + totaltrips + `</td>
+        <td style="font-weight:bold;font-size:25px">` + totalamount + `</td>
+        <td style="font-weight:bold;font-size:25px">` + amounttaken + `</td>
+        <td style="font-weight:bold;font-size:25px">` + (totalamount - amounttaken) + `</td>
     </tr>`
     // Close the table structure
     out += "</table>";
