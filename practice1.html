@@ -1,210 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Financial Year Comparison Chart</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #eef1f5;
-      margin: 0;
-      padding: 40px;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<title>Custom Search Dropdown</title>
 
-    h2 {
-      color: #2b2b2b;
-      margin-bottom: 30px;
-    }
+<style>
+body {
+    font-family: Arial, sans-serif;
+    padding: 40px;
+    background: #f4f6f9;
+}
 
-    #chart-container {
-      width: 95%;
-      max-width: 1600px;
-      margin: auto;
-      background: #ffffff;
-      padding: 40px 30px;
-      border-radius: 20px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-    }
+.dropdown {
+    width: 320px;
+    position: relative;
+}
 
-    canvas {
-      height: 800px !important;
-    }
-  </style>
+.dropdown-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.dropdown-list {
+    position: absolute;
+    width: 100%;
+    border: 1px solid #ccc;
+    background: white;
+    max-height: 220px;
+    overflow-y: auto;
+    display: none;
+    z-index: 100;
+}
+
+.search-box {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background: #f0f0f0;
+}
+</style>
 </head>
 <body>
-  <h2>Financial Year Comparison (Aug–Jul)</h2>
-  <div id="chart-container">
-    <canvas id="myChart"></canvas>
-  </div>
 
-  <script>
-    const months = ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+<h3>Search Customer</h3>
 
-    const year1 = [120000, 85000, 130000, 75000, 125000, 100000, 90000, 140000, 135000, 115000, 105000, 80000];
-    const year2 = [130000, 102000, 145000, 70000, 138000, 110000, 99000, 155000, 148000, 90000, 110000, 85000];
+<div class="dropdown">
+    <input type="text" class="dropdown-input" placeholder="Select Customer" readonly>
 
-    const customYear1 = year1.map((val, i) => ({
-      profit: val - (i === 1 || i === 3 || i === 11 ? 125000 : 50000),
-      worked: 25,
-      totalDays: 31,
-      holiday: 6,
-      oil: 15000
-    }));
+    <div class="dropdown-list">
+        <!-- Search input INSIDE dropdown -->
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Type to search...">
+        </div>
 
-    const customYear2 = year2.map((val, i) => ({
-      profit: val - (i === 3 || i === 9 || i === 11 ? 140000 : 55000),
-      worked: 26,
-      totalDays: 31,
-      holiday: 5,
-      oil: 16000
-    }));
+        <div id="items"></div>
+    </div>
+</div>
 
-    const ctx = document.getElementById('myChart').getContext('2d');
+<script>
+const names = [
+    "Ramesh Kumar",
+    "Suresh Reddy",
+    "Anil Sharma",
+    "Priya Verma",
+    "Kiran Rao",
+    "Lakshmi Devi",
+    "Venkatesh Naidu",
+    "Rahul Mehta",
+    "Sneha Patel",
+    "Arjun Singh",
+    "Pooja Agarwal",
+    "Naveen Chandra",
+    "Bhavani Prasad",
+    "Sathish Kumar",
+    "Deepika Rao",
+    "Manoj Gupta",
+    "Swathi Reddy",
+    "Harish Babu",
+    "Akhil Varma",
+    "Neha Jain"
+];
 
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: months,
-        datasets: [
-          {
-            label: '2023–24',
-            data: year1,
-            backgroundColor: customYear1.map(val =>
-              val.profit >= 0 ? 'rgba(0, 200, 100, 0.8)' : 'rgba(255, 70, 70, 0.8)'
-            ),
-            custom: customYear1,
-            datalabels: {
-              anchor: 'end',
-              align: 'start',
-              formatter: (value, context) => {
-                const i = context.dataIndex;
-                const c = context.dataset.custom[i];
-                const income = value;
-                const profit = c.profit;
-                const profitLabel = profit >= 0 ? `Profit: ₹${profit.toLocaleString()}` : `Loss: ₹${Math.abs(profit).toLocaleString()}`;
+const dropdownInput = document.querySelector(".dropdown-input");
+const dropdownList = document.querySelector(".dropdown-list");
+const itemsDiv = document.getElementById("items");
+const searchInput = document.getElementById("searchInput");
 
-                const totalMinutes = income / 16.6;
-                const hours = Math.floor((totalMinutes / c.totalDays) / 60);
-                const minutes = Math.round((totalMinutes / c.totalDays) % 60);
+// Populate items
+function renderItems(filter = "") {
+    itemsDiv.innerHTML = "";
+    names
+        .filter(name => name.toLowerCase().includes(filter.toLowerCase()))
+        .forEach(name => {
+            const div = document.createElement("div");
+            div.className = "dropdown-item";
+            div.textContent = name;
+            div.onclick = () => {
+                dropdownInput.value = name;
+                dropdownList.style.display = "none";
+            };
+            itemsDiv.appendChild(div);
+        });
+}
 
-                const totalHrs = Math.round(income / 1000);
-                const disel = Math.round(c.oil / totalHrs);
+// Open dropdown
+dropdownInput.addEventListener("click", () => {
+    dropdownList.style.display = "block";
+    searchInput.focus();
+    renderItems();
+});
 
-                return [
-                  `Income: ₹${income.toLocaleString()}`,
-                  profitLabel,
-                  `Total Hrs: ${totalHrs} hrs`,
-                  `Avg Hrs: ${hours} hrs ${minutes} min`,
-                  `Oil/Hrs: ₹${disel}`,
-                  `Total Days: ${c.totalDays}`,
-                  `Worked: ${c.worked}`,
-                  `Holidays: ${c.holiday}`,
-                  `Oil Used: ₹${c.oil}`
-                ];
-              },
-              color: '#000',
-              font: {
-                size: 11,
-                weight: 'normal'
-              }
-            },
-            categoryPercentage: 0.5,
-            barPercentage: 0.9
-          },
-          {
-            label: '2024–25',
-            data: year2,
-            backgroundColor: customYear2.map(val =>
-              val.profit >= 0 ? 'rgba(0, 200, 100, 0.8)' : 'rgba(255, 70, 70, 0.8)'
-            ),
-            custom: customYear2,
-            datalabels: {
-              anchor: 'end',
-              align: 'start',
-              formatter: (value, context) => {
-                const i = context.dataIndex;
-                const c = context.dataset.custom[i];
-                const income = value;
-                const profit = c.profit;
-                const profitLabel = profit >= 0 ? `Profit: ₹${profit.toLocaleString()}` : `Loss: ₹${Math.abs(profit).toLocaleString()}`;
+// Search filtering
+searchInput.addEventListener("input", (e) => {
+    renderItems(e.target.value);
+});
 
-                const totalMinutes = income / 16.6;
-                const hours = Math.floor((totalMinutes / c.totalDays) / 60);
-                const minutes = Math.round((totalMinutes / c.totalDays) % 60);
+// Close on outside click
+document.addEventListener("click", (e) => {
+    if (!e.target.closest(".dropdown")) {
+        dropdownList.style.display = "none";
+    }
+});
+</script>
 
-                const totalHrs = Math.round(income / 1000);
-                const disel = Math.round(c.oil / totalHrs);
-
-                return [
-                  `Income: ₹${income.toLocaleString()}`,
-                  profitLabel,
-                  `Total Hrs: ${totalHrs} hrs`,
-                  `Avg Hrs: ${hours} hrs ${minutes} min`,
-                  `Oil/Hrs: ₹${disel}`,
-                  `Total Days: ${c.totalDays}`,
-                  `Worked: ${c.worked}`,
-                  `Holidays: ${c.holiday}`,
-                  `Oil Used: ₹${c.oil}`
-                ];
-              },
-              color: '#000',
-              font: {
-                size: 11,
-                weight: 'normal'
-              }
-            },
-            categoryPercentage: 0.5,
-            barPercentage: 0.9
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          x: {
-            stacked: false,
-            ticks: {
-              font: {
-                size: 16
-              }
-            }
-          },
-          y: {
-            beginAtZero: true,
-            max: 200000,
-            ticks: {
-              stepSize: 25000,
-              font: {
-                size: 14
-              }
-            },
-            title: {
-              display: true,
-              text: 'Income (₹)',
-              font: {
-                size: 16
-              }
-            }
-          }
-        },
-        plugins: {
-          tooltip: {
-            enabled: false
-          },
-          legend: {
-            labels: {
-              font: {
-                size: 16
-              }
-            }
-          }
-        }
-      },
-      plugins: [ChartDataLabels]
-    });
-  </script>
 </body>
 </html>

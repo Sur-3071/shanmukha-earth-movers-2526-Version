@@ -110,6 +110,10 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 });
                             }
                             var pay = "UnPaid";
+                            if(name==="CASH WORK")
+                            {
+                                pay="Paid";
+                            }
                             await set(dataRefset, {
                                 Date: dat,
                                 Name: name,

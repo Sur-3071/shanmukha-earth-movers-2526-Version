@@ -164,7 +164,6 @@ function generateTable(data) {
             disel += parseInt(activity.Disel)
             var editid = customerPhone + "v";
             collection += parseInt(activity.Price);
-            overallcollection += parseInt(activity.OverallPrice);
             var amount = activity.Payment === "Paid" ? 0 : activity.Price;
             var overallrecovery = activity.Payment === "Paid" ? 0 : activity.OverallPrice;
             var balanaceamount = 0;
@@ -288,7 +287,7 @@ function generateTable(data) {
             // if (activity.Beta !== undefined && activity.Beta !== "undefined" && activity.Beta !== null) {
             //     amount=parseInt(amount)+parseInt(activity.Beta);
             // }
-            var beta = activity.Beta === "undefined" || activity.Beta === undefined ? 0 : activity.Beta
+            var beta = activity.Beta === "undefined" || activity.Beta === undefined || activity.Beta === "undefined" ? 0 : activity.Beta
             // console.log(beta);
             var drivers = "";
             var tripamount = "";
@@ -303,6 +302,9 @@ function generateTable(data) {
                 jcbtripamount = activity.JcbTripPrice;
             }
             // console.log()
+            var overallpricemoney=isNaN(activity.OverallPrice)|| activity.OverallPrice===undefined ?activity.Price:activity.OverallPrice;
+
+            overallcollection += parseInt(overallpricemoney);
 
             out += `<tr>
                         <td>${customerPhone}</td>
@@ -326,7 +328,7 @@ function generateTable(data) {
                         <td><button type="button" id=${editid} class="edit">Edit</button></td>
                         <td>${totalamount}</td>
                         <td>${amount}</td>
-                        <td>${activity.OverallPrice}</td>
+                        <td>${overallpricemoney}</td>
                         <td>${overallrecovery}</td>
                     </tr>`;
 

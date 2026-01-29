@@ -327,6 +327,134 @@
         function moneyconvert(amount) {
             return `₹${amount.toLocaleString('en-IN')}`; // Example: formats as Indian Rupees
         }
+        var dropdownInput = document.getElementById("name");
+        var dropdownList = document.getElementById("nameDropdown");
+        var itemsDiv = document.getElementById("nameItems");
+        var searchInput = document.getElementById("nameSearch");
+
+        function renderNameItems(filter = "") {
+            itemsDiv.innerHTML = "";
+
+            names
+                .filter(n => n.toLowerCase().includes(filter.toLowerCase()))
+                .forEach(name => {
+                    const div = document.createElement("div");
+                    div.className = "dropdown-item";
+                    div.textContent = name;
+
+                    div.onclick = () => {
+                        dropdownInput.value = name;
+                        dropdownList.style.display = "none";
+
+                        dropdownInput.dispatchEvent(new Event("change"));
+                    };
+
+                    itemsDiv.appendChild(div);
+                });
+        }
+
+        // Open dropdown
+        dropdownInput.addEventListener("click", () => {
+            dropdownList.style.display = "block";
+            searchInput.value = "";
+            renderNameItems();
+            searchInput.focus();
+        });
+
+        // Search filter
+        searchInput.addEventListener("input", e => {
+            renderNameItems(e.target.value);
+        });
+
+        // Close on outside click
+        document.addEventListener("click", e => {
+            if (!e.target.closest(".dropdown")) {
+                dropdownList.style.display = "none";
+            }
+        });
+
+        function initSearchDropdown(config) {
+            const {
+                inputId,
+                dropdownId,
+                searchId,
+                itemsId,
+                data
+            } = config;
+
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+            const searchInput = document.getElementById(searchId);
+            const itemsDiv = document.getElementById(itemsId);
+
+            function renderItems(filter = "") {
+                itemsDiv.innerHTML = "";
+
+                data
+                    .filter(item => item.toLowerCase().includes(filter.toLowerCase()))
+                    .forEach(item => {
+                        const div = document.createElement("div");
+                        div.className = "dropdown-item";
+                        div.textContent = item;
+
+                        div.onclick = () => {
+                            input.value = item;
+                            dropdown.style.display = "none";
+
+                            // 🔥 trigger change event
+                            input.dispatchEvent(new Event("change"));
+                        };
+
+                        itemsDiv.appendChild(div);
+                    });
+            }
+
+            input.addEventListener("click", () => {
+                dropdown.style.display = "block";
+                searchInput.value = "";
+                renderItems();
+                searchInput.focus();
+            });
+
+            searchInput.addEventListener("input", e => {
+                renderItems(e.target.value);
+            });
+        }
+
+        initSearchDropdown({
+            inputId: "name",
+            dropdownId: "nameDropdown",
+            searchId: "nameSearch",
+            itemsId: "nameItems",
+            data: names
+        });
+
+        initSearchDropdown({
+            inputId: "name2",
+            dropdownId: "name2Dropdown",
+            searchId: "name2Search",
+            itemsId: "name2Items",
+            data: names
+        });
+
+        initSearchDropdown({
+            inputId: "name3",
+            dropdownId: "name3Dropdown",
+            searchId: "name3Search",
+            itemsId: "name3Items",
+            data: names
+        });
+
+        initSearchDropdown({
+            inputId: "name4",
+            dropdownId: "name4Dropdown",
+            searchId: "name4Search",
+            itemsId: "name4Items",
+            data: names
+        });
+
+
+
 
         function generateName(data) {
             for (const customerPhone in data) {
@@ -338,80 +466,6 @@
                 }
             }
             names.sort();
-            const selectElement = document.getElementById("name");
-
-            // Add a placeholder option at the top (optional)
-            const placeholderOption = document.createElement("option");
-            placeholderOption.value = "";
-            placeholderOption.text = "Select Customer Name";
-            placeholderOption.disabled = true;
-            placeholderOption.selected = true;
-            selectElement.appendChild(placeholderOption);
-
-            // Add each name as an optionv
-            // console.log("values are: " + names);
-            names.forEach(name => {
-                const option = document.createElement("option");
-                option.value = name;
-                option.text = name;
-                selectElement.appendChild(option);
-            });
-            const selectElement1 = document.getElementById("name2");
-
-            // Add a placeholder option at the top (optional)
-            const placeholderOption1 = document.createElement("option");
-            placeholderOption1.value = "";
-            placeholderOption1.text = "Select Customer Name";
-            placeholderOption1.disabled = true;
-            placeholderOption1.selected = true;
-            selectElement1.appendChild(placeholderOption1);
-
-            // Add each name as an option
-            // console.log("values are: " + names);
-            names.forEach(name => {
-                const option = document.createElement("option");
-                option.value = name;
-                option.text = name;
-                selectElement1.appendChild(option);
-            });
-            const selectElement2 = document.getElementById("name3");
-
-            // Add a placeholder option at the top (optional)
-            const placeholderOption2 = document.createElement("option");
-            placeholderOption2.value = "";
-            placeholderOption2.text = "Select Customer Name";
-            placeholderOption2.disabled = true;
-            placeholderOption2.selected = true;
-            selectElement2.appendChild(placeholderOption2);
-
-            // Add each name as an option
-            // console.log("values are: " + names);
-            names.forEach(name => {
-                const option = document.createElement("option");
-                option.value = name;
-                option.text = name;
-                selectElement2.appendChild(option);
-            });
-
-            const selectElement3 = document.getElementById("name4");
-
-            // Add a placeholder option at the top (optional)
-            const placeholderOption3 = document.createElement("option");
-            placeholderOption3.value = "";
-            placeholderOption3.text = "Select Customer Name";
-            placeholderOption3.disabled = true;
-            placeholderOption3.selected = true;
-            selectElement3.appendChild(placeholderOption3);
-
-            // Add each name as an option
-            // console.log("values are: " + names);
-            names.forEach(name => {
-                const option = document.createElement("option");
-                option.value = name;
-                option.text = name;
-                selectElement3.appendChild(option);
-            });
-            // console.log(names);
         }
 
         var months = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -468,10 +522,10 @@
                         else {
                             amount = parseInt(amount) - parseInt(balanaceamount);
                         }
-                    overalldueamount = parseInt(overalldueamount) - parseInt(balanaceamount);
+                        overalldueamount = parseInt(overalldueamount) - parseInt(balanaceamount);
                     }
                     recovery += parseInt(amount);
-                    overallpricedue += isNaN(overalldueamount)?0:parseInt(overalldueamount);
+                    overallpricedue += isNaN(overalldueamount) ? 0 : parseInt(overalldueamount);
                     var dte = parseInt(activity.Date[8] + activity.Date[9]);
                     var mon = parseInt(activity.Date[5] + activity.Date[6]);
                     // if (dte < 10 || (dte >= 10 && parseInt(month) != mon)) {
@@ -1060,7 +1114,20 @@
     <div id="formContainer" style="display: none;">
         <form id="userForm1">
             <input type="date" id="dat" name="dat" placeholder="Date" required>
-            <select id="name" name="name" placeholder="Customer Name" required></select>
+            <!-- <select id="name" name="name" placeholder="Customer Name" required></select> -->
+
+            <div class="dropdown">
+                <input type="text" id="name" class="dropdown-input" placeholder="Select Customer" readonly>
+
+                <div class="dropdown-list" id="nameDropdown">
+                    <div class="search-box">
+                        <input type="text" id="nameSearch" placeholder="Type to search...">
+                    </div>
+                    <div id="nameItems"></div>
+                </div>
+            </div>
+
+
             <input type="text" id="vill" name="vill" placeholder="Village Name" required readonly>
             <input type="tel" id="dis" name="dis" placeholder="Enter Disel Amount" required>
             <input type="text" id="wid" name="wid" placeholder="Work Id" required readonly>
@@ -1126,7 +1193,20 @@
     <div id="custamountcontainer" style="display: none;">
         <form id="userForm3">
             <input type="date" id="dat1" name="dat" placeholder="Date" required>
-            <select id="name2" name="name2" placeholder="Customer Name" required></select>
+            <!-- <select id="name2" name="name2" placeholder="Customer Name" required></select> -->
+
+            <div class="dropdown">
+                <input type="text" id="name2" class="dropdown-input" placeholder="Select Customer" readonly>
+
+                <div class="dropdown-list" id="name2Dropdown">
+                    <div class="search-box">
+                        <input type="text" id="name2Search" placeholder="Type to search...">
+                    </div>
+                    <div id="name2Items"></div>
+                </div>
+            </div>
+
+
             <input type="text" id="vil2" name="vil" class=village placeholder="Village" required readonly>
             <input type="text" id="amt" name="amt" placeholder="Amount" required>
             <input type="text" id="cid1" name="cid1" placeholder="Amount Id" required readonly>
@@ -1140,14 +1220,36 @@
 
 
         <form id="userForm4">
-            <select id="name3" name="name3" placeholder="Customer Name"></select>
+            <!-- <select id="name3" name="name3" placeholder="Customer Name"></select> -->
+            <div class="dropdown">
+                <input type="text" id="name3" class="dropdown-input" placeholder="Select Customer" readonly>
+
+                <div class="dropdown-list" id="name3Dropdown">
+                    <div class="search-box">
+                        <input type="text" id="name3Search" placeholder="Type to search...">
+                    </div>
+                    <div id="name3Items"></div>
+                </div>
+            </div>
+
             <input type="button" onclick="transalate()" value="Get Customer Data" id="submit4">
         </form>
     </div>
 
     <div id="customerreceipt" style="display: none;">
         <form id="userForm5">
-            <select id="name4" name="name4" placeholder="Customer Name"></select>
+            <!-- <select id="name4" name="name4" placeholder="Customer Name"></select> -->
+            <div class="dropdown">
+                <input type="text" id="name4" class="dropdown-input" placeholder="Select Customer" readonly>
+
+                <div class="dropdown-list" id="name4Dropdown">
+                    <div class="search-box">
+                        <input type="text" id="name4Search" placeholder="Type to search...">
+                    </div>
+                    <div id="name4Items"></div>
+                </div>
+            </div>
+
             <input type="button" value="Get Customer Bill" id="submit5">
         </form>
 
