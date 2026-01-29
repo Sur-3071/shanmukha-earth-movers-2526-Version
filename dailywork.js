@@ -32,7 +32,7 @@ function timecal() {
     var rate=parseInt(document.getElementById("rate").value);
     if(type==="Hours")
     {
-        rate = (isNaN(pri)?beta:parseInt(pri)+beta);
+        rate = (isNaN(pri)?0:parseInt(pri));
         document.getElementById("rate").value=rate;
     }
     else

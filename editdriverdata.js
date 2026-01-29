@@ -6,15 +6,16 @@ function openPopup1(btn) {
     const cells = row.querySelectorAll("td");
 
     // extract values
-    const rawDate = cells[1].innerText.trim();   // e.g. "12-01-2025"
+    const rawDate = cells[2].innerText.trim();   // e.g. "12-01-2025"
 
     const [dd, mm, yyyy] = rawDate.split("-");
     const date = `${yyyy}-${mm}-${dd}`;
-    const driver = cells[4].innerText.trim();
-    const dayType = cells[3].innerText.trim();
-    const customer = cells[2].innerText.trim();
-    const price = cells[6].innerText.trim();
-    const trips = cells[7].innerText.trim();
+    const systemid = cells[1].innerText.trim();
+    const driver = cells[5].innerText.trim();
+    const dayType = cells[4].innerText.trim();
+    const customer = cells[3].innerText.trim();
+    const price = cells[7].innerText.trim();
+    const trips = cells[8].innerText.trim();
     const popupHTML = `
     <div id="myModal1"
          style="
@@ -62,6 +63,12 @@ function openPopup1(btn) {
             </h2>
 
             <form id="form" style="text-align:center;">
+
+            <input type="text"
+                       id="sno"
+                       placeholder="System Id"
+                       required
+                       style="width:90%; padding:8px; margin-bottom:14px;" value="${systemid}">
 
                 <input type="date"
                        id="editdate"

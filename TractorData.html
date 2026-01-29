@@ -27,6 +27,7 @@
         border-radius: 6px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
+
     #form2 {
         max-width: 800px;
         margin: auto;
@@ -45,33 +46,41 @@
         padding: 12px;
         vertical-align: middle;
     }
+
     .blodfont1 th {
-  white-space: nowrap;   /* keeps text in single line */
-}
+        white-space: nowrap;
+        /* keeps text in single line */
+    }
 
-.blodfont1 table {
-  border-collapse: collapse;
-  width: auto; /* table adjusts to content */
-}
+    .blodfont1 table {
+        border-collapse: collapse;
+        width: auto;
+        /* table adjusts to content */
+    }
 
-.blodfont1 td {
-  padding: 8px 12px;
-  white-space: nowrap;   /* prevents text wrapping */
-  width: auto;           /* width grows/shrinks with content */
-  min-width: fit-content;
-}
+    .blodfont1 td {
+        padding: 8px 12px;
+        white-space: nowrap;
+        /* prevents text wrapping */
+        width: auto;
+        /* width grows/shrinks with content */
+        min-width: fit-content;
+    }
 
-.blodfont table {
-  border-collapse: collapse;
-  width: auto; /* table adjusts to content */
-}
+    .blodfont table {
+        border-collapse: collapse;
+        width: auto;
+        /* table adjusts to content */
+    }
 
-.blodfont td {
-  padding: 8px 12px;
-  white-space: nowrap;   /* prevents text wrapping */
-  width: auto;           /* width grows/shrinks with content */
-  min-width: fit-content;
-}
+    .blodfont td {
+        padding: 8px 12px;
+        white-space: nowrap;
+        /* prevents text wrapping */
+        width: auto;
+        /* width grows/shrinks with content */
+        min-width: fit-content;
+    }
 
 
 
@@ -232,131 +241,147 @@
         background-color: #fef9e7;
         color: #333;
     }
-/* ===== POPUP BACKGROUND ===== */
-#myModal1 {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
 
-/* ===== POPUP BOX ===== */
-#myModal1 .modal-content {
-    background: #ffffff;
-    width: 480px;
-    max-width: 95%;
-    padding: 22px;
-    border-radius: 14px;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
-    position: relative;
-    animation: popupFade 0.25s ease-in-out;
-}
-
-/* ===== CLOSE (X) BUTTON ===== */
-#myModal1 .close {
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #ffffff;
-    background: #e53935; /* RED */
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 30px;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
-}
-
-#myModal1 .close:hover {
-    background: #c62828;
-    transform: scale(1.1);
-}
-
-/* ===== POPUP HEADING ===== */
-#myModal1 h2 {
-    margin: 0 0 15px;
-    text-align: center;
-    color: #333;
-}
-
-/* ===== TABLE STYLE (ONLY INSIDE POPUP) ===== */
-#myModal1 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-#myModal1 table td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-/* Add gap between table rows ONLY inside popup */
-#myModal1 table tr td {
-    padding-bottom: 14px;
-}
-
-
-/* ===== INPUTS INSIDE TABLE ===== */
-#myModal1 table input {
-    width: 100%;
-    padding: 8px 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s ease;
-}
-
-#myModal1 table input:focus {
-    border-color: #1976d2;
-}
-
-/* ===== SAVE BUTTON ===== */
-#myModal1 .sub {
-    width: 100%;
-    padding: 10px;
-    margin-top: 15px;
-    background: #1976d2;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-#myModal1 .sub:hover {
-    background: #125aa0;
-}
-.overlay {
-    position: absolute;
-    inset: 0;
-}
-
-
-/* ===== POPUP ANIMATION ===== */
-@keyframes popupFade {
-    from {
-        transform: scale(0.85);
-        opacity: 0;
+    /* ===== POPUP BACKGROUND ===== */
+    #myModal1 {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
     }
-    to {
-        transform: scale(1);
-        opacity: 1;
+
+    /* ===== POPUP BOX ===== */
+    #myModal1 .modal-content {
+        background: #ffffff;
+        width: 480px;
+        max-width: 95%;
+        padding: 22px;
+        border-radius: 14px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+        position: relative;
+        animation: popupFade 0.25s ease-in-out;
     }
-}
+
+    /* ===== CLOSE (X) BUTTON ===== */
+    #myModal1 .close {
+        position: absolute;
+        top: 12px;
+        right: 14px;
+        font-size: 22px;
+        font-weight: bold;
+        color: #ffffff;
+        background: #e53935;
+        /* RED */
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 30px;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    #myModal1 .close:hover {
+        background: #c62828;
+        transform: scale(1.1);
+    }
+
+    /* ===== POPUP HEADING ===== */
+    #myModal1 h2 {
+        margin: 0 0 15px;
+        text-align: center;
+        color: #333;
+    }
+
+    /* ===== TABLE STYLE (ONLY INSIDE POPUP) ===== */
+    #myModal1 table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    #myModal1 table td {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* Add gap between table rows ONLY inside popup */
+    #myModal1 table tr td {
+        padding-bottom: 14px;
+    }
 
 
+    /* ===== INPUTS INSIDE TABLE ===== */
+    #myModal1 table input {
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.2s ease;
+    }
 
+    #myModal1 table input:focus {
+        border-color: #1976d2;
+    }
+
+    /* ===== SAVE BUTTON ===== */
+    #myModal1 .sub {
+        width: 100%;
+        padding: 10px;
+        margin-top: 15px;
+        background: #1976d2;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    #myModal1 .sub:hover {
+        background: #125aa0;
+    }
+
+    .overlay {
+        position: absolute;
+        inset: 0;
+    }
+
+
+    /* ===== POPUP ANIMATION ===== */
+    @keyframes popupFade {
+        from {
+            transform: scale(0.85);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
 </style>
 <script>
+    function GetSystemId(outputId) {
+        // alert("yes " + outputId);
+
+        const id = Date.now();
+
+        if (outputId === "1") {
+            document.getElementById("wid1").value = id;
+        }
+        else if (outputId === "3") {
+            document.getElementById("wid2").value = id;
+        }
+    }
+
     function showPage(pageId) {
+        // alert("yes");
         const pages = ['list1', 'list2', 'list3'];
         document.querySelectorAll("form").forEach(form => {
             form.reset();
@@ -366,6 +391,8 @@
 
             if (id === pageId) {
                 section.style.display = 'block';
+                const lastChar = pageId[pageId.length - 1];
+                GetSystemId(lastChar);
             } else {
                 section.style.display = 'none';
             }
@@ -450,6 +477,11 @@
                         </tr>
                         <tr>
                             <td>
+                                <input type="text" id='wid1' placeholder="System Id" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <select id="time" required>
                                     <option hidden>select Day Type</option>
                                     <option>Day</option>
@@ -517,7 +549,7 @@
                             <td>
                                 <button type="button" value="click" class="sub" id="getDataBtn">Edit Trips Data</button>
                             </td>
-                             <td>
+                            <td>
                                 <button type="button" value="click" class="sub" id="updatebtn">Updated Data</button>
                             </td>
                             <td>
@@ -564,6 +596,11 @@
                         </tr>
                         <tr>
                             <td>
+                                <input type="text" id='wid2' placeholder="System Id" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <input type="text" id="pur" placeholder="Enter Purpose" onchange="transalatepur()">
                             </td>
                         </tr>
@@ -582,8 +619,7 @@
                 </form>
             </div>
         </div>
-        <img src="done1.png" id="done"
-     style="display: none; margin: 0 auto; height: 100px; width: 100px;">
+        <img src="done1.png" id="done" style="display: none; margin: 0 auto; height: 100px; width: 100px;">
         <div id="convert">
             <iframe src="https://www.typingbaba.com/translator/english-to-telugu-translation.php" id="trans"
                 style="display: none;" width="80%" height="450px"></iframe>
@@ -637,6 +673,6 @@
 
 </script>
 
-<script src="Tractor.js" ></script>
+<script src="Tractor.js"></script>
 
 </html>

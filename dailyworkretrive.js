@@ -141,8 +141,10 @@ function generateTable(data) {
             <th id="csize">Driver Beta</th>
             <th id="csize">Payment Status</th>
             <th id="csize">Edit Data</th>
-            <th id="csize">Price</th>
-            <th id="csize">Recovery Amount</th>
+            <th id="csize">Jcb Price</th>
+            <th id="csize">Jcb Recovery Amount</th>
+            <th id="csize">Overall Price</th>
+            <th id="csize">Overall Recovery Amount</th>
         </tr>`;
     var l = [];
     var workday = 0;
@@ -153,6 +155,8 @@ function generateTable(data) {
     var totalcontarct = 0;
     var disel = 0;
     // alert("1");
+    var overallcollection = 0;
+    var overallrecoveryamount = 0;
     const processedCustomers = new Set();
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
@@ -160,7 +164,9 @@ function generateTable(data) {
             disel += parseInt(activity.Disel)
             var editid = customerPhone + "v";
             collection += parseInt(activity.Price);
-            var amount = activity.Payment === "Paid" ? 0 : activity.Price
+            overallcollection += parseInt(activity.OverallPrice);
+            var amount = activity.Payment === "Paid" ? 0 : activity.Price;
+            var overallrecovery = activity.Payment === "Paid" ? 0 : activity.OverallPrice;
             var balanaceamount = 0;
             var customerName = activity.Name;
             // alert("2");
@@ -234,12 +240,17 @@ function generateTable(data) {
 
                 balanaceamount = getCachedExtraAmount(customerName);
                 processedCustomers.add(customerName);
-                amount = parseInt(amount) - parseInt(balanaceamount);
+                if (amount < parseInt(balanaceamount)) {
+                    amount = 0;
+                }
+                else {
+                    amount = parseInt(amount) - parseInt(balanaceamount);
+                }
+                overallrecovery = parseInt(overallrecovery) - parseInt(balanaceamount);
             }
-            // alert("3===>"+amount);
-            // console.log(activity.Name+"=====>"+amount);
             recovery += parseInt(amount);
-            // alert("4");
+            overallrecoveryamount += parseInt(overallrecovery);
+           
 
             if (activity.Trips !== "--") {
                 totaltrips += parseInt(activity.Trips);
@@ -311,9 +322,12 @@ function generateTable(data) {
                         <td>${beta}</td>
                         <td><button type="button" class="pay" id="${customerPhone}"
             style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
-            ${activity.Payment}                        <td><button type="button" id=${editid} class="edit">Edit</button></td>
+            ${activity.Payment}</td>                        
+                        <td><button type="button" id=${editid} class="edit">Edit</button></td>
                         <td>${totalamount}</td>
                         <td>${amount}</td>
+                        <td>${activity.OverallPrice}</td>
+                        <td>${overallrecovery}</td>
                     </tr>`;
 
 
@@ -338,6 +352,8 @@ function generateTable(data) {
     <td id="am" colspan="3">Work In Price</td>
     <td id="am">${collection}</td>
     <td id="am">${recovery}</td>
+    <td id="am">${overallcollection}</td>
+    <td id="am">${overallrecoveryamount}</td>
     </tr>`;
     out += `</table>`;
     document.getElementById("enterdata").innerHTML = out;
@@ -571,8 +587,10 @@ function SearchTable(data) {
         d.style.display = "none";
 
         var collection = 0, recovery = 0;
+        var overaldueamountrecovery=0;
         var totalhou = 0, totalmint = 0;
         var totaltrips = 0, totalcontarct = 0, disel = 0;
+        var overallcollections=0;
 
         let out = `<table border="1px">
         <tr>
@@ -593,8 +611,10 @@ function SearchTable(data) {
             <th id="csize">Driver Beta</th>
             <th id="csize">Payment Status</th>
             <th id="csize">Edit Data</th>
-            <th id="csize">Price</th>
-            <th id="csize">Recovery Amount</th>
+            <th id="csize">Jcb Price</th>
+            <th id="csize">Jcb Recovery Amount</th>
+            <th id="csize">Overall Price</th>
+            <th id="csize">Overall Recovery Amount</th>
         </tr>`;
 
         // Group by Name
@@ -631,9 +651,11 @@ function SearchTable(data) {
             // Subtotals
             let subDisel = 0, subTrips = 0, subContract = 0, subPrice = 0, subRecovery = 0;
             let subHou = 0, subMint = 0;
+            var overaldueamountsubrecovery=0;
+            var overallsubcollections=0;
 
             // Header row for person
-            out += `<tr><td colspan="19" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
+            out += `<tr><td colspan="21" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
 
             entries.forEach(entry => {
                 const customerPhone = entry.id;
@@ -641,6 +663,7 @@ function SearchTable(data) {
 
                 const thisDisel = parseInt(activity.Disel || 0);
                 const thisPrice = parseInt(activity.Price || 0);
+                const thisoverallPrice = parseInt(activity.OverallPrice || 0);
                 const thisTrips = activity.Trips !== "--" ? parseInt(activity.Trips) : 0;
                 const thisContract = activity.Contract !== "--" ? parseInt(activity.Contract) : 0;
 
@@ -668,6 +691,7 @@ function SearchTable(data) {
                 const bgColor = payment === "paid" ? "green" : (payment === "unpaid" ? "red" : "");
 
                 var amount = activity.Payment === "Paid" ? 0 : thisPrice;
+                var overalldueamount = activity.Payment === "Paid" ? 0 : thisoverallPrice;
                 // alert("Iam coming..");
                 var customerName = personName;
                 var balanaceamount = 0;
@@ -675,77 +699,87 @@ function SearchTable(data) {
 
                     balanaceamount = getCachedExtraAmount(customerName);
                     processedCustomers.add(customerName);
-                    amount = parseInt(amount) - parseInt(balanaceamount);
+                    if (amount < parseInt(balanaceamount)) {
+                        amount = 0;
+                    }
+                    else {
+                        amount = parseInt(amount) - parseInt(balanaceamount);
+                    }
+                    overalldueamount = parseInt(overalldueamount) - parseInt(balanaceamount);
                 }
+                overaldueamountrecovery+=overalldueamount;
+                overaldueamountsubrecovery+=isNaN(overalldueamount)?0:overalldueamount;
+                overallsubcollections+=isNaN(activity.OverallPrice)?0:activity.OverallPrice;
+
 
                 var LDrivers = 0;
-            var HoursDrivers = 0;
-            if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
-                let str = activity.HoursDrivers || "";
-                // alert(str);
-                let count = 0;
+                var HoursDrivers = 0;
+                if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
+                    let str = activity.HoursDrivers || "";
+                    // alert(str);
+                    let count = 0;
 
-                for (let i = 0; i < str.length; i++) {
-                    if (str[i] === "=") {
-                        count++;
-                    }
-                }
-
-                if (count > 1) {
-
-                    let arr = str.split(" ").filter(Boolean);
-                    // console.log(arr);
-                    let result = "";
-
-                    for (let i = 0; i < arr.length; i += 3) {
-                        if (arr[i] && arr[i + 2]) {       // <— check before adding
-                            result += arr[i] + " = " + arr[i + 2] + "\n";
-                        }
-                    }
-                    // console.log(result);
-
-                    result = result.replace(/\n/g, "<br>");
-                    HoursDrivers = result;
-
-                }
-                else {
-                    HoursDrivers = str;
-                }
-
-            }
-            // console.log(activity.Drivers);
-            var LDrivers = 0;
-            if (activity.Drivers !== undefined) {
-                let str = activity.Drivers;
-                let count1 = 0;
-
-                for (let i = 0; i < str.length; i++) {
-                    if (str[i] === "=") {
-                        count1++;
-                    }
-                }
-                if (count1 > 1) {
-                    // alert("yes more then two drivers");
-                    let arr = str.split(" ").filter(Boolean);
-                    let result = "";
-
-                    for (let i = 0; i < arr.length; i += 3) {
-                        if (arr[i] && arr[i + 2]) {       // <— check before adding
-                            result += arr[i] + " = " + arr[i + 2] + "\n";
+                    for (let i = 0; i < str.length; i++) {
+                        if (str[i] === "=") {
+                            count++;
                         }
                     }
 
-                    result = result.replace(/\n/g, "<br>");
-                    LDrivers = result;
+                    if (count > 1) {
+
+                        let arr = str.split(" ").filter(Boolean);
+                        // console.log(arr);
+                        let result = "";
+
+                        for (let i = 0; i < arr.length; i += 3) {
+                            if (arr[i] && arr[i + 2]) {       // <— check before adding
+                                result += arr[i] + " = " + arr[i + 2] + "\n";
+                            }
+                        }
+                        // console.log(result);
+
+                        result = result.replace(/\n/g, "<br>");
+                        HoursDrivers = result;
+
+                    }
+                    else {
+                        HoursDrivers = str;
+                    }
+
                 }
-                else {
-                    LDrivers = str;
+                // console.log(activity.Drivers);
+                var LDrivers = 0;
+                if (activity.Drivers !== undefined) {
+                    let str = activity.Drivers;
+                    let count1 = 0;
+
+                    for (let i = 0; i < str.length; i++) {
+                        if (str[i] === "=") {
+                            count1++;
+                        }
+                    }
+                    if (count1 > 1) {
+                        // alert("yes more then two drivers");
+                        let arr = str.split(" ").filter(Boolean);
+                        let result = "";
+
+                        for (let i = 0; i < arr.length; i += 3) {
+                            if (arr[i] && arr[i + 2]) {       // <— check before adding
+                                result += arr[i] + " = " + arr[i + 2] + "\n";
+                            }
+                        }
+
+                        result = result.replace(/\n/g, "<br>");
+                        LDrivers = result;
+                    }
+                    else {
+                        LDrivers = str;
+                    }
                 }
-            }
                 var drivers = "";
                 var tripamount = "";
                 var jcbtripamount = "--";
-                
+
                 if (activity.Drivers === "--") {
                     drivers = HoursDrivers;
                     tripamount = activity.HoursTripsAmount
@@ -759,28 +793,9 @@ function SearchTable(data) {
 
                 recovery += amount;
                 subRecovery += amount;
+                overallcollections+=isNaN(activity.OverallPrice)?0:activity.OverallPrice;
 
                 const editid = customerPhone + "v";
-
-                // out += `<tr>
-                //     <td>${customerPhone}</td>
-                //     <td>${activity.Date}</td>
-                //     <td>${activity.Name}</td>
-                //     <td>${activity.Villagename}</td>
-                //     <td>${activity.Disel}</td>
-                //     <td>${activity.Trips}</td>
-                //     <td>${activity.Contract}</td>
-                //     <td>${activity.Starting}</td>
-                //     <td>${activity.Ending}</td>
-                //     <td>${activity.TotalTime}</td>
-                //     <td>${activity.Beta}</td>
-                //     <td><button type="button" class="pay" id="${customerPhone}"
-                //         style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
-                //         ${activity.Payment}</button></td>
-                //     <td><button type="button" id=${editid} class="edit">Edit</button></td>
-                //     <td>${activity.Price}</td>
-                //     <td>${amount}</td>
-                // </tr>`;
 
                 out += `<tr>
                         <td>${customerPhone}</td>
@@ -804,6 +819,8 @@ function SearchTable(data) {
                     <td><button type="button" id=${editid} class="edit">Edit</button></td>
                         <td>${activity.Price}</td>
                         <td>${amount}</td>
+                        <td>${activity.OverallPrice}</td>
+                        <td>${overalldueamount}</td>
                     </tr>`;
             });
 
@@ -824,6 +841,8 @@ function SearchTable(data) {
                 <td colspan="3">Sub Total</td>
                 <td>${subPrice}</td>
                 <td>${subRecovery}</td>
+                <td>${overallsubcollections}</td>
+                <td>${overaldueamountsubrecovery}</td>
             </tr>`;
         });
 
@@ -844,6 +863,8 @@ function SearchTable(data) {
             <td id="am" colspan="3">Grand Total</td>
             <td id="am">${collection}</td>
             <td id="am">${recovery}</td>
+            <td>${overallcollections}</td>
+            <td>${overaldueamountrecovery}</td>
         </tr>`;
 
         out += `</table>`;
@@ -932,14 +953,21 @@ function generateTableByDate(data, startdate, enddate, data1) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
             if (activity.Date >= startdate && activity.Date <= enddate) {
-                var amount = activity.Payment === "Paid" ? 0 : activity.Price
+                var amount = activity.Payment === "Paid" ? 0 : activity.Price;
+                var overalldueamount=activity.Payment==="Paid"?0:activity.OverallPrice;
                 var customerName = activity.Name;
                 var balanaceamount = 0;
                 if (!processedCustomers.has(customerName) && activity.Payment === "UnPaid") {
 
                     balanaceamount = getCachedExtraAmount(customerName);
                     processedCustomers.add(customerName);
-                    amount = parseInt(amount) - parseInt(balanaceamount);
+                    if (amount < parseInt(balanaceamount)) {
+                        amount = 0;
+                    }
+                    else {
+                        amount = parseInt(amount) - parseInt(balanaceamount);
+                    }
+                    overalldueamount = parseInt(overalldueamount) - parseInt(balanaceamount);
                 }
                 var editid = customerPhone + "v";
                 disel += parseInt(activity.Disel);
@@ -1097,6 +1125,7 @@ document.addEventListener("click", async function (e1) {
             HoursPrice: data.HoursPrice,
             TripsPrice: data.TripsPrice,
             TotalTime: data.TotalTime,
+            OverallPrice: data.OverallPrice,
             Trips: data.Trips,
             Villagename: data.Villagename
         });
@@ -1164,6 +1193,7 @@ document.addEventListener("click", async function (e1) {
                 TripsPrice: data.TripsPrice,
                 JcbTripPrice: jcbtripprice,
                 TotalTime: data.TotalTime,
+                OverallPrice: data.OverallPrice,
                 Trips: data.Trips,
                 Villagename: data.Villagename
             });

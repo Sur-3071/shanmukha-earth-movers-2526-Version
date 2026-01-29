@@ -194,10 +194,10 @@ h2 {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-#captureDiv1 table {
+/* #captureDiv1 table {
     width: 100%;
     border-collapse: collapse;
-}
+} */
 
 #captureDiv1 th, #captureDiv1 td {
     padding: 12px; /* Reduced from 16px */
@@ -919,10 +919,7 @@ table {
         font-size: 20px; /* Adjusted from 24px */
     }
 
-    table {
-        overflow-x: auto;
-        width: 100%;
-    }
+   
 
     #tday, #wday, #hday, #twrk, #proft, #oil, #avghrs, #perdayhrs, #imphrs {
         font-size: 20px; /* Reduced from 30px */

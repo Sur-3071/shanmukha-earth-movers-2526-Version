@@ -41,6 +41,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     var hoursdrivers = document.getElementById("output1").value;
     var hourstrips = document.getElementById("trips1").value;
     // alert(beta,hourstrpamt,hoursdrivers,hourstrips);
+    var overallamount = 0;
     document.getElementById("userForm1").reset();
     setTimeout(() => {
         location.reload();
@@ -51,6 +52,8 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
         ttime = "--";
         con = "--";
         hrsamt = "--";
+        overallamount = (parseInt(jcbtrpamt) + parseInt(trpamt)) * parseInt(trips) + parseInt(beta);
+        // alert(overallamount);
 
 
     }
@@ -63,12 +66,22 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
             drivers = "--";
             hrsamt = "--";
             trpamt = "--";
+            overallamount = parseInt(con) + parseInt(beta);
+            // alert(overallamount);
         }
         else {
             trips = "--";
             drivers = "--";
             con = "--";
             trpamt = "--";
+            const b = parseInt(beta) || 0;
+            const r = parseInt(rate) || 0;
+            const hAmt = parseInt(hourstrpamt) || 0;
+            const hCnt = parseInt(hourstrips) || 0;
+
+            overallamount = b + r + (hAmt * hCnt);
+
+            // alert(overallamount);
         }
     }
     if (dat.length > 0) {
@@ -117,6 +130,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 Trips: trips,
                                 Drivers: drivers,
                                 Starting: stime,
+                                OverallPrice:overallamount,
                                 Ending: etime,
                                 TotalTime: ttime,
                                 Price: rate
@@ -348,7 +362,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
             // Only target work entries (skip ExtraAmount key)
             if (activity?.Name.trim().toLowerCase() === name.trim().toLowerCase() && activity?.Payment === "UnPaid") {
                 k = 1;
-                const price = parseInt(activity.Price);
+                const price = parseInt(activity.OverallPrice);
                 if (totalded >= price) {
                     totalded -= price;
                     var beta = 0;
@@ -392,6 +406,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
                         HoursPrice: activity.HoursPrice,
                         TripsPrice: activity.TripsPrice,
                         Beta: beta,
+                        OverallPrice:activity.OverallPrice,
                         HoursTrips: HoursTrips,
                         HoursTripsAmount: HoursTripsAmount,
                         HoursDrivers: HoursDrivers,
@@ -609,9 +624,9 @@ function checkcustomer(data) {
 function generateCustomerTable(data) {
     var collection = 0;
     var recovery = 0;
-    let out = `<table border="1px" background-color: cadetblue;" id="customerTable1">
+    let out = `<table border="1" id="customerTable1">
     <tr>
-    <th colspan="12" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
+    <th colspan="13" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
     </tr>
         <tr>
             <th id="csize">Customer Id</th>
@@ -625,7 +640,8 @@ function generateCustomerTable(data) {
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
             <th id="csize">Payment Status</th>
-            <th id="csize">Price</th>
+            <th id="csize">JCB Price</th>
+            <th id="csize">Overall Price</th>
         </tr>`;
     var l = [];
     var workday = 0;
@@ -637,17 +653,81 @@ function generateCustomerTable(data) {
     var formname = document.getElementById("name3").value.toLowerCase();
     // console.log(formname);
     var rec = 0;
+    var overallamount=0;
+    var Driverslist="";
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
             var editid = customerPhone + "v";
             // console.log(formname,activity.Name,formname.length,activity.Name.length);
             if (activity.Name.toLowerCase().trim() == formname.trim()) {
+                var HoursDrivers = 0;
+                 if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
+                    let str = activity.HoursDrivers || "";
+                    // alert(str);
+                    let count = 0;
+
+                    for (let i = 0; i < str.length; i++) {
+                        if (str[i] === "=") {
+                            count++;
+                        }
+                    }
+
+                    if (count > 1) {
+
+                        let arr = str.split(" ").filter(Boolean);
+                        let result = "";
+
+                        for (let i = 0; i < arr.length; i += 3) {
+                            if (arr[i] && arr[i + 2]) {       // <— check before adding
+                                result += arr[i] + " = " + arr[i + 2] + "\n";
+                            }
+                        }
+                        // console.log(result);
+
+                        result = result.replace(/\n/g, "<br>");
+                        HoursDrivers = result;
+
+                    }
+                    else {
+                        HoursDrivers = str;
+                    }
+
+                }
+                // console.log(HoursTripsAmount+" "+HoursTrips);
+                var LDrivers = 0;
+                if (activity.Drivers !== undefined) {
+                    let str = activity.Drivers;
+                    let count1 = 0;
+
+                    for (let i = 0; i < str.length; i++) {
+                        if (str[i] === "=") {
+                            count1++;
+                        }
+                    }
+                    if (count1 > 1) {
+                        let arr = str.split(" ").filter(Boolean);
+                        let result = "";
+
+                        for (let i = 0; i < arr.length; i += 3) {
+                            if (arr[i] && arr[i + 2]) {       // <— check before adding
+                                result += arr[i] + " = " + arr[i + 2] + "\n";
+                            }
+                        }
+
+                        result = result.replace(/\n/g, "<br>");
+                        LDrivers = result;
+                    }
+                    else {
+                        LDrivers = str;
+                    }
+                }
                 var pri = 0;
                 // recovery += parseInt(amount);
                 if (activity.Trips !== "--") {
                     // pri=parseInt(activity.Trips)*parseInt(tripamt);
                     totaltrips += parseInt(activity.Trips);
+                    Driverslist=LDrivers;
                 }
                 if (activity.Contract !== "--") {
                     totalcontarct += parseInt(activity.Contract);
@@ -655,6 +735,7 @@ function generateCustomerTable(data) {
                 }
 
                 if (activity.Starting !== "--") {
+                    Driverslist=HoursDrivers;
                     var timesplit = activity.TotalTime;
                     var v = timesplit.split(':');
                     hou += parseInt(v[0]);
@@ -663,12 +744,14 @@ function generateCustomerTable(data) {
                     // var totmin=parseInt(v[0])*60+parseInt(v[1]);
                     // pri=totmin*permin;
                 }
+                
                 collection += parseInt(activity.Price);
                 // console.log(activity);
                 var bal = 0;
                 if (activity.Payment !== "Paid") {
                     bal = activity.Price;
                 }
+                overallamount+=isNaN(activity.OverallPrice)?0:activity.OverallPrice;
                 rec += parseInt(bal);
                 let color = activity.Payment === "Paid" ? "green" : "red";
                 out += `<tr>
@@ -676,7 +759,7 @@ function generateCustomerTable(data) {
                         <td>${formatDate(activity.Date)}</td>
                         <td>${activity.Name}</td>
                         <td>${activity.Villagename}</td>
-                        <td>${activity.Drivers}</td>
+                        <td>${Driverslist}</td>
                         <td>${activity.Trips}</td>
                         <td>${activity.Contract}</td>
                         <td>${activity.Starting}</td>
@@ -684,6 +767,7 @@ function generateCustomerTable(data) {
                         <td>${activity.TotalTime}</td>
                         <td id="${activity.PhoneNumber}" style="color: ${color}; font-size:30px; font-weight:bold;">${activity.Payment}</td>
                         <td style="font-size:20px;">${moneyconvert(parseInt(activity.Price))}</td>
+                        <td style="font-size:20px;">${moneyconvert(parseInt(activity.OverallPrice))}</td>
                     </tr>`;
 
             }
@@ -700,13 +784,15 @@ function generateCustomerTable(data) {
             <td id="am" colspan="3" style="font-size:30px;">${totaltime}</td>
             <td  id="col" colspan="1">Bill</td>
             <td id="col">${moneyconvert(collection)}</td>
+            <td id="col">${moneyconvert(overallamount)}</td>
             </tr>`;
     out += `</table>`;
     document.getElementById("customeralldata2").innerHTML = "";
-    document.getElementById("customeralldata").innerHTML = out;
+document.getElementById("customeralldata").innerHTML =
+  `<div class="table-scroll-only">${out}</div>`;
     document.getElementsByClassName("heading")[1].style.display = "block";
 
-    RePrint6(collection);
+    RePrint6(overallamount);
 }
 function formatDate(isoDate) {
     const [year, month, day] = isoDate.split("-");
@@ -837,7 +923,7 @@ function generateCustomerTable1(data) {
                         }
                     }
                     if (count1 > 1) {
-                        let arr =  str.split(" ").filter(Boolean);
+                        let arr = str.split(" ").filter(Boolean);
                         let result = "";
 
                         for (let i = 0; i < arr.length; i += 3) {
@@ -853,7 +939,7 @@ function generateCustomerTable1(data) {
                         LDrivers = str;
                     }
                 }
-                var totalpriceload=0;
+                var totalpriceload = 0;
 
                 // alert(defaultRate);
                 // 👇 Rate type handling
@@ -865,8 +951,8 @@ function generateCustomerTable1(data) {
                     totalcontract += parseInt(contractAmt);
                 } else if (activity.Trips !== "--") {
                     type = "Trips";
-                    totalpriceload=(defaultRate + tracttrips);
-                    for (let i = 100; i <=5000; i += 10) {
+                    totalpriceload = (defaultRate + tracttrips);
+                    for (let i = 100; i <= 5000; i += 10) {
                         dropdown += `<option value="${i}" ${i === totalpriceload ? "selected" : ""}>₹${i}</option>`;
                     }
                     finalAmount = (parseInt(activity.Trips) * (defaultRate + tracttrips)) + parseInt(beta);

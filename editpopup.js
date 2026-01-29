@@ -25,7 +25,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
     // const pno = document.getElementById("pno").value;
     const disel = document.getElementById("dis").value;
     var con = document.getElementById("con").value;
-     var desc = document.getElementById("desc").value;
+    var desc = document.getElementById("desc").value;
     var stime = document.getElementById("stime").value;
     var etime = document.getElementById("etime").value;
     var ttime = document.getElementById("ttime").value;
@@ -40,11 +40,42 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
     var hourstrpamt = document.getElementById("trprate1").value;
     var hoursdrivers = document.getElementById("output1").value;
     var hourstrips = document.getElementById("trips1").value;
+    var overallamount = 0;
+    // alert(trips+" "+con);
+    if (trips.length > 0 && trips!=="--") {
+        const jcb = parseInt(jcbtrpamt) || 0;
+        const tripAmt = parseInt(trpamt) || 0;
+        const tripCount = parseInt(trips) || 0;
+        const b = parseInt(beta) || 0;
+
+        overallamount = (jcb + tripAmt) * tripCount + b;
+
+    }
+    else {
+        // alert(trips+" "+con);
+        if (con.length > 0 && con!=="--") {
+            const c = parseInt(con) || 0;
+            const b = parseInt(beta) || 0;
+
+            overallamount = c + b;
+
+        }
+        else {
+            const b = parseInt(beta) || 0;
+            const r = parseInt(rate) || 0;
+            const hAmt = parseInt(hourstrpamt) || 0;
+            const hCnt = parseInt(hourstrips) || 0;
+
+            overallamount = b + r + (hAmt * hCnt);
+
+        }
+    }
+    // alert(overallamount);
     if (stime.length === 0) {
 
         stime = "--";
         etime = "--";
-        hrsamt="--";
+        hrsamt = "--";
     }
     if (dat.length > 0) {
         if (name.length > 0) {
@@ -71,18 +102,19 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
                         PhoneNumber: "**",
                         Shift: "**",
                         Beta: beta,
-                        HoursTrips:hourstrips,
-                        HoursTripsAmount:hourstrpamt,
-                        HoursDrivers:hoursdrivers,
+                        HoursTrips: hourstrips,
+                        HoursTripsAmount: hourstrpamt,
+                        HoursDrivers: hoursdrivers,
                         Description: desc,
                         Contract: con,
                         Payment: pay,
                         Disel: disel,
                         Trips: trips,
                         Drivers: output,
-                        HoursPrice:hrsamt,
-                        TripsPrice:trpamt,
+                        HoursPrice: hrsamt,
+                        TripsPrice: trpamt,
                         JcbTripPrice: jcbtrpamt,
+                        OverallPrice: overallamount,
                         Starting: stime,
                         Ending: etime,
                         TotalTime: ttime,

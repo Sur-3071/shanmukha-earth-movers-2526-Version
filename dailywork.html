@@ -37,41 +37,46 @@
             appId: "1:688935767962:web:d3d8d7569fd2470dfef423"
         };
 
-        let extraAmountsCache = {}; // Example: { "Suresh": 1200, "Ravi": 0 }
-
-        let extraamounttotal = 0;
-
         async function loadAllExtraAmountsOnce() {
             const app = initializeApp(firebaseConfig);
-            const db1 = "CustomersAmount";
             const db = getDatabase(app);
-            const customersRef = ref(db, db1);
+            const customersRef = ref(db, "CustomersAmount");
 
             try {
                 const snapshot = await get(customersRef);
 
                 if (!snapshot.exists()) {
-                    extraAmountsCache = {};
+                    localStorage.setItem("extraAmountsCache", JSON.stringify({}));
                     return;
                 }
 
                 const data = snapshot.val();
                 const cache = {};
+                let total = 0;
 
-                // Build map { username: amount }
                 for (const name in data) {
-                    const customer = data[name];
-                    cache[name] = customer.ExtraAmount || 0;
-                    extraamounttotal += parseInt(customer.ExtraAmount || 0);
+                    const amount = parseInt(data[name].ExtraAmount || 0);
+                    cache[name] = amount;
+                    total += amount;
                 }
 
-                extraAmountsCache = cache; // assign final structure
+                // ✅ SAVE TO LOCAL STORAGE
+                localStorage.setItem("extraAmountsCache", JSON.stringify(cache));
+                localStorage.setItem("extraAmountTotal", total);
+
+                console.log("Extra amounts loaded & cached");
 
             } catch (error) {
                 console.error("Error loading ExtraAmounts:", error);
-                extraAmountsCache = {};
+                localStorage.setItem("extraAmountsCache", JSON.stringify({}));
             }
         }
+
+
+
+
+
+
 
 
         const names = [];
@@ -94,7 +99,7 @@
                     alert("No data available.");
                 }
             } catch (error) {
-                alert("Error occurred while fetching data 3071");
+                alert("Error occurred while fetching data 3071ram");
             }
         }
         async function Expensescal() {
@@ -113,7 +118,7 @@
                     alert("No data available.");
                 }
             } catch (error) {
-                alert("Error occurred while fetching data 3071");
+                alert("Error occurred while fetching data 30713");
             }
         }
 
@@ -419,6 +424,7 @@
 
 
         function generateTable(data) {
+            // alert("hi-1");
             const today = new Date();
             const year = today.getFullYear();
             const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -433,12 +439,39 @@
             // var holiday = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             // var profit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             var recovery = 0;
+            var overallpricedue = 0;
+            const processedCustomers = new Set();
             for (const customerPhone in data) {
                 if (data.hasOwnProperty(customerPhone)) {
                     const activity = data[customerPhone];
-                    if (activity.Payment === "UnPaid") {
-                        recovery += parseInt(activity.Price);
+                    var customerName = activity.Name;
+                    // if (activity.Payment === "UnPaid") {
+                    //     recovery += parseInt(activity.Price);
+                    //     overallpricedue += parseInt(activity.OverallPrice);
+                    //     console.log(activity.Price + " " + recovery + " " + overallpricedue);
+                    // }
+                    var amount = activity.Payment === "Paid" ? 0 : parseInt(activity.Price);
+                    var overalldueamount = activity.Payment === "Paid" ? 0 : parseInt(activity.OverallPrice);
+                    if (!processedCustomers.has(customerName) && activity.Payment === "UnPaid") {
+                        // alert("hi-2 " + customerName);
+                        const extraAmountsCache =
+                            JSON.parse(localStorage.getItem("extraAmountsCache")) || {};
+                        // alert(extraAmountsCache[customerName]);
+                        var balanaceamount = extraAmountsCache[customerName] || 0;
+                        // alert(balanaceamount + " values are");
+                        // alert("hi-3");
+                        console.log(overalldueamount + " " + customerName + " " + balanaceamount);
+                        processedCustomers.add(customerName);
+                        if (amount < parseInt(balanaceamount)) {
+                            amount = 0;
+                        }
+                        else {
+                            amount = parseInt(amount) - parseInt(balanaceamount);
+                        }
+                    overalldueamount = parseInt(overalldueamount) - parseInt(balanaceamount);
                     }
+                    recovery += parseInt(amount);
+                    overallpricedue += isNaN(overalldueamount)?0:parseInt(overalldueamount);
                     var dte = parseInt(activity.Date[8] + activity.Date[9]);
                     var mon = parseInt(activity.Date[5] + activity.Date[6]);
                     // if (dte < 10 || (dte >= 10 && parseInt(month) != mon)) {
@@ -671,7 +704,7 @@
             document.getElementById("proft").innerHTML = moneyconvert(proft);
             document.getElementById("oil").innerHTML = moneyconvert(oila);
             document.getElementById("avghrs").innerHTML = avghrss + "Hrs  " + avgmin + "Min";
-            document.getElementById("perdayhrs").innerHTML = moneyconvert(recovery - extraamounttotal);
+            document.getElementById("perdayhrs").innerHTML = moneyconvert(recovery) + "<br>" + moneyconvert(overallpricedue);
             document.getElementById("imphrs").innerHTML = imprhrs + " Hrs   " + impmin + " Min";
             document.getElementById("proft").style.color = "skyblue";
             document.getElementById("imphrs").style.color = "red";
@@ -736,6 +769,8 @@
         window.addEventListener('load', DayCountcal);
         window.addEventListener('load', selectnames);
         window.addEventListener('load', Expensescal);
+
+
     </script>
 </head>
 
@@ -856,7 +891,7 @@
                     document.getElementById("myModal2"),
                     document.getElementById("myModal3"),
                     document.getElementById("myModal4")
-                    
+
                 ];
 
                 // Close modal if user clicks outside modal content
@@ -982,9 +1017,8 @@
                         if (status === "Completed") {
                             container.innerHTML = "Completed";
                         }
-                        else
-                        {
-                        container.innerHTML = "Still Running...";
+                        else {
+                            container.innerHTML = "Still Running...";
                         }
 
                         q.data.forEach(item => {
@@ -1000,8 +1034,8 @@
                         document.getElementById("myModal4").style.display = "block";
                     }
                     else {
-                            document.getElementById("Qutertable").innerHTML = "The Quarter is Not Yet Started";
-                            document.getElementById("myModal4").style.display = "block";
+                        document.getElementById("Qutertable").innerHTML = "The Quarter is Not Yet Started";
+                        document.getElementById("myModal4").style.display = "block";
                     }
                 }
 
@@ -1383,6 +1417,7 @@
             }
 
             const input = row.querySelector(".finalPrice");
+            alert(input);
             input.value = finalPrice;
 
             calculateTotalBill();

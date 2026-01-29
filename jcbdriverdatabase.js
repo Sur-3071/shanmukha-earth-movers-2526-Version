@@ -14,35 +14,34 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // Get a reference to the database service
 const db = getDatabase(app);
-const monthsMap = {
-  "January":  [0, 0],
-  "February": [0, 0],
-  "March":    [0, 0],
-  "April":    [0, 0],
-  "May":      [0, 0],
-  "June":     [0, 0],
-  "July":     [0, 0],
-  "August":   [0, 0],
-  "September":[0, 0],
-  "October":  [0, 0],
-  "November": [0, 0],
-  "December": [0, 0]
-};
 
+    var  monthsMap = {
+        "January": [0, 0],
+        "February": [0, 0],
+        "March": [0, 0],
+        "April": [0, 0],
+        "May": [0, 0],
+        "June": [0, 0],
+        "July": [0, 0],
+        "August": [0, 0],
+        "September": [0, 0],
+        "October": [0, 0],
+        "November": [0, 0],
+        "December": [0, 0]
+    };
 
 document.getElementById('submit1').addEventListener('click', async function (e) {
     e.preventDefault();
     const dat = document.getElementById("d1").value;
     const wid = document.getElementById("wid1").value;
     const purpose = document.getElementById("work1").value;
-    const monthname=document.getElementById("monthDropdown").value;
+    const monthname = document.getElementById("monthDropdown").value;
 
 
     document.getElementById("userForm1").reset();
 
     if (dat.length > 0) {
-        if(monthname.length>0)
-        {
+        if (monthname.length > 0) {
             if (purpose.length > 0) {
                 const db1 = "JcbDriverData";
                 const db2 = "Leaves";
@@ -50,7 +49,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                 try {
                     await set(dataRefset, {
                         Date: dat,
-                        Month:monthname,
+                        Month: monthname,
                         Purpose: purpose
                     });
                     document.getElementById("done").style.display = "block";
@@ -67,10 +66,9 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                 datarebuild();
             }
         }
-        else
-        {
+        else {
             alert("Please Select Month");
-                datarebuild();
+            datarebuild();
         }
     }
     else {
@@ -93,12 +91,11 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
     const dat = document.getElementById("d2").value;
     const wid = document.getElementById("wid2").value;
     const amount = document.getElementById("work2").value;
-    const monthname=document.getElementById("monthDropdown1").value;
+    const monthname = document.getElementById("monthDropdown1").value;
     document.getElementById("userForm2").reset();
 
     if (dat.length > 0) {
-        if(monthname.length>0)
-        {
+        if (monthname.length > 0) {
             if (amount.length > 0) {
                 if (isAllDigits(amount)) {
                     const db1 = "JcbDriverData";
@@ -107,7 +104,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
                     try {
                         await set(dataRefset, {
                             Date: dat,
-                            Month:monthname,
+                            Month: monthname,
                             Salary: amount
                         });
                         document.getElementById("done").style.display = "block";
@@ -129,9 +126,9 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
                 datarebuild();
             }
         }
-        else{
+        else {
             alert("Please Select Month");
-                datarebuild();
+            datarebuild();
         }
     }
     else {
@@ -154,6 +151,8 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
 
 document.getElementById('toggleBtn').addEventListener('click', async function (e) {
     e.preventDefault();
+    const salaryDiv = document.getElementById("salaryTableContainer");
+    const leaveDiv = document.getElementById("leaveTableContainer");
     try {
         // Access the database and retrieve data
         const db1 = "JcbDriverData";
@@ -167,7 +166,29 @@ document.getElementById('toggleBtn').addEventListener('click', async function (e
             generateTable(data);
 
         } else {
-            alert("Zero Leaves and Zero salary.");
+            salaryDiv.innerHTML = `<div style="padding: 10px; 
+                                     font-size: 14px; 
+                                     font-weight: 600; 
+                                     color: #b00020; 
+                                     background: #ffe5e8; 
+                                     border: 1px solid #ffb3bd; 
+                                     border-radius: 8px; 
+                                     text-align: center;
+                                     margin-top: 8px;">
+                           No Salary Records Found
+                       </div>`;
+
+            leaveDiv.innerHTML = `<div style="padding: 10px; 
+                                     font-size: 14px; 
+                                     font-weight: 600; 
+                                     color: #b00020; 
+                                     background: #ffe5e8; 
+                                     border: 1px solid #ffb3bd; 
+                                     border-radius: 8px; 
+                                     text-align: center;
+                                     margin-top: 8px;">
+                           No Leave Records Found
+                       </div>`;
         }
     } catch (error) {
         alert("Error occurred while fetching data");
@@ -176,8 +197,24 @@ document.getElementById('toggleBtn').addEventListener('click', async function (e
 });
 
 function generateTable(data) {
-    // console.log("📦 Incoming Data:", data);
+    
+    monthsMap = {
+        "January": [0, 0],
+        "February": [0, 0],
+        "March": [0, 0],
+        "April": [0, 0],
+        "May": [0, 0],
+        "June": [0, 0],
+        "July": [0, 0],
+        "August": [0, 0],
+        "September": [0, 0],
+        "October": [0, 0],
+        "November": [0, 0],
+        "December": [0, 0]
+    };
 
+
+    // console.log("📦 Incoming Data:", data);
     const salaryDiv = document.getElementById("salaryTableContainer");
     const leaveDiv = document.getElementById("leaveTableContainer");
 
@@ -185,6 +222,7 @@ function generateTable(data) {
     leaveDiv.innerHTML = "";
 
     if (data.Salary && Object.keys(data.Salary).length > 0) {
+        
         const box = document.createElement("div");
         box.classList.add("table-box", "salary-table");
 
@@ -200,6 +238,7 @@ function generateTable(data) {
         let totalSalary = 0;
 
         Object.values(data.Salary).forEach(entry => {
+            
             const row = document.createElement("tr");
             const amount = parseFloat(entry.Salary) || 0;
             totalSalary += amount;
@@ -237,6 +276,7 @@ function generateTable(data) {
     }
 
     // 🌴 LEAVE TABLE (Date + Purpose)
+    
     if (data.Leaves && Object.keys(data.Leaves).length > 0) {
         const box = document.createElement("div");
         box.classList.add("table-box", "leave-table");
@@ -249,6 +289,7 @@ function generateTable(data) {
                 <th>Purpose</th>
             </tr>
         `;
+        
 
         let totalLeaves = 0;
 
@@ -288,15 +329,15 @@ function generateTable(data) {
                        </div>`;
     }
     updateMonthCards(monthsMap);
-// 
+    
 }
 function updateMonthCards(monthlySummary) {
-    const driverSalary = 16000;   // fixed base salary per month
+    const driverSalary = 21000;   // fixed base salary per month
     const allowedLeaves = 2;      // standard allowed leaves per month
 
-   Object.keys(monthsMap).forEach(month => {
-    const card = document.getElementById(`card-${month}`);
-    // console.log(month);
+    Object.keys(monthsMap).forEach(month => {
+        const card = document.getElementById(`card-${month}`);
+        // console.log(month);
         if (card) {
             const salaryEl = card.querySelector(".salary");
             const salarycut = card.querySelector(".cut-salary");
@@ -327,7 +368,7 @@ function updateMonthCards(monthlySummary) {
             salarycut.textContent = `₹${salaryCutAmount.toLocaleString("en-IN")}`;
 
             // Calculate remaining salary after deduction
-            const finalRemainingSalary = 16000-totalSalaryTaken - salaryCutAmount;
+            const finalRemainingSalary = 21000 - totalSalaryTaken - salaryCutAmount;
             remainingSalaryEl.textContent = `₹${finalRemainingSalary.toLocaleString("en-IN")}`;
 
         }
