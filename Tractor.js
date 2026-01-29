@@ -305,7 +305,7 @@ function displayUpdatedtripsdata(data) {
     r.style.display = "block";
 }
 function displaytripsdata(data, drivername) {
-    alert("parrel call");
+    // alert("parrel call");
     driver = drivername;
     document.getElementById("screenshot").style.display = "block";
     var r = document.getElementById("tripsdata");
@@ -401,18 +401,18 @@ function displaytripsdata(data, drivername) {
 
             out += `
         <tr>
-            <td style="font-weight:bold;font-size:25px">${sno}</td>
-            <td style="font-weight:bold;font-size:25px">${key}</td>
-            <td style="font-weight:bold;font-size:25px">${formatDateToNormal(date)}</td>
-            <td style="font-weight:bold;font-size:25px">${name}</td>
-            <td style="font-weight:bold;font-size:25px">${shift}</td>
+            <td style="font-weight:bold;font-size:35px;padding:15px">${sno}</td>
+            <td style="font-weight:bold;font-size:35px;padding:15px">${key}</td>
+            <td style="font-weight:bold;font-size:35px;padding:15px">${formatDateToNormal(date)}</td>
+            <td style="font-weight:bold;font-size:35px;padding:15px">${name}</td>
+            <td style="font-weight:bold;font-size:35px;padding:15px">${shift}</td>
             <td style="display:none;">${drivername}</td>
-            <td style="font-weight:bold;font-size:25px">
+            <td style="font-weight:bold;font-size:35px;padding:15px">
                 <button type="button" class="edit" onclick="openPopup1(this)">Edit</button>
             </td>
-            <td style="font-weight:bold;font-size:25px">${amount}</td>
-            <td style="font-weight:bold;font-size:25px">${trips}</td>
-            <td style="font-weight:bold;font-size:25px">${trips * amount}</td>
+            <td style="font-weight:bold;font-size:35px;padding:15px">${amount}</td>
+            <td style="font-weight:bold;font-size:35px;padding:15px">${trips}</td>
+            <td style="font-weight:bold;font-size:35px;padding:15px">${trips * amount}</td>
         </tr>`;
 
             sno++;

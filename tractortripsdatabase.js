@@ -46,6 +46,7 @@ document.getElementById('submit').addEventListener('click', function (e) {
                 var d = document.getElementById("done");
                 d.style.display = "block";
                 removedone()
+                GetSystemId("1");
             })
             .catch((error) => {
                 console.error("Error adding document: ", error);
@@ -56,6 +57,18 @@ document.getElementById('submit').addEventListener('click', function (e) {
         alert("Please Enter All The Fields Properly");
     }
 });
+//  function GetSystemId(outputId) {
+//         // alert("yes " + outputId);
+
+//         const id = Date.now();
+
+//         if (outputId === "1") {
+//             document.getElementById("wid1").value = id;
+//         }
+//         else if (outputId === "3") {
+//             document.getElementById("wid2").value = id;
+//         }
+//     }
 
 export function editDriverData(e){
     e.preventDefault();
@@ -129,7 +142,8 @@ amountdataentry.addEventListener('click', function (e) {
                 document.getElementById("form1").reset();
                 var d = document.getElementById("done");
                 d.style.display = "block";
-                removedone()
+                removedone();
+                GetSystemId("3");
             })
             .catch((error) => {
                 console.error("Error adding document: ", error);
