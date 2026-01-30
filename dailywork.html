@@ -327,51 +327,6 @@
         function moneyconvert(amount) {
             return `₹${amount.toLocaleString('en-IN')}`; // Example: formats as Indian Rupees
         }
-        var dropdownInput = document.getElementById("name");
-        var dropdownList = document.getElementById("nameDropdown");
-        var itemsDiv = document.getElementById("nameItems");
-        var searchInput = document.getElementById("nameSearch");
-
-        function renderNameItems(filter = "") {
-            itemsDiv.innerHTML = "";
-
-            names
-                .filter(n => n.toLowerCase().includes(filter.toLowerCase()))
-                .forEach(name => {
-                    const div = document.createElement("div");
-                    div.className = "dropdown-item";
-                    div.textContent = name;
-
-                    div.onclick = () => {
-                        dropdownInput.value = name;
-                        dropdownList.style.display = "none";
-
-                        dropdownInput.dispatchEvent(new Event("change"));
-                    };
-
-                    itemsDiv.appendChild(div);
-                });
-        }
-
-        // Open dropdown
-        dropdownInput.addEventListener("click", () => {
-            dropdownList.style.display = "block";
-            searchInput.value = "";
-            renderNameItems();
-            searchInput.focus();
-        });
-
-        // Search filter
-        searchInput.addEventListener("input", e => {
-            renderNameItems(e.target.value);
-        });
-
-        // Close on outside click
-        document.addEventListener("click", e => {
-            if (!e.target.closest(".dropdown")) {
-                dropdownList.style.display = "none";
-            }
-        });
 
         function initSearchDropdown(config) {
             const {
@@ -390,23 +345,33 @@
             function renderItems(filter = "") {
                 itemsDiv.innerHTML = "";
 
-                data
-                    .filter(item => item.toLowerCase().includes(filter.toLowerCase()))
-                    .forEach(item => {
-                        const div = document.createElement("div");
-                        div.className = "dropdown-item";
-                        div.textContent = item;
+                const filteredNames = names.filter(name =>
+                    name.toLowerCase().includes(filter.toLowerCase())
+                );
 
-                        div.onclick = () => {
-                            input.value = item;
-                            dropdown.style.display = "none";
+                // No result case
+                if (filteredNames.length === 0) {
+                    const div = document.createElement("div");
+                    div.className = "dropdown-item no-result";
+                    div.textContent = "Customer Not Found";
+                    itemsDiv.appendChild(div);
+                    return;
+                }
 
-                            // 🔥 trigger change event
-                            input.dispatchEvent(new Event("change"));
-                        };
+                filteredNames.forEach(name => {
+                    const div = document.createElement("div");
+                    div.className = "dropdown-item";
+                    div.textContent = name;
 
-                        itemsDiv.appendChild(div);
-                    });
+                    div.onclick = () => {
+                        input.value = name;
+                        dropdown.style.display = "none";
+
+                        input.dispatchEvent(new Event("change"));
+                    };
+
+                    itemsDiv.appendChild(div);
+                });
             }
 
             input.addEventListener("click", () => {

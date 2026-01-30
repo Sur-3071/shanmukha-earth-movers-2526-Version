@@ -189,6 +189,16 @@ h2 {
     position: relative;
 }
 
+.dropdown-item.no-result {
+    color: red;
+    /* text-align: center; */
+    padding-left: 100px;
+    cursor: default;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+
 .dropdown-input {
     width: 100%;
     padding: 10px;

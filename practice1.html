@@ -5,6 +5,10 @@
 <title>Custom Search Dropdown</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     padding: 40px;
@@ -31,7 +35,7 @@ body {
     max-height: 220px;
     overflow-y: auto;
     display: none;
-    z-index: 100;
+    z-index: 1000;
 }
 
 .search-box {
@@ -42,7 +46,7 @@ body {
 .search-box input {
     width: 100%;
     padding: 8px;
-    box-sizing: border-box;
+    font-size: 14px;
 }
 
 .dropdown-item {
@@ -53,8 +57,16 @@ body {
 .dropdown-item:hover {
     background: #f0f0f0;
 }
+
+.dropdown-item.no-result {
+    color: red;
+    text-align: center;
+    cursor: default;
+    font-weight: bold;
+}
 </style>
 </head>
+
 <body>
 
 <h3>Search Customer</h3>
@@ -63,7 +75,6 @@ body {
     <input type="text" class="dropdown-input" placeholder="Select Customer" readonly>
 
     <div class="dropdown-list">
-        <!-- Search input INSIDE dropdown -->
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Type to search...">
         </div>
@@ -101,28 +112,43 @@ const dropdownList = document.querySelector(".dropdown-list");
 const itemsDiv = document.getElementById("items");
 const searchInput = document.getElementById("searchInput");
 
-// Populate items
+// Render dropdown items
 function renderItems(filter = "") {
     itemsDiv.innerHTML = "";
-    names
-        .filter(name => name.toLowerCase().includes(filter.toLowerCase()))
-        .forEach(name => {
-            const div = document.createElement("div");
-            div.className = "dropdown-item";
-            div.textContent = name;
-            div.onclick = () => {
-                dropdownInput.value = name;
-                dropdownList.style.display = "none";
-            };
-            itemsDiv.appendChild(div);
-        });
+
+    const filteredNames = names.filter(name =>
+        name.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    // No result case
+    if (filteredNames.length === 0) {
+        const div = document.createElement("div");
+        div.className = "dropdown-item no-result";
+        div.textContent = "No user found";
+        itemsDiv.appendChild(div);
+        return;
+    }
+
+    filteredNames.forEach(name => {
+        const div = document.createElement("div");
+        div.className = "dropdown-item";
+        div.textContent = name;
+
+        div.onclick = () => {
+            dropdownInput.value = name;
+            dropdownList.style.display = "none";
+        };
+
+        itemsDiv.appendChild(div);
+    });
 }
 
 // Open dropdown
 dropdownInput.addEventListener("click", () => {
     dropdownList.style.display = "block";
-    searchInput.focus();
+    searchInput.value = "";
     renderItems();
+    searchInput.focus();
 });
 
 // Search filtering
@@ -130,7 +156,7 @@ searchInput.addEventListener("input", (e) => {
     renderItems(e.target.value);
 });
 
-// Close on outside click
+// Close dropdown when clicking outside
 document.addEventListener("click", (e) => {
     if (!e.target.closest(".dropdown")) {
         dropdownList.style.display = "none";
