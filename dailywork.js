@@ -130,7 +130,7 @@ function updateTotalTrips() {
 }
 function updateTotalTrips1() {
     // alert("hi");
-    // alert("row1");
+    // alert("trips1");
     const tripInputs = document.querySelectorAll('input[name="trips1[]"]');
     let total = 0;
     tripInputs.forEach(input => {
@@ -164,7 +164,7 @@ function generateOutput() {
 }
 function tripprice1()
 {
-    // alert("row1");
+    // alert("tripprice1");
     var c1=document.getElementById("trips1").value;
     var c3=parseInt(document.getElementById("trprate1").value);
     var c2=parseInt(c1)*c3;
@@ -173,6 +173,7 @@ function tripprice1()
 }
 
 function generateOutput1() {
+    // alert("hi");
     const driverNames = document.querySelectorAll('input[name="driverName1[]"]');
     const trips = document.querySelectorAll('input[name="trips1[]"]');
     const outputDiv = document.getElementById('output1');

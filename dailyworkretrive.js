@@ -168,10 +168,6 @@ function generateTable(data) {
             var overallrecovery = activity.Payment === "Paid" ? 0 : activity.OverallPrice;
             var balanaceamount = 0;
             var customerName = activity.Name;
-            // alert("2");
-            // alert(activity.Name);
-            // alert(!processedCustomers.has(customerName));
-            var LDrivers = 0;
             var HoursDrivers = 0;
             if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
                 let str = activity.HoursDrivers || "";
@@ -292,14 +288,17 @@ function generateTable(data) {
             var drivers = "";
             var tripamount = "";
             var jcbtripamount = "--";
+            var totaltractortrips=0;
             if (activity.Drivers === "--") {
                 drivers = HoursDrivers;
+                totaltractortrips=activity.HoursTrips;
                 tripamount = activity.HoursTripsAmount
             }
             else {
                 drivers = LDrivers;
                 tripamount = activity.TripsPrice;
                 jcbtripamount = activity.JcbTripPrice;
+                totaltractortrips=activity.Trips;
             }
             // console.log()
             var overallpricemoney=isNaN(activity.OverallPrice)|| activity.OverallPrice===undefined ?activity.Price:activity.OverallPrice;
@@ -312,7 +311,7 @@ function generateTable(data) {
                         <td>${activity.Name}</td>
                         <td>${activity.Villagename}</td>
                         <td>${activity.Disel}</td>
-                        <td>${activity.Trips}</td>
+                        <td>${totaltractortrips}</td>
                         <td>${drivers}</td>
                         <td>${tripamount}</td>
                         <td>${jcbtripamount}</td>
@@ -498,6 +497,7 @@ document.addEventListener("click", async function (e1) {
             document.getElementById("loading").style.display = "none";
             document.getElementById("contract").style.display = "none";
             document.getElementById("hours").style.display = "block";
+            document.getElementById("loading1").style.display = "block"
         }
         else {
             if (worktype == "Loading") {
@@ -536,7 +536,7 @@ function editData() {
     // preventDefault();
     const container = document.getElementById('container43');
     const rawText = document.getElementById('output').value.trim();
-    container.innerHTML = `<button class="add-button" onclick="addRow()">Add</button>`;
+    container.innerHTML = `<button class="add-button" onclick="addRow()">Add Driver</button>`;
 
     const lines = rawText.split('\n');
 
@@ -560,7 +560,7 @@ function editData1() {
     // preventDefault();
     const container = document.getElementById('container2');
     const rawText = document.getElementById('output1').value.trim();
-    container.innerHTML = `<button class="add-button" onclick="addRow()">Add</button>`;
+    container.innerHTML = `<button class="add-button" onclick="addRow1()">Add Driver</button>`;
 
     const lines = rawText.split('\n');
 
@@ -569,7 +569,7 @@ function editData1() {
 
         if (driver && trips) {
             const newRow = document.createElement('div');
-            newRow.className = 'row';
+            newRow.className = 'row1';
             newRow.innerHTML = `
         <input type="text" placeholder="Driver Name" name="driverName1[]" value="${driver}" onchange="removereadonly()" required>
         <input type="number" placeholder="Trips" name="trips1[]" value="${trips}"  required onkeyup="updateTotalTrips1()">
