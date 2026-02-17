@@ -128,6 +128,7 @@ function generateTable(data) {
             <th id="csize1">Date</th>
             <th id="csize1">Customer Name</th>
             <th id="csize1">Village</th>
+            <th id="csize1">Description</th>
             <th id="csize">Disel</th>
             <th id="csize">Trips</th>
             <th id="csize2">Drivers</th>
@@ -310,6 +311,7 @@ function generateTable(data) {
                         <td>${activity.Date}</td>
                         <td>${activity.Name}</td>
                         <td>${activity.Villagename}</td>
+                        <td>${activity.Description}</td>
                         <td>${activity.Disel}</td>
                         <td>${totaltractortrips}</td>
                         <td>${drivers}</td>
@@ -600,6 +602,7 @@ function SearchTable(data) {
             <th id="csize1">Date</th>
             <th id="csize1">Customer Name</th>
             <th id="csize1">Village</th>
+            <th id="csize1">Description</th>
             <th id="csize">Disel</th>
             <th id="csize">Trips</th>
             <th id="csize2">Drivers</th>
@@ -657,7 +660,7 @@ function SearchTable(data) {
             var overallsubcollections=0;
 
             // Header row for person
-            out += `<tr><td colspan="21" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
+            out += `<tr><td colspan="22" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
 
             entries.forEach(entry => {
                 const customerPhone = entry.id;
@@ -804,6 +807,7 @@ function SearchTable(data) {
                         <td>${activity.Date}</td>
                         <td>${activity.Name}</td>
                         <td>${activity.Villagename}</td>
+                        <td>${activity.Description}</td>
                         <td>${activity.Disel}</td>
                         <td>${activity.Trips}</td>
                         <td>${drivers}</td>
@@ -834,7 +838,7 @@ function SearchTable(data) {
 
             // Subtotal row
             out += `<tr style="background-color:#f0f0f0; font-weight:bold;">
-                <td colspan="4">Subtotal for ${personName}</td>
+                <td colspan="5">Subtotal for ${personName}</td>
                 <td>${subDisel}</td>
                 <td>${subTrips}</td>
                 <td colspan="3">Loading</td>
@@ -856,7 +860,7 @@ function SearchTable(data) {
 
         // Grand total row
         out += `<tr style="background-color:#d0ffd0; font-weight:bold;">
-            <td colspan="4" id="col">Total Work Analysis</td>
+            <td colspan="5" id="col">Total Work Analysis</td>
             <td id="am">${disel}</td>
             <td id="am">${totaltrips}</td>
             <td colspan="3">Loading</td>
@@ -921,6 +925,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
             <th id="csize1">Date</th>
             <th id="csize1">Customer Name</th>
             <th id="csize1">Village</th>
+            <th id="csize1">Description</th>
             <th id="csize1">Disel</th>
             <th id="csize">Trips</th>
             <th id="csize">Contract</th>
@@ -996,6 +1001,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
                         <td>${activity.Date}</td>
                         <td>${activity.Name}</td>
                         <td>${activity.Villagename}</td>
+                        <td>${activity.Description}</td>
                         <td>${activity.Disel}</td>
                         <td>${activity.Trips}</td>
                         <td>${activity.Contract}</td>

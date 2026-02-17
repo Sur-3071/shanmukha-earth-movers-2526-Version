@@ -630,19 +630,20 @@ function generateCustomerTable(data) {
     var recovery = 0;
     let out = `<table border="1" id="customerTable1">
     <tr>
-    <th colspan="13" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
+    <th colspan="14" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
     </tr>
         <tr>
             <th id="csize">Customer Id</th>
             <th id="csize1">Date</th>
             <th id="csize1">Customer Name</th>
-            <th id="csize1">Village</th>
+            <th id="csize1">Description</th>
             <th id="csize">Drivers</th>
             <th id="csize">Trips</th>
             <th id="csize">Contract</th>
             <th id="csize">Starting Time</th>
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
+            <th id="csize">Beta</th>
             <th id="csize">Payment Status</th>
             <th id="csize">JCB Price</th>
             <th id="csize">Overall Price</th>
@@ -659,6 +660,8 @@ function generateCustomerTable(data) {
     var rec = 0;
     var overallamount=0;
     var Driverslist="";
+    var beta=0;
+    var overallbeta=0;
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
@@ -676,6 +679,10 @@ function generateCustomerTable(data) {
                             count++;
                         }
                     }
+                    if (activity.Beta !== undefined && activity.Beta !== "undefined" && activity.Beta !== null) {
+                    beta = activity.Beta;
+                    overallbeta+=parseInt(beta);
+                }
 
                     if (count > 1) {
 
@@ -762,13 +769,14 @@ function generateCustomerTable(data) {
                         <td>${customerPhone}</td>
                         <td>${formatDate(activity.Date)}</td>
                         <td>${activity.Name}</td>
-                        <td>${activity.Villagename}</td>
+                        <td>${activity.Description}</td>
                         <td>${Driverslist}</td>
                         <td>${activity.Trips}</td>
                         <td>${activity.Contract}</td>
                         <td>${activity.Starting}</td>
                         <td>${activity.Ending}</td>
                         <td>${activity.TotalTime}</td>
+                        <td>${beta}</td>
                         <td id="${activity.PhoneNumber}" style="color: ${color}; font-size:30px; font-weight:bold;">${activity.Payment}</td>
                         <td style="font-size:20px;">${moneyconvert(parseInt(activity.Price))}</td>
                         <td style="font-size:20px;">${moneyconvert(parseInt(activity.OverallPrice))}</td>
@@ -786,6 +794,7 @@ function generateCustomerTable(data) {
             <td  id="am" style="font-size:30px;">${totaltrips}</td>
             <td id="am" style="font-size:30px;">${totalcontarct}</td>
             <td id="am" colspan="3" style="font-size:30px;">${totaltime}</td>
+            <td id="col">${moneyconvert(overallbeta)}</td>
             <td  id="col" colspan="1">Bill</td>
             <td id="col">${moneyconvert(collection)}</td>
             <td id="col">${moneyconvert(overallamount)}</td>
