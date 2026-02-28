@@ -332,7 +332,7 @@ function generateTable(data) {
     
 }
 function updateMonthCards(monthlySummary) {
-    const driverSalary = 21000;   // fixed base salary per month
+    const driverSalary = 15000;   // fixed base salary per month
     const allowedLeaves = 2;      // standard allowed leaves per month
 
     Object.keys(monthsMap).forEach(month => {
@@ -368,7 +368,7 @@ function updateMonthCards(monthlySummary) {
             salarycut.textContent = `₹${salaryCutAmount.toLocaleString("en-IN")}`;
 
             // Calculate remaining salary after deduction
-            const finalRemainingSalary = 21000 - totalSalaryTaken - salaryCutAmount;
+            const finalRemainingSalary = 15000 - totalSalaryTaken - salaryCutAmount;
             remainingSalaryEl.textContent = `₹${finalRemainingSalary.toLocaleString("en-IN")}`;
 
         }

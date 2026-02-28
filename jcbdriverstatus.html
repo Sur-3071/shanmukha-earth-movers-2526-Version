@@ -298,21 +298,85 @@
             display: block;
             font-weight: bold;
         }
-        th, td {
-            padding: 12px 55px;   /* vertical 12px, horizontal 16px */
-            text-align: left;     /* optional */
-            border: 1px solid #ccc; /* optional */
-            }    
 
-            #salaryTableContainer
-            {
-                margin-right: 250px;
+        th,
+        td {
+            padding: 12px 55px;
+            /* vertical 12px, horizontal 16px */
+            text-align: left;
+            /* optional */
+            border: 1px solid #ccc;
+            /* optional */
+        }
+
+        #salaryTableContainer {
+            margin-right: 250px;
+        }
+
+        #tablesContainer {
+            margin-top: 50px;
+        }
+
+        .salary-banner {
+            margin-top: 50px;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 12px;
+            color: white;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .salary-banner:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Shine effect */
+        .salary-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: skewX(-20deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
             }
 
-            #tablesContainer
-            {
-                margin-top: 50px;
+            100% {
+                left: 150%;
             }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .salary-banner span {
+            margin: 0 10px;
+            display: inline-block;
+        }
 
         @media screen and (max-width: 900px) {
             .forms-section {
@@ -327,6 +391,23 @@
 
     <div id="com">
         <img src="company.png" style="padding-left: 20px;">
+    </div>
+
+    <!-- <div style="background-color: #f2f2f2; padding: 5px; 
+            font-weight: bold; font-size: 18px; 
+            text-align: center; border-radius: 8px;margin-top: 50px;">
+        🚗 డ్రైవర్ పేరు: కొండపల్లి దుర్గ ప్రసాద్ &nbsp;&nbsp; | &nbsp;&nbsp;
+        💼 ముందస్తు మొత్తం: ₹30,000 &nbsp;&nbsp; | &nbsp;&nbsp;
+        💰 నెలవారీ జీతం: ₹15,000 &nbsp;&nbsp; | &nbsp;&nbsp;
+        🧾 రోజువారీ భత్యం: ₹200 &nbsp;&nbsp; | &nbsp;&nbsp;
+        📅 నెలవారీ సెలవులు: 2 రోజులు
+    </div> -->
+    <div class="salary-banner">
+        🚗 డ్రైవర్ పేరు: కొండపల్లి దుర్గ ప్రసాద్ |
+        💼 ముందస్తు మొత్తం: ₹30,000 |
+        💰 నెలవారీ జీతం: ₹15,000 |
+        🧾 రోజువారీ భత్యం: ₹200 |
+        📅 నెలవారీ సెలవులు: 2 రోజులు
     </div>
 
     <img src="done1.png" id="done" style="display: none; margin: 0 auto;" height="100px" width="100px">
@@ -345,7 +426,7 @@
             </form>
         </div>
 
-         <div class="form-container">
+        <div class="form-container">
             <h2>Driver Leave Entry</h2>
             <form id="userForm1">
                 <input type="date" id='d1' placeholder="Enter Date" onchange="GetSystemId('wid1')">
@@ -390,14 +471,14 @@
         option.text = month;
         option.value = month;
         dropdown.add(option);
-        
+
     });
     months.forEach(month => {
         const option = document.createElement("option");
         option.text = month;
         option.value = month;
         dropdown1.add(option);
-        
+
     });
 
     const grid = document.getElementById("monthGrid");
@@ -414,7 +495,7 @@
         <p>⏳ Remaining Leaves: <span class="remaining-leaves">0</span> Days</p>
         <p>🗓️ Extra Leaves: <span class="extra-leaves">0</span> Days</p>
         <p>🔻 Salary Cuttings: <span class="cut-salary">₹0</span></p>
-        <p>💵 Remaining Salary: <span class="remaining-salary">₹21000</span></p>
+        <p>💵 Remaining Salary: <span class="remaining-salary">₹15000</span></p>
 
       </div>
     </div>
