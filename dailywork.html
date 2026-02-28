@@ -12,6 +12,8 @@
     <!-- Include confetti library -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
 
 
     <script type="module">
@@ -1261,8 +1263,6 @@
             </div>
         </div>
         <div id="btn43">
-            <!-- <input type="button" class="heading" id="dnw1" style="display: none;" onclick="captureDiv1()"
-                value="Screen Shot"></input> -->
             <input type="button" class="heading" id="printBtn1" onclick="printLedgerBill()" value="Print"
                 style="display: none">
             <input type="button" class="heading" id="dnw2" style="display: none;" onclick="updateTable()"
@@ -1294,17 +1294,61 @@
     <script src="dailywork.js"></script>
     <script src="proxyurl.js"></script>
     <script>
-        function printLedgerBill() {
-            var printContents = document.getElementById("captureDiv1").innerHTML;
-            var originalContents = document.body.innerHTML;
 
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
+        function getFormattedDate() {
+            const now = new Date();
+
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+
+            return `${day}-${month}-${year}`;
+        }
+
+        function printLedgerBill() {
+            const element = document.body;
+            var customername = document.getElementById("name4").value;
+            customername += "_" + getFormattedDate();
+            const opt = {
+                margin: 2.5,
+                filename: customername + '.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: {
+                    scale: 2.0,        // increase clarity
+                    useCORS: true,
+                    backgroundColor: null
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a3',    // A3 size
+                    orientation: 'landscape'  // Landscape
+                }
+            };
+
+            html2pdf().set(opt).from(element).save();
         }
 
         function printLedger() {
-            window.print();
+            const element = document.body;
+            var customername = document.getElementById("name3").value;
+            customername += "_" + getFormattedDate();
+            const opt = {
+                margin: 10,
+                filename: customername+'.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: {
+                    scale: 3,        // increase clarity
+                    useCORS: true,
+                    scrollY: 0
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a3',    // A3 size
+                    orientation: 'landscape'  // Landscape
+                }
+            };
+
+            html2pdf().set(opt).from(element).save();
         }
         async function openPopup1() {
             document.getElementById("myModal1").style.display = "flex";
@@ -1339,83 +1383,51 @@
         }
         const select = document.getElementById("hrsrate");
         for (let rate = 800; rate <= 1500; rate += 50) {
-            let option = document.createElement("option");
-            option.value = rate;
-            option.textContent = rate;
-            select.appendChild(option);
-        }
-
-        function showCustomerData() {
-            // Show customer data div
+            let option = document.createElement("option"); option.value = rate;
+            option.textContent = rate; select.appendChild(option);
+        } function showCustomerData() { // Show customer data div
             document.getElementById("captureDiv").style.display = "block";
             document.getElementById("captureDiv1").style.display = "none";
-            document.getElementById("printBtn1").style.display = "none";
-            document.getElementById("dnw2").style.display = "none";
-            document.getElementById("submit6").style.display = "none";
-            document.getElementById("prevyear").style.display = "none";
-
-
-            // Clear the contents of captureDiv1
+            document.getElementById("printBtn1").style.display = "none"; document.getElementById("dnw2").style.display = "none"
+                ; document.getElementById("submit6").style.display = "none";
+            document.getElementById("prevyear").style.display = "none"; // Clear the contents of captureDiv1
             document.getElementById("customeralldata2").innerHTML = "";
-            document.getElementById("customerallamt2").innerHTML = "";
-            document.getElementById("ledger2").innerHTML = "";
+            document.getElementById("customerallamt2").innerHTML = ""; document.getElementById("ledger2").innerHTML = "";
         }
-
-        function showCustomerBill() {
-            // Show customer bill div
+        function showCustomerBill() { // Show customer bill div
             document.getElementById("captureDiv1").style.display = "block";
-            document.getElementById("captureDiv").style.display = "none";
-            // document.getElementById("dnw3").style.display = "none";
-            document.getElementById("printBtn").style.display = "none";
-            document.getElementById("cusname").style.display = "none";
-            // Clear the contents of captureDiv
-            document.getElementById("customeralldata").innerHTML = "";
-            document.getElementById("customerallamt").innerHTML = "";
-            document.getElementById("ledger").innerHTML = "";
-            document.getElementById("prevyear").style.display = "none";
-
+            document.getElementById("captureDiv").style.display = "none"; //
+            document.getElementById("dnw3").style.display = "none"; document.getElementById("printBtn").style.display = "none"
+                ; document.getElementById("cusname").style.display = "none"; // Clear the contents of captureDiv
+            document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
+                ; document.getElementById("ledger").innerHTML = ""; document.getElementById("prevyear").style.display = "none";
         }
-
         function remainingbuttons1() {
             document.getElementById("captureDiv1").style.display = "none";
-            document.getElementById("captureDiv").style.display = "none";
-            // document.getElementById("dnw3").style.display = "none";
-            // document.getElementById("dnw3").style.display = "none";
+            document.getElementById("captureDiv").style.display = "none"; //
+            document.getElementById("dnw3").style.display = "none"; // document.getElementById("dnw3").style.display="none" ;
             document.getElementById("cusname").style.display = "none";
-            document.getElementById("customeralldata").innerHTML = "";
-            document.getElementById("customerallamt").innerHTML = "";
-            document.getElementById("ledger").innerHTML = "";
-            document.getElementById("printBtn1").style.display = "none";
-            document.getElementById("dnw2").style.display = "none";
-            document.getElementById("submit6").style.display = "none";
+            document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
+                ; document.getElementById("ledger").innerHTML = ""; document.getElementById("printBtn1").style.display = "none";
+            document.getElementById("dnw2").style.display = "none"; document.getElementById("submit6").style.display = "none";
             document.getElementById("customeralldata2").innerHTML = "";
-            document.getElementById("customerallamt2").innerHTML = "";
-            document.getElementById("ledger2").innerHTML = "";
+            document.getElementById("customerallamt2").innerHTML = ""; document.getElementById("ledger2").innerHTML = "";
             document.getElementById("prevyear").style.display = "none";
-
-
-        }
-        function remainingbuttons() {
+        } function remainingbuttons() {
             document.getElementById("captureDiv1").style.display = "none";
-            document.getElementById("captureDiv").style.display = "none";
-            // document.getElementById("dnw3").style.display = "none";
-            document.getElementById("cusname").style.display = "none";
-            document.getElementById("customeralldata").innerHTML = "";
-            document.getElementById("customerallamt").innerHTML = "";
-            document.getElementById("ledger").innerHTML = "";
-            document.getElementById("printBtn1").style.display = "none";
-            document.getElementById("dnw2").style.display = "none";
-            document.getElementById("submit6").style.display = "none";
+            document.getElementById("captureDiv").style.display = "none"; //
+            document.getElementById("dnw3").style.display = "none"; document.getElementById("cusname").style.display = "none";
+            document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
+                ; document.getElementById("ledger").innerHTML = ""; document.getElementById("printBtn1").style.display = "none";
+            document.getElementById("dnw2").style.display = "none"; document.getElementById("submit6").style.display = "none";
             document.getElementById("prevyear").style.display = "none";
             document.getElementById("customeralldata2").innerHTML = "";
-            document.getElementById("customerallamt2").innerHTML = "";
-            document.getElementById("ledger2").innerHTML = "";
-
+            document.getElementById("customerallamt2").innerHTML = ""; document.getElementById("ledger2").innerHTML = "";
         }
         function captureDiv() {
-            const element = document.getElementById("captureDiv");
-
-            html2canvas(element, { scale: 2 }).then((canvas) => {
+            const element = document.getElementById("captureDiv"); html2canvas(element, {
+                scale: 2
+            }).then((canvas) => {
                 const link = document.createElement("a");
                 link.download = "screenshot.png";
                 link.href = canvas.toDataURL("image/png");
@@ -1467,20 +1479,21 @@
 
         function formeldger2() {
             let led = `<table border="1px">
-                <tr>
-                    <th id="bal1">Total Work Amount</th>
-                    <th id="bal1">Previous Balance</th>
-                    <th id="bal1">Total Balanace</th>
+            <tr>
+                <th id="bal1">Total Work Amount</th>
+                <th id="bal1">Previous Balance</th>
+                <th id="bal1">Total Balanace</th>
 
-                </tr>`;
+            </tr>`;
             var bal1 = parseInt(localStorage.getItem("editbill"));
             var extramoney = parseInt(localStorage.getItem("extramoney"));
             led += `<tr>
-            <td class="lsize" style="font-size:30px;">${moneyconvert(bal1)}</td>
-            <td style="font-size:30px;">${moneyconvert(extramoney)}</td>
-            <td style="font-size:30px;">${moneyconvert(bal1 - extramoney)}</td>
+                <td class="lsize" style="font-size:30px;">${moneyconvert(bal1)}</td>
+                <td style="font-size:30px;">${moneyconvert(extramoney)}</td>
+                <td style="font-size:30px;">${moneyconvert(bal1 - extramoney)}</td>
             </tr>`;
-            led += `</table>`;
+            led += `
+        </table>`;
             document.getElementById("ledger2").innerHTML = led;
 
         }
@@ -1528,7 +1541,7 @@
                     const select = cell.querySelector("select");
                     if (select) {
                         const selectedValue = select.value;
-                        cell.textContent = selectedValue;  // Replace <select> with text
+                        cell.textContent = selectedValue; // Replace <select> with text
                     }
                 }
             }
