@@ -346,7 +346,8 @@
                 itemsDiv.innerHTML = "";
 
                 const filteredNames = names.filter(name =>
-                    name.toLowerCase().includes(filter.toLowerCase())
+                    name.trim().toLowerCase()
+                        .includes(filter.trim().toLowerCase())
                 );
 
                 // No result case
@@ -1239,8 +1240,9 @@
         <div>
             <div id="ledger" style="width: 50%; margin-left: 370px;">
             </div>
-            <input type="button" class="heading" id="dnw3" onclick="captureDiv()" value="Screen Shot"
-                style="display: none; width: 150px; margin-left: 650px;"></input>
+
+            <input type="button" class="heading" id="printBtn" onclick="printLedger()" value="Print"
+                style="width: 150px; margin-left: 650px;display: none">
 
         </div>
     </div>
@@ -1259,8 +1261,10 @@
             </div>
         </div>
         <div id="btn43">
-            <input type="button" class="heading" id="dnw1" style="display: none;" onclick="captureDiv1()"
-                value="Screen Shot"></input>
+            <!-- <input type="button" class="heading" id="dnw1" style="display: none;" onclick="captureDiv1()"
+                value="Screen Shot"></input> -->
+            <input type="button" class="heading" id="printBtn1" onclick="printLedgerBill()" value="Print"
+                style="display: none">
             <input type="button" class="heading" id="dnw2" style="display: none;" onclick="updateTable()"
                 value="Update Table"></input>
             <input type="button" class="heading" value="Modify Table" style="display: none;" id="submit6"></input>
@@ -1290,7 +1294,18 @@
     <script src="dailywork.js"></script>
     <script src="proxyurl.js"></script>
     <script>
+        function printLedgerBill() {
+            var printContents = document.getElementById("captureDiv1").innerHTML;
+            var originalContents = document.body.innerHTML;
 
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+
+        function printLedger() {
+            window.print();
+        }
         async function openPopup1() {
             document.getElementById("myModal1").style.display = "flex";
         }
@@ -1334,7 +1349,7 @@
             // Show customer data div
             document.getElementById("captureDiv").style.display = "block";
             document.getElementById("captureDiv1").style.display = "none";
-            document.getElementById("dnw1").style.display = "none";
+            document.getElementById("printBtn1").style.display = "none";
             document.getElementById("dnw2").style.display = "none";
             document.getElementById("submit6").style.display = "none";
             document.getElementById("prevyear").style.display = "none";
@@ -1350,7 +1365,8 @@
             // Show customer bill div
             document.getElementById("captureDiv1").style.display = "block";
             document.getElementById("captureDiv").style.display = "none";
-            document.getElementById("dnw3").style.display = "none";
+            // document.getElementById("dnw3").style.display = "none";
+            document.getElementById("printBtn").style.display = "none";
             document.getElementById("cusname").style.display = "none";
             // Clear the contents of captureDiv
             document.getElementById("customeralldata").innerHTML = "";
@@ -1363,13 +1379,13 @@
         function remainingbuttons1() {
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("captureDiv").style.display = "none";
-            document.getElementById("dnw3").style.display = "none";
-            document.getElementById("dnw3").style.display = "none";
+            // document.getElementById("dnw3").style.display = "none";
+            // document.getElementById("dnw3").style.display = "none";
             document.getElementById("cusname").style.display = "none";
             document.getElementById("customeralldata").innerHTML = "";
             document.getElementById("customerallamt").innerHTML = "";
             document.getElementById("ledger").innerHTML = "";
-            document.getElementById("dnw1").style.display = "none";
+            document.getElementById("printBtn1").style.display = "none";
             document.getElementById("dnw2").style.display = "none";
             document.getElementById("submit6").style.display = "none";
             document.getElementById("customeralldata2").innerHTML = "";
@@ -1382,12 +1398,12 @@
         function remainingbuttons() {
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("captureDiv").style.display = "none";
-            document.getElementById("dnw3").style.display = "none";
+            // document.getElementById("dnw3").style.display = "none";
             document.getElementById("cusname").style.display = "none";
             document.getElementById("customeralldata").innerHTML = "";
             document.getElementById("customerallamt").innerHTML = "";
             document.getElementById("ledger").innerHTML = "";
-            document.getElementById("dnw1").style.display = "none";
+            document.getElementById("printBtn1").style.display = "none";
             document.getElementById("dnw2").style.display = "none";
             document.getElementById("submit6").style.display = "none";
             document.getElementById("prevyear").style.display = "none";
@@ -1423,7 +1439,7 @@
             const userForm5 = document.querySelector('#userForm5');
             const download = document.querySelector('#dnw1');
             const update = document.querySelector('#dnw2');
-            const down1 = document.querySelector('#dnw3');
+            // const down1 = document.querySelector('#dnw3');
             const modify = document.querySelector('#submit6');
 
             // Use visibility instead of display

@@ -126,6 +126,17 @@ body {
   background-size: 18px;
 }
 
+@media print {
+    @page {
+        size: A3 landscape;
+        margin: 10mm;
+    }
+
+    body {
+        width: 100%;
+    }
+}
+
 .select:hover{
   border-color: var(--border-hover);
 }
