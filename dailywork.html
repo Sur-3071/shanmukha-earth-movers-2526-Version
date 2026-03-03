@@ -315,9 +315,35 @@
             document.getElementById("exptable2").innerHTML = sureshTable;
             document.getElementById("exptable1").innerHTML = dadyTable;
             document.getElementById("exptable3").innerHTML = alldadyTable;
-            document.getElementById("dadyexp").innerHTML = moneyconvert(dadyTotals.Total);
-            document.getElementById("sureshexp").innerHTML = moneyconvert(sureshTotals.Total);
-            document.getElementById("allexp").innerHTML = moneyconvert(sureshTotals.Total + dadyTotals.Total);
+            // document.getElementById("dadyexp").innerHTML =
+            //     moneyconvert(dadyTotals.Total) + "<br>" +
+            //     moneyconvert(dadyTotals.Jcb);
+            document.getElementById("dadyexp").innerHTML =
+                `<div style="font-size:12px;font-weight:bold; margin-bottom:3px;">
+        <strong>Total Expenses:</strong> ${moneyconvert(dadyTotals.Total)}
+     </div>
+     <div style="font-size:12px;font-weight:bold;">
+        <strong>JCB Expenses:</strong> ${moneyconvert(dadyTotals.Jcb)}
+     </div>`;
+            // document.getElementById("sureshexp").innerHTML =
+            //     moneyconvert(sureshTotals.Total) + "<br>" +
+            //     moneyconvert(sureshTotals.Jcb);
+
+            document.getElementById("sureshexp").innerHTML =
+                `<div style="font-size:12px;font-weight:bold; margin-bottom:3px;">
+        <strong>Total Expenses:</strong> ${moneyconvert(sureshTotals.Total)}
+     </div>
+     <div style="font-size:12px;font-weight:bold;">
+        <strong>JCB Expenses:</strong> ${moneyconvert(sureshTotals.Jcb)}
+     </div>`;
+     document.getElementById("allexp").innerHTML =
+                `<div style="font-size:12px;font-weight:bold; margin-bottom:3px;">
+        <strong>Total Expenses:</strong> ${moneyconvert(sureshTotals.Total + dadyTotals.Total)}
+     </div>
+     <div style="font-size:12px;font-weight:bold;">
+        <strong>JCB Expenses:</strong> ${moneyconvert(sureshTotals.Jcb + dadyTotals.Jcb)}
+     </div>`;
+            // document.getElementById("allexp").innerHTML = moneyconvert(sureshTotals.Total + dadyTotals.Total);
 
             // Apply styles
             document.getElementById("dadyexp").style.color = "skyblue";
@@ -1409,7 +1435,7 @@
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("captureDiv").style.display = "none"; //
             // document.getElementById("dnw3").style.display = "none";
-             // document.getElementById("dnw3").style.display="none" ;
+            // document.getElementById("dnw3").style.display="none" ;
             document.getElementById("cusname").style.display = "none";
             document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
                 ; document.getElementById("ledger").innerHTML = ""; document.getElementById("printBtn1").style.display = "none";
@@ -1421,7 +1447,7 @@
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("captureDiv").style.display = "none";
             // document.getElementById("dnw3").style.display = "none";
-             document.getElementById("cusname").style.display = "none";
+            document.getElementById("cusname").style.display = "none";
             document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
                 ; document.getElementById("ledger").innerHTML = ""; document.getElementById("printBtn1").style.display = "none";
             document.getElementById("dnw2").style.display = "none"; document.getElementById("submit6").style.display = "none";
