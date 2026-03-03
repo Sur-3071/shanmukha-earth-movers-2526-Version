@@ -1334,7 +1334,7 @@
             customername += "_" + getFormattedDate();
             const opt = {
                 margin: 10,
-                filename: customername+'.pdf',
+                filename: customername + '.pdf',
                 image: { type: 'jpeg', quality: 1 },
                 html2canvas: {
                     scale: 3,        // increase clarity
@@ -1385,11 +1385,13 @@
         for (let rate = 800; rate <= 1500; rate += 50) {
             let option = document.createElement("option"); option.value = rate;
             option.textContent = rate; select.appendChild(option);
-        } function showCustomerData() { // Show customer data div
+        }
+        function showCustomerData() { // Show customer data div
             document.getElementById("captureDiv").style.display = "block";
             document.getElementById("captureDiv1").style.display = "none";
-            document.getElementById("printBtn1").style.display = "none"; document.getElementById("dnw2").style.display = "none"
-                ; document.getElementById("submit6").style.display = "none";
+            document.getElementById("printBtn1").style.display = "none";
+            document.getElementById("dnw2").style.display = "none";
+            document.getElementById("submit6").style.display = "none";
             document.getElementById("prevyear").style.display = "none"; // Clear the contents of captureDiv1
             document.getElementById("customeralldata2").innerHTML = "";
             document.getElementById("customerallamt2").innerHTML = ""; document.getElementById("ledger2").innerHTML = "";
@@ -1397,7 +1399,8 @@
         function showCustomerBill() { // Show customer bill div
             document.getElementById("captureDiv1").style.display = "block";
             document.getElementById("captureDiv").style.display = "none"; //
-            document.getElementById("dnw3").style.display = "none"; document.getElementById("printBtn").style.display = "none"
+            // document.getElementById("dnw3").style.display = "none";
+            document.getElementById("printBtn").style.display = "none"
                 ; document.getElementById("cusname").style.display = "none"; // Clear the contents of captureDiv
             document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
                 ; document.getElementById("ledger").innerHTML = ""; document.getElementById("prevyear").style.display = "none";
@@ -1405,7 +1408,8 @@
         function remainingbuttons1() {
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("captureDiv").style.display = "none"; //
-            document.getElementById("dnw3").style.display = "none"; // document.getElementById("dnw3").style.display="none" ;
+            // document.getElementById("dnw3").style.display = "none";
+             // document.getElementById("dnw3").style.display="none" ;
             document.getElementById("cusname").style.display = "none";
             document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
                 ; document.getElementById("ledger").innerHTML = ""; document.getElementById("printBtn1").style.display = "none";
@@ -1415,8 +1419,9 @@
             document.getElementById("prevyear").style.display = "none";
         } function remainingbuttons() {
             document.getElementById("captureDiv1").style.display = "none";
-            document.getElementById("captureDiv").style.display = "none"; //
-            document.getElementById("dnw3").style.display = "none"; document.getElementById("cusname").style.display = "none";
+            document.getElementById("captureDiv").style.display = "none";
+            // document.getElementById("dnw3").style.display = "none";
+             document.getElementById("cusname").style.display = "none";
             document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
                 ; document.getElementById("ledger").innerHTML = ""; document.getElementById("printBtn1").style.display = "none";
             document.getElementById("dnw2").style.display = "none"; document.getElementById("submit6").style.display = "none";
