@@ -66,7 +66,7 @@
                 localStorage.setItem("extraAmountsCache", JSON.stringify(cache));
                 localStorage.setItem("extraAmountTotal", total);
 
-                console.log("Extra amounts loaded & cached");
+                // console.log("Extra amounts loaded & cached");
 
             } catch (error) {
                 console.error("Error loading ExtraAmounts:", error);
@@ -75,7 +75,72 @@
         }
 
 
+        function checkQuarterResult() {
 
+            const checkQuarterData = setInterval(() => {
+
+                const storedData = localStorage.getItem("quarterResult");
+
+                if (storedData) {
+
+                    clearInterval(checkQuarterData); // stop checking
+
+                    const data = JSON.parse(storedData);
+                    showQuarterProfit(data); // run profit UI function
+
+                }
+
+            }, 2000);
+        }
+
+
+        function showQuarterProfit(data) {
+
+            const result = {};
+
+            Object.keys(data).forEach(q => {
+                const quarter = data[q];
+
+                if (quarter.data.workedDays === 0) {
+                    result[q] = q + " not started";
+                } else {
+                    result[q] = String(quarter.data.profit);
+                }
+            });
+
+            function setProfit(id, value) {
+
+                const el = document.getElementById(id);
+                if (!el) return;
+
+                if (isNaN(value)) {
+                    el.innerHTML = "Querter Not Started";
+                    el.style.color = "black";
+                } else {
+
+                    const num = Number(value);
+
+                    if (num > 0) {
+                        el.innerHTML = "Profit : " + num;
+                        el.style.color = "green";
+                    } else {
+                        el.innerHTML = "Loss : " + Math.abs(num);
+                        el.style.color = "red";
+                    }
+
+                }
+            }
+
+            setProfit("profitquat1", result.Q1);
+            setProfit("profitquat2", result.Q2);
+            setProfit("profitquat3", result.Q3);
+        }
+
+        checkQuarterResult();
+
+        window.onload = function () {
+            checkQuarterResult();
+        };
 
 
 
@@ -336,7 +401,7 @@
      <div style="font-size:12px;font-weight:bold;">
         <strong>JCB Expenses:</strong> ${moneyconvert(sureshTotals.Jcb)}
      </div>`;
-     document.getElementById("allexp").innerHTML =
+            document.getElementById("allexp").innerHTML =
                 `<div style="font-size:12px;font-weight:bold; margin-bottom:3px;">
         <strong>Total Expenses:</strong> ${moneyconvert(sureshTotals.Total + dadyTotals.Total)}
      </div>
@@ -370,6 +435,7 @@
             const searchInput = document.getElementById(searchId);
             const itemsDiv = document.getElementById(itemsId);
 
+
             function renderItems(filter = "") {
                 itemsDiv.innerHTML = "";
 
@@ -395,6 +461,7 @@
                     div.onclick = () => {
                         input.value = name;
                         dropdown.style.display = "none";
+                        hideCustomerSections();
 
                         input.dispatchEvent(new Event("change"));
                     };
@@ -402,6 +469,7 @@
                     itemsDiv.appendChild(div);
                 });
             }
+            input.addEventListener("change", hideCustomerSections);
 
             input.addEventListener("click", () => {
                 dropdown.style.display = "block";
@@ -449,6 +517,33 @@
 
 
 
+        function hideCustomerSections() {
+            var customerdata = document.getElementById("customeralldata");
+            var customerledger = document.getElementById("ledger");
+            var customerbilldata = document.getElementById("customeralldata2");
+            var customerbillledger = document.getElementById("ledger2");
+            var customerallamount = document.getElementById("customerallamt");
+            var customername = document.getElementById("cusname");
+            var buttons = document.getElementById("btn43");
+            var printbtn = document.getElementById("printBtn");
+
+            [
+                customerdata,
+                customerledger,
+                customerbilldata,
+                customerbillledger,
+                customerallamount,
+                customername,
+                buttons,
+                printbtn
+            ].forEach(el => {
+                if (el && window.getComputedStyle(el).display === "block" || window.getComputedStyle(el).display === "flex") {
+                    el.style.display = "none";
+                }
+            });
+        }
+
+
 
         function generateName(data) {
             for (const customerPhone in data) {
@@ -489,15 +584,52 @@
             var recovery = 0;
             var overallpricedue = 0;
             const processedCustomers = new Set();
+            const unpaidCustomers = {};
+            const previousBalances = JSON.parse(localStorage.getItem("extraAmountsCache")) || {};
             for (const customerPhone in data) {
                 if (data.hasOwnProperty(customerPhone)) {
                     const activity = data[customerPhone];
+
+
+                    if (activity.Payment === "UnPaid") {
+                        // alert("1");
+                        const name = activity.Name;
+
+                        const jcb = Number(activity.Price) || 0;
+                        const overall = Number(activity.OverallPrice) || 0;
+                        // alert("2");
+                        if (Object.keys(unpaidCustomers).length && unpaidCustomers[name]) {
+
+                            // alert("3-1");
+                            unpaidCustomers[name].jcbPrice += jcb;
+                            unpaidCustomers[name].overallPrice += overall;
+
+                        } else {
+
+                            // alert("3-2");
+                            const originalDate = new Date(activity.Date);
+
+                            // reverse date format
+                            const reversedDate = originalDate.toLocaleDateString("en-GB");
+                           
+                            const today = new Date();
+                            const diffTime = today - originalDate;
+                            const daysCompleted = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                            unpaidCustomers[name] = {
+                                jcbPrice: jcb,
+                                Date: reversedDate,
+                                daysPassed: daysCompleted,
+                                overallPrice: overall
+                            };
+
+                        }
+                    }
+
+
                     var customerName = activity.Name;
-                    // if (activity.Payment === "UnPaid") {
-                    //     recovery += parseInt(activity.Price);
-                    //     overallpricedue += parseInt(activity.OverallPrice);
-                    //     console.log(activity.Price + " " + recovery + " " + overallpricedue);
-                    // }
+
+
                     var amount = activity.Payment === "Paid" ? 0 : parseInt(activity.Price);
                     var overalldueamount = activity.Payment === "Paid" ? 0 : parseInt(activity.OverallPrice);
                     if (!processedCustomers.has(customerName) && activity.Payment === "UnPaid") {
@@ -508,7 +640,7 @@
                         var balanaceamount = extraAmountsCache[customerName] || 0;
                         // alert(balanaceamount + " values are");
                         // alert("hi-3");
-                        console.log(overalldueamount + " " + customerName + " " + balanaceamount);
+                        // console.log(overalldueamount + " " + customerName + " " + balanaceamount);
                         processedCustomers.add(customerName);
                         if (amount < parseInt(balanaceamount)) {
                             amount = 0;
@@ -550,6 +682,105 @@
                     // }
                 }
             }
+            for (let name in unpaidCustomers) {
+
+                // check if previous balance exists
+                if (previousBalances[name]) {
+                    unpaidCustomers[name].previousBalance = previousBalances[name];
+                } else {
+                    unpaidCustomers[name].previousBalance = 0;
+                }
+
+            }
+            console.log(unpaidCustomers);
+
+            setTimeout(function () {
+
+                const container = document.getElementById("recoverytablemain");
+
+                let totalPrev = 0;
+                let totalJcb = 0;
+                let totalRemJcb = 0;
+                let totalOverall = 0;
+                let totalRemOverall = 0;
+
+                let tableHTML = `
+    <table border="1" id="unpaidTable" style="border-collapse:collapse; width:100%; text-align:center;">
+        <thead>
+           <tr>
+            <th>Customer Name</th>
+            <th>Date</th>
+            <th>Days Completed</th>
+            <th>Previous Balance</th>
+            <th>Total JCB Price</th>
+            <th>Remaining JCB Price</th>
+            <th>Total Overall Price</th>
+            <th>Remaining Overall Price</th>
+</tr>
+        </thead>
+        <tbody>
+    `;
+
+                for (let name in unpaidCustomers) {
+
+                    const data = unpaidCustomers[name];
+
+                    const previous = (data.previousBalance > 0 ? data.previousBalance : 0) || 0;
+                    const jcb = (data.jcbPrice > 0 ? data.jcbPrice : 0) || 0;
+                    const overall = (data.overallPrice > 0 ? data.overallPrice : 0) || 0;
+
+                    const remainingJcb = (jcb - previous) > 0 ? (jcb - previous) : 0;
+                    const remainingOverall = (overall - previous) > 0 ? (overall - previous) : 0;
+
+                    // accumulate totals
+                    totalPrev += previous;
+                    totalJcb += jcb;
+                    totalRemJcb += remainingJcb;
+                    totalOverall += overall;
+                    totalRemOverall += remainingOverall;
+                    let months = Math.floor(data.daysPassed / 30);
+                    let days = data.daysPassed % 30;
+
+                    tableHTML += `
+            <tr>
+                <td>${name}</td>
+                <td>${data.Date}</td>
+                <td>${months}Months ${days}Days</td>
+                <td>${previous}</td>
+                <td>${jcb}</td>
+                <td>${remainingJcb}</td>
+                <td>${overall}</td>
+                <td>${remainingOverall}</td>
+            </tr>
+        `;
+                }
+
+                // TOTAL ROW
+                tableHTML += `
+        <tr style="font-weight:bold;background:#f2f2f2;">
+            <td colspan=3>Total</td>
+            <td>${totalPrev}</td>
+            <td>${totalJcb}</td>
+            <td>${totalRemJcb}</td>
+            <td>${totalOverall}</td>
+            <td>${totalRemOverall}</td>
+        </tr>
+    `;
+
+                tableHTML += `
+        </tbody>
+    </table>
+    `;
+
+                container.innerHTML = `
+<h2 class="table-heading">Unpaid Customers</h2>
+${tableHTML}
+`;
+
+                console.log(unpaidCustomer);
+
+            }, 8000);
+
             for (const dtss of l) {
                 var dte1 = parseInt(dtss.slice(8, 10));  // Extract day
                 var mon1 = parseInt(dtss.slice(5, 7));   // Extract month
@@ -859,7 +1090,7 @@
                 <h2 style="color: rgb(37, 188, 230);">Total Profit</h2>
                 <h1 id="proft"></h1>
             </div>
-            <div class="box">
+            <div class="box" onclick="openPopup5()">
                 <h2 style="color: rgb(75, 166, 236);">Recovery Amount</h2>
                 <h1 id="perdayhrs"></h1>
             </div>
@@ -878,16 +1109,19 @@
             <div class="box" onclick="openQuarter(1)">
                 <h2 style="color: rgb(75, 166, 236);"> Quarter 1</h2>
                 <h2 style="color: rgb(75, 166, 236);">(August – November)</h2>
+                <h1 id="profitquat1"></h1>
                 <h1 id="quat1"></h1>
             </div>
             <div class="box" onclick="openQuarter(2)">
                 <h2 style="color: rgb(75, 166, 236);">Quarter 2 </h2>
                 <h2 style="color: rgb(75, 166, 236);">(December – March)</h2>
+                <h1 id="profitquat2"></h1>
                 <h1 id="quat2"></h1>
             </div>
             <div class="box" onclick="openQuarter(3)">
                 <h2 style="color: rgb(75, 166, 236);">Quarter 3 </h2>
                 <h2 style="color: rgb(75, 166, 236);">(April – July)</h2>
+                <h1 id="profitquat3"></h1>
                 <h1 id="quat3"></h1>
             </div>
             <div class="box" id="Dady" onclick="openPopup1()">
@@ -932,13 +1166,25 @@
                     <div id="Qutertable"></div>
                 </div>
             </div>
+            <div id="myModal5" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closePopup5()">&times;</span>
+                    <div id="recoverytablemain">
+                        <div class="loading-box" id="loadingMessage">
+                            <div class="loader"></div>
+                            <p>Data is loading, please wait...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <script>
                 // List all modal IDs
                 const modals = [
                     document.getElementById("myModal1"),
                     document.getElementById("myModal2"),
                     document.getElementById("myModal3"),
-                    document.getElementById("myModal4")
+                    document.getElementById("myModal4"),
+                    document.getElementById("myModal5")
 
                 ];
 
@@ -1301,8 +1547,8 @@
     <img src="done1.png" id="done" style="display: none;" height="100px" width="100px">
     <div id="prevyear"
         style="height:200vh; display:flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; display: none;">
-        <h1 style="color: green; font-size: 3em; text-align: center; margin-top: 150px;">
-            Previous Year Works
+        <h1 class="financial-title">
+            2024 - 2025 Financial Year Work Status
         </h1>
 
         <img src="2024-work done.png" alt="Work Done"
@@ -1388,6 +1634,9 @@
         async function openPopup4() {
             document.getElementById("myModal4").style.display = "flex";
         }
+        async function openPopup5() {
+            document.getElementById("myModal5").style.display = "flex";
+        }
 
         function closePopup1() {
             document.getElementById("myModal1").style.display = "none";
@@ -1400,6 +1649,9 @@
         }
         function closePopup4() {
             document.getElementById("myModal4").style.display = "none";
+        }
+        function closePopup5() {
+            document.getElementById("myModal5").style.display = "none";
         }
         // Close popup when clicking outside
         window.onclick = function (event) {
@@ -1420,7 +1672,8 @@
             document.getElementById("submit6").style.display = "none";
             document.getElementById("prevyear").style.display = "none"; // Clear the contents of captureDiv1
             document.getElementById("customeralldata2").innerHTML = "";
-            document.getElementById("customerallamt2").innerHTML = ""; document.getElementById("ledger2").innerHTML = "";
+            document.getElementById("customerallamt2").innerHTML = "";
+            document.getElementById("ledger2").innerHTML = "";
         }
         function showCustomerBill() { // Show customer bill div
             document.getElementById("captureDiv1").style.display = "block";

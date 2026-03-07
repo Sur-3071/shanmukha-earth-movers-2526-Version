@@ -246,7 +246,7 @@ function generateTable(data) {
             }
             recovery += parseInt(amount);
             overallrecoveryamount += parseInt(overallrecovery);
-           
+
 
             if (activity.Trips !== "--") {
                 totaltrips += parseInt(activity.Trips);
@@ -289,26 +289,33 @@ function generateTable(data) {
             var drivers = "";
             var tripamount = "";
             var jcbtripamount = "--";
-            var totaltractortrips=0;
+            var totaltractortrips = 0;
             if (activity.Drivers === "--") {
                 drivers = HoursDrivers;
-                totaltractortrips=activity.HoursTrips;
+                totaltractortrips = activity.HoursTrips;
                 tripamount = activity.HoursTripsAmount
             }
             else {
                 drivers = LDrivers;
                 tripamount = activity.TripsPrice;
                 jcbtripamount = activity.JcbTripPrice;
-                totaltractortrips=activity.Trips;
+                totaltractortrips = activity.Trips;
             }
             // console.log()
-            var overallpricemoney=isNaN(activity.OverallPrice)|| activity.OverallPrice===undefined ?activity.Price:activity.OverallPrice;
+            var overallpricemoney = isNaN(activity.OverallPrice) || activity.OverallPrice === undefined ? activity.Price : activity.OverallPrice;
 
             overallcollection += parseInt(overallpricemoney);
+            const originalDate = new Date(activity.Date);
+
+            const day = String(originalDate.getDate()).padStart(2, '0');
+            const month = String(originalDate.getMonth() + 1).padStart(2, '0');
+            const year = originalDate.getFullYear();
+
+            const formattedDate = `${day}-${month}-${year}`;
 
             out += `<tr>
                         <td>${customerPhone}</td>
-                        <td>${activity.Date}</td>
+                        <td>${formattedDate}</td>
                         <td>${activity.Name}</td>
                         <td>${activity.Villagename}</td>
                         <td>${activity.Description}</td>
@@ -591,10 +598,10 @@ function SearchTable(data) {
         d.style.display = "none";
 
         var collection = 0, recovery = 0;
-        var overaldueamountrecovery=0;
+        var overaldueamountrecovery = 0;
         var totalhou = 0, totalmint = 0;
         var totaltrips = 0, totalcontarct = 0, disel = 0;
-        var overallcollections=0;
+        var overallcollections = 0;
 
         let out = `<table border="1px">
         <tr>
@@ -656,8 +663,8 @@ function SearchTable(data) {
             // Subtotals
             let subDisel = 0, subTrips = 0, subContract = 0, subPrice = 0, subRecovery = 0;
             let subHou = 0, subMint = 0;
-            var overaldueamountsubrecovery=0;
-            var overallsubcollections=0;
+            var overaldueamountsubrecovery = 0;
+            var overallsubcollections = 0;
 
             // Header row for person
             out += `<tr><td colspan="22" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
@@ -712,9 +719,9 @@ function SearchTable(data) {
                     }
                     overalldueamount = parseInt(overalldueamount) - parseInt(balanaceamount);
                 }
-                overaldueamountrecovery+=overalldueamount;
-                overaldueamountsubrecovery+=isNaN(overalldueamount)?0:overalldueamount;
-                overallsubcollections+=isNaN(activity.OverallPrice)?0:activity.OverallPrice;
+                overaldueamountrecovery += overalldueamount;
+                overaldueamountsubrecovery += isNaN(overalldueamount) ? 0 : overalldueamount;
+                overallsubcollections += isNaN(activity.OverallPrice) ? 0 : activity.OverallPrice;
 
 
                 var LDrivers = 0;
@@ -798,7 +805,7 @@ function SearchTable(data) {
 
                 recovery += amount;
                 subRecovery += amount;
-                overallcollections+=isNaN(activity.OverallPrice)?0:activity.OverallPrice;
+                overallcollections += isNaN(activity.OverallPrice) ? 0 : activity.OverallPrice;
 
                 const editid = customerPhone + "v";
 
@@ -961,7 +968,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
             const activity = data[customerPhone];
             if (activity.Date >= startdate && activity.Date <= enddate) {
                 var amount = activity.Payment === "Paid" ? 0 : activity.Price;
-                var overalldueamount=activity.Payment==="Paid"?0:activity.OverallPrice;
+                var overalldueamount = activity.Payment === "Paid" ? 0 : activity.OverallPrice;
                 var customerName = activity.Name;
                 var balanaceamount = 0;
                 if (!processedCustomers.has(customerName) && activity.Payment === "UnPaid") {

@@ -316,6 +316,65 @@ td select, td input.finalPrice {
     margin-right: auto;
 }
 
+.loading-box{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:40px;
+font-size:18px;
+font-weight:500;
+color:#444;
+animation:fadeIn 0.5s ease;
+}
+.table-heading{
+text-align:center;
+font-size:28px;
+font-weight:800;
+color:#1faa59;
+margin-bottom:18px;
+letter-spacing:1px;
+text-transform:uppercase;
+border-bottom:3px solid #1faa59;
+display:inline-block;
+padding-bottom:6px;
+}
+
+.loader{
+width:40px;
+height:40px;
+border:4px solid #e0e0e0;
+border-top:4px solid #2c7be5;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin-bottom:10px;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+.financial-title{
+    text-align: center;
+    margin-top: 120px;
+    font-size: 3.2em;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-family: "Segoe UI", Arial, sans-serif;
+
+    background: linear-gradient(90deg, #0f9b0f, #38ef7d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+}
+
 #btn43 {
     display: flex;
     gap: 30px; /* Reduced from 150px */

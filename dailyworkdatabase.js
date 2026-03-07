@@ -110,9 +110,8 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 });
                             }
                             var pay = "UnPaid";
-                            if(name==="CASH WORK")
-                            {
-                                pay="Paid";
+                            if (name === "CASH WORK") {
+                                pay = "Paid";
                             }
                             await set(dataRefset, {
                                 Date: dat,
@@ -134,7 +133,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 Trips: trips,
                                 Drivers: drivers,
                                 Starting: stime,
-                                OverallPrice:overallamount,
+                                OverallPrice: overallamount,
                                 Ending: etime,
                                 TotalTime: ttime,
                                 Price: rate
@@ -410,7 +409,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
                         HoursPrice: activity.HoursPrice,
                         TripsPrice: activity.TripsPrice,
                         Beta: beta,
-                        OverallPrice:activity.OverallPrice,
+                        OverallPrice: activity.OverallPrice,
                         HoursTrips: HoursTrips,
                         HoursTripsAmount: HoursTripsAmount,
                         HoursDrivers: HoursDrivers,
@@ -658,10 +657,10 @@ function generateCustomerTable(data) {
     var formname = document.getElementById("name3").value.toLowerCase();
     // console.log(formname);
     var rec = 0;
-    var overallamount=0;
-    var Driverslist="";
-    var beta=0;
-    var overallbeta=0;
+    var overallamount = 0;
+    var Driverslist = "";
+    var beta = 0;
+    var overallbeta = 0;
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
@@ -669,7 +668,7 @@ function generateCustomerTable(data) {
             // console.log(formname,activity.Name,formname.length,activity.Name.length);
             if (activity.Name.toLowerCase().trim() == formname.trim()) {
                 var HoursDrivers = 0;
-                 if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
+                if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
                     let str = activity.HoursDrivers || "";
                     // alert(str);
                     let count = 0;
@@ -680,9 +679,9 @@ function generateCustomerTable(data) {
                         }
                     }
                     if (activity.Beta !== undefined && activity.Beta !== "undefined" && activity.Beta !== null) {
-                    beta = activity.Beta;
-                    overallbeta+=parseInt(beta);
-                }
+                        beta = activity.Beta;
+                        overallbeta += parseInt(beta);
+                    }
 
                     if (count > 1) {
 
@@ -738,7 +737,7 @@ function generateCustomerTable(data) {
                 if (activity.Trips !== "--") {
                     // pri=parseInt(activity.Trips)*parseInt(tripamt);
                     totaltrips += parseInt(activity.Trips);
-                    Driverslist=LDrivers;
+                    Driverslist = LDrivers;
                 }
                 if (activity.Contract !== "--") {
                     totalcontarct += parseInt(activity.Contract);
@@ -746,7 +745,7 @@ function generateCustomerTable(data) {
                 }
 
                 if (activity.Starting !== "--") {
-                    Driverslist=HoursDrivers;
+                    Driverslist = HoursDrivers;
                     var timesplit = activity.TotalTime;
                     var v = timesplit.split(':');
                     hou += parseInt(v[0]);
@@ -755,14 +754,14 @@ function generateCustomerTable(data) {
                     // var totmin=parseInt(v[0])*60+parseInt(v[1]);
                     // pri=totmin*permin;
                 }
-                
+
                 collection += parseInt(activity.Price);
                 // console.log(activity);
                 var bal = 0;
                 if (activity.Payment !== "Paid") {
                     bal = activity.Price;
                 }
-                overallamount+=isNaN(activity.OverallPrice)?0:activity.OverallPrice;
+                overallamount += isNaN(activity.OverallPrice) ? 0 : activity.OverallPrice;
                 rec += parseInt(bal);
                 let color = activity.Payment === "Paid" ? "green" : "red";
                 out += `<tr>
@@ -801,8 +800,11 @@ function generateCustomerTable(data) {
             </tr>`;
     out += `</table>`;
     document.getElementById("customeralldata2").innerHTML = "";
-document.getElementById("customeralldata").innerHTML =
-  `<div class="table-scroll-only">${out}</div>`;
+    document.getElementById("customeralldata").innerHTML =
+        `<div class="table-scroll-only">${out}</div>`;
+    document.getElementById("cusname").style.display = "block";
+    document.getElementById("customeralldata").style.display = "block";
+    document.getElementById("ledger").style.display = "block";
     document.getElementsByClassName("heading")[1].style.display = "block";
 
     RePrint6(overallamount);
@@ -1019,6 +1021,11 @@ ${headname}</h1>`;
 
     out += `</table>`;
     document.getElementById("customeralldata2").innerHTML = heading + out;
+    document.getElementById("customeralldata2").style.display = "block";
+    setTimeout(function () {
+        document.getElementById("ledger2").style.display = "block";
+        document.getElementById("btn43").style.display = "flex";
+    }, 7000);
     document.getElementsByClassName("heading")[3].style.display = "block";
     document.getElementsByClassName("heading")[4].style.display = "block";
     document.getElementsByClassName("heading")[5].style.display = "block";
@@ -1108,6 +1115,8 @@ function generateCustomeramtTable(data, amt) {
     out1 += `</table>`;
     document.getElementById("customerallamt2").innerHTML = "";
     document.getElementById("customerallamt").innerHTML = out1;
+    document.getElementById("customerallamt").style.display = "block";
+    document.getElementById("printBtn").style.display = "block";
     // document.getElementsByClassName("heading")[2].style.display = "block";
 
 
