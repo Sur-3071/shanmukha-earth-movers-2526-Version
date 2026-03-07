@@ -611,7 +611,7 @@
 
                             // reverse date format
                             const reversedDate = originalDate.toLocaleDateString("en-GB");
-                           
+
                             const today = new Date();
                             const diffTime = today - originalDate;
                             const daysCompleted = Math.floor(diffTime / (1000 * 60 * 60 * 24));
@@ -692,7 +692,13 @@
                 }
 
             }
-            console.log(unpaidCustomers);
+            // console.log(unpaidCustomers);
+            const sortedCustomers = Object.keys(unpaidCustomers)
+                .sort((a, b) => a.localeCompare(b))
+                .reduce((obj, key) => {
+                    obj[key] = unpaidCustomers[key];
+                    return obj;
+                }, {});
 
             setTimeout(function () {
 
@@ -721,9 +727,9 @@
         <tbody>
     `;
 
-                for (let name in unpaidCustomers) {
+                for (let name in sortedCustomers) {
 
-                    const data = unpaidCustomers[name];
+                    const data = sortedCustomers[name];
 
                     const previous = (data.previousBalance > 0 ? data.previousBalance : 0) || 0;
                     const jcb = (data.jcbPrice > 0 ? data.jcbPrice : 0) || 0;
@@ -777,7 +783,7 @@
 ${tableHTML}
 `;
 
-                console.log(unpaidCustomer);
+                // console.log(unpaidCustomer);
 
             }, 8000);
 
