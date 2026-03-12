@@ -851,6 +851,10 @@ function generateCustomerTable1(data) {
             if (activity.Name.toLowerCase().trim() === formname.trim() && activity.Payment === "UnPaid") {
                 // alert("is there");
                 headname = activity.Name;
+                if(headname.toLowerCase()==="biyyam reddy")
+                {
+                    headname="Bhaskar Reddy Garu Rajamundry";
+                }
 
                 let totalMins = 0;
                 if (activity.TotalTime !== "--") {
