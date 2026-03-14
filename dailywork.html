@@ -133,9 +133,13 @@
                 }
             }
 
-            setProfit("profitquat1", result.Q1);
-            setProfit("profitquat2", result.Q2);
-            setProfit("profitquat3", result.Q3);
+            setTimeout(function () {
+
+                setProfit("profitquat1", result.Q1);
+                setProfit("profitquat2", result.Q2);
+                setProfit("profitquat3", result.Q3);
+
+            }, 10000); // 10 seconds
         }
 
         checkQuarterResult();
