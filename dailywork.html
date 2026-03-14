@@ -78,8 +78,9 @@
         function checkQuarterResult() {
 
             const checkQuarterData = setInterval(() => {
+                setTimeout(function () {
+                    const storedData = localStorage.getItem("quarterResult");
 
-                const storedData = localStorage.getItem("quarterResult");
 
                 if (storedData) {
 
@@ -87,9 +88,11 @@
 
                     const data = JSON.parse(storedData);
                     // console.log("Quarter result data found:", data);
+
                     showQuarterProfit(data); // run profit UI function
 
                 }
+                }, 8000); // 10 seconds
 
             }, 2000);
         }
@@ -133,13 +136,10 @@
                 }
             }
 
-            setTimeout(function () {
 
-                setProfit("profitquat1", result.Q1);
-                setProfit("profitquat2", result.Q2);
-                setProfit("profitquat3", result.Q3);
-
-            }, 10000); // 10 seconds
+            setProfit("profitquat1", result.Q1);
+            setProfit("profitquat2", result.Q2);
+            setProfit("profitquat3", result.Q3);
         }
 
         checkQuarterResult();
