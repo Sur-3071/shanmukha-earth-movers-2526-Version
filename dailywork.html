@@ -86,6 +86,7 @@
                     clearInterval(checkQuarterData); // stop checking
 
                     const data = JSON.parse(storedData);
+                    // console.log("Quarter result data found:", data);
                     showQuarterProfit(data); // run profit UI function
 
                 }
@@ -107,6 +108,7 @@
                     result[q] = String(quarter.data.profit);
                 }
             });
+            // console.log(result);
 
             function setProfit(id, value) {
 
@@ -984,7 +986,10 @@ ${tableHTML}
             var homeexp = 20000;
             var imprhrs = parseInt((((365 * 8000) - totalwork) / (remin)) / 1000)
             var impmin = parseInt((((((365 * 8000) - totalwork) / (remin)) / 1000) - imprhrs) * 60)
-            proft = totalwork - workday * 335 - differenceInDays * 2534 - oila - differenceInDays * 667;
+            //3350 is the average cost per day (335 for maintains + 1800  for jcb emi and 667 is the home expenses and 835 for jsb operator salary
+            proft = totalwork - (workday * 335) - (differenceInDays * 3300) - oila;
+            // console.log(totalwork, workday, differenceInDays, oila, proft);
+
             document.getElementById("twrk").innerHTML = moneyconvert(totalwork);
             document.getElementById("proft").innerHTML = moneyconvert(proft);
             document.getElementById("oil").innerHTML = moneyconvert(oila);
@@ -1007,7 +1012,50 @@ ${tableHTML}
             };
 
             function calculate(indexes, title, monthsLabel) {
+                const today = new Date();
+                const currentYear = today.getFullYear();
 
+                // determine cycle start year (Aug 10 boundary)
+                let cycleStartYear;
+
+                if (today >= new Date(currentYear, 7, 10)) {
+                    cycleStartYear = currentYear;
+                } else {
+                    cycleStartYear = currentYear - 1;
+                }
+
+                let startDate, endDate;
+
+                if (monthsLabel === "August – November") {
+
+                    startDate = new Date(cycleStartYear, 7, 10); // Aug 10
+                    endDate = new Date(cycleStartYear, 11, 9);   // Dec 9
+
+                }
+                else if (monthsLabel === "December – March") {
+
+                    startDate = new Date(cycleStartYear, 11, 10); // Dec 10
+                    endDate = new Date(cycleStartYear + 1, 3, 9); // Apr 9
+
+                }
+                else if (monthsLabel === "April – July") {
+
+                    startDate = new Date(cycleStartYear + 1, 3, 10); // Apr 10
+                    endDate = new Date(cycleStartYear + 1, 7, 9);    // Aug 9
+
+                }
+
+                // if quarter not finished yet
+                if (today < endDate) {
+                    endDate = today;
+                }
+
+                // calculate days
+                const diffTime = endDate - startDate;
+                const actualDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1 < 0 ? 0 : Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                const salary = actualDays * 833;
+                const jcbemi = actualDays * 1800;
+                const home = actualDays * 667;
                 let income = 0,
                     oilUsed = 0,
                     total = 0,
@@ -1022,8 +1070,9 @@ ${tableHTML}
                     total += totalDays[i];
                     workedDays += worked[i];
                     holidays += holiday[i];
-                    profitSum += profit[i];
                 });
+                const maintaince = workedDays * 335;
+                profitSum = (income) - (salary + jcbemi + maintaince + home + oilUsed);
 
                 return {
                     title,
@@ -1032,8 +1081,9 @@ ${tableHTML}
                         income,
                         Oil: oilUsed,
                         totalDays: total,
-                        workedDays,
-                        holidays,
+                        Actualdays: actualDays,
+                        workedDays: workedDays,
+                        holidays: total - actualDays,
                         totalHours: income / 1000,
                         profit: profitSum
                     }
@@ -1242,28 +1292,91 @@ ${tableHTML}
                         const q = qData[qKey];
                         const d = q.data || {};
 
+                        const today = new Date();
+                        const currentYear = today.getFullYear();
+
+                        // determine company cycle start year (Aug 10 boundary)
+                        let cycleStartYear;
+                        if (today >= new Date(currentYear, 7, 10)) {
+                            cycleStartYear = currentYear;
+                        } else {
+                            cycleStartYear = currentYear - 1;
+                        }
+
+                        let startDate, endDate;
+
+                        if (q.months === "August – November") {
+
+                            startDate = new Date(cycleStartYear, 7, 10); // Aug 10
+                            endDate = new Date(cycleStartYear, 11, 9);   // Dec 9
+
+                        }
+                        else if (q.months === "December – March") {
+
+                            startDate = new Date(cycleStartYear, 11, 10); // Dec 10
+                            endDate = new Date(cycleStartYear + 1, 3, 9); // Apr 9
+
+                        }
+                        else if (q.months === "April – July") {
+
+                            startDate = new Date(cycleStartYear + 1, 3, 10); // Apr 10
+                            endDate = new Date(cycleStartYear + 1, 7, 9);    // Aug 9
+
+                        }
+
+                        // if quarter still running
+                        if (today < endDate) {
+                            endDate = today;
+                        }
+
+                        // if quarter still running
+                        if (today < endDate) {
+                            endDate = today;
+                        }
+
+                        // calculate days
+                        const diffTime = endDate - startDate;
+                        const Actualdays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+
                         const income = d.income || 0;
-                        const expense = d.Oil || 0;
+                        const diseloil = d.Oil || 0;
                         const workedDays = d.workedDays || 0;
                         const totalHours = incomeToHoursMinutes(income) || 0;
-                        const profit = d.profit || 0;
                         const totaldays = d.totalDays || 0;
+                        const salary = Actualdays * 833;
+                        const jcbemi = Actualdays * 1800;
+                        const maintaince = workedDays * 335;
+                        const home = Actualdays * 667;
+                        const profit = income - diseloil - salary - jcbemi - maintaince - home;
                         const profitType = profit >= 0 ? "profit" : "loss";
                         const profitLabel = profit >= 0 ? "Profit" : "Loss";
-                        const salary = totaldays * 734;
-                        const jcbemi = totaldays * 1800;
-                        const maintaince = workedDays * 335;
-                        const home = 80000;
                         const holidays = totaldays - workedDays;
-                        const totalexpenses = expense + salary + jcbemi + maintaince + home;
+                        const totalexpenses = diseloil + salary + jcbemi + maintaince + home;
                         const avghrs = averageHoursPerDay(income, totaldays) || 0;
+                        // console.log(q.months);
+
+                        // console.log({
+                        //     income,
+                        //     diseloil,
+                        //     salary,
+                        //     Actualdays,
+                        //     jcbemi,
+                        //     maintaince,
+                        //     workedDays,
+                        //     home,
+                        //     profit,
+                        //     totalexpenses
+                        // });
+
                         quarters[index + 1] = {
                             title: q.title || "",
                             months: q.months || "",
                             data: [
                                 { label: "Income", value: `₹${income.toLocaleString()}` },
-                                { label: "Disel", value: `₹${expense.toLocaleString()}` },
+                                { label: "Disel Oil", value: `₹${diseloil.toLocaleString()}` },
                                 { label: "Total Days", value: `${totaldays} Days` },
+                                { label: "Actual Days", value: `${Actualdays} Days` },
                                 { label: "Working Days", value: `${workedDays} Days` },
                                 { label: "Holidays", value: `${totaldays - workedDays} Days` },
                                 { label: "Total Hours", value: `${totalHours}` },
