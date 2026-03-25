@@ -29,7 +29,7 @@ async function RePrintHome() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Homeexp`);
+        const dataRefget = ref(db2, DBConstants.Homeexpenses);
         const snapshot = await get(dataRefget);
 
         // Check if data exists

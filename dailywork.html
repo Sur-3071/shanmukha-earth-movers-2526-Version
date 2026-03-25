@@ -29,7 +29,7 @@
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
         import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
-
+        import DBConstants from './DatabaseConstants.js';
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "tractor-driver-data.firebaseapp.com",
@@ -42,7 +42,7 @@
         async function loadAllExtraAmountsOnce() {
             const app = initializeApp(firebaseConfig);
             const db = getDatabase(app);
-            const customersRef = ref(db, "CustomersAmount");
+            const customersRef = ref(db, DBConstants.CustomersAmount);
 
             try {
                 const snapshot = await get(customersRef);
@@ -82,16 +82,16 @@
                     const storedData = localStorage.getItem("quarterResult");
 
 
-                if (storedData) {
+                    if (storedData) {
 
-                    clearInterval(checkQuarterData); // stop checking
+                        clearInterval(checkQuarterData); // stop checking
 
-                    const data = JSON.parse(storedData);
-                    // console.log("Quarter result data found:", data);
+                        const data = JSON.parse(storedData);
+                        // console.log("Quarter result data found:", data);
 
-                    showQuarterProfit(data); // run profit UI function
+                        showQuarterProfit(data); // run profit UI function
 
-                }
+                    }
                 }, 8000); // 10 seconds
 
             }, 2000);
@@ -162,7 +162,7 @@
                 localStorage.setItem("extramoney", 0);
 
                 // Access the database and retrieve data
-                const dataRefget = ref(db2, `Daily Work-2025-2026`);
+                const dataRefget = ref(db2, DBConstants.DailyWorkDB);
                 const snapshot = await get(dataRefget);
 
                 if (snapshot.exists()) {
@@ -180,7 +180,7 @@
             try {
 
                 // Access the database and retrieve data
-                const dataRefget = ref(db2, `Homeexp`);
+                const dataRefget = ref(db2, DBConstants.Homeexpenses);
                 const snapshot = await get(dataRefget);
 
                 if (snapshot.exists()) {
@@ -197,7 +197,7 @@
 
         async function selectnames() {
             try {
-                const dataRefget = ref(db2, `Customers`);
+                const dataRefget = ref(db2, DBConstants.Customers);
                 const snapshot = await get(dataRefget);
 
                 // Check if data exists
@@ -555,7 +555,7 @@
             for (const customerPhone in data) {
                 if (data.hasOwnProperty(customerPhone)) {
                     const activity = data[customerPhone];
-                    if (customerPhone !== "Customers" && activity.Name !== undefined) {
+                    if (customerPhone !== DBConstants.Customers && activity.Name !== undefined) {
                         names.push(activity.Name);
                     }
                 }
@@ -1666,17 +1666,26 @@ ${tableHTML}
 
         </div>
     </div>
-
+<!-- previous analysis section -->
     <img src="done1.png" id="done" style="display: none;" height="100px" width="100px">
-    <div id="prevyear"
-        style="height:200vh; display:flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; display: none;">
-        <h1 class="financial-title">
-            2024 - 2025 Financial Year Work Status
-        </h1>
+    <div id="yearButtons" class="year-container" style="display: none;">
+        <div onclick="toggleYear('year1')" class="year-btn">2024 - 2025</div>
+        <!-- <div onclick="toggleYear('year2')" class="year-btn">2025 - 2026</div> -->
+    </div>
+    <div id="prevyear">
+        <div id="year1" class="year-content">
+            <h1 class="financial-title">2024 - 2025 Financial Year Work Status</h1>
 
-        <img src="2024-work done.png" alt="Work Done"
-            style="max-width:200%; max-height:300vh; display:block;margin-left: 150px;">
-        <img src="2024-jcb-bar.png" alt="JCB Bar" style="max-width:200%; max-height:90vh; display:block;">
+            <img src="2024-work done.png" class="year-img">
+            <img src="2024-jcb-bar.png" class="year-img">
+        </div>
+
+        <!-- <div id="year2" class="year-content">
+            <h1 class="financial-title">2025 - 2026 Financial Year Work Status</h1>
+
+            <img src="2025-work done.png" class="year-img">
+            <img src="2025-jcb-bar.png" class="year-img">
+        </div> -->
     </div>
 
 
@@ -1689,6 +1698,21 @@ ${tableHTML}
     <script src="dailywork.js"></script>
     <script src="proxyurl.js"></script>
     <script>
+
+        function toggleYear(id) {
+            const allSections = document.querySelectorAll('.year-content');
+
+            allSections.forEach(sec => {
+                if (sec.id !== id) {
+                    sec.style.display = "none";
+                }
+            });
+
+            const section = document.getElementById(id);
+
+            section.style.display =
+                (section.style.display === "flex") ? "none" : "flex";
+        }
 
         function getFormattedDate() {
             const now = new Date();
@@ -1788,6 +1812,10 @@ ${tableHTML}
             option.textContent = rate; select.appendChild(option);
         }
         function showCustomerData() { // Show customer data div
+            const yearButtons = document.getElementsByClassName("year-container");
+            for (let i = 0; i < yearButtons.length; i++) {
+                yearButtons[i].style.display = "none";
+            }
             document.getElementById("captureDiv").style.display = "block";
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("printBtn1").style.display = "none";
@@ -1799,6 +1827,10 @@ ${tableHTML}
             document.getElementById("ledger2").innerHTML = "";
         }
         function showCustomerBill() { // Show customer bill div
+            const yearButtons = document.getElementsByClassName("year-container");
+            for (let i = 0; i < yearButtons.length; i++) {
+                yearButtons[i].style.display = "none";
+            }
             document.getElementById("captureDiv1").style.display = "block";
             document.getElementById("captureDiv").style.display = "none"; //
             // document.getElementById("dnw3").style.display = "none";
@@ -1808,6 +1840,10 @@ ${tableHTML}
                 ; document.getElementById("ledger").innerHTML = ""; document.getElementById("prevyear").style.display = "none";
         }
         function remainingbuttons1() {
+            const yearButtons = document.getElementsByClassName("year-container");
+            for (let i = 0; i < yearButtons.length; i++) {
+                yearButtons[i].style.display = "flex";
+            }
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("captureDiv").style.display = "none"; //
             // document.getElementById("dnw3").style.display = "none";
@@ -1820,6 +1856,10 @@ ${tableHTML}
             document.getElementById("customerallamt2").innerHTML = ""; document.getElementById("ledger2").innerHTML = "";
             document.getElementById("prevyear").style.display = "none";
         } function remainingbuttons() {
+            const yearButtons = document.getElementsByClassName("year-container");
+            for (let i = 0; i < yearButtons.length; i++) {
+                yearButtons[i].style.display = "none";
+            }
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("captureDiv").style.display = "none";
             // document.getElementById("dnw3").style.display = "none";

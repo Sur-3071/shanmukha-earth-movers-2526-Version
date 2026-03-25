@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+import DBConstants from "./DatabaseConstants.js";
 
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
@@ -26,8 +27,8 @@ document.getElementById('submit').addEventListener('click', function (e) {
     const price = document.getElementById("aname").value;
     const trips = document.getElementById("trips").value;
     const wid = document.getElementById("wid1").value;
-    const db1 = "Tractor_Trips";
-    const db2 = "Tractor_Amount";
+    const db1 = DBConstants.TractorTrips;
+    const db2 = DBConstants.TractorAmount;
     if (d.length > 0 && drivername.length > 0 && customer.length > 0 && price.length > 0 && trips.length > 0) {
         // Set data to Firebase database
         const dataRefget = ref(db, `${db1}/${drivername}/`);
@@ -85,8 +86,8 @@ export function editDriverData(e){
 
     // alert(price+" "+trips);
     // alert(drivername);
-    const db1 = "Tractor_Trips";
-    const db2 = "Tractor_Amount";
+    const db1 = DBConstants.TractorTrips;
+    const db2 = DBConstants.TractorAmount;
     // alert(d.length+" "+drivername.length+" "+customer.length+" "+price.length+" "+trips.length);
     if (d.length > 0 && drivername.length > 0 && customer.length > 0 && price.length > 0 && trips.length > 0) {
         // Set data to Firebase database
@@ -125,7 +126,7 @@ amountdataentry.addEventListener('click', function (e) {
     const pur = document.getElementById("pur").value;
     const amount = document.getElementById("amount").value;
     const wid = document.getElementById("wid2").value;
-    const db2 = "Tractor_Amount";
+    const db2 = DBConstants.TractorAmount;
 
     // Set data to Firebase database
     if (d.length > 0 && drivername.length > 0 && amount.length > 0) {
@@ -183,7 +184,7 @@ amountdataentry.addEventListener('click', function (e) {
 getDataBtn.addEventListener('click', async function () {
 
     const drivername = document.getElementById("dname2").value.trim();
-    const db1 = "Tractor_Trips";
+    const db1 = DBConstants.TractorTrips;
 
     if (!drivername || drivername === "select Driver Name") {
         alert("Please Select Driver Name");
@@ -254,7 +255,7 @@ updatebtn.addEventListener('click', async function () {
     // }
 
     const drivername = document.getElementById("dname2").value.trim();
-    const db1 = "Tractor_Trips";
+    const db1 = DBConstants.TractorTrips;
 
     if (!drivername || drivername === "select Driver Name") {
         alert("Please Select Driver Name");
@@ -324,7 +325,7 @@ updatebtn.addEventListener('click', async function () {
 getamount.addEventListener('click', async function () {
 
     const drivername = document.getElementById("dname2").value.trim();
-    const db1 = "Tractor_Amount";
+    const db1 = DBConstants.TractorAmount;
 
     if (!drivername || drivername === "select Driver Name") {
         alert("Please Select Driver Name");
@@ -416,8 +417,8 @@ getbal.addEventListener('click', async function () {
     }
 
     try {
-        const tripsRef = ref(db, "Tractor_Trips");
-        const amountRef = ref(db, "Tractor_Amount");
+        const tripsRef = ref(db, DBConstants.TractorTrips);
+        const amountRef = ref(db, DBConstants.TractorAmount);
 
         // Fetch BOTH at once
         const [tripsSnap, amountSnap] = await Promise.all([

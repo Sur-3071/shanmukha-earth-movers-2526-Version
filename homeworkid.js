@@ -18,7 +18,7 @@ document.getElementById("name").addEventListener("change", async function (e1) {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const db1 = "Homeexp";
+        const db1 = DBConstants.Homeexpenses;
         const db3= "Home";
         const dataRefget = ref(db2, `${db1}/${db3}`);
         const snapshot = await get(dataRefget);

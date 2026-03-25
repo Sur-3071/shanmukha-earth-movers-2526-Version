@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+import DBConstants from './DatabaseConstants.js';
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "tractor-driver-data.firebaseapp.com",
@@ -16,7 +17,7 @@ const db2 = getDatabase(app);
 
 async function selectVillage() {
     try {
-        const dataRefget = ref(db2, `Customers`);
+        const dataRefget = ref(db2, DBConstants.Customers);
         const snapshot = await get(dataRefget);
 
         // Check if data exists
@@ -39,7 +40,7 @@ function getvillage(data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
             // console.log(activity,customerPhone)
-            if (customerPhone !== "Customers_Id" && cusname===activity.Name) {
+            if (customerPhone !== DBConstants.Customers_Id && cusname===activity.Name) {
                document.getElementById("vill").value=activity. Villagename;
                break;
             }
@@ -48,7 +49,7 @@ function getvillage(data) {
 }
 async function selectVillage1() {
     try {
-        const dataRefget = ref(db2, `Customers`);
+        const dataRefget = ref(db2, DBConstants.Customers);
         const snapshot = await get(dataRefget);
 
         // Check if data exists
@@ -71,7 +72,7 @@ function getvillage1(data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
             // console.log(activity,customerPhone)
-            if (customerPhone !== "Customers_Id" && cusname===activity.Name) {
+            if (customerPhone !== DBConstants.Customers_Id && cusname===activity.Name) {
                document.getElementById("vil2").value=activity. Villagename;
                break;
             }
@@ -102,8 +103,8 @@ document.getElementById("name1").addEventListener("change", async function (e1) 
     e1.preventDefault(); // Prevent default form submission behavior
     try {
         // Access the database and retrieve data
-        const db1 = "Customers_Id";
-        const db3 = "Customers";
+        const db1 = DBConstants.Customers_Id;
+        const db3 = DBConstants.Customers;
         const dataRefget = ref(db2, `${db3}/${db1}`);
         const snapshot = await get(dataRefget);
         // Check if data exists
@@ -123,8 +124,8 @@ document.getElementById("name2").addEventListener("change", async function (e1) 
     e1.preventDefault(); // Prevent default form submission behavior
     try {
         // Access the database and retrieve data
-        const db1 = "CustomersAmount_Id";
-        const db3 = "CustomersAmount";
+        const db1 = DBConstants.CustomersAmount_Id;
+        const db3 = DBConstants.CustomersAmount;
         const dataRefget = ref(db2, `${db3}/${db1}`);
         const snapshot = await get(dataRefget);
         selectVillage1();

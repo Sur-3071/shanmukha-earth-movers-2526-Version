@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
-
+import DBConstants from './DatabaseConstants.js';
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "tractor-driver-data.firebaseapp.com",
@@ -81,7 +81,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
         if (name.length > 0) {
             if (villname.length > 0) {
 
-                const db1 = "Daily Work-2025-2026";
+                const db1 = DBConstants.DailyWorkDB;
                 const db2 = "Work_Count";
                 const db3 = "Work_Id";
                 const w_id = ref(db, `${db2}`);

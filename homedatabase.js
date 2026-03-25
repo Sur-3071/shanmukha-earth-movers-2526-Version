@@ -43,7 +43,7 @@ document.getElementById('submit').addEventListener('click', async function (e) {
     if (dat.length > 0) {
         if (name.length > 0) {
             if (disel.length > 0) {
-                const db1 = "Homeexp";
+                const db1 = DBConstants.Homeexpenses;
                 const db2 = "Home";
 
                 const w_id = ref(db, `${db1}/${db2}`);

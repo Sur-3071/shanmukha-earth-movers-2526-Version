@@ -14,7 +14,7 @@ function transalate() {
             convert.innerHTML = "";
             let text = data.responseData.translatedText;
             // alert(text);
-            convert.innerHTML = text;
+            convert.innerHTML = text+" గారు";
             // console.log(text);
         });
     }

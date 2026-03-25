@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
-
+import DBConstants from './DatabaseConstants.js';
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "tractor-driver-data.firebaseapp.com",
@@ -32,7 +32,7 @@ async function RePrint() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work-2025-2026`);
+        const dataRefget = ref(db2, DBConstants.DailyWorkDB);
         const snapshot = await get(dataRefget);
 
         // Check if data exists
@@ -57,7 +57,7 @@ async function RePrintSearch() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work-2025-2026`);
+        const dataRefget = ref(db2, DBConstants.DailyWorkDB);
         const snapshot = await get(dataRefget);
 
         // Check if data exists
@@ -76,7 +76,7 @@ async function RePrintSearch() {
 let extraAmountsCache = {}; // Example: { "Suresh": 1200, "Ravi": 0 }
 
 async function loadAllExtraAmountsOnce() {
-    const db1 = "CustomersAmount";
+    const db1 = DBConstants.CustomersAmount;
     const customersRef = ref(db, db1);
 
     try {
@@ -427,7 +427,7 @@ document.addEventListener("click", async function (e1) {
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work-2025-2026/${id}`);
+        const dataRefget = ref(db2, `DBConstants.DailyWorkDB/${id}`);
         const snapshot = await get(dataRefget);
         var data;
         if (snapshot.exists()) {
@@ -904,8 +904,8 @@ async function RePrint1() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work-2025-2026`);
-        const dataRefget1 = ref(db2, `Homeexp`);
+        const dataRefget = ref(db2, DBConstants.DailyWorkDB);
+        const dataRefget1 = ref(db2, DBConstants.Homeexpenses);
         const snapshot = await get(dataRefget);
         const snapshot1 = await get(dataRefget1);
 
@@ -1079,7 +1079,7 @@ document.addEventListener("click", async function (e1) {
         e1.preventDefault();
         var id = e1.target.id;
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work-2025-2026/${id}`);
+        const dataRefget = ref(db2, `${DBConstants.DailyWorkDB}/${id}`);
         const snapshot = await get(dataRefget);
         var data;
         if (snapshot.exists()) {
@@ -1094,7 +1094,7 @@ document.addEventListener("click", async function (e1) {
         }
         document.getElementById(id).textContent = payment;
 
-        const db1 = "Daily Work-2025-2026";
+        const db1 = DBConstants.DailyWorkDB;
         const paymentstatus = ref(db, `${db1}/${id}`);
         var beta = 0;
         var HoursTrips = 0;
@@ -1151,7 +1151,7 @@ document.addEventListener("click", async function (e1) {
             e1.preventDefault();
             var id = e1.target.id;
             const db2 = getDatabase(app);
-            const dataRefget = ref(db2, `Daily Work-2025-2026/${id}`);
+            const dataRefget = ref(db2, `${DBConstants.DailyWorkDB}/${id}`);
             const snapshot = await get(dataRefget);
             var data;
             if (snapshot.exists()) {
@@ -1165,7 +1165,7 @@ document.addEventListener("click", async function (e1) {
                 payment = "UnPaid";
             }
             document.getElementById(id).textContent = payment;
-            const db1 = "Daily Work-2025-2026";
+            const db1 = DBConstants.DailyWorkDB;
             var beta = 0;
             var HoursTrips = 0;
             var HoursTripsAmount = 0;
@@ -1242,7 +1242,7 @@ async function RePrintHome() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Homeexp`);
+        const dataRefget = ref(db2, DBConstants.Homeexpenses);
         const snapshot = await get(dataRefget);
         // alert("coming");
         // Check if data exists

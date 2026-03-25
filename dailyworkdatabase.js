@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
-
+import DBConstants from './DatabaseConstants.js';
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "tractor-driver-data.firebaseapp.com",
@@ -93,7 +93,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                         const db2 = "Work_Count";
                         const db3 = "Sethu_Id";
                         const db4 = "Work_Id";
-                        const db5 = "Daily Work-2025-2026";
+                        const db5 = DBConstants.DailyWorkDB;
                         const w_id = ref(db, `${db2}`);
                         const dataRefset = ref(db, `${db5}/${wid}`);
                         var sethu_databasecount = ref(db, `${db2}/${db3}`);
@@ -224,8 +224,8 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
     const villname = document.getElementById("vil1").value.toUpperCase();
     if (name.length > 0) {
         if (villname.length > 0) {
-            const db1 = "Customers";
-            const db2 = "Customers_Id";
+            const db1 = DBConstants.Customers;
+            const db2 = DBConstants.Customers_Id;
 
             const w_id = ref(db, `${db1}/${db2}`);
             const dataRefset = ref(db, `${db1}/${wid}`);
@@ -308,7 +308,7 @@ document.getElementById('submit3').addEventListener('click', async function (e) 
 
 
 async function getExtraAmount(Amount, name, wid, dte, villname) {
-    const db1 = "CustomersAmount";
+    const db1 = DBConstants.CustomersAmount;
     const db2 = "ExtraAmount";
     const db3 = name;
     const customerRef = ref(db, `${db1}/${name}`);
@@ -337,7 +337,7 @@ async function FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount)
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `Daily Work-2025-2026`);
+        const dataRefget = ref(db2, DBConstants.DailyWorkDB);
         const snapshot = await get(dataRefget);
 
         // Check if data exists
@@ -353,9 +353,9 @@ async function FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount)
     }
 }
 async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount) {
-    const db1 = "Daily Work-2025-2026";
+    const db1 = DBConstants.DailyWorkDB;
     // alert("this is the customet payment");
-    const db2 = "CustomersAmount";
+    const db2 = DBConstants.CustomersAmount;
     // alert("Iam coming");
     var k = 0;
     for (const workId in data) {
@@ -429,8 +429,8 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
         }, 5000);
     }
     else {
-        const db1 = "CustomersAmount";
-        const db3 = "CustomersAmount_Id";
+        const db1 = DBConstants.CustomersAmount;
+        const db3 = DBConstants.CustomersAmount_Id;
         const w_id = ref(db, `${db1}/${db3}`);
         const work_snapshot = await get(w_id);
 
@@ -513,7 +513,7 @@ async function RePrint5() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget1 = ref(db2, `Daily Work-2025-2026`);
+        const dataRefget1 = ref(db2, DBConstants.DailyWorkDB);
         const snapshot1 = await get(dataRefget1);
 
         // Check if data exists
@@ -534,7 +534,7 @@ async function RePrint51() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget1 = ref(db2, `Daily Work-2025-2026`);
+        const dataRefget1 = ref(db2, DBConstants.DailyWorkDB);
         const snapshot1 = await get(dataRefget1);
 
         // Check if data exists
@@ -555,7 +555,7 @@ async function RePrint6(amt) {
     try {
         var formname1 = document.getElementById("name3").value;
         const db2 = getDatabase(app);
-        const dataRefget2 = ref(db2, `CustomersAmount/${formname1}`);
+        const dataRefget2 = ref(db2, `${DBConstants.CustomersAmount}/${formname1}`);
         const snapshot2 = await get(dataRefget2);
         // Check if data exists
         if (snapshot2.exists()) {
@@ -579,7 +579,7 @@ async function RePrint7() {
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
-        const dataRefget1 = ref(db2, `Customers`);
+        const dataRefget1 = ref(db2, DBConstants.Customers);
         const snapshot1 = await get(dataRefget1);
 
         // Check if data exists
@@ -1020,8 +1020,8 @@ function generateCustomerTable1(data) {
         <td colspan="4">Bill</td>
         <td id="totalBill">--</td>
     </tr>`;
-    let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
-${headname}</h1>`;
+let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
+${headname} GARU</h1>`;
 
     out += `</table>`;
     document.getElementById("customeralldata2").innerHTML = heading + out;
@@ -1040,7 +1040,7 @@ ${headname}</h1>`;
 
 async function getExtraAmountofuser() {
     var formname1 = document.getElementById("name4").value;
-    const db1 = "CustomersAmount";
+    const db1 = DBConstants.CustomersAmount;
     const db21 = "ExtraAmount";
     const db3 = formname1;
     const customerRef = ref(db, `${db1}/${formname1}`);

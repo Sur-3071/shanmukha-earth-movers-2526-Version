@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
-
+import DBConstants from './DatabaseConstants.js';
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "tractor-driver-data.firebaseapp.com",
@@ -43,7 +43,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     if (dat.length > 0) {
         if (monthname.length > 0) {
             if (purpose.length > 0) {
-                const db1 = "JcbDriverData";
+                const db1 = DBConstants.JcbDriverDB;
                 const db2 = "Leaves";
                 const dataRefset = ref(db, `${db1}/${db2}/${wid}`);
                 try {
@@ -98,7 +98,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
         if (monthname.length > 0) {
             if (amount.length > 0) {
                 if (isAllDigits(amount)) {
-                    const db1 = "JcbDriverData";
+                    const db1 = DBConstants.JcbDriverDB;
                     const db2 = "Salary";
                     const dataRefset = ref(db, `${db1}/${db2}/${wid}`);
                     try {
@@ -155,7 +155,7 @@ document.getElementById('toggleBtn').addEventListener('click', async function (e
     const leaveDiv = document.getElementById("leaveTableContainer");
     try {
         // Access the database and retrieve data
-        const db1 = "JcbDriverData";
+        const db1 = DBConstants.JcbDriverDB;
         const dataRefset = ref(db, `${db1}`);
         const snapshot = await get(dataRefset);
 
