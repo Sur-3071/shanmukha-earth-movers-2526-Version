@@ -92,6 +92,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
     const wid = document.getElementById("wid2").value;
     const amount = document.getElementById("work2").value;
     const monthname = document.getElementById("monthDropdown1").value;
+    const paymentMethod = document.getElementById("paymentMethod").value;
     document.getElementById("userForm2").reset();
 
     if (dat.length > 0) {
@@ -105,7 +106,8 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
                         await set(dataRefset, {
                             Date: dat,
                             Month: monthname,
-                            Salary: amount
+                            Salary: amount,
+                            PaymentMethod: paymentMethod
                         });
                         document.getElementById("done").style.display = "block";
                         setTimeout(() => {
@@ -231,6 +233,7 @@ function generateTable(data) {
             <caption>💰 Salary Data</caption>
             <tr>
                 <th>Date</th>
+                <th>Payment Method</th>
                 <th>Amount (₹)</th>
             </tr>
         `;
@@ -245,6 +248,7 @@ function generateTable(data) {
             monthsMap[entry.Month][0] += parseInt(amount);
             row.innerHTML = `
                 <td>${entry.Date}</td>
+                <td>${entry.PaymentMethod === undefined ? 'Phonepe' : entry.PaymentMethod}</td>
                 <td>${amount.toLocaleString("en-IN")}</td>
             `;
             table.appendChild(row);
@@ -254,7 +258,7 @@ function generateTable(data) {
         const totalRow = document.createElement("tr");
         totalRow.classList.add("total-row");
         totalRow.innerHTML = `
-            <td>Total</td>
+            <td colspan="2">Total</td>
             <td>₹${totalSalary.toLocaleString("en-IN")}</td>
         `;
         table.appendChild(totalRow);
