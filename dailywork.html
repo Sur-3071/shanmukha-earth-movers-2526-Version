@@ -793,6 +793,21 @@ ${tableHTML}
 
             }, 8000);
 
+            const currenttoday = new Date();
+            const currentYear = currenttoday.getFullYear();
+
+            const aug10 = new Date(currentYear, 7, 10);
+
+            let financialStart, financialEnd;
+
+            if (currenttoday >= aug10) {
+                financialStart = new Date(currentYear, 7, 10);
+                financialEnd = new Date(currentYear + 1, 7, 9);
+            } else {
+                financialStart = new Date(currentYear - 1, 7, 10);
+                financialEnd = new Date(currentYear, 7, 9);
+            }
+
             for (const dtss of l) {
                 var dte1 = parseInt(dtss.slice(8, 10));  // Extract day
                 var mon1 = parseInt(dtss.slice(5, 7));   // Extract month
@@ -807,10 +822,48 @@ ${tableHTML}
 
                 }
             }
-            for (var i = 1; i < 13; i++) {
-                holiday[i] = totalDays[i] - worked[i];
-                profit[i] = months[i] - oil[i] - worked[i] * 335 - totalDays[i] * 2534 - 20000;
 
+            for (let i = 1; i < 13; i++) {
+
+                // 🔥 FIX: assign correct year
+                let year;
+                if (i >= 8) {
+                    year = financialStart.getFullYear(); // Aug–Dec
+                } else {
+                    year = financialEnd.getFullYear();   // Jan–Jul
+                }
+
+                const { start, end } = getCycleDates(year, i);
+
+                let daysToConsider = 0;
+
+                // skip outside financial year
+                if (end < financialStart || start > financialEnd) {
+                    daysToConsider = 0;
+                } else {
+
+                    const actualStart = start < financialStart ? financialStart : start;
+                    const actualEnd = end > financialEnd ? financialEnd : end;
+
+                    if (today >= actualStart && today <= actualEnd) {
+                        // current cycle
+                        daysToConsider =
+                            Math.floor((today - actualStart) / (1000 * 60 * 60 * 24)) + 1;
+                    }
+                    else if (today > actualEnd) {
+                        // completed cycle
+                        daysToConsider =
+                            Math.floor((actualEnd - actualStart) / (1000 * 60 * 60 * 24)) + 1;
+                    }
+                }
+
+                holiday[i] = daysToConsider - worked[i];
+
+                profit[i] =
+                    months[i]
+                    - oil[i]
+                    - (worked[i * 1] * 335)
+                    - (daysToConsider * 3300);
             }
 
             const sortedDates = l.sort((a, b) => new Date(a) - new Date(b));
@@ -875,6 +928,7 @@ ${tableHTML}
                         backgroundColor: profit.slice(1).map(p => p >= 0 ? 'rgba(0, 200, 100, 0.7)' : 'rgba(255, 50, 50, 0.7)'),
                         custom: customData
                     }]
+
                 },
                 options: {
                     plugins: {
@@ -889,10 +943,10 @@ ${tableHTML}
                                     const profitLabel = profitVal >= 0
                                         ? `Profit: ₹${profitVal.toLocaleString()}`
                                         : `Loss: ₹${Math.abs(profitVal).toLocaleString()}`;
-
+                                    var totalworkingdatedays = custom.worked + custom.holiday;
                                     const totalMinutes = income / 16.6;
-                                    const hours = Math.floor((totalMinutes / custom.totalDays) / 60);
-                                    const minutes = Math.round((totalMinutes / custom.totalDays) % 60);
+                                    const hours = Math.floor((totalMinutes / totalworkingdatedays) / 60);
+                                    const minutes = Math.round((totalMinutes / totalworkingdatedays) % 60);
                                     const Totalhrs = Math.round(income / 1000);
                                     const disel = Math.round(custom.oil / Totalhrs);
 
@@ -929,14 +983,23 @@ ${tableHTML}
                                 left: 10,
                                 right: 10
                             },
+                            // anchor: 'end',
+                            // align: 'end',
+                            // offset: 6,
+                            // backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            // color: '#222',
+                            // borderRadius: 6,
+                            // borderColor: '#ccc',
+                            // borderWidth: 1,
+                            // padding: 6,
                             font: function (context) {
                                 const width = context.chart.width;
                                 if (width < 400) {
-                                    return { size: 7, weight: 'bold' };
+                                    return { size: 5, weight: 'bold' };
                                 } else if (width < 600) {
-                                    return { size: 9, weight: 'bold' };
+                                    return { size: 7, weight: 'bold' };
                                 }
-                                return { size: 11, weight: 'bold' };
+                                return { size: 9, weight: 'bold' };
                             },
                             formatter: function (value, context) {
                                 if (value === 0) return null;
@@ -944,16 +1007,102 @@ ${tableHTML}
                                 const index = context.dataIndex;
                                 const custom = context.dataset.custom[index];
 
+                                // const monthprofit = value
+                                //     - parseInt(custom.oil)
+                                //     - (parseInt(custom.worked) * 335)
+                                //     - (parseInt(custom.totalDays) * 3300);
+
+                                const today = new Date();
+                                const currentYear = today.getFullYear();
+
+                                // Financial year logic
+                                const aug10 = new Date(currentYear, 7, 10);
+
+                                let financialStart, financialEnd;
+
+                                if (today >= aug10) {
+                                    financialStart = new Date(currentYear, 7, 10);
+                                    financialEnd = new Date(currentYear + 1, 7, 9);
+                                } else {
+                                    financialStart = new Date(currentYear - 1, 7, 10);
+                                    financialEnd = new Date(currentYear, 7, 9);
+                                }
+
+                                // FIX: correct year per month
+                                let year;
+                                if ((index + 1) >= 8) {
+                                    year = financialStart.getFullYear();
+                                } else {
+                                    year = financialEnd.getFullYear();
+                                }
+
+                                // cycle dates
+                                let start, end;
+
+                                if ((index + 1) === 12) {
+                                    start = new Date(year, 11, 10);
+                                    end = new Date(year + 1, 0, 9);
+                                } else {
+                                    start = new Date(year, index, 10);
+                                    end = new Date(year, index + 1, 9);
+                                }
+
+                                // calculate daysToConsider
+                                let daysToConsider = 0;
+
+                                if (!(end < financialStart || start > financialEnd)) {
+
+                                    const actualStart = start < financialStart ? financialStart : start;
+                                    const actualEnd = end > financialEnd ? financialEnd : end;
+
+                                    if (today >= actualStart && today <= actualEnd) {
+                                        daysToConsider =
+                                            Math.floor((today - actualStart) / (1000 * 60 * 60 * 24)) + 1;
+                                    } else if (today > actualEnd) {
+                                        daysToConsider =
+                                            Math.floor((actualEnd - actualStart) / (1000 * 60 * 60 * 24)) + 1;
+                                    }
+                                }
+
+                                // ✅ FINAL PROFIT
                                 const monthprofit = value
                                     - parseInt(custom.oil)
                                     - (parseInt(custom.worked) * 335)
-                                    - (parseInt(custom.totalDays) * 2633) - 20000;
+                                    - (daysToConsider * 3300);
 
+                                // 🔥 Extra calculations
+                                const totalHrs = Math.round(value / 1000);
+                                const avgOil = totalHrs ? Math.round(custom.oil / totalHrs) : 0;
+
+                                // return [
+                                //     `In: ₹${value.toLocaleString()}`,
+                                //     `Oil: ₹${parseInt(custom.oil).toLocaleString()}`,
+                                //     `${monthprofit < 0 ? "Loss" : "Profit"}: ₹${Math.abs(monthprofit).toLocaleString()}`,
+                                //     `${custom.worked} days`
+                                // ];
+
+                                const totalMinutes = parseInt(value) / 16.6;
+                                //     const hours = Math.floor((totalMinutes / daysToConsider) / 60);
+                                //     const minutes = Math.round((totalMinutes / daysToConsider) % 60);
+
+                                const avgMinutesPerDay = totalMinutes / daysToConsider;
+
+                                let hours = Math.floor(avgMinutesPerDay / 60);
+                                let minutes = Math.round(avgMinutesPerDay % 60);
+
+                                // 🔥 FIX
+                                if (minutes === 60) {
+                                    hours += 1;
+                                    minutes = 0;
+                                }
                                 return [
                                     `In: ₹${value.toLocaleString()}`,
                                     `Oil: ₹${parseInt(custom.oil).toLocaleString()}`,
                                     `${monthprofit < 0 ? "Loss" : "Profit"}: ₹${Math.abs(monthprofit).toLocaleString()}`,
-                                    `${custom.worked} days`
+                                    `Worked: ${custom.worked} days`,
+                                    `Actual Days: ${daysToConsider}`,
+                                    `Avg Hrs: ${hours}:${minutes} min`,
+                                    `Oil/Hr: ₹${avgOil}`
                                 ];
                             }
 
@@ -972,6 +1121,21 @@ ${tableHTML}
                 },
                 plugins: [ChartDataLabels] // <-- Important
             });
+
+            function getCycleDates(year, month) {
+                let start, end;
+
+                if (month === 12) {
+                    start = new Date(year, 11, 10);
+                    end = new Date(year + 1, 0, 9);
+                } else {
+                    start = new Date(year, month - 1, 10);
+                    end = new Date(year, month, 9);
+                }
+
+                return { start, end };
+            }
+
 
             var totalwork = 0;
             var proft = 0;
@@ -1118,7 +1282,7 @@ ${tableHTML}
         <div id="com">
             <img src="company.png" style="padding-left: 20px;">
         </div>
-        <h2 align="center" style="font-size: 35px;" id="heading">Daily Work Data</h2>
+        <h1 align="center" style="font-size: 35px; font-weight: bold;" id="heading">Daily Work Data</h1>
     </div>
     <div id="cho">
         <input type="button" value="Add Customer" id="addcus" class="confet" onclick="remainingbuttons()">
@@ -1666,7 +1830,7 @@ ${tableHTML}
 
         </div>
     </div>
-<!-- previous analysis section -->
+    <!-- previous analysis section -->
     <img src="done1.png" id="done" style="display: none;" height="100px" width="100px">
     <div id="yearButtons" class="year-container" style="display: none;">
         <div onclick="toggleYear('year1')" class="year-btn">2024 - 2025</div>
