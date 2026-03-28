@@ -661,6 +661,7 @@ function generateCustomerTable(data) {
     var Driverslist = "";
     var beta = 0;
     var overallbeta = 0;
+    const uniqueDates = new Set();
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
@@ -763,23 +764,42 @@ function generateCustomerTable(data) {
                 }
                 overallamount += isNaN(activity.OverallPrice) ? 0 : activity.OverallPrice;
                 rec += parseInt(bal);
+
+                if (activity.Date) {
+                    uniqueDates.add(activity.Date); // automatically unique
+                }
                 let color = activity.Payment === "Paid" ? "green" : "red";
-                out += `<tr>
-                        <td>${customerPhone}</td>
-                        <td>${formatDate(activity.Date)}</td>
-                        <td>${activity.Name}</td>
-                        <td>${activity.Description}</td>
-                        <td>${Driverslist}</td>
-                        <td>${activity.Trips}</td>
-                        <td>${activity.Contract}</td>
-                        <td>${activity.Starting}</td>
-                        <td>${activity.Ending}</td>
-                        <td>${activity.TotalTime}</td>
-                        <td>${beta}</td>
-                        <td id="${activity.PhoneNumber}" style="color: ${color}; font-size:30px; font-weight:bold;">${activity.Payment}</td>
-                        <td style="font-size:20px;">${moneyconvert(parseInt(activity.Price))}</td>
-                        <td style="font-size:20px;">${moneyconvert(parseInt(activity.OverallPrice))}</td>
-                    </tr>`;
+
+                out += `<tr style="font-size:16px; text-align:center;">
+
+                    <td style="padding:8px;font-weight:600;"">${customerPhone}</td>
+                    <td style="padding:8px;font-weight:600;"">${formatDate(activity.Date)}</td>
+                    <td style="padding:8px; font-weight:600;">${activity.Name.toLowerCase().includes("garu")
+                        ? activity.Name
+                        : activity.Name + " Garu"}</td>
+                    <td style="padding:8px;font-weight:600;"">${activity.Description}</td>
+                    <td style="padding:8px;font-weight:600;"">${Driverslist}</td>
+                    <td style="padding:8px;font-weight:600;"">${activity.Trips}</td>
+                    <td style="padding:8px;font-weight:600;"">${activity.Contract}</td>
+                    <td style="padding:8px;font-weight:600;"">${activity.Starting}</td>
+                    <td style="padding:8px;font-weight:600;"">${activity.Ending}</td>
+                    <td style="padding:8px;font-weight:600;"">${activity.TotalTime}</td>
+                    <td style="padding:8px; font-weight:bold;">${beta}</td>
+
+                    <td id="${activity.PhoneNumber}" 
+                        style="color:${color}; font-size:20px; font-weight:bold; padding:8px;">
+                        ${activity.Payment}
+                    </td>
+
+                    <td style="font-size:18px; font-weight:600; color:#2c5aa0; padding:8px;">
+                        ₹${moneyconvert(parseInt(activity.Price))}
+                    </td>
+
+                    <td style="font-size:18px; font-weight:600; color:#1e8e3e; padding:8px;">
+                        ₹${moneyconvert(parseInt(activity.OverallPrice))}
+                    </td>
+
+                </tr>`;
 
             }
         }
@@ -789,7 +809,7 @@ function generateCustomerTable(data) {
     hou += mintohou;
     totaltime = hou + ":" + mint;
     out += `<tr>
-            <td colspan="5" id="col">Total Work Analaysis</td>
+            <td colspan="5" id="col">Total Work Analaysis For <b>${uniqueDates.size}</b> Days</td>
             <td  id="am" style="font-size:30px;">${totaltrips}</td>
             <td id="am" style="font-size:30px;">${totalcontarct}</td>
             <td id="am" colspan="3" style="font-size:30px;">${totaltime}</td>
@@ -845,15 +865,15 @@ function generateCustomerTable1(data) {
     let formname = document.getElementById("name4").value.toLowerCase();
     // alert(formname);
     let k = 0;
+    const uniqueDates = new Set();
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
             if (activity.Name.toLowerCase().trim() === formname.trim() && activity.Payment === "UnPaid") {
                 // alert("is there");
                 headname = activity.Name;
-                if(headname.toLowerCase()==="biyyam reddy")
-                {
-                    headname="Bhaskar Reddy Garu Rajamundry";
+                if (headname.toLowerCase() === "biyyam reddy") {
+                    headname = "Bhaskar Reddy Garu Rajamundry";
                 }
 
                 let totalMins = 0;
@@ -983,27 +1003,83 @@ function generateCustomerTable1(data) {
                     }
                     finalAmount = Math.round((totalMins / 60) * defaultRate) + parseInt(beta) + (parseInt(HoursTrips) * parseInt(HoursTripsAmount));
                 }
+                if (activity.Date) {
+                    uniqueDates.add(activity.Date); // automatically unique
+                }
 
-                out += `<tr data-type="${type}" data-trips="${activity.Trips}" data-mins="${totalMins}">
-                    <td>${activity.Date}</td>
-                    <td>${HoursDrivers}</td>
-                    <td>${LDrivers}</td>
-                    <td>${activity.Trips}</td>
-                    <td>${activity.Contract}</td>
-                    <td>${activity.Starting}</td>
-                    <td>${activity.Ending}</td>
-                    <td>${activity.TotalTime}</td>
-                    <td>${HoursTrips}</td>
-                    <td>${HoursTripsAmount}</td>
-                    <td>${beta}</td>
-                    <td>
-                        <select class="rateDropdown" onchange="calculateFinalPrice(this,'${beta}', '${HoursTrips}','${tracttrips}', '${HoursTripsAmount}'); formeldger2();" ${type === "Contract" ? "disabled" : ""}>
-                            ${dropdown}
-                        </select>
-                        <div style="font-size:10px;color:gray;">(${type})</div>
-                    </td>
-                    <td><input type="number" class="finalPrice" value="${finalAmount}" readonly style="width:80px;" /></td>
-                </tr>`;
+                // out += `<tr data-type="${type}" data-trips="${activity.Trips}" data-mins="${totalMins}">
+                //     <td>${formatDate(activity.Date)}</td>
+                //     <td>${HoursDrivers}</td>
+                //     <td>${LDrivers}</td>
+                //     <td>${activity.Trips}</td>
+                //     <td>${activity.Contract}</td>
+                //     <td>${activity.Starting}</td>
+                //     <td>${activity.Ending}</td>
+                //     <td>${activity.TotalTime}</td>
+                //     <td>${HoursTrips}</td>
+                //     <td>${HoursTripsAmount}</td>
+                //     <td>${beta}</td>
+                //     <td>
+                //         <select class="rateDropdown" onchange="calculateFinalPrice(this,'${beta}', '${HoursTrips}','${tracttrips}', '${HoursTripsAmount}'); formeldger2();" ${type === "Contract" ? "disabled" : ""}>
+                //             ${dropdown}
+                //         </select>
+                //         <div style="font-size:10px;color:gray;">(${type})</div>
+                //     </td>
+                //     <td><input type="number" class="finalPrice" value="${finalAmount}" readonly style="width:80px;" /></td>
+                // </tr>`;
+
+                out += `<tr data-type="${type}" data-trips="${activity.Trips}" data-mins="${totalMins}"
+    style="font-size:16px; font-weight:600; text-align:center;"
+    onmouseover="this.style.background='#f5faff'"
+    onmouseout="this.style.background='white'">
+
+    <td style="padding:8px;">${formatDate(activity.Date)}</td>
+    <td style="padding:8px;">${HoursDrivers}</td>
+    <td style="padding:8px;">${LDrivers}</td>
+    <td style="padding:8px;">${activity.Trips}</td>
+    <td style="padding:8px;">${activity.Contract}</td>
+    <td style="padding:8px;">${activity.Starting}</td>
+    <td style="padding:8px;">${activity.Ending}</td>
+    <td style="padding:8px;">${activity.TotalTime}</td>
+    <td style="padding:8px;">${HoursTrips}</td>
+    <td style="padding:8px; color:#2c5aa0;">${HoursTripsAmount}</td>
+    <td style="padding:8px; font-weight:700;">${beta}</td>
+
+    <td style="padding:8px;">
+        <select class="rateDropdown"
+            onchange="calculateFinalPrice(this,'${beta}', '${HoursTrips}','${tracttrips}', '${HoursTripsAmount}'); formeldger2();"
+            ${type === "Contract" ? "disabled" : ""}
+            style="
+                padding:6px;
+                border-radius:6px;
+                border:1px solid #ccc;
+                font-weight:600;
+                cursor:pointer;
+            ">
+            ${dropdown}
+        </select>
+
+        <div style="font-size:12px; color:gray; margin-top:4px;">
+            (${type})
+        </div>
+    </td>
+
+    <td style="padding:8px;">
+        <input type="number"
+            class="finalPrice"
+            value="${finalAmount}"
+            readonly
+            style="
+                width:90px;
+                padding:6px;
+                font-weight:700;
+                border-radius:6px;
+                border:1px solid #ccc;
+                text-align:center;
+            " />
+    </td>
+
+</tr>`;
             }
         }
     }
@@ -1013,14 +1089,14 @@ function generateCustomerTable1(data) {
     hou += mintohou;
 
     out += `<tr>
-        <td colspan="3">Total Work</td>
+        <td colspan="3">Total Work Analaysis For <b>${uniqueDates.size}</b> Days</td>
         <td>${totaltrips}</td>
         <td>${totalcontract}</td>
         <td colspan="3">${hou}:${mint}</td>
         <td colspan="4">Bill</td>
         <td id="totalBill">--</td>
     </tr>`;
-let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
+    let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
 ${headname} GARU</h1>`;
 
     out += `</table>`;
@@ -1102,7 +1178,9 @@ function generateCustomeramtTable(data, amt) {
                 out1 += `<tr>
                         <td>${customerPhone}</td>
                         <td>${activity.Date}</td>
-                        <td>${activity.Name}</td>
+                        <td>${activity.Name.toLowerCase().includes("garu")
+                        ? activity.Name
+                        : activity.Name + " Garu"}</td>
                         <td>${activity.Villagename}</td>
                         <td style="font-size:20px;">${moneyconvert(parseInt(activity.Amouont))}</td>
                     </tr>`;
