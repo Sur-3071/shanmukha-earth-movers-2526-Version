@@ -1833,8 +1833,14 @@ ${tableHTML}
     <!-- previous analysis section -->
     <img src="done1.png" id="done" style="display: none;" height="100px" width="100px">
     <div id="yearButtons" class="year-container" style="display: none;">
-        <div onclick="toggleYear('year1')" class="year-btn">2024 - 2025</div>
-        <!-- <div onclick="toggleYear('year2')" class="year-btn">2025 - 2026</div> -->
+        <div onclick="toggleYear('year1', this)" class="year-btn" data-text="2024 - 2025">
+            Open 2024 - 2025 Analysis
+        </div>
+
+        <div onclick="toggleYear('year2', this)" class="year-btn" data-text="2025 - 2026">
+            Open 2025 - 2026 Analysis
+        </div>
+
     </div>
     <div id="prevyear">
         <div id="year1" class="year-content">
@@ -1863,19 +1869,37 @@ ${tableHTML}
     <script src="proxyurl.js"></script>
     <script>
 
-        function toggleYear(id) {
-            const allSections = document.querySelectorAll('.year-content');
+        function toggleYear(id, btn) {
 
+            const allSections = document.querySelectorAll('.year-content');
+            const allButtons = document.querySelectorAll('.year-btn');
+
+            // 🔁 Reset all sections
             allSections.forEach(sec => {
                 if (sec.id !== id) {
                     sec.style.display = "none";
                 }
             });
 
-            const section = document.getElementById(id);
+            // 🔁 Reset all buttons
+            allButtons.forEach(b => {
+                b.innerText = "Open " + b.getAttribute("data-text") + " Analysis";
+                b.classList.remove("active"); // remove color
+            });
 
-            section.style.display =
-                (section.style.display === "flex") ? "none" : "flex";
+            const section = document.getElementById(id);
+            const yearText = btn.getAttribute("data-text");
+
+            // 🔥 Toggle current
+            if (section.style.display === "flex") {
+                section.style.display = "none";
+                btn.innerText = "Open " + yearText + " Analysis";
+                btn.classList.remove("active");
+            } else {
+                section.style.display = "flex";
+                btn.innerText = "Close " + yearText + " Analysis";
+                btn.classList.add("active"); // 🔥 apply color
+            }
         }
 
         function getFormattedDate() {
@@ -1914,6 +1938,9 @@ ${tableHTML}
         function printLedger() {
             const element = document.body;
             var customername = document.getElementById("name3").value;
+            if (!customername.toLowerCase().includes("garu")) {
+                customername += " GARU";
+            }
             customername += "_" + getFormattedDate();
             const opt = {
                 margin: 10,
