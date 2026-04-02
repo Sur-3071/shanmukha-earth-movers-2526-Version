@@ -771,9 +771,9 @@ function generateCustomerTable(data) {
                 rowCount++;
 
                 // 🔥 PAGE BREAK CONTROL (ONLY ADDITION)
-                if (rowCount % 15=== 0) {
-                    out += `<tr style="page-break-before: always;"></tr>`;
-                }
+                // if (rowCount % 15=== 0) {
+                //     out += `<tr style="page-break-before: always;"></tr>`;
+                // }
                 let color = activity.Payment === "Paid" ? "green" : "red";
 
                 out += `<tr style="font-size:16px; text-align:center;">

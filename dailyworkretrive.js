@@ -427,7 +427,7 @@ document.addEventListener("click", async function (e1) {
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
         const db2 = getDatabase(app);
-        const dataRefget = ref(db2, `DBConstants.DailyWorkDB/${id}`);
+        const dataRefget = ref(db2, `${DBConstants.DailyWorkDB}/${id}`);
         const snapshot = await get(dataRefget);
         var data;
         if (snapshot.exists()) {
