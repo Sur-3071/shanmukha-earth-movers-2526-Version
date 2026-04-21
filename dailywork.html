@@ -592,6 +592,7 @@
             const processedCustomers = new Set();
             const unpaidCustomers = {};
             const previousBalances = JSON.parse(localStorage.getItem("extraAmountsCache")) || {};
+            const unpaidcustomerslist = [];
             for (const customerPhone in data) {
                 if (data.hasOwnProperty(customerPhone)) {
                     const activity = data[customerPhone];
@@ -599,6 +600,8 @@
 
                     if (activity.Payment === "UnPaid") {
                         // alert("1");
+                        // console.log(activity);
+                        unpaidcustomerslist.push(activity);
                         const name = activity.Name;
 
                         const jcb = Number(activity.Price) || 0;
@@ -688,6 +691,7 @@
                     // }
                 }
             }
+            localStorage.setItem("unpaidCustomerslistdata", JSON.stringify(unpaidcustomerslist));
             for (let name in unpaidCustomers) {
 
                 // check if previous balance exists
@@ -728,6 +732,7 @@
             <th>Remaining JCB Price</th>
             <th>Total Overall Price</th>
             <th>Remaining Overall Price</th>
+            <th>Overview</th>
 </tr>
         </thead>
         <tbody>
@@ -758,11 +763,32 @@
                 <td>${name}</td>
                 <td>${data.Date}</td>
                 <td>${months}Months ${days}Days</td>
+                <td>
+  <button 
+    onclick="openPopup6('${name}', ${previous})" 
+    style="
+      background-color:#007bff;
+      color:white;
+      border:none;
+      padding:8px 14px;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:500;
+      transition:0.3s;
+    "
+    onmouseover="this.style.backgroundColor='#0056b3'"
+    onmouseout="this.style.backgroundColor='#007bff'"
+  >
+    User Overview
+  </button>
+</td>
                 <td>${previous}</td>
                 <td>${jcb}</td>
                 <td>${remainingJcb}</td>
                 <td>${overall}</td>
-                <td>${remainingOverall}</td>
+  <td>${remainingOverall}</td>
+</td>
             </tr>
         `;
                 }
@@ -770,7 +796,7 @@
                 // TOTAL ROW
                 tableHTML += `
         <tr style="font-weight:bold;background:#f2f2f2;">
-            <td colspan=3>Total</td>
+            <td colspan=4>Total</td>
             <td>${totalPrev}</td>
             <td>${totalJcb}</td>
             <td>${totalRemJcb}</td>
@@ -1401,6 +1427,18 @@ ${tableHTML}
                     </div>
                 </div>
             </div>
+            <div id="myModal6" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closePopup6()">&times;</span>
+                    <div id="overviewtablemain">
+                        <div class="loading-box" id="loadingMessage">
+                            <div class="loader"></div>
+                            <p>Data is loading, please wait...</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
             <script>
                 // List all modal IDs
                 const modals = [
@@ -1408,7 +1446,8 @@ ${tableHTML}
                     document.getElementById("myModal2"),
                     document.getElementById("myModal3"),
                     document.getElementById("myModal4"),
-                    document.getElementById("myModal5")
+                    document.getElementById("myModal5"),
+                    document.getElementById("myModal6")
 
                 ];
 
@@ -1976,6 +2015,83 @@ ${tableHTML}
             document.getElementById("myModal5").style.display = "flex";
         }
 
+        async function openPopup6(name, previousBalance) {
+
+            document.getElementById("myModal6").style.display = "flex";
+
+            // Loading
+            document.getElementById("overviewtablemain").innerHTML = `
+        <div class="loading-box">
+            <div class="loader"></div>
+            <p>Data is loading, please wait...</p>
+        </div>
+    `;
+
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const data = JSON.parse(localStorage.getItem("unpaidCustomerslistdata")) || [];
+
+            let rows = "";
+            let count = 1;
+
+            let totalUnpaid = 0;
+
+            for (let index = 0; index < data.length; index++) {
+                const user = data[index];
+
+                if (user.Name !== name) continue;
+
+                const amount = Number(user.OverallPrice) || 0;
+                totalUnpaid += amount;
+
+                rows += `
+        <tr>
+            <td>${count++}</td>
+            <td>${user.Name}</td>
+            <td>${user.Date}</td>
+            <td>${amount}</td>
+        </tr>
+        `;
+            }
+
+            // ✅ Final Balance Calculation
+            const finalBalance = totalUnpaid - (Number(previousBalance) || 0);
+
+            // ✅ Ledger Summary
+            const summary = `
+        <tr style="font-weight:bold; background:#f2f2f2;">
+            <td colspan="3">Current UnPaid</td>
+            <td>${totalUnpaid}</td>
+        </tr>
+        <tr style="font-weight:bold;">
+            <td colspan="3">Previous Balance</td>
+            <td>${previousBalance || 0}</td>
+        </tr>
+        <tr style="font-weight:bold; color:red;">
+            <td colspan="3">Total Remaining</td>
+            <td>${finalBalance}</td>
+        </tr>
+    `;
+
+            document.getElementById("overviewtablemain").innerHTML = `
+        <table border="1" style="border-collapse:collapse; width:100%; text-align:center;">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows || `<tr><td colspan="4">No data found</td></tr>`}
+                ${summary}
+            </tbody>
+        </table>
+    `;
+        }
+
+
         function closePopup1() {
             document.getElementById("myModal1").style.display = "none";
         }
@@ -1990,6 +2106,9 @@ ${tableHTML}
         }
         function closePopup5() {
             document.getElementById("myModal5").style.display = "none";
+        }
+        function closePopup6() {
+            document.getElementById("myModal6").style.display = "none";
         }
         // Close popup when clicking outside
         window.onclick = function (event) {

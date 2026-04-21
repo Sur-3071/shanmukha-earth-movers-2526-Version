@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+import DBConstants from './DatabaseConstants.js';
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "tractor-driver-data.firebaseapp.com",
