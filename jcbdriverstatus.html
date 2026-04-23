@@ -6,446 +6,354 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Driver Salary & Leave Dashboard</title>
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #FAEBD7;
-            margin: 0;
-            padding: 0;
-        }
+       /* ===== Base ===== */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f3f4f6;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-top: 20px;
-        }
+h1, h2 {
+    color: #333;
+    margin-top: 20px;
+}
 
-        /* Grid for Monthly Cards */
-        .month-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 30px;
-        }
+/* ===== Toggle Button ===== */
+#toggleBtn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+    transition: background 0.3s;
+}
+#toggleBtn:hover {
+    background-color: #0056b3;
+}
 
-        .month-card {
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            position: relative;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+/* ===== Select Dropdown ===== */
+select {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+    width: 400px;
+    background-color: #fff;
+}
+select:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+}
 
-        .month-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
+label {
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: block;
+    font-weight: bold;
+}
 
-        .month-header {
-            background: linear-gradient(45deg, #2ecc71, #27ae60);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 12px;
-            font-weight: bold;
-            text-align: center;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
+/* ===== Month Grid ===== */
+.month-grid {
+    display: none;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 95%;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+.month-grid::-webkit-scrollbar {
+    display: none;
+}
 
-        .month-details p {
-            margin: 8px 0;
-            font-size: 15px;
-            color: #444;
-        }
+.month-card {
+    flex: 0 0 220px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 15px;
+    transition: 0.3s;
+}
+.month-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
 
-        .month-details span {
-            font-weight: 600;
-            color: #2c3e50;
-        }
+.month-header {
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
 
-        /* Forms Section */
-        .forms-section {
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-start;
-            margin: 40px 0;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
+.month-details p {
+    margin: 6px 0;
+    font-size: 14px;
+}
 
-        .form-container {
-            background: #fff;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            width: 420px;
-        }
+/* ===== Forms ===== */
+.forms-section {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 40px 0;
+}
 
-        .form-container h2 {
-            color: #27ae60;
-            margin-bottom: 15px;
-            text-align: center;
-        }
+.form-container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    width: 420px;
+}
 
-        .form-container input[type="text"],
-        .form-container input[type="date"] {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 15px;
-        }
+.form-container input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
 
-        .form-container input[type="button"] {
-            background: linear-gradient(45deg, #27ae60, #2ecc71);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            margin-top: 10px;
-        }
+.form-container input[type="button"] {
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.form-container input[type="button"]:hover {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+}
 
-        .form-container input[type="button"]:hover {
-            background: linear-gradient(45deg, #2ecc71, #27ae60);
-        }
+/* ===== Table Box ===== */
+.table-box {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: 0.3s;
+}
+.table-box:hover {
+    transform: scale(1.02);
+}
 
-        /* ===== Modern Table Styling ===== */
-        .table-box {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            width: 350px;
-            transition: transform 0.2s ease;
-        }
+/* ===== Salary Table ===== */
+.salary-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.salary-table caption {
+    background: linear-gradient(45deg, #007bff, #00c6ff);
+    color: white;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 18px;
+}
+.salary-table th {
+    background: #007bff;
+    color: white;
+    padding: 14px 20px;
+    border: 1px solid #ddd;
+}
+.salary-table td {
+    padding: 14px 20px;
+    border: 1px solid #ddd;
+}
+.salary-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.salary-table tr:hover {
+    background-color: #eef6ff;
+}
+.salary-table td:last-child {
+    font-weight: bold;
+    color: #28a745;
+}
 
-        .table-box:hover {
-            transform: scale(1.02);
-        }
+/* ===== Leave Table ===== */
+.leave-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.leave-table caption {
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    color: white;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 18px;
+}
+.leave-table th {
+    background: #27ae60;
+    color: white;
+    padding: 14px 20px;
+    border: 1px solid #ddd;
+}
+.leave-table td {
+    padding: 14px 20px;
+    border: 1px solid #ddd;
+}
+.leave-table tr:nth-child(even) {
+    background-color: #f4fbf6;
+}
+.leave-table tr:hover {
+    background-color: #e8f8ee;
+}
+.leave-table td:last-child {
+    font-weight: bold;
+    color: #e67e22;
+}
 
-        .table-box caption {
-            font-weight: bold;
-            padding: 12px;
-            font-size: 18px;
-            color: #fff;
-            text-align: center;
-        }
+/* ===== General Table Fix ===== */
+th, td {
+    padding: 14px 20px;
+    border: 1px solid #ccc;
+}
 
-        .salary-table caption {
-            background: linear-gradient(45deg, #3498db, #2980b9);
-        }
+/* ===== Banner ===== */
+.salary-banner {
+    margin-top: 30px;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 12px;
+    color: white;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
 
-        .leave-table caption {
-            background: linear-gradient(45deg, #27ae60, #2ecc71);
-        }
+/* ===== Image ===== */
+.driver-image img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid green;
+}
 
-        .table-box table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: 'Poppins', sans-serif;
-        }
+/* ===== Modal ===== */
+.image-modal {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+}
+.modal-content {
+    max-width: 80%;
+    max-height: 80%;
+}
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+}
 
-        .table-box th,
-        .table-box td {
-            padding: 10px 8px;
-            text-align: center;
-        }
+/* ===== Image Modal ===== */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 
-        .table-box tr:nth-child(even) {
-            background: #f8f9fa;
-        }
+    background-color: rgba(0, 0, 0, 0.9);
 
-        .table-box tr:nth-child(odd) {
-            background: #eef3f7;
-        }
+    /* Center the image */
+    justify-content: center;
+    align-items: center;
+}
 
-        .table-box th {
-            font-weight: 600;
-            background: #ecf0f1;
-            color: #2c3e50;
-        }
+/* Image inside modal */
+.modal-content {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 12px;
+    object-fit: contain;
+}
 
-        .table-box td {
-            color: #34495e;
-            font-size: 14px;
-        }
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 35px;
+    color: white;
+    cursor: pointer;
+    z-index: 1001;
+}
 
-        .no-data {
-            text-align: center;
-            font-size: 15px;
-            color: #888;
-            font-style: italic;
-            padding: 20px;
-        }
+/* Container */
+.driver-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
 
-        body {
-            font-family: "Poppins", sans-serif;
-            background: #f3f4f6;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
+/* Salary banner (text part) */
+.salary-banner {
+    flex: 1; /* take remaining space */
+    padding: 15px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
 
-        h2 {
-            color: #333;
-            margin-bottom: 10px;
-        }
+/* Driver image */
+.driver-image {
+    flex: 0 0 120px; /* fixed size */
+    display: flex;
+    justify-content: center;
+}
 
-        /* Toggle button style */
-        #toggleBtn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 22px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-bottom: 20px;
-            transition: background 0.3s;
-        }
+.driver-image img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #27ae60;
+}
 
-        #toggleBtn:hover {
-            background-color: #0056b3;
-        }
+/* Optional hover zoom */
+.modal-content:hover {
+    transform: scale(1.05);
+    transition: 0.3s ease;
+}
 
-        /* Scrollable container */
-        .month-grid {
-            display: none;
-            /* Hidden initially */
-            overflow-x: auto;
-            gap: 20px;
-            padding: 20px;
-            margin: 0 auto;
-            max-width: 95%;
-            cursor: grab;
-            scroll-behavior: smooth;
-            user-select: none;
-            scrollbar-width: none;
-            /* Hide Firefox scrollbar */
-        }
+/* ===== Responsive ===== */
+@media screen and (max-width: 900px) {
+    .forms-section {
+        flex-direction: column;
+        align-items: center;
+    }
 
-        .month-grid::-webkit-scrollbar {
-            display: none;
-            /* Hide Chrome scrollbar */
-        }
-
-        /* Month cards */
-        .month-card {
-            flex: 0 0 220px;
-            background: white;
-            border-radius: 14px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .month-card:hover {
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .month-header {
-            background: #007bff;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            padding: 8px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .month-details p {
-            margin: 6px 0;
-            font-size: 14px;
-        }
-
-        #com {
-            border-radius: 25px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .container {
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            text-align: center;
-        }
-
-        select {
-            padding: 10px 15px;
-            font-size: 16px;
-            border: 2px solid #007bff;
-            border-radius: 8px;
-            outline: none;
-            cursor: pointer;
-            transition: 0.3s ease;
-            width: 400px;
-        }
-
-        select:focus {
-            border-color: #0056b3;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
-        }
-
-        label {
-            font-size: 18px;
-            margin-bottom: 10px;
-            display: block;
-            font-weight: bold;
-        }
-
-        th,
-        td {
-            padding: 12px 55px;
-            /* vertical 12px, horizontal 16px */
-            text-align: left;
-            /* optional */
-            border: 1px solid #ccc;
-            /* optional */
-        }
-
-        #salaryTableContainer {
-            margin-right: 250px;
-        }
-
-        #tablesContainer {
-            margin-top: 50px;
-        }
-
-        .salary-banner {
-            margin-top: 50px;
-            padding: 15px;
-            font-weight: bold;
-            font-size: 18px;
-            text-align: center;
-            border-radius: 12px;
-            color: white;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        .salary-banner:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Shine effect */
-        .salary-banner::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: skewX(-20deg);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% {
-                left: -100%;
-            }
-
-            100% {
-                left: 150%;
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .salary-banner span {
-            margin: 0 10px;
-            display: inline-block;
-        }
-
-        .driver-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        /* 80% */
-        .salary-banner {
-            flex: 0 0 80%;
-            background: #2c5aa0;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: bold;
-        }
-
-        /* 20% */
-        .driver-image {
-            flex: 0 0 20%;
-            display: flex;
-            justify-content: center;
-        }
-
-        .driver-image img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            /* circle image */
-            object-fit: cover;
-            border: 3px solid green;
-        }
-
-
-        .image-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            padding-top: 50px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            text-align: center;
-        }
-
-        .modal-content {
-            max-width: 80%;
-            max-height: 80%;
-            border-radius: 10px;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 40px;
-            font-size: 30px;
-            color: white;
-            cursor: pointer;
-        }
-
-        @media screen and (max-width: 900px) {
-            .forms-section {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
+    select {
+        width: 100%;
+    }
+}
     </style>
 </head>
 
@@ -503,6 +411,7 @@
                     <option value="Gpay">💰 Google Pay</option>
                     <option value="Bank Transfer">🏦 Bank Transfer</option>
                 </select>
+                <input type="text" id="reason"  placeholder="Enter Purpose">
                 <input type="text" id="work2" maxlength="6" placeholder="Enter Salary">
                 <input type="button" value="Submit Salary" id="submit2">
             </form>

@@ -727,12 +727,12 @@
             <th>Customer Name</th>
             <th>Date</th>
             <th>Days Completed</th>
+            <th>Overview</th>
             <th>Previous Balance</th>
             <th>Total JCB Price</th>
             <th>Remaining JCB Price</th>
             <th>Total Overall Price</th>
             <th>Remaining Overall Price</th>
-            <th>Overview</th>
 </tr>
         </thead>
         <tbody>
@@ -888,8 +888,7 @@ ${tableHTML}
                 profit[i] =
                     months[i]
                     - oil[i]
-                    - (worked[i * 1] * 335)
-                    - (daysToConsider * 3300);
+                    - (daysToConsider * 3700);
             }
 
             const sortedDates = l.sort((a, b) => new Date(a) - new Date(b));
@@ -1033,11 +1032,6 @@ ${tableHTML}
                                 const index = context.dataIndex;
                                 const custom = context.dataset.custom[index];
 
-                                // const monthprofit = value
-                                //     - parseInt(custom.oil)
-                                //     - (parseInt(custom.worked) * 335)
-                                //     - (parseInt(custom.totalDays) * 3300);
-
                                 const today = new Date();
                                 const currentYear = today.getFullYear();
 
@@ -1093,8 +1087,7 @@ ${tableHTML}
                                 // ✅ FINAL PROFIT
                                 const monthprofit = value
                                     - parseInt(custom.oil)
-                                    - (parseInt(custom.worked) * 335)
-                                    - (daysToConsider * 3300);
+                                    - (daysToConsider * 3700);
 
                                 // 🔥 Extra calculations
                                 const totalHrs = Math.round(value / 1000);
@@ -1180,8 +1173,8 @@ ${tableHTML}
             var homeexp = 20000;
             var imprhrs = parseInt((((365 * 8000) - totalwork) / (remin)) / 1000)
             var impmin = parseInt((((((365 * 8000) - totalwork) / (remin)) / 1000) - imprhrs) * 60)
-            //3350 is the average cost per day (335 for maintains + 1800  for jcb emi and 667 is the home expenses and 835 for jsb operator salary
-            proft = totalwork - (workday * 335) - (differenceInDays * 3300) - oila;
+            //3700 is the average cost per day (400 for maintains + 1800  for jcb emi and 665 is the home expenses and 835 for jcb operator salary
+            proft = totalwork - (differenceInDays * 3700) - oila;
             // console.log(totalwork, workday, differenceInDays, oila, proft);
 
             document.getElementById("twrk").innerHTML = moneyconvert(totalwork);
@@ -1247,9 +1240,9 @@ ${tableHTML}
                 // calculate days
                 const diffTime = endDate - startDate;
                 const actualDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1 < 0 ? 0 : Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                const salary = actualDays * 833;
+                const salary = actualDays * 835;
                 const jcbemi = actualDays * 1800;
-                const home = actualDays * 667;
+                const home = actualDays * 665;
                 let income = 0,
                     oilUsed = 0,
                     total = 0,
@@ -1265,7 +1258,7 @@ ${tableHTML}
                     workedDays += worked[i];
                     holidays += holiday[i];
                 });
-                const maintaince = workedDays * 335;
+                const maintaince = actualDays * 400;
                 profitSum = (income) - (salary + jcbemi + maintaince + home + oilUsed);
 
                 return {
@@ -1551,10 +1544,10 @@ ${tableHTML}
                         const workedDays = d.workedDays || 0;
                         const totalHours = incomeToHoursMinutes(income) || 0;
                         const totaldays = d.totalDays || 0;
-                        const salary = Actualdays * 833;
+                        const salary = Actualdays * 835;
                         const jcbemi = Actualdays * 1800;
-                        const maintaince = workedDays * 335;
-                        const home = Actualdays * 667;
+                        const maintaince = Actualdays * 400;
+                        const home = Actualdays * 665;
                         const profit = income - diseloil - salary - jcbemi - maintaince - home;
                         const profitType = profit >= 0 ? "profit" : "loss";
                         const profitLabel = profit >= 0 ? "Profit" : "Loss";
@@ -1901,6 +1894,15 @@ ${tableHTML}
     <marquee behavior="scroll" direction="left" scrollamount="10">
         <img src="jcb.png" height="500px" width="500px" id="jcb">
     </marquee>
+    <div class="expense-banner">
+        🚜 Daily Expense:
+        Maintenance ₹400 |
+        JCB EMI ₹1800 |
+        Home ₹665 |
+        Operator ₹835
+        👉 Total: ₹3700 / day
+    </div>
+    </div>
     <!-- Load the main script as a module -->
     <script type="module" src="dailyworkdatabase.js"></script>
     <script type="module" src="dailyworkid_retrive.js"></script>

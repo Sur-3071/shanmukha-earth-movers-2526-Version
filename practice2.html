@@ -53,11 +53,10 @@
         const prevOil = [120000, 85000, 10000, 7000, 11000, 9500, 8000, 12500, 11500, 10800, 10000, 7800];
         const totalDays = [31, 30, 31, 30, 31, 31, 29, 31, 30, 31, 30, 31];
 
-        const PER_DAY_COST = 2534;
-        const PER_WORKDAY_COST = 335;
+        const PER_DAY_COST = 3700;
 
         const prevCustom = prevIncome.map((income, i) => {
-            const profit = income - (prevWorked[i] * PER_WORKDAY_COST + totalDays[i] * PER_DAY_COST + prevOil[i]);
+            const profit = income - ( totalDays[i] * PER_DAY_COST + prevOil[i]);
             return {
                 profit: profit,
                 worked: prevWorked[i],

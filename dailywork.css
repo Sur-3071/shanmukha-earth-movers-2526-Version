@@ -382,6 +382,33 @@ td select, td input.finalPrice {
     font-size: 16px;
 }
 
+/* ===== Fixed Expense Banner ===== */
+.expense-banner {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+
+    background: linear-gradient(90deg, #000428, #004e92);
+    color: #ffffff;
+
+    text-align: center;
+    padding: 14px 10px;
+
+    font-size: 18px;        /* 👈 bigger text */
+    font-weight: 600;       /* bold */
+
+    letter-spacing: 0.5px;
+
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.3);
+
+    z-index: 999;
+}
+
+/* Highlight total */
+.expense-banner b {
+    color: #00ffcc;
+}
+
 #customerTable1 .finalPrice {
     background-color: #e6f7ff;
     font-weight: bold;
