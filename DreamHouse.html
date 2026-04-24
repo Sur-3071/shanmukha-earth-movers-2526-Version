@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream House</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif;}
+
+body{background: linear-gradient(135deg,#f6d365,#fda085);}
+
+.header{text-align:center;padding:30px 10px 60px;color:#fff;position:relative;}
+.header h1{font-size:42px;}
+.header p{margin-top:8px;}
+
+.family-img{
+    position:absolute;right:40px;top:10px;
+    width:170px;height:170px;border-radius:50%;
+    object-fit:cover;border:6px solid #fff;
+    box-shadow:0 15px 35px rgba(0,0,0,0.25);
+}
+
+/* CARD */
+.container{display:flex;justify-content:center;padding:20px;}
+.card{
+    background:#fff;width:90%;max-width:900px;
+    border-radius:20px;padding:30px;
+    box-shadow:0 20px 45px rgba(0,0,0,0.2);
+}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.full{grid-column:span 2;}
+
+input,select,textarea{
+    width:100%;padding:12px;border-radius:10px;
+    border:1px solid #ddd;height:45px;
+}
+textarea{height:100px;}
+
+.error{border:2px solid red !important;}
+
+/* BUTTON */
+.buttons{display:flex;justify-content:center;gap:20px;margin-top:25px;}
+button{padding:12px 25px;border:none;border-radius:10px;cursor:pointer;}
+.add-btn{background:#ff7a18;color:#fff;}
+.retrieve-btn{background:#eee;}
+
+/* SUCCESS IMAGE */
+.success-img{
+    position:fixed;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:100px;height:100px;
+    display:none;
+    z-index:999;
+    animation:pop 0.5s ease;
+}
+/* ERROR FIELD */
+.error{
+    border:2px solid red !important;
+}
+
+/* SUCCESS IMAGE */
+.success-img{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:100px;
+    height:100px;
+    display:none;
+    z-index:999;
+    animation:pop 0.5s ease;
+}
+
+@keyframes pop{
+    from{transform:translate(-50%,-60%) scale(0.3);opacity:0;}
+    to{transform:translate(-50%,-50%) scale(1);opacity:1;}
+}
+
+/* TABLE */
+.table-container{
+    margin-top:25px;
+    animation:fadeUp 0.5s ease;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+th,td{
+    padding:12px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+}
+
+th{
+    background:#ff7a18;
+    color:#fff;
+}
+
+tr:hover{
+    background:#fff6f0;
+}
+
+/* DESCRIPTION ROW */
+.desc-row td{
+    text-align:left;
+    background:#fff6f0;
+    padding:12px 16px;
+    border-bottom:2px solid #ffe0d0;
+}
+
+/* EMPTY MESSAGE */
+.empty{
+    padding:10px;
+    text-align:center;
+    color:red;
+}
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes pop{
+    from{transform:translate(-50%,-60%) scale(0.3);opacity:0;}
+    to{transform:translate(-50%,-50%) scale(1);opacity:1;}
+}
+
+/* TABLE SECTION */
+#tableSection{
+    width:90%;
+    max-width:900px;
+    margin:20px auto;
+}
+
+/* TOTAL BOX */
+.total-box{
+    margin-top:15px;
+    padding:15px;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+    font-size:18px;
+    font-weight:600;
+    text-align:right;
+    color:#ff7a18;
+    animation:fadeUp 0.5s ease;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-content{
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    width:300px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea{
+    padding:8px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+/* 🔥 MODAL BACKDROP */
+.modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 🔥 MODAL BOX */
+.modal-content{
+    background:#fff;
+    padding:25px;
+    border-radius:16px;
+    width:320px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.25);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    animation: scaleUp 0.3s ease;
+}
+
+/* TITLE */
+.modal-content h3{
+    text-align:center;
+    color:#ff7a18;
+    margin-bottom:10px;
+}
+
+/* INPUTS */
+.modal-content input,
+.modal-content select,
+.modal-content textarea{
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    transition:0.3s;
+}
+
+.modal-content textarea{
+    height:80px;
+}
+
+/* FOCUS EFFECT */
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus{
+    border-color:#ff7a18;
+    box-shadow:0 0 8px rgba(255,122,24,0.3);
+    outline:none;
+}
+
+/* BUTTON CONTAINER */
+.modal-content div{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:10px;
+}
+
+/* BUTTONS */
+.modal-content button{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.3s;
+}
+
+/* SAVE BUTTON */
+.modal-content button:first-child{
+    background:linear-gradient(135deg,#ff7a18,#ffb347);
+    color:#fff;
+}
+
+/* CANCEL BUTTON */
+.modal-content button:last-child{
+    background:#eee;
+}
+
+/* HOVER EFFECT */
+.modal-content button:hover{
+    transform:translateY(-2px);
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+@keyframes scaleUp{
+    from{transform:scale(0.7);opacity:0;}
+    to{transform:scale(1);opacity:1;}
+}
+
+/* 🔥 LOADER CONTAINER */
+.loader{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:30px;
+    animation:fadeUp 0.5s ease;
+}
+
+/* 🔄 SPINNER */
+.spinner{
+    width:45px;
+    height:45px;
+    border:5px solid #ffe0d0;
+    border-top:5px solid #ff7a18;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+}
+
+/* TEXT */
+.loader p{
+    margin-top:10px;
+    color:#ff7a18;
+    font-weight:600;
+}
+
+/* ANIMATION */
+@keyframes spin{
+    0%{transform:rotate(0deg);}
+    100%{transform:rotate(360deg);}
+}
+
+.loader p::after{
+    content:'';
+    animation:dots 1.5s infinite;
+}
+
+@keyframes dots{
+    0%{content:'';}
+    33%{content:'.';}
+    66%{content:'..';}
+    100%{content:'...';}
+}
+
+/* 🔥 EMPTY STATE */
+.empty-state{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:40px 20px;
+    margin-top:20px;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.1);
+    animation:fadeUp 0.5s ease;
+}
+
+/* ICON */
+.empty-icon{
+    font-size:60px;
+    margin-bottom:10px;
+    animation:float 2s ease-in-out infinite;
+}
+
+/* MAIN TEXT */
+.empty-title{
+    font-size:22px;
+    font-weight:700;
+    color:#ff7a18;
+}
+
+/* SUB TEXT */
+.empty-sub{
+    font-size:14px;
+    color:#777;
+    margin-top:5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1>🏡 Dream House</h1>
+<p>Building today, cherishing forever ❤️</p>
+<img src="familyphoto.png" class="family-img">
+</div>
+
+<div class="container">
+<div class="card">
+
+<form id="expenseForm">
+
+<div class="form-grid">
+
+<div>
+<label>ID</label>
+<input type="text" id="id" readonly>
+</div>
+
+<div>
+<label>Date</label>
+<input type="date" id="date">
+</div>
+
+<div>
+<label>Payment</label>
+<select id="payment">
+<option value="">Select Payment Method</option>
+<option>PhonePe</option>
+<option>Google Pay</option>
+<option>Paytm</option>
+<option>Cash</option>
+</select>
+</div>
+
+<div>
+<label>Amount</label>
+<input type="number" id="amount">
+</div>
+
+<div>
+<label>Payer</label>
+<input type="text" id="payer">
+</div>
+
+<div>
+<label>Purpose Type</label>
+<select id="ptype">
+<option value="">Select</option>
+<option>Home Purpose</option>
+<option>Other Purpose</option>
+</select>
+</div>
+
+<div class="full">
+<label>Description</label>
+<textarea id="desc"></textarea>
+</div>
+
+</div>
+
+<div class="buttons">
+<button type="submit" id="submitBtn" class="add-btn">Submit</button>
+<button type="button" id="retrieveBtn" class="retrieve-btn">Retrieve</button>
+</div>
+
+</form>
+
+<img src="done1.png" id="done" class="success-img">
+
+</div>
+</div> <!-- END CARD -->
+</div> <!-- END CONTAINER -->
+
+<!-- 🔥 TABLE OUTSIDE -->
+<div id="tableSection">
+    <div id="tableContainer" class="table-container"></div>
+    <div id="totalBox" class="total-box"></div>
+</div></div>
+
+<script>
+// UNIQUE ID
+function genId(){
+    return "DH-" + new Date().getTime();
+}
+window.onload = () => document.getElementById("id").value = genId();
+
+</script>
+<script type="module" src="DreamHouseDB.js"></script>
+
+<!-- 🔥 EDIT MODAL -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h3>Edit Expense</h3>
+
+        <input type="hidden" id="editId">
+
+        <input type="date" id="editDate">
+        <input type="number" id="editAmount">
+
+        <select id="editPayment">
+            <option>UPI</option>
+            <option>PhonePe</option>
+            <option>Google Pay</option>
+            <option>Paytm</option>
+            <option>Cash</option>
+        </select>
+
+        <input type="text" id="editPayer">
+
+        <select id="editType">
+            <option>Home Purpose</option>
+            <option>Other Purpose</option>
+        </select>
+
+        <textarea id="editDesc"></textarea>
+
+        <div style="margin-top:10px;">
+            <button onclick="updateData()">Save</button>
+            <button onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

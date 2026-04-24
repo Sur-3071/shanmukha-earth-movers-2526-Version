@@ -7,7 +7,8 @@ const DBConstants={
     Homeexpenses:"Homeexp",
     JcbDriverDB:"JcbDriverData",
     TractorTrips:"Tractor_Trips",
-    TractorAmount:"Tractor_Amount"
+    TractorAmount:"Tractor_Amount",
+    DreamHouseDB:"SwathiDreamHouseData",
 };
 
 export default DBConstants;
