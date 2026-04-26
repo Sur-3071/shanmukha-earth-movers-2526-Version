@@ -1689,13 +1689,14 @@ ${tableHTML}
             <input type="text" id="vill" name="vill" placeholder="Village Name" required readonly>
             <input type="tel" id="dis" name="dis" placeholder="Enter Disel Amount" required>
             <input type="text" id="wid" name="wid" placeholder="Work Id" required readonly>
+            <input type="text" id="beta" name="beta" placeholder="Driver Beta"  onchange="timecal()">
+            <input type="text" id="desc" name="desc" placeholder="Description"  required>
             <select id="worktype" required onchange="addflow()">
                 <option hidden>select Work Type</option>
                 <option>Hours</option>
                 <option>Loading</option>
                 <option>Contract</option>
             </select>
-            <input type="text" id="beta" name="beta" placeholder="Driver Beta" value="0" onchange="timecal()">
             <div id="hours" style="display: none;">
                 <select id="hrsrate" name="hrsrate" onchange="timecal()" required>
                     <option value="" disabled selected>Select Hours Price</option>
@@ -1703,7 +1704,7 @@ ${tableHTML}
                 </select>
                 <div id="loading1">
                     <input type="text" id="trprate1" name="trprate1" placeholder="Trip Price" onkeyup="tripprice1()"
-                        value="0" required>
+                         required>
                     <div id="container2">
                         <div class="row1">
                             <button class="add-button" onclick="addRow1()">Add Driver</button>
@@ -1713,9 +1714,8 @@ ${tableHTML}
                         style="font-size: 20px; display: none;" readonly></textarea>
                     <input type="text" id="trips1" placeholder="Number of Trips" readonly required value="0">
                     <input type="text" id="alltrprate" name="alltrprate" placeholder="Total Trip Price" required
-                        value="0">
+                        value="0" readonly>
                 </div>
-                <input type="text" id="desc" name="desc" placeholder="Description" value="--" required>
                 <input type="time" id="stime" name="stime" placeholder="Starting Time" onchange="timecal()" required>
                 <input type="time" id="etime" name="etime" placeholder="Ending Time" onchange="timecal()" required>
                 <input type="text" id="ttime" name="ttime" placeholder="Total Time" readonly required>

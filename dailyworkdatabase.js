@@ -22,9 +22,9 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     const name = document.getElementById("name").value;
     const villname = document.getElementById("vill").value;
     const pno = "**";
-    const disel = document.getElementById("dis").value;
+    const disel = document.getElementById("dis").value || "0";
     var con = document.getElementById("con").value;
-    var desc = document.getElementById("desc").value;
+    var desc = document.getElementById("desc").value || "--";;
     var stime = document.getElementById("stime").value;
     var etime = document.getElementById("etime").value;
     var ttime = document.getElementById("ttime").value;
@@ -36,8 +36,8 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     var hrsamt = document.getElementById("hrsrate").value;
     var jcbtrpamt = document.getElementById("jcbtrprate").value;
     var trpamt = document.getElementById("trprate").value;
-    const beta = document.getElementById("beta").value;
-    var hourstrpamt = document.getElementById("trprate1").value;
+    const beta = document.getElementById("beta").value || "0";
+    var hourstrpamt = document.getElementById("trprate1").value || "0";
     var hoursdrivers = document.getElementById("output1").value;
     var hourstrips = document.getElementById("trips1").value;
     // alert(beta,hourstrpamt,hoursdrivers,hourstrips);
