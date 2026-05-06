@@ -548,11 +548,14 @@ function editData() {
     container.innerHTML = `<button class="add-button" onclick="addRow()">Add Driver</button>`;
 
     const lines = rawText.split('\n');
-
+    var nonpaytrips = 0;
     lines.forEach(line => {
         const [driver, trips] = line.split('=').map(item => item.trim());
 
         if (driver && trips) {
+            if(driver.toLowerCase().includes("own")) {
+                nonpaytrips += parseInt(trips);
+            }
             const newRow = document.createElement('div');
             newRow.className = 'row';
             newRow.innerHTML = `
@@ -563,6 +566,7 @@ function editData() {
             container.appendChild(newRow);
         }
     });
+    document.getElementById("noncompanytractors").value = nonpaytrips;
 }
 
 function editData1() {
@@ -572,11 +576,14 @@ function editData1() {
     container.innerHTML = `<button class="add-button" onclick="addRow1()">Add Driver</button>`;
 
     const lines = rawText.split('\n');
-
+    var nonpaytrips = 0;
     lines.forEach(line => {
         const [driver, trips] = line.split('=').map(item => item.trim());
 
         if (driver && trips) {
+             if(driver.toLowerCase().includes("own")) {
+                nonpaytrips += parseInt(trips);
+            }
             const newRow = document.createElement('div');
             newRow.className = 'row1';
             newRow.innerHTML = `
@@ -586,6 +593,7 @@ function editData1() {
       `;
             container.appendChild(newRow);
         }
+        document.getElementById("hoursnoncompanytractors").value = nonpaytrips;
     });
 }
 

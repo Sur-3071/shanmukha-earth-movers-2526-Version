@@ -40,6 +40,8 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     var hourstrpamt = document.getElementById("trprate1").value || "0";
     var hoursdrivers = document.getElementById("output1").value;
     var hourstrips = document.getElementById("trips1").value;
+    var noncompanytractorstrips = document.getElementById("noncompanytractors").value || "0";
+    var hoursnoncompanytractorstrips = document.getElementById("hoursnoncompanytractors").value || "0";
     // alert(beta,hourstrpamt,hoursdrivers,hourstrips);
     var overallamount = 0;
     document.getElementById("userForm1").reset();
@@ -52,7 +54,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
         ttime = "--";
         con = "--";
         hrsamt = "--";
-        overallamount = (parseInt(jcbtrpamt) + parseInt(trpamt)) * parseInt(trips) + parseInt(beta);
+        overallamount = (parseInt(jcbtrpamt) + parseInt(trpamt)) * parseInt(trips) + parseInt(beta)-(parseInt(trpamt) * parseInt(noncompanytractorstrips));
         // alert(overallamount);
 
 
@@ -78,8 +80,9 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
             const r = parseInt(rate) || 0;
             const hAmt = parseInt(hourstrpamt) || 0;
             const hCnt = parseInt(hourstrips) || 0;
+            const hnoncompanytractorstrips = parseInt(hoursnoncompanytractorstrips) || 0;
 
-            overallamount = b + r + (hAmt * hCnt);
+            overallamount = b + r + (hAmt * hCnt) - (hAmt * hnoncompanytractorstrips);
 
             // alert(overallamount);
         }

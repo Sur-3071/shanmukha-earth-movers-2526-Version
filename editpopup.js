@@ -40,6 +40,8 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
     var hourstrpamt = document.getElementById("trprate1").value;
     var hoursdrivers = document.getElementById("output1").value;
     var hourstrips = document.getElementById("trips1").value;
+    var hoursnoncompanytractors = document.getElementById("hoursnoncompanytractors").value;
+    var noncompanytractors = document.getElementById("noncompanytractors").value;
     var overallamount = 0;
     // alert(trips+" "+con);
     if (trips.length > 0 && trips!=="--") {
@@ -48,7 +50,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
         const tripCount = parseInt(trips) || 0;
         const b = parseInt(beta) || 0;
 
-        overallamount = (jcb + tripAmt) * tripCount + b;
+        overallamount = (jcb + tripAmt) * tripCount + b-(tripAmt * noncompanytractors);
 
     }
     else {
@@ -65,8 +67,9 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
             const r = parseInt(rate) || 0;
             const hAmt = parseInt(hourstrpamt) || 0;
             const hCnt = parseInt(hourstrips) || 0;
+            const hoursnoncompanytractorstrips = parseInt(hoursnoncompanytractors) || 0;
 
-            overallamount = b + r + (hAmt * hCnt);
+            overallamount = b + r + (hAmt * hCnt)-((hAmt * hoursnoncompanytractorstrips));
 
         }
     }

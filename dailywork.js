@@ -43,7 +43,6 @@ function timecal() {
             var jcbtriprate=parseInt(document.getElementById("jcbtrprate").value || "0");
             var trippri=(triprate*jcbtriprate);
             rate = (isNaN(trippri)?beta:parseInt(trippri)+beta);
-            alert(rate);
             document.getElementById("rate").value=rate;
         }
         else
@@ -120,25 +119,53 @@ function removeRow1(button) {
 
 function updateTotalTrips() {
     // alert("hi");
+    const driverNames = document.querySelectorAll('input[name="driverName[]"]');
     const tripInputs = document.querySelectorAll('input[name="trips[]"]');
+    let paytotal = 0;
     let total = 0;
-    tripInputs.forEach(input => {
-        const value = parseInt(input.value) || 0;
-        total += value;
+    driverNames.forEach((driverName, index) => {
+        const trip = tripInputs[index].value || 0;
+        const name = (driverName.value.toLowerCase() || "Unknown Driver").trim().replace(/\s+/g, "_");
+        if(name.includes("own"))
+        {
+            const value = parseInt(trip) || 0;
+            paytotal += value;
+        }
+            total += parseInt(trip) || 0;
     });
+
+    // tripInputs.forEach(input => {
+    //     console.log(input);
+    //     const value = parseInt(input.value) || 0;
+    //     total += value;
+    // });
     document.getElementById('trips').value= total;
+    document.getElementById('noncompanytractors').value= paytotal;
     tripprice();
 }
 function updateTotalTrips1() {
     // alert("hi");
     // alert("trips1");
+    const driverNames = document.querySelectorAll('input[name="driverName1[]"]');
     const tripInputs = document.querySelectorAll('input[name="trips1[]"]');
+    let paytotal = 0;
     let total = 0;
-    tripInputs.forEach(input => {
-        const value = parseInt(input.value) || 0;
-        total += value;
+    driverNames.forEach((driverName, index) => {
+        const trip = tripInputs[index].value || 0;
+        const name = (driverName.value.toLowerCase() || "Unknown Driver").trim().replace(/\s+/g, "_");
+        if(name.includes("own"))
+        {
+            const value = parseInt(trip) || 0;
+            paytotal += value;
+        }
+            total += parseInt(trip) || 0;
     });
+    // tripInputs.forEach(input => {
+    //     const value = parseInt(input.value) || 0;
+    //     total += value;
+    // });
     document.getElementById('trips1').value= total;
+    document.getElementById('hoursnoncompanytractors').value= paytotal;
     tripprice1();
 }
 function tripprice()
