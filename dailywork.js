@@ -20,7 +20,7 @@ function timecal() {
 
     // Format the total time as HH:MM
     var totalTime = diffHours.toString().padStart(2, '0') + ':' + diffMinutes.toString().padStart(2, '0');
-    var c3=parseInt(document.getElementById("hrsrate").value);
+    var c3=parseInt(document.getElementById("hrsrate").value || "1000");
     // Calculate the total minutes and price
     var tmin = diffHours * 60 + diffMinutes;
     var pri = tmin * c3/60;
@@ -28,8 +28,8 @@ function timecal() {
     document.getElementById("ttime").value = totalTime;
     // alert(pri+" "+amt);
     var type=document.getElementById("worktype").value;
-    var beta=parseInt(document.getElementById("beta").value);
-    var rate=parseInt(document.getElementById("rate").value);
+    var beta=parseInt(document.getElementById("beta").value || "0");
+    var rate=parseInt(document.getElementById("rate").value || "0");
     if(type==="Hours")
     {
         rate = (isNaN(pri)?0:parseInt(pri));
@@ -39,17 +39,18 @@ function timecal() {
     {
         if(type==="Loading")
         {
-            var triprate=parseInt(document.getElementById("trips").value);
-            var jcbtriprate=parseInt(document.getElementById("jcbtrprate").value);
+            var triprate=parseInt(document.getElementById("trips").value || "0");
+            var jcbtriprate=parseInt(document.getElementById("jcbtrprate").value || "0");
             var trippri=(triprate*jcbtriprate);
             rate = (isNaN(trippri)?beta:parseInt(trippri)+beta);
+            alert(rate);
             document.getElementById("rate").value=rate;
         }
         else
         {
             if(type==="Contract")
             {
-                var conamouont=parseInt(document.getElementById("con").value);
+                var conamouont=parseInt(document.getElementById("con").value || "0");
                 rate = (isNaN(conamouont)?beta:parseInt(conamouont)+beta);
                 document.getElementById("rate").value=rate;
 
@@ -62,8 +63,8 @@ function timecal() {
 
 function conprice()
 {
-    var beta=parseInt(document.getElementById("beta").value);
-    var c1=document.getElementById("con").value;
+    var beta=parseInt(document.getElementById("beta").value || "0");
+    var c1=document.getElementById("con").value || "0";
     document.getElementById("rate").value=parseInt(c1)+beta;
 }
 function removedone() {
@@ -142,10 +143,10 @@ function updateTotalTrips1() {
 }
 function tripprice()
 {
-    var c1=document.getElementById("trips").value;
-    var c3=parseInt(document.getElementById("jcbtrprate").value);
+    var c1=document.getElementById("trips").value || "0";
+    var c3=parseInt(document.getElementById("jcbtrprate").value || "0");
     var c2=parseInt(c1)*c3;
-    var beta=document.getElementById("beta").value;
+    var beta=document.getElementById("beta").value || "0";
     var fin=isNaN(c2)?parseInt(beta):(parseInt(beta)+c2);
     document.getElementById("rate").value=fin;
     generateOutput();
