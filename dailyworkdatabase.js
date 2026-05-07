@@ -32,14 +32,14 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     const rate = document.getElementById("rate").value;
     const shift = "**";
     const worktype = document.getElementById("worktype").value;
-    var trips = document.getElementById("trips").value;
-    var hrsamt = document.getElementById("hrsrate").value;
-    var jcbtrpamt = document.getElementById("jcbtrprate").value;
-    var trpamt = document.getElementById("trprate").value;
+    var trips = document.getElementById("trips").value || "0";
+    var hrsamt = document.getElementById("hrsrate").value || "1000";
+    var jcbtrpamt = document.getElementById("jcbtrprate").value || "0";
+    var trpamt = document.getElementById("trprate").value || "0";
     const beta = document.getElementById("beta").value || "0";
     var hourstrpamt = document.getElementById("trprate1").value || "0";
     var hoursdrivers = document.getElementById("output1").value;
-    var hourstrips = document.getElementById("trips1").value;
+    var hourstrips = document.getElementById("trips1").value || "0";
     var noncompanytractorstrips = document.getElementById("noncompanytractors").value || "0";
     var hoursnoncompanytractorstrips = document.getElementById("hoursnoncompanytractors").value || "0";
     // alert(beta,hourstrpamt,hoursdrivers,hourstrips);
@@ -929,7 +929,7 @@ function generateCustomerTable1(data) {
                     let str = activity.HoursDrivers || "";
                     // alert(str);
                     let count = 0;
-
+                    var Hnonpaytrips=0;
                     for (let i = 0; i < str.length; i++) {
                         if (str[i] === "=") {
                             count++;
@@ -943,6 +943,10 @@ function generateCustomerTable1(data) {
 
                         for (let i = 0; i < arr.length; i += 3) {
                             if (arr[i] && arr[i + 2]) {       // <— check before adding
+                                if(arr[i].toLowerCase().includes("own"))
+                                    {
+                                        Hnonpaytrips+=parseInt(arr[i + 2]);
+                                    }
                                 result += arr[i] + " = " + arr[i + 2] + "\n";
                             }
                         }
@@ -958,6 +962,7 @@ function generateCustomerTable1(data) {
 
                 }
                 // console.log(HoursTripsAmount+" "+HoursTrips);
+                var Lnonpaytrips=0;
                 var LDrivers = 0;
                 if (activity.Drivers !== undefined) {
                     let str = activity.Drivers;
@@ -973,7 +978,11 @@ function generateCustomerTable1(data) {
                         let result = "";
 
                         for (let i = 0; i < arr.length; i += 3) {
-                            if (arr[i] && arr[i + 2]) {       // <— check before adding
+                            if (arr[i] && arr[i + 2]) {  
+                                if(arr[i].toLowerCase().includes("own"))
+                                    {
+                                        Lnonpaytrips+=parseInt(arr[i + 2]);
+                                    }
                                 result += arr[i] + " = " + arr[i + 2] + "\n";
                             }
                         }
@@ -1001,14 +1010,14 @@ function generateCustomerTable1(data) {
                     for (let i = 100; i <= 5000; i += 10) {
                         dropdown += `<option value="${i}" ${i === totalpriceload ? "selected" : ""}>₹${i}</option>`;
                     }
-                    finalAmount = (parseInt(activity.Trips) * (defaultRate + tracttrips)) + parseInt(beta);
+                    finalAmount = (parseInt(activity.Trips) * (defaultRate + tracttrips)) + parseInt(beta)- (Lnonpaytrips*tracttrips);
                     totaltrips += parseInt(activity.Trips);
                 } else {
                     type = "Hours";
                     for (let i = 800; i <= 2000; i += 100) {
                         dropdown += `<option value="${i}" ${i === defaultRate ? "selected" : ""}>₹${i}</option>`;
                     }
-                    finalAmount = Math.round((totalMins / 60) * defaultRate) + parseInt(beta) + (parseInt(HoursTrips) * parseInt(HoursTripsAmount));
+                    finalAmount = Math.round((totalMins / 60) * defaultRate) + parseInt(beta) + (parseInt(HoursTrips) * parseInt(HoursTripsAmount))- (Hnonpaytrips*tracttrips);
                 }
                 if (activity.Date) {
                     uniqueDates.add(activity.Date); // automatically unique
