@@ -48,7 +48,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     setTimeout(() => {
         location.reload();
     }, 2000);
-    if (trips.length > 0) {
+    if (trips.length > 0 && trips !== "0") {
         stime = "--";
         etime = "--";
         ttime = "--";
@@ -149,27 +149,27 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                         }
                     }
                     else {
-                        alert("Please select shift type", speakText("Please select shift type"));
+                        alert("Please select shift type");
                         datarebuild();
                     }
                 }
                 else {
-                    alert("Please Enter Disel Amount", speakText("Please Enter Disel Amount"));
+                    alert("Please Enter Disel Amount");
                     datarebuild();
                 }
             }
             else {
-                alert("Please Enter Village Name", speakText("Please Enter Village Name"));
+                alert("Please Enter Village Name");
                 datarebuild();
             }
         }
         else {
-            alert("Please Enter Customer Name Or place Or Location Name", speakText("Please Enter Customer Name Or place Or Location Name"));
+            alert("Please Enter Customer Name Or place Or Location Name");
             datarebuild();
         }
     }
     else {
-        alert("Please Choose Date", speakText("Please Choose Date"));
+        alert("Please Choose Date");
         datarebuild();
     }
     function isAllDigits(str) {
@@ -196,27 +196,27 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
         document.getElementById("shift").value = shift;
         document.getElementById("trips").value = trips;
     }
-    function speakText(s) {
-        // Check if the browser supports speech synthesis
-        if ('speechSynthesis' in window) {
-            // Get the text from the textarea
-            let text = s;
+    // function speakText(s) {
+    //     // Check if the browser supports speech synthesis
+    //     if ('speechSynthesis' in window) {
+    //         // Get the text from the textarea
+    //         let text = s;
 
-            // Create a new SpeechSynthesisUtterance object
-            let speech = new SpeechSynthesisUtterance();
+    //         // Create a new SpeechSynthesisUtterance object
+    //         let speech = new SpeechSynthesisUtterance();
 
-            // Set the text to be spoken
-            speech.text = text;
+    //         // Set the text to be spoken
+    //         speech.text = text;
 
-            // Set other properties (optional)
-            speech.volume = 1; // Volume (0 to 1)
-            speech.rate = 1; // Speed rate (0.1 to 10)
-            speech.pitch = 1; // Pitch (0 to 2)
-            window.speechSynthesis.speak(speech);
-        } else {
-            alert('Sorry, your browser does not support speech synthesis.');
-        }
-    }
+    //         // Set other properties (optional)
+    //         speech.volume = 1; // Volume (0 to 1)
+    //         speech.rate = 1; // Speed rate (0.1 to 10)
+    //         speech.pitch = 1; // Pitch (0 to 2)
+    //         window.speechSynthesis.speak(speech);
+    //     } else {
+    //         alert('Sorry, your browser does not support speech synthesis.');
+    //     }
+    // }
 });
 
 
@@ -261,7 +261,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
                     }
                 }
                 else {
-                    alert("Error ", speakText("Error"));
+                    alert("Word Id Error");
                     datarebuild();
                 }
             }
@@ -275,12 +275,12 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
             }
         }
         else {
-            alert("Please Enter Village Name", speakText("Please Enter Village Name"));
+            alert("Please Enter Village Name");
             datarebuild();
         }
     }
     else {
-        alert("Please Enter Customer Name Or place Or Location Name", speakText("Please Enter Customer Name Or place Or Location Name"));
+        alert("Please Enter Customer Name Or place Or Location Name");
         datarebuild();
     }
 });
@@ -299,12 +299,12 @@ document.getElementById('submit3').addEventListener('click', async function (e) 
             getExtraAmount(Amount, name, wid, dte, villname);
         }
         else {
-            alert("Please Enter Amount", speakText("Please Enter Amouont"));
+            alert("Please Enter Amount");
             datarebuild();
         }
     }
     else {
-        alert("Please Enter Customer Name Or place Or Location Name", speakText("Please Enter Customer Name Or place Or Location Name"));
+        alert("Please Enter Customer Name Or place Or Location Name");
         datarebuild();
     }
 });
@@ -459,7 +459,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
             }
         }
         else {
-            alert("Error ", speakText("Error"));
+            alert(" Work Id Error ");
             datarebuild();
         }
         // Save leftover amount as ExtraAmount
@@ -479,7 +479,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
         RePrint5();
     }
     else {
-        alert("Please Enter Customer Name Or place Or Location Name", speakText("Please Enter Customer Name Or place Or Location Name"));
+        alert("Please Enter Customer Name Or place Or Location Name");
         datarebuild();
     }
 });
@@ -494,7 +494,7 @@ document.getElementById('submit5').addEventListener('click', async function (e) 
 
     }
     else {
-        alert("Please Enter Customer Name Or place Or Location Name", speakText("Please Enter Customer Name Or place Or Location Name"));
+        alert("Please Enter Customer Name Or place Or Location Name");
         datarebuild();
     }
 });
@@ -506,7 +506,7 @@ document.getElementById('submit6').addEventListener('click', async function (e) 
         RePrint51();
     }
     else {
-        alert("Please Enter Customer Name Or place Or Location Name", speakText("Please Enter Customer Name Or place Or Location Name"));
+        alert("Please Enter Customer Name Or place Or Location Name");
         datarebuild();
     }
 });
@@ -900,7 +900,7 @@ function generateCustomerTable1(data) {
                 let tracttrips = 0;
                 if (activity.Contract !== "--") {
                     defaultRate = parseInt(activity.Contract);
-                } else if (activity.Trips !== "--") {
+                } else if (activity.Trips !== "--" && activity.Trips !== "0") {
                     defaultRate = parseInt(activity.JcbTripPrice || "150");
                     tracttrips = parseInt(activity.TripsPrice || "150");
                 } else {
@@ -1004,7 +1004,7 @@ function generateCustomerTable1(data) {
                     dropdown = `<option value="${contractAmt}" selected>₹${contractAmt}</option>`;
                     finalAmount = parseInt(contractAmt) + parseInt(beta);
                     totalcontract += parseInt(contractAmt);
-                } else if (activity.Trips !== "--") {
+                } else if (activity.Trips !== "--" && activity.Trips !== "0") {
                     type = "Trips";
                     totalpriceload = (defaultRate + tracttrips);
                     for (let i = 100; i <= 5000; i += 10) {
