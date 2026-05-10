@@ -13,8 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-
-
+    
 
     <script type="module">
 
@@ -1955,6 +1954,7 @@ ${tableHTML}
         }
 
         function printLedgerBill() {
+            document.getElementsByClassName("expense-banner")[0].style.display = "none"; // hide print button before capture
             const element = document.body;
             var customername = document.getElementById("name4").value;
             customername += "_" + getFormattedDate();
@@ -1978,6 +1978,7 @@ ${tableHTML}
         }
 
         function printLedger() {
+            document.getElementsByClassName("expense-banner")[0].style.display = "none"; // hide print button before capture
             const element = document.body;
             var customername = document.getElementById("name3").value;
             if (!customername.toLowerCase().includes("garu")) {

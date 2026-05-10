@@ -126,16 +126,6 @@ body {
   background-size: 18px;
 }
 
-/* @media print {
-    @page {
-        size: A3 landscape;
-        margin: 10mm;
-    }
-
-    body {
-        width: 100%;
-    }
-} */
 
 @media print {
 
@@ -157,6 +147,9 @@ body {
     td, th {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+    }
+    .expense-banner {
+        display: none;
     }
 }
 

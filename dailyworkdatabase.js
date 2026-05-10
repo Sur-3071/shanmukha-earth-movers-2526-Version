@@ -54,7 +54,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
         ttime = "--";
         con = "--";
         hrsamt = "--";
-        overallamount = (parseInt(jcbtrpamt) + parseInt(trpamt)) * parseInt(trips) + parseInt(beta)-(parseInt(trpamt) * parseInt(noncompanytractorstrips));
+        overallamount = (parseInt(jcbtrpamt) + parseInt(trpamt)) * parseInt(trips) + parseInt(beta) - (parseInt(trpamt) * parseInt(noncompanytractorstrips));
         // alert(overallamount);
 
 
@@ -529,7 +529,7 @@ async function RePrint5() {
             alert("No data available");
         }
     } catch (error) {
-        alert("Error occurred while fetching data 989");
+        alert("Error occurred while fetching data for Fetching Customer Data");
     }
 }
 async function RePrint51() {
@@ -551,7 +551,7 @@ async function RePrint51() {
             alert("No data available");
         }
     } catch (error) {
-        alert("Error occurred while fetching data 989");
+        alert("Error occurred while fetching data for Fetching Customer Bill Data");
     }
 }
 async function RePrint6(amt) {
@@ -573,7 +573,7 @@ async function RePrint6(amt) {
 
         }
     } catch (error) {
-        alert("Error occurred while fetching data");
+        alert("Error occurred while fetching data for Fetching Customer Amount Data");
     }
 }
 
@@ -665,6 +665,10 @@ function generateCustomerTable(data) {
     var overallbeta = 0;
     var rowCount = 0; // 🔥 added for page control
     const uniqueDates = new Set();
+    // data.sort((a, b) => {
+    //     return new Date(a.Date) - new Date(b.Date);
+    // });
+    
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
@@ -873,6 +877,9 @@ function generateCustomerTable1(data) {
     // alert(formname);
     let k = 0;
     const uniqueDates = new Set();
+    data.sort((a, b) => {
+        return new Date(a.Date) - new Date(b.Date);
+    });
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
@@ -929,7 +936,7 @@ function generateCustomerTable1(data) {
                     let str = activity.HoursDrivers || "";
                     // alert(str);
                     let count = 0;
-                    var Hnonpaytrips=0;
+                    var Hnonpaytrips = 0;
                     for (let i = 0; i < str.length; i++) {
                         if (str[i] === "=") {
                             count++;
@@ -943,10 +950,9 @@ function generateCustomerTable1(data) {
 
                         for (let i = 0; i < arr.length; i += 3) {
                             if (arr[i] && arr[i + 2]) {       // <— check before adding
-                                if(arr[i].toLowerCase().includes("own"))
-                                    {
-                                        Hnonpaytrips+=parseInt(arr[i + 2]);
-                                    }
+                                if (arr[i].toLowerCase().includes("own")) {
+                                    Hnonpaytrips += parseInt(arr[i + 2]);
+                                }
                                 result += arr[i] + " = " + arr[i + 2] + "\n";
                             }
                         }
@@ -962,7 +968,7 @@ function generateCustomerTable1(data) {
 
                 }
                 // console.log(HoursTripsAmount+" "+HoursTrips);
-                var Lnonpaytrips=0;
+                var Lnonpaytrips = 0;
                 var LDrivers = 0;
                 if (activity.Drivers !== undefined) {
                     let str = activity.Drivers;
@@ -978,11 +984,10 @@ function generateCustomerTable1(data) {
                         let result = "";
 
                         for (let i = 0; i < arr.length; i += 3) {
-                            if (arr[i] && arr[i + 2]) {  
-                                if(arr[i].toLowerCase().includes("own"))
-                                    {
-                                        Lnonpaytrips+=parseInt(arr[i + 2]);
-                                    }
+                            if (arr[i] && arr[i + 2]) {
+                                if (arr[i].toLowerCase().includes("own")) {
+                                    Lnonpaytrips += parseInt(arr[i + 2]);
+                                }
                                 result += arr[i] + " = " + arr[i + 2] + "\n";
                             }
                         }
@@ -1010,14 +1015,14 @@ function generateCustomerTable1(data) {
                     for (let i = 100; i <= 5000; i += 10) {
                         dropdown += `<option value="${i}" ${i === totalpriceload ? "selected" : ""}>₹${i}</option>`;
                     }
-                    finalAmount = (parseInt(activity.Trips) * (defaultRate + tracttrips)) + parseInt(beta)- (Lnonpaytrips*tracttrips);
+                    finalAmount = (parseInt(activity.Trips) * (defaultRate + tracttrips)) + parseInt(beta) - (Lnonpaytrips * tracttrips);
                     totaltrips += parseInt(activity.Trips);
                 } else {
                     type = "Hours";
                     for (let i = 800; i <= 2000; i += 100) {
                         dropdown += `<option value="${i}" ${i === defaultRate ? "selected" : ""}>₹${i}</option>`;
                     }
-                    finalAmount = Math.round((totalMins / 60) * defaultRate) + parseInt(beta) + (parseInt(HoursTrips) * parseInt(HoursTripsAmount))- (Hnonpaytrips*tracttrips);
+                    finalAmount = Math.round((totalMins / 60) * defaultRate) + parseInt(beta) + (parseInt(HoursTrips) * parseInt(HoursTripsAmount)) - (Hnonpaytrips * tracttrips);
                 }
                 if (activity.Date) {
                     uniqueDates.add(activity.Date); // automatically unique
