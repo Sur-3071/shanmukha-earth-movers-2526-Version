@@ -668,7 +668,7 @@ function generateCustomerTable(data) {
     // data.sort((a, b) => {
     //     return new Date(a.Date) - new Date(b.Date);
     // });
-    
+
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
@@ -963,6 +963,11 @@ function generateCustomerTable1(data) {
 
                     }
                     else {
+                        let [name, value] = str.split("=").map(s => s.trim());
+
+                        if (name.toLowerCase().includes("own")) {
+                            Hnonpaytrips += parseInt(value);
+                        }
                         HoursDrivers = str;
                     }
 
@@ -996,6 +1001,13 @@ function generateCustomerTable1(data) {
                         LDrivers = result;
                     }
                     else {
+                        // LDrivers = str;
+                        let [name, value] = str.split("=").map(s => s.trim());
+
+                        if (name.toLowerCase().includes("own")) {
+                            Lnonpaytrips += parseInt(value);
+                        }
+
                         LDrivers = str;
                     }
                 }
@@ -1011,8 +1023,9 @@ function generateCustomerTable1(data) {
                     totalcontract += parseInt(contractAmt);
                 } else if (activity.Trips !== "--" && activity.Trips !== "0") {
                     type = "Trips";
+                    // alert(Lnonpaytrips);
                     totalpriceload = (defaultRate + tracttrips);
-                    for (let i = 100; i <= 5000; i += 10) {
+                    for (let i = 100; i <= 5000; i += 5) {
                         dropdown += `<option value="${i}" ${i === totalpriceload ? "selected" : ""}>₹${i}</option>`;
                     }
                     finalAmount = (parseInt(activity.Trips) * (defaultRate + tracttrips)) + parseInt(beta) - (Lnonpaytrips * tracttrips);
