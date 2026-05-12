@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-    
+
 
     <script type="module">
 
@@ -1688,8 +1688,8 @@ ${tableHTML}
             <input type="text" id="vill" name="vill" placeholder="Village Name" required readonly>
             <input type="tel" id="dis" name="dis" placeholder="Enter Disel Amount" required>
             <input type="text" id="wid" name="wid" placeholder="Work Id" required readonly>
-            <input type="text" id="beta" name="beta" placeholder="Driver Beta"  onchange="timecal()">
-            <input type="text" id="desc" name="desc" placeholder="Description"  required>
+            <input type="text" id="beta" name="beta" placeholder="Driver Beta" onchange="timecal()">
+            <input type="text" id="desc" name="desc" placeholder="Description" required>
             <select id="worktype" required onchange="addflow()">
                 <option hidden>select Work Type</option>
                 <option>Hours</option>
@@ -1703,7 +1703,7 @@ ${tableHTML}
                 </select>
                 <div id="loading1">
                     <input type="text" id="trprate1" name="trprate1" placeholder="Trip Price" onkeyup="tripprice1()"
-                         required>
+                        required>
                     <div id="container2">
                         <div class="row1">
                             <button class="add-button" onclick="addRow1()">Add Driver</button>
@@ -1712,7 +1712,8 @@ ${tableHTML}
                     <textarea id="output1" placeholder="All Drivers list" rows="4" cols="30"
                         style="font-size: 20px; display: none;" readonly></textarea>
                     <input type="text" id="trips1" placeholder="Number of Trips" readonly required value="0">
-                    <input type="text" id="hoursnoncompanytractors" placeholder="Number of Non Company Tractor Trips" readonly required>
+                    <input type="text" id="hoursnoncompanytractors" placeholder="Number of Non Company Tractor Trips"
+                        readonly required>
                     <input type="text" id="alltrprate" name="alltrprate" placeholder="Total Trip Price" required
                         value="0" readonly>
                 </div>
@@ -1732,7 +1733,8 @@ ${tableHTML}
                 <textarea id="output" placeholder="All Drivers list" rows="4" cols="35"
                     style="font-size: 20px; display: none;" readonly></textarea>
                 <input type="text" id="trips" placeholder="Number of Trips" readonly required>
-                <input type="text" id="noncompanytractors" placeholder="Number of Non Company Tractor Trips" readonly required>
+                <input type="text" id="noncompanytractors" placeholder="Number of Non Company Tractor Trips" readonly
+                    required>
             </div>
             <div id="contract" style="display: none;">
                 <input type="text" id="con" name="con" placeholder="Contract Amount" onkeyup="conprice()" required>
@@ -2021,78 +2023,568 @@ ${tableHTML}
 
         async function openPopup6(name, previousBalance) {
 
-            document.getElementById("myModal6").style.display = "flex";
+            try {
 
-            // Loading
-            document.getElementById("overviewtablemain").innerHTML = `
-        <div class="loading-box">
-            <div class="loader"></div>
-            <p>Data is loading, please wait...</p>
-        </div>
-    `;
+                document.getElementById("myModal6").style.display = "flex";
 
-            await new Promise(resolve => setTimeout(resolve, 500));
+                // =========================================
+                // Loading
+                // =========================================
 
-            const data = JSON.parse(localStorage.getItem("unpaidCustomerslistdata")) || [];
-
-            let rows = "";
-            let count = 1;
-
-            let totalUnpaid = 0;
-
-            for (let index = 0; index < data.length; index++) {
-                const user = data[index];
-
-                if (user.Name !== name) continue;
-
-                const amount = Number(user.OverallPrice) || 0;
-                totalUnpaid += amount;
-
-                rows += `
-        <tr>
-            <td>${count++}</td>
-            <td>${user.Name}</td>
-            <td>${user.Date}</td>
-            <td>${amount}</td>
-        </tr>
+                document.getElementById("overviewtablemain").innerHTML = `
+            <div class="loading-box">
+                <div class="loader"></div>
+                <p>Data is loading, please wait...</p>
+            </div>
         `;
-            }
 
-            // ✅ Final Balance Calculation
-            const finalBalance = totalUnpaid - (Number(previousBalance) || 0);
+                await new Promise(resolve => setTimeout(resolve, 500));
 
-            // ✅ Ledger Summary
-            const summary = `
-        <tr style="font-weight:bold; background:#f2f2f2;">
-            <td colspan="3">Current UnPaid</td>
-            <td>${totalUnpaid}</td>
-        </tr>
-        <tr style="font-weight:bold;">
-            <td colspan="3">Previous Balance</td>
-            <td>${previousBalance || 0}</td>
-        </tr>
-        <tr style="font-weight:bold; color:red;">
-            <td colspan="3">Total Remaining</td>
-            <td>${finalBalance}</td>
-        </tr>
-    `;
+                // =========================================
+                // Fetch Data
+                // =========================================
 
-            document.getElementById("overviewtablemain").innerHTML = `
-        <table border="1" style="border-collapse:collapse; width:100%; text-align:center;">
-            <thead>
+                const data =
+                    JSON.parse(
+                        localStorage.getItem("unpaidCustomerslistdata")
+                    ) || {};
+
+                let rows = "";
+
+                let count = 1;
+
+                let totalUnpaid = 0;
+
+                // =========================================
+                // Loop Data
+                // =========================================
+
+                for (const customerPhone in data) {
+
+                    const activity = data[customerPhone];
+
+                    if (!activity) continue;
+
+                    if (activity.Name !== name) continue;
+
+                    // =========================================
+                    // HOURS DRIVER FORMAT
+                    // =========================================
+
+                    let HoursDrivers = "--";
+
+                    if (
+                        activity.HoursDrivers !== undefined &&
+                        activity.HoursDrivers !== null &&
+                        activity.HoursDrivers !== "undefined"
+                    ) {
+
+                        let str = activity.HoursDrivers || "";
+
+                        let count1 = 0;
+
+                        for (let i = 0; i < str.length; i++) {
+
+                            if (str[i] === "=") {
+                                count1++;
+                            }
+                        }
+
+                        if (count1 > 1) {
+
+                            let arr = str.split(" ").filter(Boolean);
+
+                            let result = "";
+
+                            for (let i = 0; i < arr.length; i += 3) {
+
+                                if (arr[i] && arr[i + 2]) {
+
+                                    result +=
+                                        arr[i] +
+                                        " = " +
+                                        arr[i + 2] +
+                                        "<br>";
+                                }
+                            }
+
+                            HoursDrivers = result;
+
+                        } else {
+
+                            HoursDrivers =
+                                str.replace(/\n/g, "<br>");
+                        }
+                    }
+
+                    // =========================================
+                    // LOADING DRIVER FORMAT
+                    // =========================================
+
+                    let LDrivers = "--";
+
+                    if (
+                        activity.Drivers !== undefined &&
+                        activity.Drivers !== null
+                    ) {
+
+                        let str = activity.Drivers || "";
+
+                        let count2 = 0;
+
+                        for (let i = 0; i < str.length; i++) {
+
+                            if (str[i] === "=") {
+                                count2++;
+                            }
+                        }
+
+                        if (count2 > 1) {
+
+                            let arr = str.split(" ").filter(Boolean);
+
+                            let result = "";
+
+                            for (let i = 0; i < arr.length; i += 3) {
+
+                                if (arr[i] && arr[i + 2]) {
+
+                                    result +=
+                                        arr[i] +
+                                        " = " +
+                                        arr[i + 2] +
+                                        "<br>";
+                                }
+                            }
+
+                            LDrivers = result;
+
+                        } else {
+
+                            LDrivers =
+                                str.replace(/\n/g, "<br>");
+                        }
+                    }
+
+                    // =========================================
+                    // TOTAL AMOUNT
+                    // =========================================
+
+                    const totalAmount =
+                        Number(activity.OverallPrice) || 0;
+
+                    totalUnpaid += totalAmount;
+
+                    // =========================================
+                    // WORK TYPE
+                    // =========================================
+
+                    let workType = "";
+
+                    let details = "";
+
+                    // =========================================
+                    // HOURS WORK
+                    // =========================================
+
+                    if (activity.Drivers === "--" && activity.Contract === "--") {
+
+                        workType = "Hours Work";
+
+                        // =====================================
+                        // Hours Amount
+                        // =====================================
+
+                        let totalHoursAmount = 0;
+
+                        if (
+                            activity.TotalTime &&
+                            activity.TotalTime !== "--"
+                        ) {
+
+                            let timeSplit =
+                                activity.TotalTime.split(":");
+
+                            let hours =
+                                parseInt(timeSplit[0]) || 0;
+
+                            let minutes =
+                                parseInt(timeSplit[1]) || 0;
+
+                            let totalTimeInHours =
+                                hours + (minutes / 60);
+
+                            totalHoursAmount =
+                                totalTimeInHours *
+                                (parseInt(activity.HoursPrice) || 0);
+                        }
+
+                        // =====================================
+                        // Tractor Logic
+                        // =====================================
+
+                        let totalTractorTrips =
+                            parseInt(activity.HoursTrips) || 0;
+
+                        let tractorTripPrice =
+                            parseInt(activity.HoursTripsAmount) || 0;
+
+                        // =====================================
+                        // REMOVE OWN DRIVER TRIPS
+                        // =====================================
+
+                        let ownTrips = 0;
+
+                        let hoursDriverText =
+                            activity.HoursDrivers || "";
+
+                        let ownMatch =
+                            hoursDriverText.match(
+                                /own\s*=\s*(\d+)/i
+                            );
+
+                        if (ownMatch) {
+
+                            ownTrips =
+                                parseInt(ownMatch[1]) || 0;
+                        }
+
+                        let remainingTrips =
+                            totalTractorTrips - ownTrips;
+
+                        if (remainingTrips < 0) {
+                            remainingTrips = 0;
+                        }
+
+                        let totalTractorAmount =
+                            remainingTrips *
+                            tractorTripPrice;
+
+                        details = `
+
+                    <b>Total Tractor Trips :</b>
+                    ${totalTractorTrips}<br>
+
+                    <b>Own Trips :</b>
+                    ${ownTrips}<br>
+
+                    <b>Chargeable Trips :</b>
+                    ${remainingTrips}<br>
+
+                    <b>Tractor Trip Price :</b>
+                    ${tractorTripPrice}<br>
+
+                    <b>Total Tractor Amount :</b>
+                    ${totalTractorAmount}<br>
+
+                    <b>Hours Amount :</b>
+                    ${activity.HoursPrice || 0}<br>
+
+                    <b>Total Hours Amount :</b>
+                    ${totalHoursAmount}<br>
+
+                    <b>Drivers :</b><br>
+                    ${HoursDrivers || "--"}<br>
+
+                    <b>Starting :</b>
+                    ${activity.Starting || "--"}<br>
+
+                    <b>Ending :</b>
+                    ${activity.Ending || "--"}<br>
+
+                    <b>Total Time :</b>
+                    ${activity.TotalTime || "--"}<br>
+
+                    <b>Beta :</b>
+                    ${activity.Beta || 0}
+                `;
+                    }
+
+                    // =========================================
+                    // LOADING WORK
+                    // =========================================
+
+                    else if (activity.Trips !== "--") {
+
+                        workType = "Loading Work";
+
+                        // =====================================
+                        // VALUES
+                        // =====================================
+
+                        let totalTrips =
+                            parseInt(activity.Trips) || 0;
+
+                        let tractorTripPrice =
+                            parseInt(activity.TripsPrice) || 0;
+
+                        let jcbTripPrice =
+                            parseInt(activity.JcbTripPrice) || 0;
+
+                        // =====================================
+                        // FIND OWN TRIPS
+                        // =====================================
+
+                        let ownTrips = 0;
+
+                        let driverText =
+                            activity.Drivers || "";
+
+                        let ownMatch =
+                            driverText.match(
+                                /own\s*=\s*(\d+)/i
+                            );
+
+                        if (ownMatch) {
+
+                            ownTrips =
+                                parseInt(ownMatch[1]) || 0;
+                        }
+
+                        // =====================================
+                        // REMOVE OWN TRIPS
+                        // =====================================
+
+                        let remainingTrips =
+                            totalTrips - ownTrips;
+
+                        if (remainingTrips < 0) {
+                            remainingTrips = 0;
+                        }
+
+                        // =====================================
+                        // TOTALS
+                        // =====================================
+
+                        let totalJcbAmount =
+                            totalTrips * jcbTripPrice;
+
+                        let totalTractorAmount =
+                            remainingTrips *
+                            tractorTripPrice;
+
+                        details = `
+
+                    <b>Total Trips :</b>
+                    ${totalTrips}<br>
+
+                    <b>Own Trips :</b>
+                    ${ownTrips}<br>
+
+                    <b>Chargeable Trips :</b>
+                    ${remainingTrips}<br>
+
+                    <b>Tractor Trip Price :</b>
+                    ${tractorTripPrice}<br>
+
+                    <b>Total Tractor Amount :</b>
+                    ${totalTractorAmount}<br>
+
+                    <b>JCB Trip Price :</b>
+                    ${jcbTripPrice}<br>
+
+                    <b>Total JCB Amount :</b>
+                    ${totalJcbAmount}<br>
+
+                    <b>Drivers :</b><br>
+                    ${LDrivers || "--"}<br>
+
+                    <b>Beta :</b>
+                    ${activity.Beta || 0}
+                `;
+                    }
+
+                    // =========================================
+                    // CONTRACT WORK
+                    // =========================================
+
+                    else {
+
+                        workType = "Contract Work";
+
+                        details = `
+
+                    <b>Contract Amount :</b>
+                    ${activity.Contract || 0}<br>
+
+                    <b>Total Amount :</b>
+                    ${activity.OverallPrice || 0}<br>
+
+                    <b>Description :</b>
+                    ${activity.Description || "--"}<br>
+
+                    <b>Beta :</b>
+                    ${activity.Beta || 0}
+                `;
+                    }
+
+                    // =========================================
+                    // DATE FORMAT
+                    // =========================================
+
+                    const originalDate =
+                        new Date(activity.Date);
+
+                    const day =
+                        String(originalDate.getDate())
+                            .padStart(2, '0');
+
+                    const month =
+                        String(originalDate.getMonth() + 1)
+                            .padStart(2, '0');
+
+                    const year =
+                        originalDate.getFullYear();
+
+                    const formattedDate =
+                        `${day}-${month}-${year}`;
+
+                    // =========================================
+                    // TABLE ROW
+                    // =========================================
+
+                    rows += `
+
                 <tr>
-                    <th>S.No</th>
-                    <th>Name</th>
-                    <th>Date</th>
-                    <th>Amount</th>
+
+                    <td>${count++}</td>
+
+                    <td>${formattedDate}</td>
+
+                    <td>${workType}</td>
+
+                    <td style="text-align:left;">
+                        ${details}
+                    </td>
+
+                    <td>
+                        ${totalAmount}
+                    </td>
+
                 </tr>
-            </thead>
-            <tbody>
-                ${rows || `<tr><td colspan="4">No data found</td></tr>`}
-                ${summary}
-            </tbody>
-        </table>
-    `;
+            `;
+                }
+
+                // =========================================
+                // FINAL BALANCE
+                // =========================================
+
+                const finalBalance =
+                    totalUnpaid -
+                    (Number(previousBalance) || 0);
+
+                // =========================================
+                // SUMMARY
+                // =========================================
+
+                const summary = `
+
+            <tr style="
+                font-weight:bold;
+                background:#f2f2f2;
+            ">
+
+                <td colspan="4">
+                    Current UnPaid
+                </td>
+
+                <td>
+                    ${totalUnpaid}
+                </td>
+
+            </tr>
+
+            <tr style="
+                font-weight:bold;
+            ">
+
+                <td colspan="4">
+                    Previous Balance
+                </td>
+
+                <td>
+                    ${previousBalance || 0}
+                </td>
+
+            </tr>
+
+            <tr style="
+                font-weight:bold;
+                color:red;
+            ">
+
+                <td colspan="4">
+                    Total Remaining
+                </td>
+
+                <td>
+                    ${finalBalance}
+                </td>
+
+            </tr>
+        `;
+
+                // =========================================
+                // FINAL TABLE
+                // =========================================
+
+                document.getElementById("overviewtablemain").innerHTML = `
+
+            <table border="1"
+                   class="wide-table"
+                   style="
+                        width:100%;
+                        border-collapse:collapse;
+                        text-align:center;
+                   ">
+
+                <thead>
+
+                    <tr>
+
+                        <th>S.No</th>
+
+                        <th>Date</th>
+
+                        <th>Work Type</th>
+
+                        <th>Work Details</th>
+
+                        <th>Amount</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${rows ||
+
+                    `
+                        <tr>
+
+                            <td colspan="5">
+                                No Data Found
+                            </td>
+
+                        </tr>
+                        `
+                    }
+
+                    ${summary}
+
+                </tbody>
+
+            </table>
+        `;
+
+            } catch (error) {
+
+                console.log(error);
+
+                document.getElementById("overviewtablemain").innerHTML =
+                    "Error Loading Data";
+            }
         }
 
 
