@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 import DBConstants from './DatabaseConstants.js';
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
@@ -33,6 +33,192 @@ async function selectVillage() {
         alert("Error occurred while fetching data 1234");
     }
 }
+
+document.addEventListener("click", async function (e) {
+
+    const db1 = DBConstants.DailyWorkDB;
+
+    if (
+        e.target.classList.contains("payment-btn")
+    ) {
+
+        try {
+
+            let btn = e.target;
+
+            let customerId = btn.id;
+
+            // =====================================
+            // GET LOCAL STORAGE
+            // =====================================
+
+            let data =
+                JSON.parse(
+                    localStorage.getItem(
+                        "unpaidCustomerslistdata"
+                    )
+                ) || {};
+
+            // =====================================
+            // FIND ACTIVITY USING workid
+            // =====================================
+
+            let activity = null;
+
+            for (const key in data) {
+
+                if (
+                    data[key].workid == customerId
+                ) {
+
+                    activity = data[key];
+
+                    break;
+                }
+            }
+
+            // =====================================
+            // NOT FOUND
+            // =====================================
+
+            if (!activity) {
+
+                console.log(
+                    "Activity not found"
+                );
+
+                return;
+            }
+
+            // =====================================
+            // TOGGLE STATUS
+            // =====================================
+
+            let currentStatus =
+                activity.Payment || "UnPaid";
+
+            let newStatus =
+                currentStatus === "Paid"
+                    ? "UnPaid"
+                    : "Paid";
+                    
+            activity.Payment =
+                newStatus;
+
+            // =====================================
+            // UPDATE LOCAL STORAGE
+            // =====================================
+
+            localStorage.setItem(
+                "unpaidCustomerslistdata",
+                JSON.stringify(data)
+            );
+
+            // =====================================
+            // FIREBASE UPDATE
+            // =====================================
+
+            const updatedData = {
+
+                Contract:
+                    activity.Contract,
+
+                Date:
+                    activity.Date,
+
+                Disel:
+                    activity.Disel,
+
+                Ending:
+                    activity.Ending,
+
+                Name:
+                    activity.Name,
+
+                Payment:
+                    newStatus,
+
+                PhoneNumber:
+                    activity.PhoneNumber,
+
+                Price:
+                    activity.Price,
+
+                Shift:
+                    activity.Shift,
+
+                Starting:
+                    activity.Starting,
+
+                TotalTime:
+                    activity.TotalTime,
+
+                Trips:
+                    activity.Trips,
+
+                Villagename:
+                    activity.Villagename,
+
+                Description:
+                    activity.Description,
+
+                Drivers:
+                    activity.Drivers,
+
+                HoursPrice:
+                    activity.HoursPrice,
+
+                TripsPrice:
+                    activity.TripsPrice,
+
+                Beta:
+                    activity.Beta || 0,
+
+                OverallPrice:
+                    activity.OverallPrice,
+
+                HoursTrips:
+                    activity.HoursTrips,
+
+                HoursTripsAmount:
+                    activity.HoursTripsAmount,
+
+                HoursDrivers:
+                    activity.HoursDrivers,
+
+                JcbTripPrice:
+                    activity.JcbTripPrice
+            };
+
+            const transactionRef =
+                ref(
+                    db2,
+                    `${db1}/${customerId}`
+                );
+
+            await set(
+                transactionRef,
+                updatedData
+            );
+
+            // =====================================
+            // BUTTON UI
+            // =====================================
+
+            btn.innerText =
+                newStatus;
+
+            btn.style.backgroundColor =
+                newStatus === "Paid"
+                    ? "green"
+                    : "red";
+
+        } catch (error) {
+
+            console.log(error);
+        }
+    }
+});
 
 function getvillage(data) {
     var cusname=document.getElementById("name").value;

@@ -594,12 +594,13 @@
             const unpaidcustomerslist = [];
             for (const customerPhone in data) {
                 if (data.hasOwnProperty(customerPhone)) {
-                    const activity = data[customerPhone];
+                    var activity = data[customerPhone];
 
 
                     if (activity.Payment === "UnPaid") {
                         // alert("1");
                         // console.log(activity);
+                        activity.workid = customerPhone;
                         unpaidcustomerslist.push(activity);
                         const name = activity.Name;
 
@@ -2068,31 +2069,33 @@ ${tableHTML}
                     if (activity.Name !== name) continue;
 
                     // =========================================
-                    // HOURS DRIVER FORMAT
+                    // DRIVER FORMATTING
                     // =========================================
 
-                    let HoursDrivers = "--";
+                    function formatDrivers(str) {
 
-                    if (
-                        activity.HoursDrivers !== undefined &&
-                        activity.HoursDrivers !== null &&
-                        activity.HoursDrivers !== "undefined"
-                    ) {
+                        if (
+                            str === undefined ||
+                            str === null ||
+                            str === "undefined" ||
+                            str === "--"
+                        ) {
+                            return "--";
+                        }
 
-                        let str = activity.HoursDrivers || "";
-
-                        let count1 = 0;
+                        let count = 0;
 
                         for (let i = 0; i < str.length; i++) {
 
                             if (str[i] === "=") {
-                                count1++;
+                                count++;
                             }
                         }
 
-                        if (count1 > 1) {
+                        if (count > 1) {
 
-                            let arr = str.split(" ").filter(Boolean);
+                            let arr =
+                                str.split(" ").filter(Boolean);
 
                             let result = "";
 
@@ -2108,63 +2111,17 @@ ${tableHTML}
                                 }
                             }
 
-                            HoursDrivers = result;
-
-                        } else {
-
-                            HoursDrivers =
-                                str.replace(/\n/g, "<br>");
+                            return result;
                         }
+
+                        return str.replace(/\n/g, "<br>");
                     }
 
-                    // =========================================
-                    // LOADING DRIVER FORMAT
-                    // =========================================
+                    let HoursDrivers =
+                        formatDrivers(activity.HoursDrivers);
 
-                    let LDrivers = "--";
-
-                    if (
-                        activity.Drivers !== undefined &&
-                        activity.Drivers !== null
-                    ) {
-
-                        let str = activity.Drivers || "";
-
-                        let count2 = 0;
-
-                        for (let i = 0; i < str.length; i++) {
-
-                            if (str[i] === "=") {
-                                count2++;
-                            }
-                        }
-
-                        if (count2 > 1) {
-
-                            let arr = str.split(" ").filter(Boolean);
-
-                            let result = "";
-
-                            for (let i = 0; i < arr.length; i += 3) {
-
-                                if (arr[i] && arr[i + 2]) {
-
-                                    result +=
-                                        arr[i] +
-                                        " = " +
-                                        arr[i + 2] +
-                                        "<br>";
-                                }
-                            }
-
-                            LDrivers = result;
-
-                        } else {
-
-                            LDrivers =
-                                str.replace(/\n/g, "<br>");
-                        }
-                    }
+                    let LDrivers =
+                        formatDrivers(activity.Drivers);
 
                     // =========================================
                     // TOTAL AMOUNT
@@ -2173,7 +2130,9 @@ ${tableHTML}
                     const totalAmount =
                         Number(activity.OverallPrice) || 0;
 
-                    totalUnpaid += totalAmount;
+                    if (activity.Payment !== "Paid") {
+                        totalUnpaid += totalAmount;
+                    }
 
                     // =========================================
                     // WORK TYPE
@@ -2187,13 +2146,12 @@ ${tableHTML}
                     // HOURS WORK
                     // =========================================
 
-                    if (activity.Drivers === "--" && activity.Contract === "--") {
+                    if (
+                        activity.Drivers === "--" &&
+                        activity.Contract === "--"
+                    ) {
 
                         workType = "Hours Work";
-
-                        // =====================================
-                        // Hours Amount
-                        // =====================================
 
                         let totalHoursAmount = 0;
 
@@ -2219,10 +2177,6 @@ ${tableHTML}
                                 (parseInt(activity.HoursPrice) || 0);
                         }
 
-                        // =====================================
-                        // Tractor Logic
-                        // =====================================
-
                         let totalTractorTrips =
                             parseInt(activity.HoursTrips) || 0;
 
@@ -2230,7 +2184,7 @@ ${tableHTML}
                             parseInt(activity.HoursTripsAmount) || 0;
 
                         // =====================================
-                        // REMOVE OWN DRIVER TRIPS
+                        // OWN TRIPS
                         // =====================================
 
                         let ownTrips = 0;
@@ -2284,7 +2238,7 @@ ${tableHTML}
                     ${totalHoursAmount}<br>
 
                     <b>Drivers :</b><br>
-                    ${HoursDrivers || "--"}<br>
+                    ${HoursDrivers}<br>
 
                     <b>Starting :</b>
                     ${activity.Starting || "--"}<br>
@@ -2308,10 +2262,6 @@ ${tableHTML}
 
                         workType = "Loading Work";
 
-                        // =====================================
-                        // VALUES
-                        // =====================================
-
                         let totalTrips =
                             parseInt(activity.Trips) || 0;
 
@@ -2322,7 +2272,7 @@ ${tableHTML}
                             parseInt(activity.JcbTripPrice) || 0;
 
                         // =====================================
-                        // FIND OWN TRIPS
+                        // OWN TRIPS
                         // =====================================
 
                         let ownTrips = 0;
@@ -2341,20 +2291,12 @@ ${tableHTML}
                                 parseInt(ownMatch[1]) || 0;
                         }
 
-                        // =====================================
-                        // REMOVE OWN TRIPS
-                        // =====================================
-
                         let remainingTrips =
                             totalTrips - ownTrips;
 
                         if (remainingTrips < 0) {
                             remainingTrips = 0;
                         }
-
-                        // =====================================
-                        // TOTALS
-                        // =====================================
 
                         let totalJcbAmount =
                             totalTrips * jcbTripPrice;
@@ -2387,7 +2329,7 @@ ${tableHTML}
                     ${totalJcbAmount}<br>
 
                     <b>Drivers :</b><br>
-                    ${LDrivers || "--"}<br>
+                    ${LDrivers}<br>
 
                     <b>Beta :</b>
                     ${activity.Beta || 0}
@@ -2458,7 +2400,39 @@ ${tableHTML}
                     </td>
 
                     <td>
+
+                        <button
+                            class="payment-btn"
+                            id="${activity.workid}"
+                            data-name="${activity.Name}"
+                            data-phone="${customerPhone}"
+                            data-amount="${totalAmount}"
+                            style="
+                                padding:6px 12px;
+                                border:none;
+                                border-radius:5px;
+                                cursor:pointer;
+                                color:white;
+                                font-weight:bold;
+                                background-color:
+                                    ${activity.Payment === "Paid"
+                            ? "green"
+                            : "red"};
+                            "
+                        >
+                            ${activity.Payment || "UnPaid"}
+                        </button>
+
+                    </td>
+
+                    <td>
                         ${totalAmount}
+                    </td>
+
+                    <td class="balance-amount">
+                        ${activity.Payment === "Paid"
+                            ? 0
+                            : totalAmount}
                     </td>
 
                 </tr>
@@ -2484,11 +2458,11 @@ ${tableHTML}
                 background:#f2f2f2;
             ">
 
-                <td colspan="4">
+                <td colspan="6">
                     Current UnPaid
                 </td>
 
-                <td>
+                <td class="current-unpaid">
                     ${totalUnpaid}
                 </td>
 
@@ -2498,7 +2472,7 @@ ${tableHTML}
                 font-weight:bold;
             ">
 
-                <td colspan="4">
+                <td colspan="6">
                     Previous Balance
                 </td>
 
@@ -2513,11 +2487,11 @@ ${tableHTML}
                 color:red;
             ">
 
-                <td colspan="4">
+                <td colspan="6">
                     Total Remaining
                 </td>
 
-                <td>
+                <td class="remaining-unpaid">
                     ${finalBalance}
                 </td>
 
@@ -2550,7 +2524,11 @@ ${tableHTML}
 
                         <th>Work Details</th>
 
-                        <th>Amount</th>
+                        <th>Payment Status</th>
+
+                        <th>Total Amount</th>
+
+                        <th>Balance Amount</th>
 
                     </tr>
 
@@ -2563,7 +2541,7 @@ ${tableHTML}
                     `
                         <tr>
 
-                            <td colspan="5">
+                            <td colspan="6">
                                 No Data Found
                             </td>
 
@@ -2582,10 +2560,142 @@ ${tableHTML}
 
                 console.log(error);
 
-                document.getElementById("overviewtablemain").innerHTML =
+                document.getElementById(
+                    "overviewtablemain"
+                ).innerHTML =
                     "Error Loading Data";
             }
         }
+
+        // =========================================
+        // PAYMENT BUTTON EVENT
+        // =========================================
+
+        document.addEventListener("click", function (e) {
+
+    if (
+        e.target.classList.contains("payment-btn")
+    ) {
+
+        let btn = e.target;
+
+        let customerName =
+            btn.dataset.name;
+
+        let amount =
+            parseInt(btn.dataset.amount) || 0;
+
+        let data =
+            JSON.parse(
+                localStorage.getItem(
+                    "unpaidCustomerslistdata"
+                )
+            ) || {};
+
+        // =====================================
+        // CURRENT STATUS
+        // =====================================
+
+        let isCurrentlyPaid =
+            btn.innerText === "Paid";
+
+        // =====================================
+        // TOGGLE STATUS
+        // =====================================
+
+        let newStatus =
+            isCurrentlyPaid
+                ? "UnPaid"
+                : "Paid";
+
+        // =====================================
+        // UPDATE STORAGE
+        // =====================================
+
+        for (const key in data) {
+
+            if (
+                data[key].Name === customerName
+            ) {
+
+                data[key].Payment =
+                    newStatus;
+            }
+        }
+
+        // localStorage.setItem(
+        //     "unpaidCustomerslistdata",
+        //     JSON.stringify(data)
+        // );
+
+        // =====================================
+        // BUTTON UI
+        // =====================================
+
+        btn.innerText = newStatus;
+
+        btn.style.backgroundColor =
+            newStatus === "Paid"
+                ? "green"
+                : "red";
+
+        // =====================================
+        // BALANCE CELL
+        // =====================================
+
+        let balanceCell =
+            btn.closest("tr")
+               .querySelector(".balance-amount");
+
+        if (balanceCell) {
+
+            balanceCell.innerText =
+                newStatus === "Paid"
+                    ? 0
+                    : amount;
+        }
+
+        // =====================================
+        // SUMMARY UPDATE
+        // =====================================
+
+        let unpaidCell =
+            document.querySelector(
+                ".current-unpaid"
+            );
+
+        let remainingCell =
+            document.querySelector(
+                ".remaining-unpaid"
+            );
+
+        if (unpaidCell) {
+
+            let current =
+                parseInt(
+                    unpaidCell.innerText
+                ) || 0;
+
+            unpaidCell.innerText =
+                newStatus === "Paid"
+                    ? current - amount
+                    : current + amount;
+        }
+
+        if (remainingCell) {
+
+            let current =
+                parseInt(
+                    remainingCell.innerText
+                ) || 0;
+
+            remainingCell.innerText =
+                newStatus === "Paid"
+                    ? current - amount
+                    : current + amount;
+        }
+    }
+});
 
 
         function closePopup1() {
