@@ -126,6 +126,127 @@ body {
   background-size: 18px;
 }
 
+/* FULL SCREEN OVERLAY */
+
+.payment-popup{
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: rgba(0,0,0,0.6);
+
+    display: none;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 999999;
+}
+
+/* CENTER BOX */
+
+.payment-popup-content{
+
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    text-align: center;
+
+    animation: popupScale 0.4s ease;
+}
+
+/* IMAGE */
+
+.success-img{
+
+    width: 150px;
+
+    height: 150px;
+
+    object-fit: contain;
+
+    animation: bounce 1s infinite;
+}
+
+/* TEXT */
+
+.payment-popup-content h2{
+
+    margin-top: 15px;
+
+    color: green;
+}
+
+/* POPUP ANIMATION */
+
+@keyframes popupScale{
+
+    from{
+
+        transform: scale(0.5);
+
+        opacity: 0;
+    }
+
+    to{
+
+        transform: scale(1);
+
+        opacity: 1;
+    }
+}
+
+/* IMAGE BOUNCE */
+
+@keyframes bounce{
+
+    0%{
+        transform: scale(1);
+    }
+
+    50%{
+        transform: scale(1.08);
+    }
+
+    100%{
+        transform: scale(1);
+    }
+}
+
+#custamountcontainer2{
+    display:flex;
+    gap:30px;
+    align-items:center;
+}
+
+#paymentTimer{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:#f2f2f2;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    font-weight:bold;
+}
+
+#timerText{
+    font-size:35px;
+    color:red;
+    margin:0;
+}
 
 @media print {
 
@@ -212,7 +333,7 @@ h2 {
     font-weight: 700; /* Simplified from 1900 (invalid value) */
 }
 
-#userForm1, #userForm3, #userForm4, #userForm5 {
+#userForm1, #userForm3, #userForm4, #userForm5, #userForm6 {
     background-color: #ffffff;
     padding: 15px; /* Reduced from 20px */
     border-radius: 10px;

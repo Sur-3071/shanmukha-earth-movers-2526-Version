@@ -101,7 +101,7 @@ document.addEventListener("click", async function (e) {
                 currentStatus === "Paid"
                     ? "UnPaid"
                     : "Paid";
-                    
+
             activity.Payment =
                 newStatus;
 
@@ -221,14 +221,14 @@ document.addEventListener("click", async function (e) {
 });
 
 function getvillage(data) {
-    var cusname=document.getElementById("name").value;
+    var cusname = document.getElementById("name").value;
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
             // console.log(activity,customerPhone)
-            if (customerPhone !== DBConstants.Customers_Id && cusname===activity.Name) {
-               document.getElementById("vill").value=activity. Villagename;
-               break;
+            if (customerPhone !== DBConstants.Customers_Id && cusname === activity.Name) {
+                document.getElementById("vill").value = activity.Villagename;
+                break;
             }
         }
     }
@@ -253,14 +253,14 @@ async function selectVillage1() {
 }
 
 function getvillage1(data) {
-    var cusname=document.getElementById("name2").value;
+    var cusname = document.getElementById("name2").value;
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
             // console.log(activity,customerPhone)
-            if (customerPhone !== DBConstants.Customers_Id && cusname===activity.Name) {
-               document.getElementById("vil2").value=activity. Villagename;
-               break;
+            if (customerPhone !== DBConstants.Customers_Id && cusname === activity.Name) {
+                document.getElementById("vil2").value = activity.Villagename;
+                break;
             }
         }
     }
@@ -326,4 +326,279 @@ document.getElementById("name2").addEventListener("change", async function (e1) 
     } catch (error) {
         console.error("Error occurred while fetching data: ", error);
     }
+});
+
+// document.addEventListener(
+//     "click",
+//     async function (e1) {
+
+//         // =====================================
+//         // CHECK BUTTON ID
+//         // =====================================
+
+//         if (
+//             e1.target.id ===
+//             "pay-entire-amount-btn"
+//         ) {
+
+//             e1.preventDefault();
+
+//             try {
+
+//                 // =============================
+//                 // SHOW FORM
+//                 // =============================
+
+//                 document.getElementById(
+//                     "custamountcontainer2"
+//                 ).style.display = "block";
+
+//                 // =============================
+//                 // GET NAME
+//                 // =============================
+
+//                 const customerName =
+//                     e1.target.dataset.name;
+//                 const villageName = "Not Required";
+//                 document.getElementById(
+//                     "name6"
+//                 ).value = customerName;
+
+//                 document.getElementById(
+//                     "vil6"
+//                 ).value = villageName;
+
+//                 const today = new Date();
+
+//                 const year =
+//                     today.getFullYear();
+
+//                 const month =
+//                     String(today.getMonth() + 1)
+//                         .padStart(2, "0");
+
+//                 const day =
+//                     String(today.getDate())
+//                         .padStart(2, "0");
+
+//                 const formattedDate =
+//                     `${year}-${month}-${day}`;
+
+//                 document.getElementById(
+//                     "dat6"
+//                 ).value = formattedDate;
+
+//                 //un dispaly form
+//                 // Show block after 1 minute
+
+//                 setTimeout(() => {
+
+//                     document.getElementById(
+//                         "custamountcontainer2"
+//                     ).style.display = "none";
+
+//                 }, 60000); // 60000 ms = 1 minute
+
+//                 // =============================
+//                 // GET ID
+//                 // =============================
+
+//                 const db1 =
+//                     DBConstants.CustomersAmount_Id;
+
+
+//                 const db3 =
+//                     DBConstants.CustomersAmount;
+
+//                 const dataRefget =
+//                     ref(
+//                         db2,
+//                         `${db3}/${db1}`
+//                     );
+
+//                 const snapshot =
+//                     await get(dataRefget);
+
+//                 if (snapshot.exists()) {
+
+//                     const data =
+//                         snapshot.val();
+
+//                     document.getElementById(
+//                         "cid6"
+//                     ).value = data;
+
+//                 } else {
+
+//                     alert(
+//                         "No data available"
+//                     );
+//                 }
+
+//             } catch (error) {
+
+//                 console.error(
+//                     "Error occurred while fetching data:",
+//                     error
+//                 );
+//             }
+//         }
+//     });
+
+let timer = 60;
+
+let countdown;
+
+document.addEventListener(
+    "click",
+    async function (e1) {
+
+        // =====================================
+        // CHECK BUTTON ID
+        // =====================================
+
+        if (
+            e1.target.id ===
+            "pay-entire-amount-btn"
+        ) {
+
+            e1.preventDefault();
+
+            try {
+
+                // =============================
+                // SHOW FORM
+                // =============================
+
+                document.getElementById(
+                    "custamountcontainer2"
+                ).style.display = "flex";
+
+                // =============================
+                // GET NAME
+                // =============================
+
+                const customerName =
+                    e1.target.dataset.name;
+
+                const villageName =
+                    "Not Required";
+
+                document.getElementById(
+                    "name6"
+                ).value = customerName;
+
+                document.getElementById(
+                    "vil6"
+                ).value = villageName;
+
+                // =============================
+                // TODAY DATE
+                // =============================
+
+                const today = new Date();
+
+                const year =
+                    today.getFullYear();
+
+                const month =
+                    String(
+                        today.getMonth() + 1
+                    ).padStart(2, "0");
+
+                const day =
+                    String(
+                        today.getDate()
+                    ).padStart(2, "0");
+
+                const formattedDate =
+                    `${year}-${month}-${day}`;
+
+                document.getElementById(
+                    "dat6"
+                ).value = formattedDate;
+
+                // =============================
+                // TIMER START
+                // =============================
+
+                timer = 60;
+
+                clearInterval(
+                    countdown
+                );
+
+                document.getElementById(
+                    "timerText"
+                ).innerText = timer;
+
+                countdown =
+                    setInterval(() => {
+
+                        timer--;
+
+                        document.getElementById(
+                            "timerText"
+                        ).innerText = timer;
+
+                        if (timer <= 0) {
+
+                            clearInterval(
+                                countdown
+                            );
+
+                            document.getElementById(
+                                "custamountcontainer2"
+                            ).style.display = "none";
+                        }
+
+                    }, 1000);
+
+                // =============================
+                // GET ID
+                // =============================
+
+                const db1 =
+                    DBConstants
+                    .CustomersAmount_Id;
+
+                const db3 =
+                    DBConstants
+                    .CustomersAmount;
+
+                const dataRefget =
+                    ref(
+                        db2,
+                        `${db3}/${db1}`
+                    );
+
+                const snapshot =
+                    await get(dataRefget);
+
+                if (
+                    snapshot.exists()
+                ) {
+
+                    const data =
+                        snapshot.val();
+
+                    document.getElementById(
+                        "cid6"
+                    ).value = data;
+
+                } else {
+
+                    alert(
+                        "No data available"
+                    );
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Error occurred while fetching data:",
+                    error
+                );
+            }
+        }
 });

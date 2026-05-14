@@ -740,7 +740,7 @@
                 for (let name in sortedCustomers) {
 
                     const data = sortedCustomers[name];
-
+                    // console.log(name, data+" is the data");
                     const previous = (data.previousBalance > 0 ? data.previousBalance : 0) || 0;
                     const jcb = (data.jcbPrice > 0 ? data.jcbPrice : 0) || 0;
                     const overall = (data.overallPrice > 0 ? data.overallPrice : 0) || 0;
@@ -1419,7 +1419,7 @@ ${tableHTML}
                     </div>
                 </div>
             </div>
-            <div id="myModal6" class="modal">
+            <!-- <div id="myModal6" class="modal">
                 <div class="modal-content">
                     <span class="close" onclick="closePopup6()">&times;</span>
                     <div id="overviewtablemain">
@@ -1430,9 +1430,92 @@ ${tableHTML}
                     </div>
                 </div>
 
+            </div> -->
+
+            <div id="myModal6" class="modal">
+
+                <div class="modal-content">
+
+                    <span class="close" onclick="closePopup6()">
+                        &times;
+                    </span>
+
+                    <div id="overviewtablemain">
+
+                        <div class="loading-box" id="loadingMessage">
+
+                            <div class="loader"></div>
+
+                            <p>
+                                Data is loading,
+                                please wait...
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ADD HERE -->
+
+                    <div id="custamountcontainer2" style="
+                display:none;
+                margin-top:20px;
+                padding:15px;
+                border:1px solid #ccc;
+                border-radius:10px;
+            ">
+
+                        <form id="userForm6">
+
+                            <input type="date" id="dat6" required>
+
+                            <input type="text" id="name6" placeholder="Customer" readonly>
+
+                            <input type="text" id="vil6" placeholder="Village" readonly>
+
+                            <input type="text" id="amt6" placeholder="Amount" required>
+
+                            <input type="text" id="cid6" placeholder="Amount Id" readonly>
+
+                            <input type="button" value="Pay Entire Amount" id="submit7">
+
+                        </form>
+
+                        <div id="paymentTimer">
+
+                            <h2 id="timerText">
+                                60
+                            </h2>
+
+                            <p>
+                                Time Remaining
+                            </p>
+
+                        </div>
+
+                    </div>
+                    <!-- SUCCESS PAYMENT POPUP -->
+
+                    <div id="paymentSuccessPopup" class="payment-popup">
+
+                        <div class="payment-popup-content">
+
+                            <img src="done1.png" alt="Payment Success" class="success-img">
+
+                            <h2>Payment Successful</h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
             </div>
             <script>
                 // List all modal IDs
+
                 const modals = [
                     document.getElementById("myModal1"),
                     document.getElementById("myModal2"),
@@ -1445,6 +1528,7 @@ ${tableHTML}
 
                 // Close modal if user clicks outside modal content
                 window.addEventListener("click", function (event) {
+
                     modals.forEach(modal => {
                         if (event.target === modal) {
                             modal.style.display = "none";
@@ -2028,6 +2112,8 @@ ${tableHTML}
 
                 document.getElementById("myModal6").style.display = "flex";
 
+                document.getElementById("custamountcontainer2").style.display = "none";
+
                 // =========================================
                 // Loading
                 // =========================================
@@ -2059,7 +2145,6 @@ ${tableHTML}
                 // =========================================
                 // Loop Data
                 // =========================================
-
                 for (const customerPhone in data) {
 
                     const activity = data[customerPhone];
@@ -2554,7 +2639,36 @@ ${tableHTML}
                 </tbody>
 
             </table>
+
+            <div
+        style="
+            margin-top:20px;
+            text-align:center;
+        "
+    >
+
+        <button
+            id="pay-entire-amount-btn"
+            data-name="${name}"
+            style="
+                padding:12px 25px;
+                border:none;
+                border-radius:8px;
+                background:green;
+                color:white;
+                font-size:16px;
+                font-weight:bold;
+                cursor:pointer;
+            "
+        >
+
+            Pay Entire Amount
+
+        </button>
+
+    </div>
         `;
+
 
             } catch (error) {
 
@@ -2573,129 +2687,129 @@ ${tableHTML}
 
         document.addEventListener("click", function (e) {
 
-    if (
-        e.target.classList.contains("payment-btn")
-    ) {
-
-        let btn = e.target;
-
-        let customerName =
-            btn.dataset.name;
-
-        let amount =
-            parseInt(btn.dataset.amount) || 0;
-
-        let data =
-            JSON.parse(
-                localStorage.getItem(
-                    "unpaidCustomerslistdata"
-                )
-            ) || {};
-
-        // =====================================
-        // CURRENT STATUS
-        // =====================================
-
-        let isCurrentlyPaid =
-            btn.innerText === "Paid";
-
-        // =====================================
-        // TOGGLE STATUS
-        // =====================================
-
-        let newStatus =
-            isCurrentlyPaid
-                ? "UnPaid"
-                : "Paid";
-
-        // =====================================
-        // UPDATE STORAGE
-        // =====================================
-
-        for (const key in data) {
-
             if (
-                data[key].Name === customerName
+                e.target.classList.contains("payment-btn")
             ) {
 
-                data[key].Payment =
-                    newStatus;
+                let btn = e.target;
+
+                let customerName =
+                    btn.dataset.name;
+
+                let amount =
+                    parseInt(btn.dataset.amount) || 0;
+
+                let data =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "unpaidCustomerslistdata"
+                        )
+                    ) || {};
+
+                // =====================================
+                // CURRENT STATUS
+                // =====================================
+
+                let isCurrentlyPaid =
+                    btn.innerText === "Paid";
+
+                // =====================================
+                // TOGGLE STATUS
+                // =====================================
+
+                let newStatus =
+                    isCurrentlyPaid
+                        ? "UnPaid"
+                        : "Paid";
+
+                // =====================================
+                // UPDATE STORAGE
+                // =====================================
+
+                for (const key in data) {
+
+                    if (
+                        data[key].Name === customerName
+                    ) {
+
+                        data[key].Payment =
+                            newStatus;
+                    }
+                }
+
+                // localStorage.setItem(
+                //     "unpaidCustomerslistdata",
+                //     JSON.stringify(data)
+                // );
+
+                // =====================================
+                // BUTTON UI
+                // =====================================
+
+                btn.innerText = newStatus;
+
+                btn.style.backgroundColor =
+                    newStatus === "Paid"
+                        ? "green"
+                        : "red";
+
+                // =====================================
+                // BALANCE CELL
+                // =====================================
+
+                let balanceCell =
+                    btn.closest("tr")
+                        .querySelector(".balance-amount");
+
+                if (balanceCell) {
+
+                    balanceCell.innerText =
+                        newStatus === "Paid"
+                            ? 0
+                            : amount;
+                }
+
+                // =====================================
+                // SUMMARY UPDATE
+                // =====================================
+
+                let unpaidCell =
+                    document.querySelector(
+                        ".current-unpaid"
+                    );
+
+                let remainingCell =
+                    document.querySelector(
+                        ".remaining-unpaid"
+                    );
+
+                if (unpaidCell) {
+
+                    let current =
+                        parseInt(
+                            unpaidCell.innerText
+                        ) || 0;
+
+                    unpaidCell.innerText =
+                        newStatus === "Paid"
+                            ? current - amount
+                            : current + amount;
+                }
+
+                if (remainingCell) {
+
+                    let current =
+                        parseInt(
+                            remainingCell.innerText
+                        ) || 0;
+
+                    remainingCell.innerText =
+                        newStatus === "Paid"
+                            ? current - amount
+                            : current + amount;
+                }
             }
-        }
-
-        // localStorage.setItem(
-        //     "unpaidCustomerslistdata",
-        //     JSON.stringify(data)
-        // );
-
-        // =====================================
-        // BUTTON UI
-        // =====================================
-
-        btn.innerText = newStatus;
-
-        btn.style.backgroundColor =
-            newStatus === "Paid"
-                ? "green"
-                : "red";
-
-        // =====================================
-        // BALANCE CELL
-        // =====================================
-
-        let balanceCell =
-            btn.closest("tr")
-               .querySelector(".balance-amount");
-
-        if (balanceCell) {
-
-            balanceCell.innerText =
-                newStatus === "Paid"
-                    ? 0
-                    : amount;
-        }
-
-        // =====================================
-        // SUMMARY UPDATE
-        // =====================================
-
-        let unpaidCell =
-            document.querySelector(
-                ".current-unpaid"
-            );
-
-        let remainingCell =
-            document.querySelector(
-                ".remaining-unpaid"
-            );
-
-        if (unpaidCell) {
-
-            let current =
-                parseInt(
-                    unpaidCell.innerText
-                ) || 0;
-
-            unpaidCell.innerText =
-                newStatus === "Paid"
-                    ? current - amount
-                    : current + amount;
-        }
-
-        if (remainingCell) {
-
-            let current =
-                parseInt(
-                    remainingCell.innerText
-                ) || 0;
-
-            remainingCell.innerText =
-                newStatus === "Paid"
-                    ? current - amount
-                    : current + amount;
-        }
-    }
-});
+        });
 
 
         function closePopup1() {
@@ -2714,6 +2828,17 @@ ${tableHTML}
             document.getElementById("myModal5").style.display = "none";
         }
         function closePopup6() {
+            const innerDiv =
+                document.getElementById(
+                    "custamountcontainer2"
+                );
+
+            if (
+                innerDiv.style.display !== "none"
+            ) {
+
+                innerDiv.style.display = "none";
+            }
             document.getElementById("myModal6").style.display = "none";
         }
         // Close popup when clicking outside

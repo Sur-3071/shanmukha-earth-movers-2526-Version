@@ -309,6 +309,29 @@ document.getElementById('submit3').addEventListener('click', async function (e) 
     }
 });
 
+document.getElementById('submit7').addEventListener('click', async function (e) {
+    e.preventDefault();
+    const dte = document.getElementById("dat6").value;
+    const name = document.getElementById("name6").value;
+    const wid = document.getElementById("cid6").value;
+    const Amount = document.getElementById("amt6").value;
+    const villname = document.getElementById("vil6").value;
+    // alert("iam coming 1");
+    document.getElementById("userForm6").reset();
+    if (name.length > 0) {
+        if (Amount.length > 0) {
+            getExtraAmount(Amount, name, wid, dte, villname);
+        }
+        else {
+            alert("Please Enter Amount");
+            datarebuild();
+        }
+    }
+    else {
+        alert("Please Enter Customer Name Or place Or Location Name");
+        datarebuild();
+    }
+});
 
 async function getExtraAmount(Amount, name, wid, dte, villname) {
     const db1 = DBConstants.CustomersAmount;
@@ -466,9 +489,24 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
         const extraRef = ref(db, `${db2}/${name}/ExtraAmount`);
         await set(extraRef, totalded);
         document.getElementById("done").style.display = "block";
+        // document.getElementById("paydone").style.display = "block";
+        // showPaymentSuccess();
+        document.getElementById(
+            "paymentSuccessPopup"
+        ).style.display = "flex";
+
+        setTimeout(() => {
+
+            document.getElementById(
+                "paymentSuccessPopup"
+            ).style.display = "none";
+
+        }, 2000);
         removedone();
     }
 }
+
+
 
 
 document.getElementById('submit4').addEventListener('click', async function (e) {
