@@ -779,7 +779,7 @@
     onmouseover="this.style.backgroundColor='#0056b3'"
     onmouseout="this.style.backgroundColor='#007bff'"
   >
-    User Overview
+    View Data
   </button>
 </td>
                 <td>${previous}</td>
@@ -1419,18 +1419,6 @@ ${tableHTML}
                     </div>
                 </div>
             </div>
-            <!-- <div id="myModal6" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closePopup6()">&times;</span>
-                    <div id="overviewtablemain">
-                        <div class="loading-box" id="loadingMessage">
-                            <div class="loader"></div>
-                            <p>Data is loading, please wait...</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div> -->
 
             <div id="myModal6" class="modal">
 
@@ -1454,6 +1442,194 @@ ${tableHTML}
                         </div>
 
                     </div>
+
+                    
+            <div id="myModal7" class="modal">
+
+                <div class="modal-content">
+
+                    <span class="close" onclick="closePopup7()">&times;</span>
+
+                    <h1 style="
+            color: red;
+            font-size: 28px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+            border-left: 6px solid crimson;
+            padding: 8px 12px;
+            background: #ffe6e6;
+            margin: 15px 0;
+            border-radius: 6px;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+        ">
+                        Data Editing
+                    </h1>
+
+                    <div id="formContainer2">
+
+                        <form id="userForm">
+
+                            <input type="date" id="dat7" name="dat" placeholder="Date" required>
+
+                            <input type="text" id="name7" name="name" placeholder="Customer Name" required>
+
+                            <input type="text" id="vil7" name="vil" placeholder="Village" required>
+
+                            <input type="tel" id="dis7" name="dis" placeholder="Enter Disel Amount" required>
+
+                            <input type="text" id="wid7" name="wid" placeholder="Work Id" readonly required>
+
+                            <input type="text" id="pay7" name="payid" placeholder="Payment Status" readonly required>
+
+                            <select id="worktype7" required onchange="addflow7()">
+
+                                <option hidden>
+                                    select Work Type
+                                </option>
+
+                                <option>
+                                    Hours
+                                </option>
+
+                                <option>
+                                    Loading
+                                </option>
+
+                                <option>
+                                    Contract
+                                </option>
+
+                            </select>
+
+                            <input type="text" id="beta7" name="beta" placeholder="Driver Beta" onchange="timecal7()">
+
+
+
+
+                            <!-- HOURS -->
+
+                            <div id="hours7" style="display:none;">
+
+                                <input type="text" id="hrsrate7" name="hrsrate" placeholder="Hours Price"
+                                    onkeyup="timecal7()" required>
+
+                                <div id="loading17">
+
+                                    <input type="text" id="trprate17" name="trprate1" placeholder="Trip Price"
+                                        onkeyup="tripprice17()" required>
+
+                                    <div id="container21">
+
+                                        <div class="row17">
+
+                                            <button type="button" class="add-button" onclick="addRow17()">
+
+                                                Add Driver
+
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                    <textarea id="output17" placeholder="All Drivers list" rows="4" cols="30"
+                                        style="font-size:20px;" readonly></textarea>
+
+                                    <input type="text" id="trips17" placeholder="Number of Trips" readonly required>
+
+                                    <input type="text" id="hoursnoncompanytractors7" name="hoursnoncompanytractors"
+                                        placeholder="Number of Non Company Tractor Trips" readonly required>
+
+                                    <input type="text" id="alltrprate7" name="alltrprate" placeholder="Total Trip Price"
+                                        required value="0">
+
+                                </div>
+
+                                <input type="text" id="desc7" name="desc" placeholder="Description" required>
+
+                                <input type="time" id="stime7" name="stime" onchange="timecal7()" required>
+
+                                <input type="time" id="etime7" name="etime" onchange="timecal7()" required>
+
+                                <input type="text" id="ttime7" name="ttime" placeholder="Total Time" readonly required>
+
+                            </div>
+
+
+
+
+                            <!-- LOADING -->
+
+                            <div id="loading7" style="display:none;">
+
+                                <input type="text" id="jcbtrprate7" name="jcbtrprate" placeholder="JCB Trip Price"
+                                    onkeyup="tripprice7()" required>
+
+                                <input type="text" id="trprate7" name="trprate" placeholder="Trip Price" required>
+
+                                <div id="container437">
+
+                                    <div class="row7">
+
+                                        <button type="button" class="add-button" onclick="addRow7()">
+
+                                            Add
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                                <textarea id="output7" placeholder="All Drivers list" rows="4" cols="30"
+                                    style="font-size:20px;" onkeyup="tripedit7()"></textarea>
+
+                                <input type="text" id="trips7" name="trips" placeholder="Number of Trips"
+                                    onkeyup="tripprice7()">
+
+                                <input type="text" id="noncompanytractors7" name="noncompanytractors"
+                                    placeholder="Number of Non Company Tractor Trips" readonly required>
+
+                            </div>
+
+
+
+
+                            <!-- CONTRACT -->
+
+                            <div id="contract7" style="display:none;">
+
+                                <input type="text" id="con7" name="con" placeholder="Contract Amount"
+                                    onkeyup="conprice7()" required>
+
+                            </div>
+
+                            <input type="text" id="rate7" name="rate" placeholder="Price" required>
+
+                            <input type="button" value="Update Data" id="submit8">
+
+                        </form>
+
+                    </div>
+
+
+
+
+
+                    <div style="
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100%;
+        ">
+
+                        <img src="done1.png" id="done7" style="display:none;" height="100px" width="100px">
+
+                    </div>
+
+                </div>
+
+            </div>
 
                     <!-- ADD HERE -->
 
@@ -1522,7 +1698,8 @@ ${tableHTML}
                     document.getElementById("myModal3"),
                     document.getElementById("myModal4"),
                     document.getElementById("myModal5"),
-                    document.getElementById("myModal6")
+                    document.getElementById("myModal6"),
+                    document.getElementById("myModal7")
 
                 ];
 
@@ -1791,7 +1968,7 @@ ${tableHTML}
                         required>
                     <div id="container2">
                         <div class="row1">
-                            <button class="add-button" onclick="addRow1()">Add Driver</button>
+                            <button type="button" class="add-button" onclick="addRow1()">Add Driver</button>
                         </div>
                     </div>
                     <textarea id="output1" placeholder="All Drivers list" rows="4" cols="30"
@@ -1812,7 +1989,7 @@ ${tableHTML}
                 <input type="text" id="trprate" name="trprate" placeholder="Trip Price" required>
                 <div id="container43">
                     <div class="row">
-                        <button class="add-button" onclick="addRow()">Add Driver</button>
+                        <button type="button" class="add-button" onclick="addRow()">Add Driver</button>
                     </div>
                 </div>
                 <textarea id="output" placeholder="All Drivers list" rows="4" cols="35"
@@ -1993,6 +2170,7 @@ ${tableHTML}
     <!-- Load the main script as a module -->
     <script type="module" src="dailyworkdatabase.js"></script>
     <script type="module" src="dailyworkid_retrive.js"></script>
+    <script type="module" src="paymentedit.js"></script>
     <script src="dailywork.js"></script>
     <script src="proxyurl.js"></script>
     <script>
@@ -2509,6 +2687,27 @@ ${tableHTML}
                         </button>
 
                     </td>
+                    <td>
+    <button
+        class="payment-edit-btn"
+        id="${activity.workid}"
+        data-name="${activity.Name}"
+        data-phone="${customerPhone}"
+        data-amount="${totalAmount}"
+        style="
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            background-color: blue;
+        "
+        onclick="openPopup7()"
+    >
+        Edit Data
+    </button>
+</td>
 
                     <td>
                         ${totalAmount}
@@ -2543,7 +2742,7 @@ ${tableHTML}
                 background:#f2f2f2;
             ">
 
-                <td colspan="6">
+                <td colspan="7">
                     Current UnPaid
                 </td>
 
@@ -2557,7 +2756,7 @@ ${tableHTML}
                 font-weight:bold;
             ">
 
-                <td colspan="6">
+                <td colspan="7">
                     Previous Balance
                 </td>
 
@@ -2572,7 +2771,7 @@ ${tableHTML}
                 color:red;
             ">
 
-                <td colspan="6">
+                <td colspan="7">
                     Total Remaining
                 </td>
 
@@ -2610,6 +2809,8 @@ ${tableHTML}
                         <th>Work Details</th>
 
                         <th>Payment Status</th>
+
+                        <th>Edit</th>
 
                         <th>Total Amount</th>
 
@@ -2811,7 +3012,10 @@ ${tableHTML}
             }
         });
 
+        async function openPopup7() {
+            document.getElementById("myModal7").style.display = "flex";
 
+        }
         function closePopup1() {
             document.getElementById("myModal1").style.display = "none";
         }
@@ -2840,6 +3044,10 @@ ${tableHTML}
                 innerDiv.style.display = "none";
             }
             document.getElementById("myModal6").style.display = "none";
+        }
+
+        function closePopup7() {
+            document.getElementById("myModal7").style.display = "none";
         }
         // Close popup when clicking outside
         window.onclick = function (event) {

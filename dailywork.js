@@ -74,6 +74,7 @@ function removedone() {
 }
 function removereadonly()
 {
+    alert("getting called");
     const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
     inputs.forEach(input => {
         input.removeAttribute('readonly');
@@ -81,7 +82,7 @@ function removereadonly()
 }
 
 function addRow() {
-    // alert("row");
+    alert("row in daily work js");
     const container = document.getElementById('container43');
     const newRow = document.createElement('div');
     newRow.className = 'row';
@@ -93,7 +94,6 @@ function addRow() {
     container.appendChild(newRow);
 }
 function addRow1() {
-    // alert("row1");
     const container1 = document.getElementById('container2');
     const newRow1 = document.createElement('div');
     newRow1.className = 'row1';
@@ -134,18 +134,13 @@ function updateTotalTrips() {
             total += parseInt(trip) || 0;
     });
 
-    // tripInputs.forEach(input => {
-    //     console.log(input);
-    //     const value = parseInt(input.value) || 0;
-    //     total += value;
-    // });
     document.getElementById('trips').value= total;
     document.getElementById('noncompanytractors').value= paytotal;
     tripprice();
 }
 function updateTotalTrips1() {
     // alert("hi");
-    // alert("trips1");
+    alert("trips1 called");
     const driverNames = document.querySelectorAll('input[name="driverName1[]"]');
     const tripInputs = document.querySelectorAll('input[name="trips1[]"]');
     let paytotal = 0;
@@ -160,10 +155,7 @@ function updateTotalTrips1() {
         }
             total += parseInt(trip) || 0;
     });
-    // tripInputs.forEach(input => {
-    //     const value = parseInt(input.value) || 0;
-    //     total += value;
-    // });
+
     document.getElementById('trips1').value= total;
     document.getElementById('hoursnoncompanytractors').value= paytotal;
     tripprice1();
@@ -254,3 +246,375 @@ document.addEventListener("click", function(event) {
         }
     }
 });
+
+
+
+function timecal7() {
+
+    var stime = document.getElementById("stime7").value;
+    var etime = document.getElementById("etime7").value;
+
+    var startTime = new Date('1970-01-01T' + stime + 'Z');
+    var endTime = new Date('1970-01-01T' + etime + 'Z');
+
+    if (endTime < startTime) {
+        endTime.setDate(endTime.getDate() + 1);
+    }
+
+    var diff = endTime - startTime;
+
+    var diffHours = Math.floor(diff / (1000 * 60 * 60));
+    var diffMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    var totalTime =
+        diffHours.toString().padStart(2, '0')
+        + ':'
+        + diffMinutes.toString().padStart(2, '0');
+
+    var c3 = parseInt(document.getElementById("hrsrate7").value || "1000");
+
+    var tmin = diffHours * 60 + diffMinutes;
+
+    var pri = tmin * c3 / 60;
+
+    document.getElementById("ttime7").value = totalTime;
+
+    var type = document.getElementById("worktype7").value;
+
+    var beta = parseInt(document.getElementById("beta7").value || "0");
+
+    var rate = parseInt(document.getElementById("rate7").value || "0");
+
+    if (type === "Hours") {
+
+        rate = (isNaN(pri) ? 0 : parseInt(pri));
+
+        document.getElementById("rate7").value = rate;
+
+    }
+    else if (type === "Loading") {
+
+        var triprate =
+            parseInt(document.getElementById("trips7").value || "0");
+
+        var jcbtriprate =
+            parseInt(document.getElementById("jcbtrprate7").value || "0");
+
+        var trippri = (triprate * jcbtriprate);
+
+        rate = (isNaN(trippri) ? beta : parseInt(trippri) + beta);
+
+        document.getElementById("rate7").value = rate;
+
+    }
+    else if (type === "Contract") {
+
+        var conamouont =
+            parseInt(document.getElementById("con7").value || "0");
+
+        rate = (isNaN(conamouont)
+            ? beta
+            : parseInt(conamouont) + beta);
+
+        document.getElementById("rate7").value = rate;
+    }
+}
+
+
+
+function conprice7() {
+
+    var beta =
+        parseInt(document.getElementById("beta7").value || "0");
+
+    var c1 =
+        document.getElementById("con7").value || "0";
+
+    document.getElementById("rate7").value =
+        parseInt(c1) + beta;
+}
+
+
+
+function removedone7() {
+
+    setTimeout(function () {
+
+        var v7 = document.getElementById("done7");
+
+        v7.style.display = "none";
+        document.getElementById("userForm").reset();
+
+    }, 3000);
+}
+
+
+
+function removereadonly7() {
+
+    const inputs =
+        document.querySelectorAll(
+            '#userForm input[type="text"], #userForm input[type="number"]'
+        );
+
+    inputs.forEach(input => {
+
+        input.removeAttribute('readonly');
+
+    });
+}
+
+
+
+function addRow7() {
+
+    const container =
+        document.getElementById('container437');
+
+    const newRow =
+        document.createElement('div');
+
+    newRow.className = 'row7';
+
+    newRow.innerHTML = `
+       <input type="text"
+              placeholder="Driver Name"
+              name="driverName7[]"
+              onchange="removereadonly7()">
+
+       <input type="number"
+              placeholder="Trips"
+              name="trips7[]"
+              readonly
+              required
+              onkeyup="updateTotalTrips7()">
+
+       <button type="button"
+               class="remove-button"
+               onclick="removeRow7(this)">
+               X
+       </button>
+    `;
+
+    container.appendChild(newRow);
+}
+
+
+
+function addRow17() {
+
+    const container1 =
+        document.getElementById('container21');
+
+    const newRow1 =
+        document.createElement('div');
+
+    newRow1.className = 'row17';
+
+    newRow1.innerHTML = `
+       <input type="text"
+              placeholder="Driver Name"
+              name="driverName17[]"
+              onchange="removereadonly7()">
+
+       <input type="number"
+              placeholder="Trips"
+              name="trips17[]"
+              readonly
+              required
+              onkeyup="updateTotalTrips17()">
+
+       <button type="button"
+               class="remove-button"
+               onclick="removeRow17(this)">
+               X
+       </button>
+    `;
+
+    container1.appendChild(newRow1);
+}
+
+
+
+function removeRow7(button) {
+
+    const row = button.parentElement;
+
+    row.remove();
+
+    updateTotalTrips7();
+}
+
+
+
+function removeRow17(button) {
+
+    const row = button.parentElement;
+
+    row.remove();
+
+    updateTotalTrips17();
+}
+
+
+
+function updateTotalTrips7() {
+
+    const driverNames =
+        document.querySelectorAll('input[name="driverName7[]"]');
+
+    const tripInputs =
+        document.querySelectorAll('input[name="trips7[]"]');
+
+    let paytotal = 0;
+
+    let total = 0;
+
+    driverNames.forEach((driverName, index) => {
+
+        const trip = tripInputs[index].value || 0;
+
+        const name =
+            (driverName.value.toLowerCase()
+                || "Unknown Driver")
+                .trim()
+                .replace(/\s+/g, "_");
+
+        if (name.includes("own")) {
+
+            const value = parseInt(trip) || 0;
+
+            paytotal += value;
+        }
+
+        total += parseInt(trip) || 0;
+    });
+
+    document.getElementById('trips7').value = total;
+
+    document.getElementById('noncompanytractors7').value = paytotal;
+
+    tripprice7();
+}
+
+
+
+function updateTotalTrips17() {
+
+    const driverNames =
+        document.querySelectorAll('input[name="driverName17[]"]');
+
+    const tripInputs =
+        document.querySelectorAll('input[name="trips17[]"]');
+
+    let paytotal = 0;
+
+    let total = 0;
+
+    driverNames.forEach((driverName, index) => {
+
+        const trip = tripInputs[index].value || 0;
+
+        const name =
+            (driverName.value.toLowerCase()
+                || "Unknown Driver")
+                .trim()
+                .replace(/\s+/g, "_");
+
+        if (name.includes("own")) {
+
+            const value = parseInt(trip) || 0;
+
+            paytotal += value;
+        }
+
+        total += parseInt(trip) || 0;
+    });
+
+    document.getElementById('trips17').value = total;
+
+    document.getElementById('hoursnoncompanytractors7').value = paytotal;
+
+    tripprice17();
+}
+
+
+
+function tripprice7() {
+
+    var c1 =
+        document.getElementById("trips7").value || "0";
+
+    var c3 =
+        parseInt(document.getElementById("jcbtrprate7").value || "0");
+
+    var c2 = parseInt(c1) * c3;
+
+    var beta =
+        document.getElementById("beta7").value || "0";
+
+    var fin =
+        isNaN(c2)
+            ? parseInt(beta)
+            : (parseInt(beta) + c2);
+
+    document.getElementById("rate7").value = fin;
+
+    generateOutput7();
+}
+
+
+
+function generateOutput7() {
+
+    const driverNames =
+        document.querySelectorAll('input[name="driverName7[]"]');
+
+    const trips =
+        document.querySelectorAll('input[name="trips7[]"]');
+
+    const outputDiv =
+        document.getElementById('output7');
+
+    outputDiv.value = "";
+
+    driverNames.forEach((driverName, index) => {
+
+        const trip = trips[index].value || 0;
+
+        const name =
+            (driverName.value || "Unknown Driver")
+                .trim()
+                .replace(/\s+/g, "_");
+
+        const line = `${name} = ${trip}`;
+
+        outputDiv.value += line + "\n";
+    });
+}
+
+
+function tripprice17()
+{
+    // alert("tripprice1");
+    var c1=document.getElementById("trips17").value;
+    var c3=parseInt(document.getElementById("trprate17").value);
+    var c2=parseInt(c1)*c3;
+    document.getElementById("alltrprate7").value=c2;
+    generateOutput17();
+}
+
+function generateOutput17() {
+    // alert("hi");
+    const driverNames = document.querySelectorAll('input[name="driverName17[]"]');
+    const trips = document.querySelectorAll('input[name="trips17[]"]');
+    const outputDiv = document.getElementById('output17');
+    outputDiv.value = "";
+    driverNames.forEach((driverName, index) => {
+        const trip = trips[index].value || 0;
+        const name = (driverName.value || "Unknown Driver").trim().replace(/\s+/g, "_");
+        const line = `${name} = ${trip}`;
+        outputDiv.value += line+" "+ "\n";
+    });
+}
+

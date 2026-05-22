@@ -541,11 +541,13 @@ document.addEventListener("click", async function (e1) {
         }
     }
 })
+
+
 function editData() {
     // preventDefault();
     const container = document.getElementById('container43');
     const rawText = document.getElementById('output').value.trim();
-    container.innerHTML = `<button class="add-button" onclick="addRow()">Add Driver</button>`;
+    container.innerHTML = `<button type="button" class="add-button" onclick="addRow()">Add Driver</button>`;
 
     const lines = rawText.split('\n');
     var nonpaytrips = 0;
@@ -573,7 +575,7 @@ function editData1() {
     // preventDefault();
     const container = document.getElementById('container2');
     const rawText = document.getElementById('output1').value.trim();
-    container.innerHTML = `<button class="add-button" onclick="addRow1()">Add Driver</button>`;
+    container.innerHTML = `<button type="button" class="add-button" onclick="addRow1()">Add Driver</button>`;
 
     const lines = rawText.split('\n');
     var nonpaytrips = 0;

@@ -196,27 +196,6 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
         document.getElementById("shift").value = shift;
         document.getElementById("trips").value = trips;
     }
-    // function speakText(s) {
-    //     // Check if the browser supports speech synthesis
-    //     if ('speechSynthesis' in window) {
-    //         // Get the text from the textarea
-    //         let text = s;
-
-    //         // Create a new SpeechSynthesisUtterance object
-    //         let speech = new SpeechSynthesisUtterance();
-
-    //         // Set the text to be spoken
-    //         speech.text = text;
-
-    //         // Set other properties (optional)
-    //         speech.volume = 1; // Volume (0 to 1)
-    //         speech.rate = 1; // Speed rate (0.1 to 10)
-    //         speech.pitch = 1; // Pitch (0 to 2)
-    //         window.speechSynthesis.speak(speech);
-    //     } else {
-    //         alert('Sorry, your browser does not support speech synthesis.');
-    //     }
-    // }
 });
 
 
