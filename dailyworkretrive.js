@@ -325,8 +325,8 @@ function generateTable(data) {
                         <td>${tripamount}</td>
                         <td>${jcbtripamount}</td>
                         <td>${activity.Contract}</td>
-                        <td>${activity.Starting}</td>
-                        <td>${activity.Ending}</td>
+                        <td>${convertTo12Hour(activity.Starting)}</td>
+                        <td>${convertTo12Hour(activity.Ending)}</td>
                         <td>${activity.TotalTime}</td>
                         <td>${activity.HoursPrice}</td>
                         <td>${beta}</td>
@@ -831,8 +831,8 @@ function SearchTable(data) {
                         <td>${tripamount}</td>
                         <td>${jcbtripamount}</td>
                         <td>${activity.Contract}</td>
-                        <td>${activity.Starting}</td>
-                        <td>${activity.Ending}</td>
+                        <td>${convertTo12Hour(activity.Starting)}</td>
+                        <td>${convertTo12Hour(activity.Ending)}</td>
                         <td>${activity.TotalTime}</td>
                         <td>${activity.HoursPrice}</td>
                         <td>${activity.Beta}</td>
@@ -1022,8 +1022,8 @@ function generateTableByDate(data, startdate, enddate, data1) {
                         <td>${activity.Disel}</td>
                         <td>${activity.Trips}</td>
                         <td>${activity.Contract}</td>
-                        <td>${activity.Starting}</td>
-                        <td>${activity.Ending}</td>
+                        <td>${convertTo12Hour(activity.Starting)}</td>
+                        <td>${convertTo12Hour(activity.Ending)}</td>
                         <td>${activity.TotalTime}</td>
                         <td>${activity.Beta}</td>
                         <td>${activity.Price}</td>

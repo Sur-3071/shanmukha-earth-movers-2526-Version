@@ -1443,14 +1443,14 @@ ${tableHTML}
 
                     </div>
 
-                    
-            <div id="myModal7" class="modal">
 
-                <div class="modal-content">
+                    <div id="myModal7" class="modal">
 
-                    <span class="close" onclick="closePopup7()">&times;</span>
+                        <div class="modal-content">
 
-                    <h1 style="
+                            <span class="close" onclick="closePopup7()">&times;</span>
+
+                            <h1 style="
             color: red;
             font-size: 28px;
             font-family: 'Segoe UI', sans-serif;
@@ -1462,174 +1462,189 @@ ${tableHTML}
             border-radius: 6px;
             box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
         ">
-                        Data Editing
-                    </h1>
+                                Data Editing
+                            </h1>
+                           <div class="loading-box" id="loadingMessage">
 
-                    <div id="formContainer2">
+                            <div class="loader"></div>
 
-                        <form id="userForm">
+                            <p>
+                                Data is loading,
+                                please wait...
+                            </p>
 
-                            <input type="date" id="dat7" name="dat" placeholder="Date" required>
+                        </div>
+                            <div id="formContainer2">
 
-                            <input type="text" id="name7" name="name" placeholder="Customer Name" required>
+                                <form id="userForm">
 
-                            <input type="text" id="vil7" name="vil" placeholder="Village" required>
+                                    <input type="date" id="dat7" name="dat" placeholder="Date" required>
 
-                            <input type="tel" id="dis7" name="dis" placeholder="Enter Disel Amount" required>
+                                    <input type="text" id="name7" name="name" placeholder="Customer Name" required>
 
-                            <input type="text" id="wid7" name="wid" placeholder="Work Id" readonly required>
+                                    <input type="text" id="vil7" name="vil" placeholder="Village" required>
 
-                            <input type="text" id="pay7" name="payid" placeholder="Payment Status" readonly required>
+                                    <input type="tel" id="dis7" name="dis" placeholder="Enter Disel Amount" required>
 
-                            <select id="worktype7" required onchange="addflow7()">
+                                    <input type="text" id="wid7" name="wid" placeholder="Work Id" readonly required>
 
-                                <option hidden>
-                                    select Work Type
-                                </option>
+                                    <input type="text" id="pay7" name="payid" placeholder="Payment Status" readonly
+                                        required>
 
-                                <option>
-                                    Hours
-                                </option>
+                                    <select id="worktype7" required onchange="addflow7()">
 
-                                <option>
-                                    Loading
-                                </option>
+                                        <option hidden>
+                                            select Work Type
+                                        </option>
 
-                                <option>
-                                    Contract
-                                </option>
+                                        <option>
+                                            Hours
+                                        </option>
 
-                            </select>
+                                        <option>
+                                            Loading
+                                        </option>
 
-                            <input type="text" id="beta7" name="beta" placeholder="Driver Beta" onchange="timecal7()">
+                                        <option>
+                                            Contract
+                                        </option>
+
+                                    </select>
+
+                                    <input type="text" id="beta7" name="beta" placeholder="Driver Beta"
+                                        onchange="timecal7()">
 
 
 
 
-                            <!-- HOURS -->
+                                    <!-- HOURS -->
 
-                            <div id="hours7" style="display:none;">
+                                    <div id="hours7" style="display:none;">
 
-                                <input type="text" id="hrsrate7" name="hrsrate" placeholder="Hours Price"
-                                    onkeyup="timecal7()" required>
+                                        <input type="text" id="hrsrate7" name="hrsrate" placeholder="Hours Price"
+                                            onkeyup="timecal7()" required>
 
-                                <div id="loading17">
+                                        <div id="loading17">
 
-                                    <input type="text" id="trprate17" name="trprate1" placeholder="Trip Price"
-                                        onkeyup="tripprice17()" required>
+                                            <input type="text" id="trprate17" name="trprate1" placeholder="Trip Price"
+                                                onkeyup="tripprice17()" required>
 
-                                    <div id="container21">
+                                            <div id="container21">
 
-                                        <div class="row17">
+                                                <div class="row17">
 
-                                            <button type="button" class="add-button" onclick="addRow17()">
+                                                    <button type="button" class="add-button" onclick="addRow17()">
 
-                                                Add Driver
+                                                        Add Driver
 
-                                            </button>
+                                                    </button>
+
+                                                </div>
+
+                                            </div>
+
+                                            <textarea id="output17" placeholder="All Drivers list" rows="4" cols="30"
+                                                style="font-size:20px;" readonly></textarea>
+
+                                            <input type="text" id="trips17" placeholder="Number of Trips" readonly
+                                                required>
+
+                                            <input type="text" id="hoursnoncompanytractors7"
+                                                name="hoursnoncompanytractors"
+                                                placeholder="Number of Non Company Tractor Trips" readonly required>
+
+                                            <input type="text" id="alltrprate7" name="alltrprate"
+                                                placeholder="Total Trip Price" required value="0">
 
                                         </div>
 
-                                    </div>
+                                        <input type="text" id="desc7" name="desc" placeholder="Description" required>
 
-                                    <textarea id="output17" placeholder="All Drivers list" rows="4" cols="30"
-                                        style="font-size:20px;" readonly></textarea>
+                                        <input type="time" id="stime7" name="stime" onchange="timecal7()" required>
 
-                                    <input type="text" id="trips17" placeholder="Number of Trips" readonly required>
+                                        <input type="time" id="etime7" name="etime" onchange="timecal7()" required>
 
-                                    <input type="text" id="hoursnoncompanytractors7" name="hoursnoncompanytractors"
-                                        placeholder="Number of Non Company Tractor Trips" readonly required>
-
-                                    <input type="text" id="alltrprate7" name="alltrprate" placeholder="Total Trip Price"
-                                        required value="0">
-
-                                </div>
-
-                                <input type="text" id="desc7" name="desc" placeholder="Description" required>
-
-                                <input type="time" id="stime7" name="stime" onchange="timecal7()" required>
-
-                                <input type="time" id="etime7" name="etime" onchange="timecal7()" required>
-
-                                <input type="text" id="ttime7" name="ttime" placeholder="Total Time" readonly required>
-
-                            </div>
-
-
-
-
-                            <!-- LOADING -->
-
-                            <div id="loading7" style="display:none;">
-
-                                <input type="text" id="jcbtrprate7" name="jcbtrprate" placeholder="JCB Trip Price"
-                                    onkeyup="tripprice7()" required>
-
-                                <input type="text" id="trprate7" name="trprate" placeholder="Trip Price" required>
-
-                                <div id="container437">
-
-                                    <div class="row7">
-
-                                        <button type="button" class="add-button" onclick="addRow7()">
-
-                                            Add
-
-                                        </button>
+                                        <input type="text" id="ttime7" name="ttime" placeholder="Total Time" readonly
+                                            required>
 
                                     </div>
 
-                                </div>
 
-                                <textarea id="output7" placeholder="All Drivers list" rows="4" cols="30"
-                                    style="font-size:20px;" onkeyup="tripedit7()"></textarea>
 
-                                <input type="text" id="trips7" name="trips" placeholder="Number of Trips"
-                                    onkeyup="tripprice7()">
 
-                                <input type="text" id="noncompanytractors7" name="noncompanytractors"
-                                    placeholder="Number of Non Company Tractor Trips" readonly required>
+                                    <!-- LOADING -->
+
+                                    <div id="loading7" style="display:none;">
+
+                                        <input type="text" id="jcbtrprate7" name="jcbtrprate"
+                                            placeholder="JCB Trip Price" onkeyup="tripprice7()" required>
+
+                                        <input type="text" id="trprate7" name="trprate" placeholder="Trip Price"
+                                            required>
+
+                                        <div id="container437">
+
+                                            <div class="row7">
+
+                                                <button type="button" class="add-button" onclick="addRow7()">
+
+                                                    Add
+
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                        <textarea id="output7" placeholder="All Drivers list" rows="4" cols="30"
+                                            style="font-size:20px;" onkeyup="tripedit7()"></textarea>
+
+                                        <input type="text" id="trips7" name="trips" placeholder="Number of Trips"
+                                            onkeyup="tripprice7()">
+
+                                        <input type="text" id="noncompanytractors7" name="noncompanytractors"
+                                            placeholder="Number of Non Company Tractor Trips" readonly required>
+
+                                    </div>
+
+
+
+
+                                    <!-- CONTRACT -->
+
+                                    <div id="contract7" style="display:none;">
+
+                                        <input type="text" id="con7" name="con" placeholder="Contract Amount"
+                                            onkeyup="conprice7()" required>
+
+                                    </div>
+
+                                    <input type="text" id="rate7" name="rate" placeholder="Price" required>
+
+                                    <input type="button" value="Update Data" id="submit8">
+
+                                </form>
 
                             </div>
 
 
 
 
-                            <!-- CONTRACT -->
 
-                            <div id="contract7" style="display:none;">
-
-                                <input type="text" id="con7" name="con" placeholder="Contract Amount"
-                                    onkeyup="conprice7()" required>
-
-                            </div>
-
-                            <input type="text" id="rate7" name="rate" placeholder="Price" required>
-
-                            <input type="button" value="Update Data" id="submit8">
-
-                        </form>
-
-                    </div>
-
-
-
-
-
-                    <div style="
+                            <div style="
             display:flex;
             justify-content:center;
             align-items:center;
             height:100%;
         ">
 
-                        <img src="done1.png" id="done7" style="display:none;" height="100px" width="100px">
+                                <img src="done1.png" id="done7" style="display:none;" height="100px" width="100px">
+
+                            </div>
+
+                        </div>
 
                     </div>
-
-                </div>
-
-            </div>
 
                     <!-- ADD HERE -->
 
@@ -2504,10 +2519,10 @@ ${tableHTML}
                     ${HoursDrivers}<br>
 
                     <b>Starting :</b>
-                    ${activity.Starting || "--"}<br>
+                    ${convertTo12Hour(activity.Starting) || "--"}<br>
 
                     <b>Ending :</b>
-                    ${activity.Ending || "--"}<br>
+                    ${convertTo12Hour(activity.Ending) || "--"}<br>
 
                     <b>Total Time :</b>
                     ${activity.TotalTime || "--"}<br>
@@ -3013,8 +3028,23 @@ ${tableHTML}
         });
 
         async function openPopup7() {
+            // Open modal immediately
             document.getElementById("myModal7").style.display = "flex";
 
+            // Show loading animation
+            document.getElementById("loadingMessage").style.display = "flex";
+
+            // Hide form initially
+            document.getElementById("formContainer2").style.display = "none";
+
+            // 2 second delay
+            setTimeout(function () {
+
+                document.getElementById("loadingMessage").style.display = "none";
+
+                document.getElementById("formContainer2").style.display = "block";
+
+            }, 1000);
         }
         function closePopup1() {
             document.getElementById("myModal1").style.display = "none";
@@ -3048,6 +3078,7 @@ ${tableHTML}
 
         function closePopup7() {
             document.getElementById("myModal7").style.display = "none";
+            document.getElementById("loadingMessage").style.display = "flex";
         }
         // Close popup when clicking outside
         window.onclick = function (event) {

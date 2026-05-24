@@ -618,3 +618,23 @@ function generateOutput17() {
     });
 }
 
+function convertTo12Hour(timeStr) {
+
+    // Check valid 24-hour format HH:MM
+    const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+    if (!regex.test(timeStr)) {
+        return timeStr; // return original string
+    }
+
+    let [hours, minutes] = timeStr.split(':');
+
+    hours = parseInt(hours);
+
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    let h12 = hours % 12 || 12;
+
+    return `${String(h12).padStart(2,'0')}:${minutes} ${ampm}`;
+}
+

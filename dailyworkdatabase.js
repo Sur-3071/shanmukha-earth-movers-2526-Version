@@ -808,8 +808,8 @@ function generateCustomerTable(data) {
                     <td style="padding:4px;font-weight:600; font-size:20px !important; min-width:150px;">${Driverslist}</td>
                     <td style="padding:4px;font-weight:600; font-size:20px !important;">${activity.Trips}</td>
                     <td style="padding:4px;font-weight:600; font-size:20px !important;">${activity.Contract}</td>
-                    <td style="padding:4px;font-weight:600; font-size:20px !important;">${activity.Starting}</td>
-                    <td style="padding:4px;font-weight:600; font-size:20px !important;">${activity.Ending}</td>
+                    <td style="padding:4px;font-weight:600; font-size:20px !important;min-width:100px;">${convertTo12Hour(activity.Starting)}</td>
+                    <td style="padding:4px;font-weight:600; font-size:20px !important;min-width:100px;">${convertTo12Hour(activity.Ending)}</td>
                     <td style="padding:4px;font-weight:600; font-size:20px !important;">${activity.TotalTime}</td>
                     <td style="padding:4px; font-weight:bold; font-size:20px !important;">${beta}</td>
 
@@ -1058,27 +1058,6 @@ function generateCustomerTable1(data) {
                     uniqueDates.add(activity.Date); // automatically unique
                 }
 
-                // out += `<tr data-type="${type}" data-trips="${activity.Trips}" data-mins="${totalMins}">
-                //     <td>${formatDate(activity.Date)}</td>
-                //     <td>${HoursDrivers}</td>
-                //     <td>${LDrivers}</td>
-                //     <td>${activity.Trips}</td>
-                //     <td>${activity.Contract}</td>
-                //     <td>${activity.Starting}</td>
-                //     <td>${activity.Ending}</td>
-                //     <td>${activity.TotalTime}</td>
-                //     <td>${HoursTrips}</td>
-                //     <td>${HoursTripsAmount}</td>
-                //     <td>${beta}</td>
-                //     <td>
-                //         <select class="rateDropdown" onchange="calculateFinalPrice(this,'${beta}', '${HoursTrips}','${tracttrips}', '${HoursTripsAmount}'); formeldger2();" ${type === "Contract" ? "disabled" : ""}>
-                //             ${dropdown}
-                //         </select>
-                //         <div style="font-size:10px;color:gray;">(${type})</div>
-                //     </td>
-                //     <td><input type="number" class="finalPrice" value="${finalAmount}" readonly style="width:80px;" /></td>
-                // </tr>`;
-
                 out += `<tr data-type="${type}" data-trips="${activity.Trips}" data-mins="${totalMins}"
     style="font-size:16px; font-weight:600; text-align:center;"
     onmouseover="this.style.background='#f5faff'"
@@ -1089,8 +1068,8 @@ function generateCustomerTable1(data) {
     <td style="padding:8px; font-size:25px !important;">${LDrivers}</td>
     <td style="padding:8px; font-size:25px !important;">${activity.Trips}</td>
     <td style="padding:8px; font-size:25px !important;">${activity.Contract}</td>
-    <td style="padding:8px; font-size:25px !important;">${activity.Starting}</td>
-    <td style="padding:8px; font-size:25px !important;">${activity.Ending}</td>
+    <td style="padding:8px; font-size:25px !important;">${convertTo12Hour(activity.Starting)}</td>
+    <td style="padding:8px; font-size:25px !important;">${convertTo12Hour(activity.Ending)}</td>
     <td style="padding:8px; font-size:25px !important;">${activity.TotalTime}</td>
     <td style="padding:8px; font-size:25px !important;">${HoursTrips}</td>
     <td style="padding:8px; color:#2c5aa0; font-size:25px !important;">${HoursTripsAmount}</td>
