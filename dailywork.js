@@ -74,7 +74,7 @@ function removedone() {
 }
 function removereadonly()
 {
-    alert("getting called");
+    // alert("getting called");
     const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
     inputs.forEach(input => {
         input.removeAttribute('readonly');
@@ -82,7 +82,7 @@ function removereadonly()
 }
 
 function addRow() {
-    alert("row in daily work js");
+    // alert("row in daily work js");
     const container = document.getElementById('container43');
     const newRow = document.createElement('div');
     newRow.className = 'row';
@@ -140,7 +140,7 @@ function updateTotalTrips() {
 }
 function updateTotalTrips1() {
     // alert("hi");
-    alert("trips1 called");
+    // alert("trips1 called");
     const driverNames = document.querySelectorAll('input[name="driverName1[]"]');
     const tripInputs = document.querySelectorAll('input[name="trips1[]"]');
     let paytotal = 0;
