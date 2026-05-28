@@ -592,10 +592,11 @@
             const unpaidCustomers = {};
             const previousBalances = JSON.parse(localStorage.getItem("extraAmountsCache")) || {};
             const unpaidcustomerslist = [];
+            const workeddays = new Set();
             for (const customerPhone in data) {
                 if (data.hasOwnProperty(customerPhone)) {
                     var activity = data[customerPhone];
-
+                    workeddays.add(activity.Date);
 
                     if (activity.Payment === "UnPaid") {
                         // alert("1");
@@ -691,6 +692,11 @@
                     // }
                 }
             }
+            localStorage.setItem(
+                "companyworkeddays",
+                JSON.stringify([...workeddays])
+            );
+
             localStorage.setItem("unpaidCustomerslistdata", JSON.stringify(unpaidcustomerslist));
             for (let name in unpaidCustomers) {
 
@@ -1320,7 +1326,7 @@ ${tableHTML}
                 <h2 style="color: rgb(75, 166, 236);">Working Days</h2>
                 <h1 id="wday"></h1>
             </div>
-            <div class="box">
+            <div class="box" onclick="openPopup8()">
                 <h2 style="color: rgb(75, 166, 236);">Holidays</h2>
                 <h1 id="hday"></h1>
             </div>
@@ -1420,6 +1426,19 @@ ${tableHTML}
                 </div>
             </div>
 
+            <div id="myModal8" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closePopup8()">&times;</span>
+                    <div id="holidaytablemain">
+                        <div class="loading-box" id="loadingMessage">
+                            <div class="loader"></div>
+                            <p>Data is loading, please wait...</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
             <div id="myModal6" class="modal">
 
                 <div class="modal-content">
@@ -1464,16 +1483,16 @@ ${tableHTML}
         ">
                                 Data Editing
                             </h1>
-                           <div class="loading-box" id="loadingMessage">
+                            <div class="loading-box" id="loadingMessage">
 
-                            <div class="loader"></div>
+                                <div class="loader"></div>
 
-                            <p>
-                                Data is loading,
-                                please wait...
-                            </p>
+                                <p>
+                                    Data is loading,
+                                    please wait...
+                                </p>
 
-                        </div>
+                            </div>
                             <div id="formContainer2">
 
                                 <form id="userForm">
@@ -1596,8 +1615,9 @@ ${tableHTML}
 
                                         </div>
 
-                                        <textarea id="output7" placeholder="All Drivers list" rows="4" cols="30"
-                                            style="font-size:20px;" onkeyup="tripedit7()"></textarea>
+                                        <textarea id="output7" placeholder="All Drivers list" rows="4"
+                                            style="width:100%;font-size:16px;" onkeyup="tripedit7()">
+</textarea>
 
                                         <input type="text" id="trips7" name="trips" placeholder="Number of Trips"
                                             onkeyup="tripprice7()">
@@ -1705,7 +1725,311 @@ ${tableHTML}
 
             </div>
             <script>
-                // List all modal IDs
+
+                setTimeout(() => {
+
+                    const data =
+                        calculateCompanyLeaves();
+
+                    renderHolidayUI(data);
+                }, 5000);
+
+
+
+                function renderHolidayUI(data) {
+
+                    const container =
+                        document.getElementById(
+                            "holidaytablemain"
+                        );
+
+                    let html = '';
+
+                    for (let month in data) {
+
+                        const value = data[month];
+
+                        html += `
+
+        <div class="holiday-card">
+
+            <div class="month-header">
+
+                <h2>${month}</h2>
+
+            </div>
+
+            ${value === "Not Started"
+
+                                ?
+
+                                `<div class="notstarted">
+
+                    🚀 Not Started
+
+                </div>`
+
+                                :
+
+                                value.length === 0
+
+                                    ?
+
+                                    `<div class="zero">
+
+                    0 Missed Dates
+
+                </div>`
+
+                                    :
+
+                                    `
+
+                <div class="count">
+
+                    ${value.length} Missed Days
+
+                </div>
+
+                <div class="date-list">
+
+                    ${value.map(date =>
+
+                                        `<span class="date-chip">
+
+                            ${date}
+
+                        </span>`
+
+                                    ).join('')
+                                    }
+
+                </div>
+
+                `
+                            }
+
+        </div>
+
+        `;
+
+                    }
+
+                    container.innerHTML = html;
+
+                }
+                function getMissedDates() {
+
+                    const workingDates =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "companyworkeddays"
+                            )
+                        ) || [];
+
+                    const today = new Date();
+
+                    const currentYear =
+                        today.getFullYear();
+
+                    const aug10 =
+                        new Date(
+                            currentYear,
+                            7,
+                            10
+                        );
+
+                    const startYear =
+                        today >= aug10
+                            ? currentYear
+                            : currentYear - 1;
+
+                    const fyStart =
+                        new Date(
+                            startYear,
+                            7,
+                            10
+                        );
+
+                    const fyEnd =
+                        new Date(
+                            startYear + 1,
+                            7,
+                            9
+                        );
+
+                    const workingSet =
+                        new Set(workingDates);
+
+                    const missedDates = [];
+
+                    let tempDate =
+                        new Date(fyStart);
+
+                    while (tempDate <= fyEnd) {
+
+                        const formattedDate =
+
+                            tempDate
+                                .toISOString()
+                                .split('T')[0];
+
+                        if (
+                            !workingSet.has(
+                                formattedDate
+                            )
+                        ) {
+
+                            missedDates.push(
+                                formattedDate
+                            );
+
+                        }
+
+                        tempDate.setDate(
+                            tempDate.getDate() + 1
+                        );
+
+                    }
+
+                    return missedDates;
+
+                }
+
+
+
+                function calculateCompanyLeaves() {
+
+                    const holidays =
+                        getMissedDates();
+
+                    const today =
+                        new Date();
+
+                    const todayStr =
+                        today
+                            .toISOString()
+                            .split('T')[0];
+
+                    const currentMonth =
+                        getCompanyMonth(
+                            todayStr
+                        );
+
+                    const months = [
+
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July"
+
+                    ];
+
+                    const currentIndex =
+                        months.indexOf(
+                            currentMonth
+                        );
+
+                    const result = {};
+
+                    months.forEach((m, index) => {
+
+                        if (index > currentIndex) {
+
+                            result[m] = "Not Started";
+
+                        }
+                        else {
+
+                            result[m] = [];
+
+                        }
+
+                    });
+
+                    holidays.forEach(date => {
+
+                        const month =
+                            getCompanyMonth(date);
+
+                        // Skip future months
+
+                        if (
+                            result[month] === "Not Started"
+                        ) {
+
+                            return;
+
+                        }
+
+                        // Skip future dates
+                        if (date > todayStr) {
+
+                            return;
+
+                        }
+
+                        result[month].push(date);
+
+                    });
+
+                    return result;
+
+                }
+
+
+
+                function getCompanyMonth(dateString) {
+
+                    const date =
+                        new Date(dateString);
+
+                    let month =
+                        date.getMonth();
+
+                    const day =
+                        date.getDate();
+
+                    if (day < 10) {
+
+                        month--;
+
+                        if (month < 0) {
+
+                            month = 11;
+
+                        }
+
+                    }
+
+                    const months = [
+
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December"
+
+                    ];
+
+                    return months[month];
+
+                }
 
                 const modals = [
                     document.getElementById("myModal1"),
@@ -1714,7 +2038,8 @@ ${tableHTML}
                     document.getElementById("myModal4"),
                     document.getElementById("myModal5"),
                     document.getElementById("myModal6"),
-                    document.getElementById("myModal7")
+                    document.getElementById("myModal7"),
+                    document.getElementById("myModal8")
 
                 ];
 
@@ -2299,6 +2624,10 @@ ${tableHTML}
             document.getElementById("myModal5").style.display = "flex";
         }
 
+        async function openPopup8() {
+            document.getElementById("myModal8").style.display = "flex";
+        }
+
         async function openPopup6(name, previousBalance) {
 
             try {
@@ -2311,13 +2640,21 @@ ${tableHTML}
                 // Loading
                 // =========================================
 
+                //         document.getElementById("overviewtablemain").innerHTML = `
+                //     <div class="loading-box">
+                //         <div class="loader"></div>
+                //         <p>Data is loading, please wait...</p>
+                //     </div>
+                // `;
                 document.getElementById("overviewtablemain").innerHTML = `
-            <div class="loading-box">
-                <div class="loader"></div>
-                <p>Data is loading, please wait...</p>
-            </div>
-        `;
+        <div class="loading-box">
+            <div class="loader"></div>
 
+            <p class="loading-text">
+                Data is loading, please wait...
+            </p>
+        </div>
+    `;
                 await new Promise(resolve => setTimeout(resolve, 500));
 
                 // =========================================
@@ -2338,9 +2675,21 @@ ${tableHTML}
                 // =========================================
                 // Loop Data
                 // =========================================
+                const nameDateMap = {};
+                var uniqueDatesCount = 0;
                 for (const customerPhone in data) {
 
                     const activity = data[customerPhone];
+
+                    const cusname = activity.Name;
+                    const date = activity.Date;
+
+                    if (!nameDateMap[cusname]) {
+                        nameDateMap[cusname] = new Set();
+                    }
+
+                    nameDateMap[cusname].add(date);
+
 
                     if (!activity) continue;
 
@@ -2637,6 +2986,8 @@ ${tableHTML}
                     ${activity.Beta || 0}
                 `;
                     }
+                    // uniqueDatesCount = uniqueDates.size;
+
 
                     // =========================================
                     // DATE FORMAT
@@ -2795,6 +3146,19 @@ ${tableHTML}
                 </td>
 
             </tr>
+            <tr style="
+                font-weight:bold;
+            ">
+
+                <td colspan="7">
+                    Total Number of Days Worked
+                </td>
+
+                <td>
+                    ${nameDateMap[name].size || 0}
+                </td>
+
+            </tr>
         `;
 
                 // =========================================
@@ -2802,6 +3166,9 @@ ${tableHTML}
                 // =========================================
 
                 document.getElementById("overviewtablemain").innerHTML = `
+                <h3 class="customer-title">
+                ${name}
+            </h3>
 
             <table border="1"
                    class="wide-table"
@@ -3060,6 +3427,9 @@ ${tableHTML}
         }
         function closePopup5() {
             document.getElementById("myModal5").style.display = "none";
+        }
+        function closePopup8() {
+            document.getElementById("myModal8").style.display = "none";
         }
         function closePopup6() {
             const innerDiv =

@@ -924,14 +924,729 @@ h1 {
     100%{
         transform:rotate(360deg);
     }
-}#loading7{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    height:250px;
 }
 
+/* FORM CONTAINER */
+#formContainer2{
+    width:100%;
+    padding:10px;
+}
+
+/* FORM */
+#userForm{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+/* INPUTS */
+#userForm input,
+#userForm select,
+#userForm textarea{
+
+    width:100%;
+    box-sizing:border-box;
+
+    padding:14px 16px;
+
+    font-size:16px;
+
+    border:1.5px solid #d8d8d8;
+    border-radius:10px;
+
+    background:#ffffff;
+
+    transition:.25s;
+}
+
+/* FOCUS EFFECT */
+
+#userForm input:focus,
+#userForm select:focus,
+#userForm textarea:focus{
+
+    outline:none;
+
+    border-color:#1a73e8;
+
+    box-shadow:0 0 10px rgba(26,115,232,.25);
+
+    transform:translateY(-1px);
+}
+
+/* TEXTAREA */
+
+#output7{
+    min-height:110px;
+    resize:vertical;
+    font-size:17px;
+}
+
+/* DRIVER ROW */
+
+.row7{
+
+    display:flex;
+
+    gap:10px;
+
+    align-items:center;
+
+    margin-top:8px;
+}
+
+.row7 input{
+
+    flex:1;
+
+    min-width:0;
+}
+
+/* BUTTON */
+
+.add-button{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#34b34a;
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.add-button:hover{
+
+    background:#25943a;
+
+    transform:translateY(-2px);
+}
+
+/* UPDATE BUTTON */
+
+#submit8{
+
+    background:#1577ea !important;
+
+    color:white;
+
+    font-weight:700;
+
+    font-size:18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+}
+
+/* MODAL CONTENT */
+
+.modal-content{
+
+    width:95%;
+
+    max-width:620px;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    background:#ffffff;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.18);
+}
+/* FORM CONTAINER */
+
+#formContainer2{
+    width:100%;
+    max-width:420px;
+    margin:auto;
+    padding:10px;
+}
+
+/* FORM */
+
+#userForm{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+
+    background:#fff;
+
+    padding:20px;
+
+    border-radius:14px;
+
+    box-shadow:0 6px 16px rgba(0,0,0,.12);
+}
+
+/* INPUTS */
+
+#userForm input,
+#userForm select,
+#userForm textarea{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    padding:12px;
+
+    font-size:16px;
+
+    border:1px solid #d6d6d6;
+
+    border-radius:10px;
+}
+
+/* Focus */
+
+#userForm input:focus,
+#userForm select:focus,
+#userForm textarea:focus{
+
+    outline:none;
+
+    border-color:#007bff;
+
+    box-shadow:0 0 8px rgba(0,123,255,.25);
+}
+
+/* Loading Section */
+
+#loading7{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    width:100%;
+}
+
+/* Hours Section */
+
+#hours7{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    width:100%;
+}
+
+/* Contract Section */
+
+#contract7{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    width:100%;
+}
+
+/* Textarea */
+
+#output7{
+
+    min-height:100px;
+
+    resize:vertical;
+}
+
+/* Dynamic Driver Row */
+
+.row7{
+
+    display:flex;
+
+    gap:10px;
+
+    align-items:center;
+
+    width:100%;
+}
+
+.row7 input{
+
+    flex:1;
+}
+
+/* Add Button */
+
+.add-button{
+
+    width:100%;
+
+    padding:12px;
+
+    background:#45b649;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+    font-weight:700;
+}
+
+/* Submit */
+/* ===== MAIN GRID ===== */
+
+#holidaytablemain{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:22px;
+
+    padding:20px;
+}
+
+/* ===== CARD ===== */
+
+.holiday-card{
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    border:1px solid #e8eef6;
+
+    box-shadow:
+    0 10px 24px rgba(0,0,0,.08);
+
+    transition:.25s;
+
+    animation:cardFade .5s ease;
+}
+
+.holiday-card:hover{
+
+    transform:
+    translateY(-5px);
+
+    box-shadow:
+    0 18px 35px rgba(0,0,0,.14);
+}
+
+/* ===== HEADER ===== */
+
+.month-header{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    gap:10px;
+
+    margin-bottom:18px;
+}
+
+/* ===== MONTH TITLE ===== */
+
+.month-header h2{
+
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:900;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+
+    color:#1565c0;
+
+    position:relative;
+}
+
+.month-header h2::after{
+
+    content:'';
+
+    display:block;
+
+    width:70px;
+
+    height:3px;
+
+    margin:8px auto 0;
+
+    border-radius:20px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #2196f3,
+        #00c6ff
+    );
+}
+
+/* ===== COUNT BADGE ===== */
+
+.count{
+
+    background:
+    linear-gradient(
+        135deg,
+        #ff6b6b,
+        #e91e63
+    );
+
+    color:white;
+
+    padding:8px 16px;
+
+    border-radius:25px;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    letter-spacing:.5px;
+
+    box-shadow:
+    0 6px 16px rgba(233,30,99,.25);
+
+    margin-bottom:6px;
+}
+
+/* ===== DATE GRID ===== */
+
+.date-list{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:14px 10px;
+
+    margin-top:14px;
+}
+
+/* ===== DATE CHIP ===== */
+
+.date-chip{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    min-height:42px;
+
+    padding:8px 6px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    border-radius:12px;
+
+    color:#1e3a5f;
+
+    background:
+    linear-gradient(
+        135deg,
+        #eef8ff,
+        #dff4ff
+    );
+
+    border:1px solid #d6ecff;
+
+    transition:.25s;
+}
+
+.date-chip:hover{
+
+    transform:
+    scale(1.05);
+
+    background:
+    linear-gradient(
+        135deg,
+        #2196f3,
+        #00c6ff
+    );
+
+    color:#fff;
+}
+
+/* ===== ZERO HOLIDAYS ===== */
+
+.zero{
+
+    background:#eafff2;
+
+    color:#10a24a;
+
+    text-align:center;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    font-size:14px;
+
+    font-weight:800;
+}
+
+/* ===== NOT STARTED ===== */
+
+.notstarted{
+
+    background:#fff6dc;
+
+    color:#d97706;
+
+    text-align:center;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    font-size:14px;
+
+    font-weight:800;
+}
+
+/* ===== LOADER ===== */
+
+.loading-box{
+
+    grid-column:1/-1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:70px;
+}
+
+.loader{
+
+    width:60px;
+
+    height:60px;
+
+    border:6px solid #e5edf5;
+
+    border-top:6px solid #1565c0;
+
+    border-radius:50%;
+
+    animation:spin .9s linear infinite;
+}
+
+.loading-box p{
+
+    margin-top:18px;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#444;
+}
+
+/* ===== ANIMATIONS ===== */
+
+@keyframes spin{
+
+    from{
+
+        transform:rotate(0deg);
+    }
+
+    to{
+
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes cardFade{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(20px);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0);
+    }
+}
+
+/* ===== TABLET ===== */
+
+@media(max-width:1100px){
+
+    #holidaytablemain{
+
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+}
+
+/* ===== MOBILE ===== */
+
+@media(max-width:700px){
+
+    #holidaytablemain{
+
+        grid-template-columns:1fr;
+
+        padding:15px;
+    }
+
+    .date-list{
+
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+}
+#submit8{
+
+    background:#1577ea;
+
+    color:white;
+
+    border:none;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+.customer-title{
+    position: relative;
+    font-size: 34px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin: 18px 0;
+
+    background: linear-gradient(90deg,#00c6ff,#0072ff,#8e2de2,#ff0080);
+    background-size: 300% 300%;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    animation:
+        gradientMove 5s ease infinite,
+        floatText 2.5s ease-in-out infinite;
+}
+
+/* Animated underline */
+.customer-title::after{
+    content:'';
+    position:absolute;
+    left:50%;
+    bottom:-10px;
+    transform:translateX(-50%);
+    width:0%;
+    height:4px;
+    border-radius:10px;
+
+    background:linear-gradient(90deg,#00c6ff,#ff0080);
+    box-shadow:0 0 12px rgba(0,198,255,0.7);
+
+    animation:lineExpand 2s ease forwards infinite alternate;
+}
+
+/* Gradient animation */
+@keyframes gradientMove{
+    0%{
+        background-position:0% 50%;
+    }
+    50%{
+        background-position:100% 50%;
+    }
+    100%{
+        background-position:0% 50%;
+    }
+}
+
+/* Floating effect */
+@keyframes floatText{
+    0%,100%{
+        transform:translateY(0px) scale(1);
+    }
+    50%{
+        transform:translateY(-6px) scale(1.03);
+    }
+}
+#noncompanytractors7{
+    width:100%;
+    box-sizing:border-box;
+}
+/* Underline animation */
+@keyframes lineExpand{
+    0%{
+        width:20%;
+        opacity:0.5;
+    }
+    100%{
+        width:75%;
+        opacity:1;
+    }
+}
 .loader7{
     width:60px;
     height:60px;
@@ -997,6 +1712,14 @@ table {
     width: 100%;
 }
 #userForm {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+#userForm7 {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
