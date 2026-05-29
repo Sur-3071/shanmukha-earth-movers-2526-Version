@@ -2767,7 +2767,17 @@ ${tableHTML}
 
                     let workType = "";
 
-                    let details = "";
+                    let descriptionList = (activity.Description || "")
+                        .split(",")
+                        .map((item, index) =>
+                            `${index + 1}. ${item.trim()}`
+                        )
+                        .join("<br>");
+
+                    let details = `
+    <b>Description :</b><br>
+    ${descriptionList || "No Description"}<br>
+`;
 
                     // =========================================
                     // HOURS WORK
@@ -2841,7 +2851,7 @@ ${tableHTML}
                             remainingTrips *
                             tractorTripPrice;
 
-                        details = `
+                        details += `
 
                     <b>Total Tractor Trips :</b>
                     ${totalTractorTrips}<br>
@@ -2932,7 +2942,7 @@ ${tableHTML}
                             remainingTrips *
                             tractorTripPrice;
 
-                        details = `
+                        details += `
 
                     <b>Total Trips :</b>
                     ${totalTrips}<br>
@@ -2971,7 +2981,7 @@ ${tableHTML}
 
                         workType = "Contract Work";
 
-                        details = `
+                        details += `
 
                     <b>Contract Amount :</b>
                     ${activity.Contract || 0}<br>
