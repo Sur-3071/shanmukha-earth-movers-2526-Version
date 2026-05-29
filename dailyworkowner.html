@@ -10,7 +10,304 @@
         href="https://drive.google.com/file/d/1lahPE_k3iX1NqZT_F77wU_jm-X76yvAb/view?usp=sharing">
 
 </head>
+<style>
+    /* ===== FORM CONTAINER ===== */
 
+#formContainer1{
+    width:50% !important;
+    display:flex !important;
+    justify-content:center !important;
+    align-items:center !important;
+    margin:40px auto !important;
+}
+
+/* ===== FORM BOX ===== */
+
+#userForm{
+    width:100% !important;
+    max-width:850px !important;
+
+    background:#ffffff !important;
+
+    padding:25px !important;
+
+    border-radius:18px !important;
+
+    box-shadow:0 10px 35px rgba(0,0,0,0.12) !important;
+
+    display:flex !important;
+    flex-direction:column !important;
+
+    gap:20px !important;
+}
+
+/* ===== DATE INPUTS ===== */
+
+#userForm input[type="date"]{
+
+    width:100% !important;
+
+    padding:14px 18px !important;
+
+    font-size:17px !important;
+
+    border:2px solid #d8d8d8 !important;
+
+    border-radius:12px !important;
+
+    background:#fafafa !important;
+
+    transition:.3s ease !important;
+
+    box-sizing:border-box !important;
+}
+
+#userForm input[type="date"]:focus{
+
+    outline:none !important;
+
+    border-color:#007bff !important;
+
+    background:#ffffff !important;
+
+    box-shadow:0 0 12px rgba(0,123,255,.25) !important;
+}
+
+/* ===== BUTTON CONTAINER ===== */
+
+#btn{
+
+    display:flex !important;
+
+    flex-direction:row !important;
+
+    justify-content:center !important;
+
+    align-items:center !important;
+
+    gap:18px !important;
+
+    width:100% !important;
+
+    flex-wrap:nowrap !important;
+}
+
+/* ===== THREE BUTTONS ===== */
+
+#submit1,
+#submit2,
+#submit3{
+
+    flex:1 !important;
+
+    min-width:180px !important;
+
+    padding:14px 20px !important;
+
+    border:none !important;
+
+    border-radius:12px !important;
+
+    color:#fff !important;
+
+    font-size:16px !important;
+
+    font-weight:700 !important;
+
+    cursor:pointer !important;
+
+    transition:.3s ease !important;
+
+    box-shadow:0 6px 15px rgba(0,0,0,0.15) !important;
+}
+
+/* Submit */
+
+#submit1{
+    background:linear-gradient(135deg,#11998e,#38ef7d) !important;
+}
+
+/* Entire Data */
+
+#submit2{
+    background:linear-gradient(135deg,#0072ff,#00c6ff) !important;
+}
+
+/* Expenses */
+
+#submit3{
+    background:linear-gradient(135deg,#fc466b,#3f5efb) !important;
+}
+
+/* Hover */
+
+#submit1:hover,
+#submit2:hover,
+#submit3:hover{
+
+    transform:translateY(-3px) scale(1.03) !important;
+
+    box-shadow:0 10px 25px rgba(0,0,0,0.22) !important;
+}
+
+/* Click */
+
+#submit1:active,
+#submit2:active,
+#submit3:active{
+
+    transform:scale(.96) !important;
+}
+
+/* ===== UPDATE BUTTON ===== */
+
+#submit4{
+
+    width:100% !important;
+
+    padding:15px !important;
+
+    border:none !important;
+
+    border-radius:12px !important;
+
+    background:linear-gradient(135deg,#ff512f,#dd2476) !important;
+
+    color:#fff !important;
+
+    font-size:18px !important;
+
+    font-weight:800 !important;
+
+    cursor:pointer !important;
+
+    transition:.3s ease !important;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.18) !important;
+}
+
+#submit4:hover{
+
+    transform:translateY(-2px) !important;
+
+    box-shadow:0 12px 28px rgba(0,0,0,.25) !important;
+}
+.mainhaed1{
+
+    text-align:center;
+
+    font-family:-apple-system,BlinkMacSystemFont,
+    "Segoe UI",Helvetica,Arial,sans-serif;
+
+    font-size:48px;
+
+    font-weight:800;
+
+    color:#24292f;
+
+    letter-spacing:1px;
+
+    margin:35px auto;
+
+    position:relative;
+
+    display:block;
+
+    animation:fadeSlide 1s ease;
+}
+
+/* Animated underline */
+
+.mainhaed1::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+
+    bottom:-12px;
+
+    transform:translateX(-50%);
+
+    width:120px;
+
+    height:5px;
+
+    border-radius:20px;
+
+    background:linear-gradient(
+        90deg,
+        #2da44e,
+        #0969da
+    );
+
+    animation:expandLine 2s ease infinite alternate;
+}
+
+/* Hover glow */
+
+.mainhaed1:hover{
+
+    color:#0969da;
+
+    transition:.3s ease;
+
+    text-shadow:0 0 12px rgba(9,105,218,.25);
+}
+
+/* Animations */
+
+@keyframes fadeSlide{
+
+    from{
+        opacity:0;
+        transform:translateY(-25px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes expandLine{
+
+    from{
+        width:80px;
+    }
+
+    to{
+        width:220px;
+    }
+}
+
+/* ===== MOBILE ===== */
+
+@media(max-width:768px){
+
+    #btn{
+
+        flex-wrap:wrap !important;
+
+        gap:12px !important;
+    }
+
+    #submit1,
+    #submit2,
+    #submit3{
+
+        width:100% !important;
+
+        min-width:unset !important;
+    }
+
+    #userForm{
+
+        padding:18px !important;
+    }
+}
+</style>
 <body style="background-color: antiquewhite; overflow-x:auto; max-width:100%;">
     <div id="home">
         <div id="com">
