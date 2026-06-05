@@ -1,0 +1,601 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f3f4f6;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+h1, h2 {
+    color: #333;
+    margin-top: 20px;
+}
+
+/* ===== Toggle Button ===== */
+#toggleBtn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+    transition: background 0.3s;
+}
+#toggleBtn:hover {
+    background-color: #0056b3;
+}
+
+/* ===== Select Dropdown ===== */
+#monthDropdown1 select {
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+    width: 260px;
+    background-color: #fff;
+}
+#monthDropdown1 select:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+}
+
+label {
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: block;
+    font-weight: bold;
+}
+
+/* ===== Month Grid ===== */
+.month-grid {
+    display: none;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 95%;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+.month-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.month-card {
+    flex: 0 0 220px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 15px;
+    transition: 0.3s;
+}
+.month-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.month-header {
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.month-details p {
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+/* ===== Forms ===== */
+.forms-section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 60px;
+}
+
+.form-container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    width: 420px;
+}
+
+.form-container input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.form-container input[type="button"] {
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.form-container input[type="button"]:hover {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+}
+
+/* ===== Table Box ===== */
+.table-box {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+
+/* ===== Salary Table ===== */
+.salary-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.salary-table caption {
+    background: linear-gradient(45deg, #007bff, #00c6ff);
+    color: white;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 18px;
+}
+.salary-table th {
+    background: #007bff;
+    color: white;
+    padding: 14px 20px;
+    border: 1px solid #ddd;
+}
+.salary-table td {
+    padding: 14px 20px;
+    border: 1px solid #ddd;
+}
+.salary-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.salary-table tr:hover {
+    background-color: #eef6ff;
+}
+.salary-table td:last-child {
+    font-weight: bold;
+    color: #28a745;
+}
+
+/* ===== Leave Table ===== */
+.leave-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.leave-table caption {
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    color: white;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 18px;
+}
+.leave-table th {
+    background: #27ae60;
+    color: white;
+    padding: 14px 20px;
+    border: 1px solid #ddd;
+}
+.leave-table td {
+    padding: 14px 20px;
+    border: 1px solid #ddd;
+}
+.leave-table tr:nth-child(even) {
+    background-color: #f4fbf6;
+}
+.leave-table tr:hover {
+    background-color: #e8f8ee;
+}
+.leave-table td:last-child {
+    font-weight: bold;
+    color: #e67e22;
+}
+
+/* ===== General Table Fix ===== */
+th, td {
+    padding: 14px 20px;
+    border: 1px solid #ccc;
+}
+
+/* ===== Banner ===== */
+.salary-banner {
+    margin-top: 30px;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 12px;
+    color: white;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* ===== Image ===== */
+.driver-image img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid green;
+}
+
+/* ===== Modal ===== */
+.image-modal {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+}
+.modal-content {
+    max-width: 80%;
+    max-height: 80%;
+}
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+}
+
+/* ===== Image Modal ===== */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, 0.9);
+
+    /* Center the image */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Image inside modal */
+.modal-content {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 12px;
+    object-fit: contain;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 35px;
+    color: white;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+/* Container */
+.driver-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Salary banner (text part) */
+.salary-banner {
+    flex: 1; /* take remaining space */
+    padding: 15px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Driver image */
+.driver-image {
+    flex: 0 0 120px; /* fixed size */
+    display: flex;
+    justify-content: center;
+}
+
+.driver-image img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #27ae60;
+}
+
+/* Optional hover zoom */
+/* .modal-content:hover {
+    transform: scale(1.05);
+    transition: 0.3s ease;
+} */
+
+/* ===== Responsive ===== */
+@media screen and (max-width: 900px) {
+    .forms-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    select {
+        width: 100%;
+    }
+}
+
+/* Container */
+/* ==========================
+   TABLE SECTION
+========================== */
+
+/* Main Section */
+#jcbdriversalary {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Driver Container */
+.driver-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+/* Salary Banner */
+.salary-banner {
+    flex: 1;
+    min-width: 300px;
+    background: #0f766e;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.8;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+
+
+/* Forms Layout */
+.forms-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 200px;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+/* Form Cards */
+.form-container {
+    background: #fff;
+    padding: 20px;
+    width: 420px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+.form-container h2 {
+    text-align: center;
+    color: #0f172a;
+    margin-bottom: 15px;
+}
+
+/* Inputs */
+.form-container input,
+.form-container select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+/* Submit Buttons */
+#submit20,
+#submit10 {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+#submit20:hover,
+#submit10:hover {
+    background: #1d4ed8;
+}
+
+/* Toggle Button */
+#toggleBtn {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 25px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+#toggleBtn:hover {
+    background: #15803d;
+}
+
+
+/* =========================
+   TABLES CONTAINER
+========================= */
+
+#tablesContainer {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* =========================
+   INDIVIDUAL TABLE SCROLL
+========================= */
+
+#salaryTableContainer,
+#leaveTableContainer {
+    flex: 1;
+    min-width: 450px;
+    max-height: 500px;   /* Adjust height as needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+}
+
+/* =========================
+   TABLE STYLE
+========================= */
+
+#salaryTableContainer table,
+#leaveTableContainer table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+/* =========================
+   TABLE HEADER
+========================= */
+
+#salaryTableContainer th,
+#leaveTableContainer th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #2563eb;
+    color: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+/* =========================
+   TABLE DATA
+========================= */
+
+#salaryTableContainer td,
+#leaveTableContainer td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    word-break: break-word;
+}
+
+/* =========================
+   TABLE SCROLLBAR
+========================= */
+
+#salaryTableContainer::-webkit-scrollbar,
+#leaveTableContainer::-webkit-scrollbar {
+    width: 8px;
+}
+
+#salaryTableContainer::-webkit-scrollbar-track,
+#leaveTableContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#salaryTableContainer::-webkit-scrollbar-thumb,
+#leaveTableContainer::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+#salaryTableContainer::-webkit-scrollbar-thumb:hover,
+#leaveTableContainer::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+/* Success Image */
+#done {
+    display: block;
+    margin: 20px auto;
+}
+
+/* Image Popup */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+    display: block;
+    max-width: 90%;
+    max-height: 90%;
+    margin: 50px auto;
+}
+
+.close-btn {
+    position: absolute;
+    right: 25px;
+    top: 20px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+/* Mobile Responsive */
+@media screen and (max-width: 768px) {
+
+    .driver-container {
+        flex-direction: column;
+    }
+
+    .form-container {
+        width: 100%;
+    }
+
+    .driver-image img {
+        width: 180px;
+        height: 180px;
+    }
+
+    .salary-banner {
+        font-size: 14px;
+    }
+}

@@ -15,22 +15,22 @@ const app = initializeApp(firebaseConfig);
 // Get a reference to the database service
 const db = getDatabase(app);
 
-    var  monthsMap = {
-        "January": [0, 0],
-        "February": [0, 0],
-        "March": [0, 0],
-        "April": [0, 0],
-        "May": [0, 0],
-        "June": [0, 0],
-        "July": [0, 0],
-        "August": [0, 0],
-        "September": [0, 0],
-        "October": [0, 0],
-        "November": [0, 0],
-        "December": [0, 0]
-    };
+var monthsMap = {
+    "January": [0, 0],
+    "February": [0, 0],
+    "March": [0, 0],
+    "April": [0, 0],
+    "May": [0, 0],
+    "June": [0, 0],
+    "July": [0, 0],
+    "August": [0, 0],
+    "September": [0, 0],
+    "October": [0, 0],
+    "November": [0, 0],
+    "December": [0, 0]
+};
 
-document.getElementById('submit1').addEventListener('click', async function (e) {
+document.getElementById('submit10').addEventListener('click', async function (e) {
     e.preventDefault();
     const dat = document.getElementById("d1").value;
     const wid = document.getElementById("wid1").value;
@@ -38,7 +38,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     const monthname = document.getElementById("monthDropdown").value;
 
 
-    document.getElementById("userForm1").reset();
+    document.getElementById("userForm9").reset();
 
     if (dat.length > 0) {
         if (monthname.length > 0) {
@@ -52,6 +52,8 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                         Month: monthname,
                         Purpose: purpose
                     });
+                    document.getElementById("paymentSuccessPopup2").style.display = "flex";
+
                     document.getElementById("done").style.display = "block";
                     setTimeout(() => {
                         removedone();
@@ -81,12 +83,14 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
         document.getElementById("work1").value = purpose;
     }
     function removedone() {
+        document.getElementById("paymentSuccessPopup2").style.display = "none";
+
         document.getElementById("done").style.display = "none";
     }
 });
 
 
-document.getElementById('submit2').addEventListener('click', async function (e) {
+document.getElementById('submit20').addEventListener('click', async function (e) {
     e.preventDefault();
     const dat = document.getElementById("d2").value;
     const wid = document.getElementById("wid2").value;
@@ -94,7 +98,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
     const monthname = document.getElementById("monthDropdown1").value;
     const paymentMethod = document.getElementById("paymentMethod").value;
     const purpose = document.getElementById("reason").value;
-    document.getElementById("userForm2").reset();
+    document.getElementById("userForm8").reset();
 
     if (dat.length > 0) {
         if (monthname.length > 0) {
@@ -111,6 +115,8 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
                             PaymentMethod: paymentMethod,
                             Purpose: purpose
                         });
+                        document.getElementById("paymentSuccessPopup2").style.display = "flex";
+
                         document.getElementById("done").style.display = "block";
                         setTimeout(() => {
                             removedone();
@@ -149,6 +155,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
         return /^\d+$/.test(str);
     }
     function removedone() {
+        document.getElementById("paymentSuccessPopup2").style.display = "none";
         document.getElementById("done").style.display = "none";
     }
 });
@@ -201,7 +208,7 @@ document.getElementById('toggleBtn').addEventListener('click', async function (e
 });
 
 function generateTable(data) {
-    
+
     monthsMap = {
         "January": [0, 0],
         "February": [0, 0],
@@ -226,7 +233,7 @@ function generateTable(data) {
     leaveDiv.innerHTML = "";
 
     if (data.Salary && Object.keys(data.Salary).length > 0) {
-        
+
         const box = document.createElement("div");
         box.classList.add("table-box", "salary-table");
 
@@ -244,7 +251,7 @@ function generateTable(data) {
         let totalSalary = 0;
 
         Object.values(data.Salary).forEach(entry => {
-            
+
             const row = document.createElement("tr");
             const amount = parseFloat(entry.Salary) || 0;
             totalSalary += amount;
@@ -284,7 +291,7 @@ function generateTable(data) {
     }
 
     // 🌴 LEAVE TABLE (Date + Purpose)
-    
+
     if (data.Leaves && Object.keys(data.Leaves).length > 0) {
         const box = document.createElement("div");
         box.classList.add("table-box", "leave-table");
@@ -297,7 +304,7 @@ function generateTable(data) {
                 <th>Purpose</th>
             </tr>
         `;
-        
+
 
         let totalLeaves = 0;
 
@@ -337,7 +344,7 @@ function generateTable(data) {
                        </div>`;
     }
     updateMonthCards(monthsMap);
-    
+
 }
 function updateMonthCards(monthlySummary) {
     const driverSalary = 15000;   // fixed base salary per month

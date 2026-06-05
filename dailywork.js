@@ -10,7 +10,7 @@ function timecal() {
     if (endTime < startTime) {
         endTime.setDate(endTime.getDate() + 1);
     }
-    
+
     // Calculate the difference in milliseconds
     var diff = endTime - startTime;
 
@@ -20,38 +20,33 @@ function timecal() {
 
     // Format the total time as HH:MM
     var totalTime = diffHours.toString().padStart(2, '0') + ':' + diffMinutes.toString().padStart(2, '0');
-    var c3=parseInt(document.getElementById("hrsrate").value || "1000");
+    var c3 = parseInt(document.getElementById("hrsrate").value || "1000");
     // Calculate the total minutes and price
     var tmin = diffHours * 60 + diffMinutes;
-    var pri = tmin * c3/60;
+    var pri = tmin * c3 / 60;
     // alert(pri);
     document.getElementById("ttime").value = totalTime;
     // alert(pri+" "+amt);
-    var type=document.getElementById("worktype").value;
-    var beta=parseInt(document.getElementById("beta").value || "0");
-    var rate=parseInt(document.getElementById("rate").value || "0");
-    if(type==="Hours")
-    {
-        rate = (isNaN(pri)?0:parseInt(pri));
-        document.getElementById("rate").value=rate;
+    var type = document.getElementById("worktype").value;
+    var beta = parseInt(document.getElementById("beta").value || "0");
+    var rate = parseInt(document.getElementById("rate").value || "0");
+    if (type === "Hours") {
+        rate = (isNaN(pri) ? 0 : parseInt(pri));
+        document.getElementById("rate").value = rate;
     }
-    else
-    {
-        if(type==="Loading")
-        {
-            var triprate=parseInt(document.getElementById("trips").value || "0");
-            var jcbtriprate=parseInt(document.getElementById("jcbtrprate").value || "0");
-            var trippri=(triprate*jcbtriprate);
-            rate = (isNaN(trippri)?beta:parseInt(trippri)+beta);
-            document.getElementById("rate").value=rate;
+    else {
+        if (type === "Loading") {
+            var triprate = parseInt(document.getElementById("trips").value || "0");
+            var jcbtriprate = parseInt(document.getElementById("jcbtrprate").value || "0");
+            var trippri = (triprate * jcbtriprate);
+            rate = (isNaN(trippri) ? beta : parseInt(trippri) + beta);
+            document.getElementById("rate").value = rate;
         }
-        else
-        {
-            if(type==="Contract")
-            {
-                var conamouont=parseInt(document.getElementById("con").value || "0");
-                rate = (isNaN(conamouont)?beta:parseInt(conamouont)+beta);
-                document.getElementById("rate").value=rate;
+        else {
+            if (type === "Contract") {
+                var conamouont = parseInt(document.getElementById("con").value || "0");
+                rate = (isNaN(conamouont) ? beta : parseInt(conamouont) + beta);
+                document.getElementById("rate").value = rate;
 
             }
         }
@@ -60,20 +55,20 @@ function timecal() {
 
 
 
-function conprice()
-{
-    var beta=parseInt(document.getElementById("beta").value || "0");
-    var c1=document.getElementById("con").value || "0";
-    document.getElementById("rate").value=parseInt(c1)+beta;
+function conprice() {
+    var beta = parseInt(document.getElementById("beta").value || "0");
+    var c1 = document.getElementById("con").value || "0";
+    document.getElementById("rate").value = parseInt(c1) + beta;
 }
 function removedone() {
     setTimeout(function () {
         var v7 = document.getElementById("done");
         v7.style.display = "none";
+        document.getElementById("paymentSuccessPopup2").style.display = "none";
+
     }, 3000);
 }
-function removereadonly()
-{
+function removereadonly() {
     // alert("getting called");
     const inputs = document.querySelectorAll('input[type="text"], input[type="number"]');
     inputs.forEach(input => {
@@ -126,16 +121,15 @@ function updateTotalTrips() {
     driverNames.forEach((driverName, index) => {
         const trip = tripInputs[index].value || 0;
         const name = (driverName.value.toLowerCase() || "Unknown Driver").trim().replace(/\s+/g, "_");
-        if(name.includes("own"))
-        {
+        if (name.includes("own")) {
             const value = parseInt(trip) || 0;
             paytotal += value;
         }
-            total += parseInt(trip) || 0;
+        total += parseInt(trip) || 0;
     });
 
-    document.getElementById('trips').value= total;
-    document.getElementById('noncompanytractors').value= paytotal;
+    document.getElementById('trips').value = total;
+    document.getElementById('noncompanytractors').value = paytotal;
     tripprice();
 }
 function updateTotalTrips1() {
@@ -148,26 +142,24 @@ function updateTotalTrips1() {
     driverNames.forEach((driverName, index) => {
         const trip = tripInputs[index].value || 0;
         const name = (driverName.value.toLowerCase() || "Unknown Driver").trim().replace(/\s+/g, "_");
-        if(name.includes("own"))
-        {
+        if (name.includes("own")) {
             const value = parseInt(trip) || 0;
             paytotal += value;
         }
-            total += parseInt(trip) || 0;
+        total += parseInt(trip) || 0;
     });
 
-    document.getElementById('trips1').value= total;
-    document.getElementById('hoursnoncompanytractors').value= paytotal;
+    document.getElementById('trips1').value = total;
+    document.getElementById('hoursnoncompanytractors').value = paytotal;
     tripprice1();
 }
-function tripprice()
-{
-    var c1=document.getElementById("trips").value || "0";
-    var c3=parseInt(document.getElementById("jcbtrprate").value || "0");
-    var c2=parseInt(c1)*c3;
-    var beta=document.getElementById("beta").value || "0";
-    var fin=isNaN(c2)?parseInt(beta):(parseInt(beta)+c2);
-    document.getElementById("rate").value=fin;
+function tripprice() {
+    var c1 = document.getElementById("trips").value || "0";
+    var c3 = parseInt(document.getElementById("jcbtrprate").value || "0");
+    var c2 = parseInt(c1) * c3;
+    var beta = document.getElementById("beta").value || "0";
+    var fin = isNaN(c2) ? parseInt(beta) : (parseInt(beta) + c2);
+    document.getElementById("rate").value = fin;
     generateOutput();
 }
 function generateOutput() {
@@ -179,16 +171,15 @@ function generateOutput() {
         const trip = trips[index].value || 0;
         const name = (driverName.value || "Unknown Driver").trim().replace(/\s+/g, "_");
         const line = `${name} = ${trip}`;
-        outputDiv.value += line+" "+ "\n";
+        outputDiv.value += line + " " + "\n";
     });
 }
-function tripprice1()
-{
+function tripprice1() {
     // alert("tripprice1");
-    var c1=document.getElementById("trips1").value;
-    var c3=parseInt(document.getElementById("trprate1").value);
-    var c2=parseInt(c1)*c3;
-    document.getElementById("alltrprate").value=c2;
+    var c1 = document.getElementById("trips1").value;
+    var c3 = parseInt(document.getElementById("trprate1").value);
+    var c2 = parseInt(c1) * c3;
+    document.getElementById("alltrprate").value = c2;
     generateOutput1();
 }
 
@@ -202,36 +193,31 @@ function generateOutput1() {
         const trip = trips[index].value || 0;
         const name = (driverName.value || "Unknown Driver").trim().replace(/\s+/g, "_");
         const line = `${name} = ${trip}`;
-        outputDiv.value += line+" "+ "\n";
+        outputDiv.value += line + " " + "\n";
     });
 }
-function addflow()
-{
-    var c=document.getElementById("worktype").value;
-    if(c=="Hours")
-        {
-            document.getElementById("loading").style.display="none";
-            document.getElementById("contract").style.display="none";
-            document.getElementById("hours").style.display="block";
+function addflow() {
+    var c = document.getElementById("worktype").value;
+    if (c == "Hours") {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("contract").style.display = "none";
+        document.getElementById("hours").style.display = "block";
+    }
+    else {
+        if (c == "Loading") {
+            document.getElementById("hours").style.display = "none";
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("contract").style.display = "none";
         }
-        else
-        {
-            if(c=="Loading")
-            {
-                document.getElementById("hours").style.display="none";
-                document.getElementById("loading").style.display="block";
-                document.getElementById("contract").style.display="none";
-            }
-            else
-            {
-                document.getElementById("hours").style.display="none";
-                document.getElementById("loading").style.display="none";
-                document.getElementById("contract").style.display="block";
-            }
+        else {
+            document.getElementById("hours").style.display = "none";
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("contract").style.display = "block";
         }
+    }
 
 }
-document.addEventListener("click", function(event) {
+document.addEventListener("click", function (event) {
     // Check if a button with class "pay" was clicked
     if (event.target.classList.contains("pay")) {
         const button = event.target; // the clicked button
@@ -594,13 +580,12 @@ function generateOutput7() {
 }
 
 
-function tripprice17()
-{
+function tripprice17() {
     // alert("tripprice1");
-    var c1=document.getElementById("trips17").value;
-    var c3=parseInt(document.getElementById("trprate17").value);
-    var c2=parseInt(c1)*c3;
-    document.getElementById("alltrprate7").value=c2;
+    var c1 = document.getElementById("trips17").value;
+    var c3 = parseInt(document.getElementById("trprate17").value);
+    var c2 = parseInt(c1) * c3;
+    document.getElementById("alltrprate7").value = c2;
     generateOutput17();
 }
 
@@ -614,7 +599,7 @@ function generateOutput17() {
         const trip = trips[index].value || 0;
         const name = (driverName.value || "Unknown Driver").trim().replace(/\s+/g, "_");
         const line = `${name} = ${trip}`;
-        outputDiv.value += line+" "+ "\n";
+        outputDiv.value += line + " " + "\n";
     });
 }
 
@@ -635,6 +620,6 @@ function convertTo12Hour(timeStr) {
 
     let h12 = hours % 12 || 12;
 
-    return `${String(h12).padStart(2,'0')}:${minutes} ${ampm}`;
+    return `${String(h12).padStart(2, '0')}:${minutes} ${ampm}`;
 }
 

@@ -325,7 +325,7 @@ function editData17() {
 
 document.getElementById('submit8').addEventListener('click', async function (e) {
     e.preventDefault();
-    alert("Submit button clicked.");
+    // alert("Submit button clicked.");
 
    const dat = document.getElementById("dat7").value;
 

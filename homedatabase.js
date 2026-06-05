@@ -16,27 +16,27 @@ const app = initializeApp(firebaseConfig);
 // Get a reference to the database service
 const db = getDatabase(app);
 
-document.getElementById('submit').addEventListener('click', async function (e) {
+document.getElementById('submit9').addEventListener('click', async function (e) {
     e.preventDefault();
-    const dat = document.getElementById("dat").value;
-    const wid = document.getElementById("wid").value;
-    const name = document.getElementById("name").value;
-    const ptype = document.getElementById("type").value;
-    const pertype = document.getElementById("persontype").value;
+    const dat = document.getElementById("dat8").value;
+    const wid = document.getElementById("wid8").value;
+    const name = document.getElementById("name8").value;
+    const ptype = document.getElementById("type8").value;
+    const pertype = document.getElementById("persontype8").value;
     // alert(pertype);
-    var disel = document.getElementById("dis").value;
-    document.getElementById("userForm").reset();
+    var disel = document.getElementById("dis8").value;
+    document.getElementById("userForm8").reset();
 
     function datarebuild() {
-        document.getElementById("dat").value = dat;
-        document.getElementById("wid").value = wid;
-        document.getElementById("name").value = name;
-        document.getElementById("type").value = ptype;
-        document.getElementById("dis").value = disel;
+        document.getElementById("dat8").value = dat;
+        document.getElementById("wid8").value = wid;
+        document.getElementById("name8").value = name;
+        document.getElementById("type8").value = ptype;
+        document.getElementById("dis8").value = disel;
     }
     function removedone() {
         setTimeout(function () {
-            var v7 = document.getElementById("done");
+            var v7 = document.getElementById("done8");
             v7.style.display = "none";
         }, 3000);
     }
@@ -124,7 +124,7 @@ document.getElementById('submit').addEventListener('click', async function (e) {
                             PersonType:pertype
                         });
 
-                        document.getElementById("done").style.display = "block";
+                        document.getElementById("done8").style.display = "block";
                         removedone(); // Ensure this function is defined elsewhere
                     } catch (error) {
                         console.log("Error updating Firebase data:", error);

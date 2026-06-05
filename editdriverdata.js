@@ -1,5 +1,5 @@
 // Tractor.js
-function openPopup1(btn) {
+function openPopup12(btn) {
 
     // get the row
     const row = btn.closest("tr");
@@ -105,7 +105,7 @@ function openPopup1(btn) {
                        required
                        style="width:90%; padding:8px; margin-bottom:14px;" value="${price}" >
 
-                <input type="button" id="submit1"
+                <input type="button" id="submit12"
                         style="
                             width:95%;
                             padding:10px;
@@ -126,7 +126,7 @@ function openPopup1(btn) {
     `;
 
     document.getElementById("popupContainer").innerHTML = popupHTML;
-    document.getElementById("submit1").addEventListener("click", editDriverData);
+    document.getElementById("submit12").addEventListener("click", editDriverData);
 }
 
 

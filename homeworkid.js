@@ -14,7 +14,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // Get a reference to the database service
 
-document.getElementById("name").addEventListener("change", async function (e1) {
+document.getElementById("name8").addEventListener("change", async function (e1) {
     e1.preventDefault(); // Prevent default form submission behavior
     try {
         // Access the database and retrieve data
@@ -27,7 +27,7 @@ document.getElementById("name").addEventListener("change", async function (e1) {
         // Check if data exists
         if (snapshot.exists()) {
             const data = snapshot.val();
-            document.getElementById("wid").value=data;
+            document.getElementById("wid8").value=data;
         } else {
             alert("No data available");
         }

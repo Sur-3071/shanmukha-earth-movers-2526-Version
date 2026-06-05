@@ -6,6 +6,11 @@
     <title>Daily Work Data</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="dailywork.css">
+    <link rel="stylesheet" href="jcbdrivercss.css">
+    <link rel="stylesheet" href="tractordrivercss.css">
+    <link rel="icon" type="image/x-icon"
+        href="https://drive.google.com/file/d/1lahPE_k3iX1NqZT_F77wU_jm-X76yvAb/view?usp=sharing">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="icon" type="image/x-icon" href="">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti/dist/confetti.browser.min.js"></script>
@@ -13,6 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
 
 
     <script type="module">
@@ -91,7 +97,7 @@
                         showQuarterProfit(data); // run profit UI function
 
                     }
-                }, 8000); // 10 seconds
+                }, 10000); // 10 seconds
 
             }, 2000);
         }
@@ -105,7 +111,7 @@
                 const quarter = data[q];
 
                 if (quarter.data.workedDays === 0) {
-                    result[q] = q + " not started";
+                    result[q] = q + " Not Started";
                 } else {
                     result[q] = String(quarter.data.profit);
                 }
@@ -118,7 +124,7 @@
                 if (!el) return;
 
                 if (isNaN(value)) {
-                    el.innerHTML = "Querter Not Started";
+                    el.innerHTML = "Quarter Not Started";
                     el.style.color = "black";
                 } else {
 
@@ -136,9 +142,13 @@
             }
 
 
-            setProfit("profitquat1", result.Q1);
-            setProfit("profitquat2", result.Q2);
-            setProfit("profitquat3", result.Q3);
+            const quarterResult = localStorage.getItem("quarterResult");
+
+            if (quarterResult !== null && quarterResult !== "") {
+                setProfit("profitquat1", result.Q1);
+                setProfit("profitquat2", result.Q2);
+                setProfit("profitquat3", result.Q3);
+            }
         }
 
         checkQuarterResult();
@@ -1306,15 +1316,80 @@ ${tableHTML}
         <div id="com">
             <img src="company.png" style="padding-left: 20px;">
         </div>
-        <h1 align="center" style="font-size: 35px; font-weight: bold;" id="heading">Daily Work Data</h1>
+        <h2 class="dashboard-title">
+            📊 Business Operations Dashboard
+        </h2>
     </div>
-    <div id="cho">
+    <!-- <div id="cho">
         <input type="button" value="Add Customer" id="addcus" class="confet" onclick="remainingbuttons()">
         <input type="button" value="Add Work" id="addwork" class="confet" onclick="remainingbuttons()">
         <input type="button" value="Work analysis" id="analytics" class="confet" onclick="remainingbuttons1()">
         <input type="button" value="Add Customer Amount" id="addcusamt" class="confet" onclick="remainingbuttons()">
         <input type="button" value="Customer Data" id="cusdta" class="confet" onclick="showCustomerData()">
         <input type="button" value="Customer Bill" id="cusbill" class="confet" onclick="showCustomerBill()">
+    </div> -->
+    <div id="cho">
+
+        <button id="addcus" class="confet" onclick="remainingbuttons()">
+            <i class="fa-solid fa-user"></i>
+            <span>Add Customer</span>
+        </button>
+
+        <button id="addwork" class="confet" onclick="remainingbuttons()">
+            <i class="fa-solid fa-briefcase"></i>
+            <span>Add Work</span>
+        </button>
+
+        <button id="analytics" class="confet" onclick="remainingbuttons1()">
+            <i class="fa-solid fa-chart-column"></i>
+            <span>Work Analysis</span>
+        </button>
+
+        <button id="addcusamt" class="confet" onclick="remainingbuttons()">
+            <i class="fa-solid fa-indian-rupee-sign"></i>
+            <span>Customer Amount</span>
+        </button>
+
+        <button id="cusdta" class="confet" onclick="showCustomerData()">
+            <i class="fa-solid fa-users"></i>
+            <span>Customer Data</span>
+        </button>
+
+        <button id="cusbill" class="confet" onclick="showCustomerBill()">
+            <i class="fa-solid fa-file-invoice"></i>
+            <span>Customer Bill</span>
+        </button>
+
+        <button id="expenses" class="confet" onclick="Expensescal()">
+            <i class="fa-solid fa-wallet"></i>
+            <span>All Expenses</span>
+        </button>
+
+        <button id="driversalary" class="confet" onclick="Driversalaryblock()">
+            <i class="fa-solid fa-user-tie"></i>
+            <span>JCB Driver Salary</span>
+        </button>
+
+        <button id="tractorbill" class="confet" onclick="TractorDriverblock()">
+            <i class="fa-solid fa-tractor"></i>
+            <span>Tractor Driver Bill</span>
+        </button>
+
+        <button id="todayworkbtn" class="confet">
+            <i class="fa-solid fa-calendar-day"></i>
+            <span>Today's Work</span>
+        </button>
+
+        <button id="last7Btn" class="confet">
+            <i class="fa-solid fa-calendar-week"></i>
+            <span>Previous 7 Days work</span>
+        </button>
+
+        <button id="financialyear" class="confet" onclick="FinancialYearBlock()">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>Financial Year</span>
+        </button>
+
     </div>
     <div id="daycnt" style="display: none;">
         <div class="container">
@@ -1699,7 +1774,7 @@ ${tableHTML}
                             </h2>
 
                             <p>
-                                Time Remaining
+                                Time Left
                             </p>
 
                         </div>
@@ -2417,8 +2492,484 @@ ${tableHTML}
         </form>
 
     </div>
+    <div id="formContainer8" style="display: none;">
+        <form id="userForm8">
+            <input type="date" id="dat8" name="dat8" placeholder="Date" required>
+
+            <select id="persontype8" required>
+                <option hidden>Select Person Type</option>
+                <option>Dady</option>
+                <option>Suresh</option>
+            </select>
+
+            <select id="type8" required>
+                <option hidden>Select Purpose Type</option>
+                <option>Farming</option>
+                <option>Jcb</option>
+                <option>Home</option>
+                <option>Salary</option>
+            </select>
+
+            <input type="text" id="name8" name="name8" placeholder="Purpose" required>
+
+            <input type="tel" id="dis8" name="dis8" placeholder="Enter Amount" required>
+
+            <input type="text" id="wid8" name="wid8" placeholder="Work Id" required readonly>
+
+            <input type="button" value="Add Data" id="submit9">
+        </form>
     </div>
 
+    <img src="done1.png" id="done8" style="display: none;" height="100px" width="100px">
+    <div id="jcbdriversalary" style="display:none;">
+
+        <div class="driver-container">
+
+            <div class="salary-banner">
+                🚗 డ్రైవర్ పేరు: కొండపల్లి దుర్గ ప్రసాద్ |
+                💼 ముందస్తు మొత్తం: ₹30,000 |
+                💰 నెలవారీ జీతం: ₹15,000 |
+                🧾 రోజువారీ భత్యం: ₹200 |
+                📅 నెలవారీ సెలవులు: 2 రోజులు
+            </div>
+
+            <div class="driver-image">
+                <img src="JCBDriverImage.png" alt="Driver" onclick="openImage(this)">
+            </div>
+            <div id="imageModal" class="image-modal">
+                <span class="close-btn" onclick="closeImage()">❌</span>
+                <img id="modalImg" class="modal-content">
+            </div>
+
+        </div>
+        <div class="forms-section">
+            <div class="form-container">
+                <h2>Driver Salary Entry</h2>
+                <form id="userForm8">
+                    <input type="date" id='d2' placeholder="Enter Date" onchange="GetSystemId('wid2')">
+                    <select id="monthDropdown1" style="width: 350px;">
+                        <option value="" disabled selected>Select Month</option>
+                    </select>
+                    <input type="text" id='wid2' placeholder="System Id" readonly>
+                    <select id="paymentMethod" style="width: 350px;">
+                        <option value="" disabled selected>Select Payment Method</option>
+                        <option value="cash">💵 Cash</option>
+                        <option value="Phonepe">📱 PhonePe</option>
+                        <option value="Paytm">💳 Paytm</option>
+                        <option value="Gpay">💰 Google Pay</option>
+                        <option value="Bank Transfer">🏦 Bank Transfer</option>
+                    </select>
+                    <input type="text" id="reason" placeholder="Enter Purpose">
+                    <input type="text" id="work2" maxlength="6" placeholder="Enter Salary">
+                    <input type="button" value="Submit Salary" id="submit20">
+                </form>
+            </div>
+
+            <div class="form-container">
+                <h2>Driver Leave Entry</h2>
+                <form id="userForm9">
+                    <input type="date" id='d1' placeholder="Enter Date" onchange="GetSystemId('wid1')">
+                    <select id="monthDropdown" style="width:380px;">
+                        <option value="" disabled selected>Select Month</option>
+                    </select>
+                    <input type="text" id='wid1' placeholder="System Id" readonly>
+                    <input type="text" id="work1" placeholder="Enter Reason">
+                    <input type="button" value="Submit Leave" id="submit10">
+                </form>
+            </div>
+        </div>
+
+        <img src="done1.png" id="done" style="display: none; margin: 0 auto;" height="100px" width="100px">
+
+
+        <button id="toggleBtn">Show Monthly Data</button>
+
+        <div class="month-grid" id="monthGrid">
+
+        </div>
+
+        <div id="tablesContainer">
+            <div id="salaryTableContainer"></div>
+            <div id="leaveTableContainer"></div>
+        </div>
+    </div>
+
+    <!-- Trcator driver bills and all -->
+    <div id="tractorDriverSection" style="display: none;">
+
+        <div id="home">
+
+            <h1 align="center">Tractor Driver Trips Data</h1>
+
+
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <div align="center" id="show">
+                <button type="button" id="b1" onclick="showPage('list1')">Add Data</button>
+                <button type="button" id="b2" onclick="showPage('list2')">Driver Data</button>
+                <button type="button" id="b3" onclick="showPage('list3')">Money Data</button>
+
+            </div>
+            <div id="maindiv">
+
+                <div id="list1" align="center" style="display: none;">
+                    <h1 align="center">Trips Data</h1>
+                    <form id="form">
+                        <table align="center">
+                            <tr>
+                                <td>
+                                    <input type="date" id='tractd1' placeholder="Enter Today Date" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select id="dname1" onchange="box1()" required>
+                                        <option hidden>select Driver Name</option>
+                                        <option>Ungarala Srinu</option>
+                                        <option>Chittibabu</option>
+                                        <option>Batchu Raju</option>
+                                        <option>Sai</option>
+                                        <option>venkanna</option>
+                                        <option>swamy </option>
+                                        <option>Chinnodu</option>
+                                        <option>Abbulu</option>
+                                        <option>Kick</option>
+                                        <option>Nagu</option>
+                                        <option>Radhakrishna</option>
+                                        <option>srinu</option>
+                                        <option>chanti</option>
+                                        <option>Govindu</option>
+                                        <option>(Pun)Nagu</option>
+                                        <option>Nani</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id='wid10' placeholder="System Id" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select id="time" required>
+                                        <option hidden>select Day Type</option>
+                                        <option>Day</option>
+                                        <option>Night</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr id="driver1" style="display: none;">
+                                <td>
+                                    <input type="text" id="oname" placeholder="Enter Other Name" required>
+                                </td>
+                            <tr>
+                                <td>
+                                    <input type="text" id="cname" placeholder="Enter Customer Name"
+                                        onchange="transalate()" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id="aname" placeholder="Enter Price" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id="tractortrips" placeholder="Enter Today Trips" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="submit" value="submit" class="sub" id="submit">Enter Data</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+
+                <div id="list2" align="center" style="display: none;">
+                    <h1 align="center">Display Driver Data</h1>
+                    <form align="center" id="form2">
+                        <table align="center">
+                            <tr>
+                                <td>
+                                    <select id="dname2" onchange="box2()" style="width: 400%;">
+                                        <option hidden>select Driver Name</option>
+                                        <option>Ungarala Srinu</option>
+                                        <option>Chittibabu</option>
+                                        <option>Batchu Raju</option>
+                                        <option>Sai</option>
+                                        <option>venkanna</option>
+                                        <option>swamy </option>
+                                        <option>Chinnodu</option>
+                                        <option>Abbulu</option>
+                                        <option>Kick</option>
+                                        <option>Nagu</option>
+                                        <option>Radhakrishna</option>
+                                        <option>srinu</option>
+                                        <option>chanti</option>
+                                        <option>Govindu</option>
+                                        <option>(Pun)Nagu</option>
+                                        <option>Nani</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="button" value="click" class="sub" id="getDataBtn">Edit Trips
+                                        Data</button>
+                                </td>
+                                <td>
+                                    <button type="button" value="click" class="sub" id="updatebtn">Updated Data</button>
+                                </td>
+                                <td>
+                                    <button type="button" value="click" class="sub" id="getamount">Amount Data</button>
+                                </td>
+                                <td>
+                                    <button type="button" value="click" class="sub" id="getbal">Balanace</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <div id="list3" align="center" style="display: none;">
+                    <h1 align="center">Amount Data</h1>
+                    <form id="form1">
+                        <table>
+                            <tr>
+                                <td>
+                                    <input type="date" id='tractd2' placeholder="Enter Today Date">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select id="dname3" onchange="box3()">
+                                        <option hidden>select Driver Name</option>
+                                        <option>Ungarala Srinu</option>
+                                        <option>Chittibabu</option>
+                                        <option>Batchu Raju</option>
+                                        <option>Sai</option>
+                                        <option>venkanna</option>
+                                        <option>swamy </option>
+                                        <option>Chinnodu</option>
+                                        <option>Abbulu</option>
+                                        <option>Kick</option>
+                                        <option>Nagu</option>
+                                        <option>Radhakrishna</option>
+                                        <option>srinu</option>
+                                        <option>chanti</option>
+                                        <option>Govindu</option>
+                                        <option>(Pun)Nagu</option>
+                                        <option>Nani</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id='wid30' placeholder="System Id" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id="pur" placeholder="Enter Purpose" onchange="transalatepur()">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id="amount" placeholder="Enter Given Amount">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="button" value="submit" class="sub" id="amountdataentry">Enter
+                                        Data</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <img src="done1.png" id="done10" style="display: none; margin: 0 auto; height: 100px; width: 100px;">
+            <div id="convert">
+                <iframe src="https://www.typingbaba.com/translator/english-to-telugu-translation.php" id="trans"
+                    style="display: none;" width="80%" height="450px"></iframe>
+            </div>
+            <div id="popupContainer"></div>
+            <div id="outerhtml">
+                <div id="final bill">
+                    <div class="image-container">
+                        <img src="abbulu.png" id="abbulu" style="display: none; height: 150px; width: 500px;">
+                        <img src="chinnodu.png" id="chinnodu" style="display: none; height: 150px; width: 500px;">
+                        <img src="chanti.png" id="chanti" style="display: none; height: 150px; width: 500px;">
+                        <img src="govind.png" id="govind" style="display: none; height: 150px; width: 500px;">
+                        <img src="kick.png" id="kick" style="display: none; height: 150px; width: 500px;">
+                        <img src="nagu1.png" id="nagu1" style="display: none; height: 150px; width: 500px;">
+                        <img src="nagu2.png" id="nagu2" style="display: none; height: 150px; width: 500px;">
+                        <img src="nani.png" id="nani" style="display: none; height: 150px; width: 500px;">
+                        <img src="radha.png" id="radha" style="display: none; height: 150px; width: 500px;">
+                        <img src="raju.png" id="raju" style="display: none; height: 150px; width: 500px;">
+                        <img src="sai.jpg" id="sai" style="display: none; height: 150px; width: 500px;">
+                        <img src="srinu.png" id="srinu" style="display: none; height: 150px; width: 500px;">
+                        <img src="swamy.png" id="swamy" style="display: none; height: 150px; width: 500px;">
+                        <img src="venkanna.png" id="venkanna" style="display: none; height: 150px; width: 500px;">
+                        <img src="chittibabu.png" id="chittibabu" style="display: none; height: 150px; width: 500px;">
+                        <img src="ungarala srinu.png" id="usrinu" style="display: none; height: 150px; width: 500px;">
+                    </div>
+
+                    <div id="tripsdata" align="center" style="padding-top: 50px;margin-bottom: 50px;">
+                        <img src="nodata.png" id="def1" style="display: none; height: 150px; width: 500px;">
+                    </div>
+                    <div id="amountdata" align="center" style="padding-top: 50px;margin-bottom: 50px;">
+                        <img src="nodata.png" id="def2" style="display: none; height: 150px; width: 500px;">
+                    </div>
+                    <div id="driverbal" align="center" style="padding-top: 50px;margin-bottom: 50px;">
+                        <img src="nodata.png" id="def3" style="display: none; height: 150px; width: 500px;">
+                    </div>
+                </div>
+                <div id="screenshot" align="center" style="display: none;">
+                    <button type="button" value="submit" class="sub" id="screnshot1" onclick="captureDiv()"
+                        style="width: 300px;">screen shot</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Owner view Data -->
+    <div id="ownerviewdata" style="display: none; width: 1260px;">
+        <div id="home">
+            <h1 align="center" class="mainhaed1">Current Year Data</h1>
+        </div>
+        <div id="formContainer1">
+            <form id="userForm15" style="width: 600px;">
+                <input type="date" id="dat11" name="dat1" placeholder="Date" required>
+                <input type="date" id="dat12" name="dat2" placeholder="Date" required>
+                <div id="btn">
+                    <input type="button" value="Submit" id="submit11">
+                    <input type="button" value="Entire Data" id="submit12">
+                    <input type="button" value="Expenses" id="submit13">
+                </div>
+            </form>
+
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <h1 style="
+                color: red;
+                font-size: 28px;
+                font-family: 'Segoe UI', sans-serif;
+                font-weight: bold;
+                border-left: 6px solid crimson;
+                padding: 8px 12px;
+                background: #ffe6e6;
+                margin: 15px 0;
+                border-radius: 6px;
+                box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+            ">
+                    Data Editing
+                </h1>
+
+                <span class="close">&times;</span>
+                <div id="formContainer2">
+                    <form id="userForm">
+                        <input type="date" id="dat" name="dat" placeholder="Date" required>
+                        <input type="text" id="name" name="name" placeholder="Customer Name" required>
+                        <input type="text" id="vil" name="vil" placeholder="Village" required>
+                        <input type="tel" id="dis" name="dis" placeholder="Enter Disel Amount" required>
+                        <input type="text" id="wid" name="wid" placeholder="Work Id" readonly required>
+                        <input type="text" id="pay" name="payid" placeholder="Payment Status" readonly required>
+
+                        <select id="worktype" required onchange="addflow()">
+                            <option hidden>select Work Type</option>
+                            <option>Hours</option>
+                            <option>Loading</option>
+                            <option>Contract</option>
+                        </select>
+                        <input type="text" id="beta" name="beta" placeholder="Driver Beta" onchange="timecal()">
+                        <div id="hours" style="display: none;">
+                            <input type="text" id="hrsrate" name="hrsrate" placeholder="Hours Price" onkeyup="timecal()"
+                                required>
+                            <div id="loading1">
+                                <input type="text" id="trprate1" name="trprate1" placeholder="Trip Price"
+                                    onkeyup="tripprice1()" required>
+                                <div id="container2">
+                                    <div class="row1">
+                                        <button type="button" class="add-button" onclick="addRow1()">Add Driver</button>
+                                    </div>
+                                </div>
+                                <textarea id="output1" placeholder="All Drivers list" rows="4" cols="30"
+                                    style="font-size: 20px;" readonly></textarea>
+                                <input type="text" id="trips1" placeholder="Number of Trips" readonly required>
+                                <input type="text" id="hoursnoncompanytractors"
+                                    placeholder="Number of Non Company Tractor Trips" readonly required>
+                                <input type="text" id="alltrprate" name="alltrprate" placeholder="Total Trip Price"
+                                    required value="0">
+                            </div>
+                            <input type="text" id="desc" name="desc" placeholder="Description" required>
+                            <input type="time" id="stime" name="stime" placeholder="Starting Time" onchange="timecal()"
+                                required>
+                            <input type="time" id="etime" name="etime" placeholder="Ending Time" onchange="timecal()"
+                                required>
+                            <input type="text" id="ttime" name="ttime" placeholder="Total Time" readonly required>
+                        </div>
+                        <div id="loading" style="display: none;">
+                            <input type="text" id="jcbtrprate" name="jcbtrprate" placeholder="JCB Trip Price"
+                                onkeyup="tripprice()" required>
+                            <input type="text" id="trprate" name="trprate" placeholder="Trip Price" required>
+                            <div id="container43">
+                                <div class="row">
+                                    <button type="button" type="button" class="add-button"
+                                        onclick="addRow()">Add</button>
+                                </div>
+                            </div>
+                            <textarea id="output" placeholder="All Drivers list" rows="4" cols="30"
+                                style="font-size: 20px; " onkeyup="tripedit()"> </textarea>
+                            <input type=" text" id="trips" name="trips" placeholder="Number of Trips"
+                                onkeyup="tripprice()">
+                            <input type="text" id="noncompanytractors" placeholder="Number of Non Company Tractor Trips"
+                                readonly required>
+                        </div>
+                        <div id="contract" style="display: none;">
+                            <input type="text" id="con" name="con" placeholder="Contract Amount" onkeyup="conprice()"
+                                required>
+                        </div>
+                        <input type="text" id="rate" name="rate" placeholder="Price" required>
+                        <input type="button" value="Update Data" id="submit4">
+                    </form>
+                </div>
+                <div style="display:flex; justify-content:center; align-items:center; height:100%;">
+                    <img src="done1.png" id="done" style="display:none;" height="100px" width="100px">
+                </div>
+            </div>
+        </div>
+        <div>
+            <input type="text" placeholder="Search Box" id="search">
+        </div>
+
+        <div class="select-wrapper" style="margin-left: 50px; margin-top: 100px;">
+            <select id="typech" name="purpose" required class="select" style="display: none;">
+                <option value="" selected disabled>Select Purpose Type</option>
+                <option value="Farming">Farming</option>
+                <option value="Jcb">JCB</option>
+                <option value="Home">Home</option>
+                <option value="Salary">Salary</option>
+                <option value="Salary Expenses">Salary Expenses</option>
+                <option>Dady</option>
+                <option>Suresh</ption>
+            </select>
+        </div>
+        <img src="done1.png" id="done" style="display: none;" height="100px" width="100px">
+    </div>
+    <div id="overview" style="display: none; width: 1260px;">
+        <div id="enterdata" class="scroll-container">
+
+        </div>
+        <div id="homeexp" style="padding-top: 80px;">
+        </div>
+        <div id="ownerledger">
+        </div>
+    </div>
+    <!-- customer already exists -->
     <div style="display: none;" id="nodata">
         <h1 style="color: red;font-size: 50px;padding-left: 120px;">Customer Already Exist</h1>
     </div>
@@ -2494,6 +3045,28 @@ ${tableHTML}
         </div> -->
     </div>
 
+    <div id="paymentSuccessPopup1" class="payment-popup">
+
+        <div class="payment-popup-content">
+
+            <img src="done1.png" alt="Payment Success" class="success-img">
+
+            <h2>Payment Successful</h2>
+
+        </div>
+
+    </div>
+    <div id="paymentSuccessPopup2" class="payment-popup">
+
+        <div class="payment-popup-content">
+
+            <img src="done1.png" alt="Payment Success" class="success-img">
+
+            <h2>Successfully Done !!</h2>
+
+        </div>
+
+    </div>
 
     <marquee behavior="scroll" direction="left" scrollamount="10">
         <img src="jcb.png" height="500px" width="500px" id="jcb">
@@ -2511,6 +3084,8 @@ ${tableHTML}
     <script type="module" src="dailyworkdatabase.js"></script>
     <script type="module" src="dailyworkid_retrive.js"></script>
     <script type="module" src="paymentedit.js"></script>
+    <script type="module" src="homedatabase.js"></script>
+    <script type="module" src="homeworkid.js"></script>
     <script src="dailywork.js"></script>
     <script src="proxyurl.js"></script>
     <script>
@@ -3476,6 +4051,12 @@ ${tableHTML}
             for (let i = 0; i < yearButtons.length; i++) {
                 yearButtons[i].style.display = "none";
             }
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
+            document.getElementById("formContainer8").style.display = "none";
             document.getElementById("captureDiv").style.display = "block";
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("printBtn1").style.display = "none";
@@ -3491,6 +4072,12 @@ ${tableHTML}
             for (let i = 0; i < yearButtons.length; i++) {
                 yearButtons[i].style.display = "none";
             }
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
             document.getElementById("captureDiv1").style.display = "block";
             document.getElementById("captureDiv").style.display = "none"; //
             // document.getElementById("dnw3").style.display = "none";
@@ -3499,11 +4086,142 @@ ${tableHTML}
             document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
                 ; document.getElementById("ledger").innerHTML = ""; document.getElementById("prevyear").style.display = "none";
         }
+        function Expensescal() { // Show customer bill div
+            const yearButtons = document.getElementsByClassName("year-container");
+            for (let i = 0; i < yearButtons.length; i++) {
+                yearButtons[i].style.display = "none";
+            }
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
+            document.getElementById("formContainer8").style.display = "block";
+            document.getElementById("captureDiv1").style.display = "none";
+            document.getElementById("captureDiv").style.display = "none"; //
+            // document.getElementById("dnw3").style.display = "none";
+            document.getElementById("printBtn").style.display = "none"
+                ; document.getElementById("cusname").style.display = "none"; // Clear the contents of captureDiv
+            document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
+                ; document.getElementById("ledger").innerHTML = ""; document.getElementById("prevyear").style.display = "none";
+        }
+
+        function TractorDriversblock() { // Show customer bill div
+            const yearButtons = document.getElementsByClassName("year-container");
+            for (let i = 0; i < yearButtons.length; i++) {
+                yearButtons[i].style.display = "none";
+            }
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "block";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("captureDiv1").style.display = "none";
+            document.getElementById("captureDiv").style.display = "none"; //
+            // document.getElementById("dnw3").style.display = "none";
+            document.getElementById("printBtn").style.display = "none"
+                ; document.getElementById("cusname").style.display = "none"; // Clear the contents of captureDiv
+            document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
+                ; document.getElementById("ledger").innerHTML = ""; document.getElementById("prevyear").style.display = "none";
+        }
+
+        function Driversalaryblock() { // Show customer bill div
+            const yearButtons = document.getElementsByClassName("year-container");
+            for (let i = 0; i < yearButtons.length; i++) {
+                yearButtons[i].style.display = "none";
+            }
+            document.getElementById("jcbdriversalary").style.display = "block";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("captureDiv1").style.display = "none";
+            document.getElementById("captureDiv").style.display = "none"; //
+            // document.getElementById("dnw3").style.display = "none";
+            document.getElementById("printBtn").style.display = "none"
+                ; document.getElementById("cusname").style.display = "none"; // Clear the contents of captureDiv
+            document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
+                ; document.getElementById("ledger").innerHTML = ""; document.getElementById("prevyear").style.display = "none";
+        }
+
+        function TractorDriverblock() { // Show customer bill div
+            const yearButtons = document.getElementsByClassName("year-container");
+            for (let i = 0; i < yearButtons.length; i++) {
+                yearButtons[i].style.display = "none";
+            }
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "block";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("captureDiv1").style.display = "none";
+            document.getElementById("captureDiv").style.display = "none"; //
+            // document.getElementById("dnw3").style.display = "none";
+            document.getElementById("printBtn").style.display = "none"
+                ; document.getElementById("cusname").style.display = "none"; // Clear the contents of captureDiv
+            document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
+                ; document.getElementById("ledger").innerHTML = ""; document.getElementById("prevyear").style.display = "none";
+        }
+
+
+        function FinancialYearBlock() {
+            // Show customer bill div
+            // alert("Financial Year Block");
+            const yearButtons = document.getElementsByClassName("year-container");
+            for (let i = 0; i < yearButtons.length; i++) {
+                yearButtons[i].style.display = "none";
+            }
+            document.getElementById("ownerviewdata").style.display = "block";
+            document.getElementById("overview").style.display = "block";
+
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("captureDiv1").style.display = "none";
+            document.getElementById("captureDiv").style.display = "none"; //
+            // document.getElementById("dnw3").style.display = "none";
+            document.getElementById("printBtn").style.display = "none"
+                ; document.getElementById("cusname").style.display = "none"; // Clear the contents of captureDiv
+            document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
+                ; document.getElementById("ledger").innerHTML = ""; document.getElementById("prevyear").style.display = "none";
+        }
+        function TodayWorkBlock() {
+            // Show customer bill div
+            // alert("Financial Year Block");
+            const yearButtons = document.getElementsByClassName("year-container");
+            for (let i = 0; i < yearButtons.length; i++) {
+                yearButtons[i].style.display = "none";
+            }
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "block";
+
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("captureDiv1").style.display = "none";
+            document.getElementById("captureDiv").style.display = "none"; //
+            // document.getElementById("dnw3").style.display = "none";
+            document.getElementById("printBtn").style.display = "none"
+                ; document.getElementById("cusname").style.display = "none"; // Clear the contents of captureDiv
+            document.getElementById("customeralldata").innerHTML = ""; document.getElementById("customerallamt").innerHTML = ""
+                ; document.getElementById("ledger").innerHTML = ""; document.getElementById("prevyear").style.display = "none";
+        }
+
         function remainingbuttons1() {
             const yearButtons = document.getElementsByClassName("year-container");
             for (let i = 0; i < yearButtons.length; i++) {
                 yearButtons[i].style.display = "flex";
             }
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("captureDiv").style.display = "none"; //
             // document.getElementById("dnw3").style.display = "none";
@@ -3521,6 +4239,11 @@ ${tableHTML}
             for (let i = 0; i < yearButtons.length; i++) {
                 yearButtons[i].style.display = "none";
             }
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
             document.getElementById("captureDiv1").style.display = "none";
             document.getElementById("captureDiv").style.display = "none";
             // document.getElementById("dnw3").style.display = "none";
@@ -3622,7 +4345,7 @@ ${tableHTML}
             }
 
             const input = row.querySelector(".finalPrice");
-            alert(input);
+            // alert(input);
             input.value = finalPrice;
 
             calculateTotalBill();
@@ -3670,6 +4393,35 @@ ${tableHTML}
         // Button event listeners
 
         document.getElementById('addwork').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
+            document.getElementById('formContainer').style.display = 'block';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('custamountcontainer').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+            let elements = document.getElementsByClassName("heading");
+
+
+        });
+
+        document.getElementById('addwork').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
             document.getElementById('formContainer').style.display = 'block';
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
@@ -3686,6 +4438,12 @@ ${tableHTML}
 
         });
         document.getElementById('cusbill').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
             document.getElementById('formContainer').style.display = 'none';
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
@@ -3703,6 +4461,12 @@ ${tableHTML}
         });
 
         document.getElementById('addcus').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
             document.getElementById('formContainer').style.display = 'none';
             document.getElementById('custContainer').style.display = 'block';
             document.getElementById('custamountcontainer').style.display = 'none';
@@ -3719,6 +4483,12 @@ ${tableHTML}
 
         });
         document.getElementById('addcusamt').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
             document.getElementById('formContainer').style.display = 'none';
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('custamountcontainer').style.display = 'block';
@@ -3735,6 +4505,11 @@ ${tableHTML}
 
         });
         document.getElementById('analytics').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
             document.getElementById('formContainer').style.display = 'none';
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'block';
@@ -3752,6 +4527,12 @@ ${tableHTML}
 
         });
         document.getElementById('cusdta').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
             document.getElementById('formContainer').style.display = 'none';
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
@@ -3764,12 +4545,357 @@ ${tableHTML}
             document.getElementById('nodata').style.display = 'none';
             document.getElementById('customerreceipt').style.display = 'none';
 
+        });
+        document.getElementById('expenses').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "block";
+            document.getElementById("jcbdriversalary").style.display = "none";
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('custamountcontainer').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+
 
 
         });
+        document.getElementById('driversalary').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById('jcbdriversalary').style.display = 'block';
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('custamountcontainer').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
+
+
+        });
+        document.getElementById('tractorbill').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById('jcbdriversalary').style.display = 'none';
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('custamountcontainer').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+            document.getElementById("tractorDriverSection").style.display = "block";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "none";
+
+        });
+
+        document.getElementById('financialyear').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById('jcbdriversalary').style.display = 'none';
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('custamountcontainer').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "block";
+            document.getElementById("overview").style.display = "none";
+
+        });
+
+        document.getElementById('todayworkbtn').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById('jcbdriversalary').style.display = 'none';
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('custamountcontainer').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "block";
+
+        }); document.getElementById('last7Btn').addEventListener('click', function () {
+            document.getElementById("formContainer8").style.display = "none";
+            document.getElementById('jcbdriversalary').style.display = 'none';
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('custContainer').style.display = 'none';
+            document.getElementById('daycnt').style.display = 'none';
+            document.getElementById('myChart').style.display = 'none';
+            document.getElementById('custamountcontainer').style.display = 'none';
+            document.getElementById('customerdata').style.display = 'none';
+            document.getElementById('customeralldata').style.display = 'none';
+            document.getElementById('customerallamt').style.display = 'none';
+            document.getElementById('ledger').style.display = 'none';
+            document.getElementById('nodata').style.display = 'none';
+            document.getElementById('customerreceipt').style.display = 'none';
+            document.getElementById("tractorDriverSection").style.display = "none";
+            document.getElementById("ownerviewdata").style.display = "none";
+            document.getElementById("overview").style.display = "block";
+
+        });
+
+        function openImage(img) {
+            document.getElementById("imageModal").style.display = "block";
+            document.getElementById("modalImg").src = img.src;
+        }
+
+        function closeImage() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+
+        const months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        const dropdown = document.getElementById("monthDropdown");
+        const dropdown1 = document.getElementById("monthDropdown1");
+
+        months.forEach(month => {
+            const option = document.createElement("option");
+            option.text = month;
+            option.value = month;
+            dropdown.add(option);
+
+        });
+        months.forEach(month => {
+            const option = document.createElement("option");
+            option.text = month;
+            option.value = month;
+            dropdown1.add(option);
+
+        });
+
+        const grid = document.getElementById("monthGrid");
+        const toggleBtn = document.getElementById("toggleBtn");
+        const table = document.getElementById("tablesContainer");
+
+        const generateCards = () => {
+            grid.innerHTML = months.map(m => `
+    <div class="month-card" id="card-${m}">
+      <div class="month-header">${m}</div>
+      <div class="month-details">
+        <p>💰 Salary Taken: <span class="salary">₹0</span></p>
+        <p>📅 Leaves Taken: <span class="leaves">0</span> Days</p>
+        <p>⏳ Remaining Leaves: <span class="remaining-leaves">0</span> Days</p>
+        <p>🗓️ Extra Leaves: <span class="extra-leaves">0</span> Days</p>
+        <p>🔻 Salary Cuttings: <span class="cut-salary">₹0</span></p>
+        <p>💵 Remaining Salary: <span class="remaining-salary">₹15000</span></p>
+
+      </div>
+    </div>
+  `).join('');
+        };
+
+
+        // ✅ Toggle show/hide logic
+        toggleBtn.addEventListener("click", () => {
+            if (grid.style.display === "none" || grid.style.display === "") {
+                generateCards();
+                grid.style.display = "flex";
+                table.style.display = "flex";
+                toggleBtn.textContent = "Hide Monthly Data";
+            } else {
+                grid.style.display = "none";
+                table.style.display = "none";
+                toggleBtn.textContent = "Show Monthly Data";
+            }
+        });
+
+        // ✅ Drag-to-scroll logic
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        grid.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - grid.offsetLeft;
+            scrollLeft = grid.scrollLeft;
+            grid.style.cursor = 'grabbing';
+        });
+
+        grid.addEventListener('mouseleave', () => {
+            isDown = false;
+            grid.style.cursor = 'grab';
+        });
+
+        grid.addEventListener('mouseup', () => {
+            isDown = false;
+            grid.style.cursor = 'grab';
+        });
+
+        grid.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - grid.offsetLeft;
+            const walk = (x - startX) * 1.5; // scroll speed
+            grid.scrollLeft = scrollLeft - walk;
+        });
+
+        // ✅ Touch support (for mobile)
+        let touchStartX = 0;
+        grid.addEventListener("touchstart", e => {
+            touchStartX = e.touches[0].clientX;
+            scrollLeft = grid.scrollLeft;
+        });
+        grid.addEventListener("touchmove", e => {
+            const touchX = e.touches[0].clientX;
+            const move = (touchX - touchStartX) * 1.5;
+            grid.scrollLeft = scrollLeft - move;
+        });
+
+        function GetSystemId(outputId) {
+            // alert("yes " + outputId);
+
+            const id = Date.now();
+
+            if (outputId === "1") {
+                document.getElementById("wid10").value = id;
+            }
+            else if (outputId === "3") {
+                document.getElementById("wid20").value = id;
+            }
+        }
+
+        function showPage(pageId) {
+
+            const pages = ['list1', 'list2', 'list3'];
+
+            // Reset all forms
+            document.querySelectorAll("form").forEach(form => {
+                form.reset();
+            });
+
+            // Hide all pages
+            pages.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    section.style.display = 'none';
+                }
+            });
+
+            // Show selected page
+            const activePage = document.getElementById(pageId);
+
+            if (activePage) {
+                activePage.style.display = 'block';
+
+                // Generate System ID only for list1 and list3
+                if (pageId !== 'list2') {
+
+                    const lastChar = "wid" + pageId[pageId.length - 1] + "0";
+
+                    const field = document.getElementById(lastChar);
+
+                    if (field) {
+                        GetSystemId(lastChar);
+                    }
+                }
+            }
+
+            // Hide dynamic sections when leaving list2
+            if (pageId !== 'list2') {
+
+                const tripsdata = document.getElementById('tripsdata');
+                const amountdata = document.getElementById('amountdata');
+                const driverbal = document.getElementById('driverbal');
+                const screenshot = document.getElementById('screenshot');
+
+                if (tripsdata) tripsdata.style.display = 'none';
+                if (amountdata) amountdata.style.display = 'none';
+                if (driverbal) driverbal.style.display = 'none';
+                if (screenshot) screenshot.style.display = 'none';
+
+                document.querySelectorAll('.image-container img').forEach(img => {
+                    img.style.display = 'none';
+                });
+            }
+        }
+
+        function captureDiv() {
+            const element = document.getElementById("final bill");
+
+            html2canvas(element, { scale: 2 }).then((canvas) => {
+                const link = document.createElement("a");
+                link.download = "screenshot.png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+
+        function tripedit() {
+            var d = document.getElementById("output").value;
+            var d1 = d.split("\n");
+            var s = 0;
+            for (var i = 0; i < d1.length; i++) {
+                var p = d1[i].split(" ");
+                if (!isNaN(p[2])) {
+                    // console.log(p[2], i);
+                    s += parseInt(p[2]);
+                }
+                document.getElementById("trips").value = s;
+                document.getElementById("rate").value = s * 150;
+            }
+
+        }
+
+
 
 
     </script>
+
+
+    <script type="module" src="jcbdriverdatabase.js"></script>
+    <script src="jcbdriverstatus.js"></script>
+    <script src="tractortripsdatabase.js" type="module">
+
+    </script>
+    <script src="editdriverdata.js">
+
+    </script>
+
+    <script src="Tractor.js"></script>
+
+
+    </script>
+
+    <script type="module" src="editpopup.js"></script>
+    <script src="dailywork.js"></script>
+    <script type="module" src="dailyworkretrive.js"></script>
+    <script type="module" src="dailywork.js"></script>
 </body>
 
 </html>

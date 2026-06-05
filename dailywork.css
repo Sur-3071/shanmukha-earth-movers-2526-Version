@@ -6,16 +6,18 @@ body {
     margin: 0; /* Added to prevent default margins */
 }
 .box {
-  width: 250px;
-  padding: 20px;
-  border: 2px solid #4ba6ec;
-  border-radius: 10px;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.3s;
+  width: 250px !important;
+  height: 150px !important;
+  padding: 20px !important;
+  border: 2px solid #4ba6ec !important;
+  border-radius: 10px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: 0.3s !important;
 }
+
 .box:hover {
-  background: #f0f8ff;
+  background: #f0f8ff !important;
 }
 
 /* Popup modal styles */
@@ -71,6 +73,7 @@ body {
     height: 50px;
     font-size: 24px;
     padding: 5px;
+    margin-left: 420px;
 }
 
 #com {
@@ -363,14 +366,31 @@ h2 {
     font-weight: 700; /* Simplified from 1900 (invalid value) */
 }
 
-#userForm1, #userForm3, #userForm4, #userForm5, #userForm6 {
+#userForm1, #userForm3, #userForm4, #userForm5, #userForm8, #userForm10 {
     background-color: #ffffff;
     padding: 15px; /* Reduced from 20px */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px; /* Standardized width */
-    margin: 0 auto; /* Centered, removed excessive margin-left */
+}
+#userForm6{
+ background-color: #ffffff;
+    padding: 15px; /* Reduced from 20px */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Standardized width */
+    margin-left: 300px;
+}
+
+#userForm15{
+ background-color: #ffffff;
+    padding: 15px; /* Reduced from 20px */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px; /* Standardized width */
 }
 
 #userForm2 {
@@ -712,6 +732,7 @@ button:active {
     outline: 3px solid lightgreen; /* Reduced from 5px */
     margin: 20px 0; /* Reduced from 50px top, 80px bottom */
     font-size: 20px; /* Reduced from 25px */
+    margin-left: 450px;
 }
 
 #daycnt {
@@ -747,6 +768,13 @@ input, select {
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 16px;
+}
+.dropdown-input{
+    width:370px !important;
+    max-width:500px !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    display:block !important;
 }
 
 .round-image {
@@ -806,7 +834,7 @@ input[type="checkbox"] {
     cursor: pointer;
 }
 
-#formContainer, #cardContainer, #popup {
+#formContainer,#formContainer8, #cardContainer, #popup {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -817,6 +845,27 @@ input[type="checkbox"] {
     
 }
 #formContainer2
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 350px; /* Reduced from 400px */
+    margin-bottom: 10px; /* Reduced from 20px */
+    padding-bottom: 50px; /* Reduced from 150px */
+    margin-left: 260px;
+}
+/* ===== SCROLL CONTAINER ===== */
+#enterdata {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;     /* horizontal scroll */
+  overflow-y: hidden;   /* no vertical scroll */
+  display: block;
+  border: 1px solid #ddd; /* optional for visibility */
+  border-radius: 8px;
+}
+#formContainer20
 {
     display: flex;
     flex-direction: column;
@@ -957,6 +1006,198 @@ h1 {
     background:#ffffff;
 
     transition:.25s;
+}
+
+/* Remove default spacing */
+.dashboard-title {
+    display: inline-block;
+    position: relative;
+
+    font-size: 26px;
+    font-weight: 800;
+    color: #198754;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    margin: 10px auto 20px auto;
+
+    animation: titleSlide 1s ease-out;
+}
+
+/* Center the heading */
+.dashboard-title {
+    left: 32%;
+    transform: translateX(-50%);
+}
+
+/* Animated underline matching text width */
+.dashboard-title::after {
+    content: '';
+    position: absolute;
+
+    left: 0;
+    bottom: -6px;
+
+    width: 100%;
+    height: 3px;
+
+    background: #198754;
+    border-radius: 10px;
+
+    transform: scaleX(0);
+    transform-origin: center;
+
+    animation: underlineGrow 1.2s ease forwards;
+}
+
+/* Slide animation */
+@keyframes titleSlide {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Underline animation */
+@keyframes underlineGrow {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 18px;
+    }
+}
+
+/* Dashboard Container */
+#cho {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    margin-top: 100px;
+    margin-bottom: 100px;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+/* Buttons */
+.confet {
+    height: 65px;
+    width: 100%;
+
+    border: none;
+    border-radius: 10px;
+
+    background: linear-gradient(135deg, #0d6efd, #0056d6);
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+    padding: 0 5px;
+
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+
+    cursor: pointer;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+    transition: all 0.2s ease;
+
+    box-sizing: border-box;
+}
+
+/* Hover */
+.confet:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.20);
+}
+
+/* Icons */
+.confet i {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* Text */
+.confet span {
+    line-height: 1.2;
+}
+
+/* Tablet */
+@media screen and (max-width: 1024px) {
+    #cho {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+    }
+
+    .confet {
+        height: 60px;
+        font-size: 12px;
+    }
+
+    .confet i {
+        font-size: 16px;
+    }
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+    #cho {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        padding: 4px;
+    }
+
+    .confet {
+        height: 55px;
+        font-size: 10px;
+        gap: 4px;
+        padding: 0 3px;
+        border-radius: 8px;
+    }
+
+    .confet i {
+        font-size: 13px;
+    }
+}
+
+/* Very Small Mobile */
+@media screen and (max-width: 480px) {
+    #cho {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+    }
+
+    .confet {
+        height: 50px;
+        font-size: 9px;
+        gap: 3px;
+        padding: 0 2px;
+    }
+
+    .confet i {
+        font-size: 12px;
+    }
 }
 
 /* FOCUS EFFECT */

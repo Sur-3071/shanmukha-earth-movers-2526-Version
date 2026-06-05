@@ -109,6 +109,7 @@ function addamount() {
 }
 
 function transalate() {
+    
     let convert = document.getElementById("cname");
     let content = document.getElementById("cname").value;
     let transLINK = `https://api.mymemory.translated.net/get?q=${content}&langpair=en-GB|te-IN`;
@@ -172,7 +173,7 @@ function box3() {
 
 function removedone() {
     setTimeout(function () {
-        var v7 = document.getElementById("done");
+        var v7 = document.getElementById("done10");
         v7.style.display = "none";
     }, 2000);
 }
@@ -408,7 +409,7 @@ function displaytripsdata(data, drivername) {
             <td style="font-weight:bold;font-size:25px;padding:15px">${shift}</td>
             <td style="display:none;">${drivername}</td>
             <td style="font-weight:bold;font-size:25px;padding:15px">
-                <button type="button" class="edit" onclick="openPopup1(this)">Edit</button>
+                <button type="button" class="edit" onclick="openPopup12(this)">Edit</button>
             </td>
             <td style="font-weight:bold;font-size:25px;padding:15px">${amount}</td>
             <td style="font-weight:bold;font-size:25px;padding:15px">${trips}</td>

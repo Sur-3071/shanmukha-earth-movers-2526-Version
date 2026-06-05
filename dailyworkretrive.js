@@ -14,7 +14,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 // Get a reference to the database service
-document.getElementById("submit2").addEventListener("click", async function (e1) {
+document.getElementById("submit12").addEventListener("click", async function (e1) {
     e1.preventDefault(); // Prevent default form submission behavior
     var d1 = document.getElementById("search");
     var n = document.getElementById("search");
@@ -141,7 +141,6 @@ function generateTable(data) {
             <th id="csize">HoursPrice</th>
             <th id="csize">Driver Beta</th>
             <th id="csize">Payment Status</th>
-            <th id="csize">Edit Data</th>
             <th id="csize">Jcb Price</th>
             <th id="csize">Jcb Recovery Amount</th>
             <th id="csize">Overall Price</th>
@@ -333,7 +332,6 @@ function generateTable(data) {
                         <td><button type="button" class="pay" id="${customerPhone}"
             style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
             ${activity.Payment}</td>                        
-                        <td><button type="button" id=${editid} class="edit">Edit</button></td>
                         <td>${totalamount}</td>
                         <td>${amount}</td>
                         <td>${overallpricemoney}</td>
@@ -359,7 +357,7 @@ function generateTable(data) {
     <td colspan="3" id="col">Drivers</td>
     <td id="am">${totalcontarct}</td>
     <td id="am" colspan="4">${totaltime}</td>
-    <td id="am" colspan="3">Work In Price</td>
+    <td id="am" colspan="2">Work In Price</td>
     <td id="am">${collection}</td>
     <td id="am">${recovery}</td>
     <td id="am">${overallcollection}</td>
@@ -367,6 +365,8 @@ function generateTable(data) {
     </tr>`;
     out += `</table>`;
     document.getElementById("enterdata").innerHTML = out;
+    document.getElementById("overview").style.display = "block";
+
     const sortedDates = l.sort((a, b) => new Date(a) - new Date(b));
     var dat1 = sortedDates[0];
     var dat2 = year + "-" + month + "-" + day;
@@ -409,7 +409,7 @@ function generateTable(data) {
     <td>${pro}</td>
     </tr>`;
     led += `</table>`;
-    document.getElementById("ledger").innerHTML = led;
+    document.getElementById("ownerledger").innerHTML = led;
 }
 
 document.addEventListener("click", async function (e1) {
@@ -555,7 +555,7 @@ function editData() {
         const [driver, trips] = line.split('=').map(item => item.trim());
 
         if (driver && trips) {
-            if(driver.toLowerCase().includes("own")) {
+            if (driver.toLowerCase().includes("own")) {
                 nonpaytrips += parseInt(trips);
             }
             const newRow = document.createElement('div');
@@ -583,7 +583,7 @@ function editData1() {
         const [driver, trips] = line.split('=').map(item => item.trim());
 
         if (driver && trips) {
-             if(driver.toLowerCase().includes("own")) {
+            if (driver.toLowerCase().includes("own")) {
                 nonpaytrips += parseInt(trips);
             }
             const newRow = document.createElement('div');
@@ -600,7 +600,7 @@ function editData1() {
 }
 
 function SearchTable(data) {
-    var d = document.getElementById("ledger");
+    var d = document.getElementById("ownerledger");
     var name = document.getElementById("search").value.trim();
     // console.log(name.length);
 
@@ -632,7 +632,6 @@ function SearchTable(data) {
             <th id="csize">HoursPrice</th>
             <th id="csize">Driver Beta</th>
             <th id="csize">Payment Status</th>
-            <th id="csize">Edit Data</th>
             <th id="csize">Jcb Price</th>
             <th id="csize">Jcb Recovery Amount</th>
             <th id="csize">Overall Price</th>
@@ -677,7 +676,7 @@ function SearchTable(data) {
             var overallsubcollections = 0;
 
             // Header row for person
-            out += `<tr><td colspan="22" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
+            out += `<tr><td colspan="21" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
 
             entries.forEach(entry => {
                 const customerPhone = entry.id;
@@ -839,7 +838,6 @@ function SearchTable(data) {
                         <td><button type="button" class="pay" id="${customerPhone}"
                         style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
                         ${activity.Payment}</button></td>
-                    <td><button type="button" id=${editid} class="edit">Edit</button></td>
                         <td>${activity.Price}</td>
                         <td>${amount}</td>
                         <td>${activity.OverallPrice}</td>
@@ -861,7 +859,7 @@ function SearchTable(data) {
                 <td colspan="3">Loading</td>
                 <td>${subContract}</td>
                 <td colspan="4">${subTime}</td>
-                <td colspan="3">Sub Total</td>
+                <td colspan="2">Sub Total</td>
                 <td>${subPrice}</td>
                 <td>${subRecovery}</td>
                 <td>${overallsubcollections}</td>
@@ -892,24 +890,42 @@ function SearchTable(data) {
 
         out += `</table>`;
         document.getElementById("enterdata").innerHTML = out;
+        document.getElementById("overview").style.display = "block";
+
     } else {
         d.style.display = "block";
         RePrint();
     }
 }
 
+document.getElementById("todayworkbtn").addEventListener("click", function () {
 
+    const today = new Date().toISOString().split("T")[0];
 
+    RePrint1(today, today);
+});
 
-document.getElementById("submit1").addEventListener("click", async function (e1) {
+document.getElementById("last7Btn").addEventListener("click", function () {
+
+    const today = new Date();
+    const last7 = new Date();
+    last7.setDate(today.getDate() - 6);
+
+    const end = today.toISOString().split("T")[0];
+    const start = last7.toISOString().split("T")[0];
+
+    RePrint1(start, end);
+});
+
+document.getElementById("submit11").addEventListener("click", async function (e1) {
     e1.preventDefault(); // Prevent default form submission behavior
     document.getElementById("search").value = "";
-    RePrint1();
+    var startdate = document.getElementById("dat11").value.trim();
+    var enddate = document.getElementById("dat12").value.trim();
+    RePrint1(startdate, enddate);
 });
-async function RePrint1() {
+async function RePrint1(startdate, enddate) {
     // Get the value from the input field
-    var startdate = document.getElementById("dat1").value.trim();
-    var enddate = document.getElementById("dat2").value.trim();
     // Validate the input (optional)
     try {
         // Access the database and retrieve data
@@ -1048,6 +1064,8 @@ function generateTableByDate(data, startdate, enddate, data1) {
             </tr>`;
     out += `</table>`;
     document.getElementById("enterdata").innerHTML = out;
+    document.getElementById("overview").style.display = "block";
+
     let led = `<table border="1px">
     <tr>
         <th id="bal1">Total Work</th>
@@ -1075,12 +1093,13 @@ function generateTableByDate(data, startdate, enddate, data1) {
     <td>${disel}</td>
     <td>${differenceInDays * 400}</td>
     <td>${differenceInDays * 1800}</td>
-    <td>${differenceInDays*665}</td>
+    <td>${differenceInDays * 665}</td>
     <td>${differenceInDays * 835}</td>
     <td>${pro}</td>
     </tr>`;
     led += `</table>`;
-    document.getElementById("ledger").innerHTML = led;
+    document.getElementById("ownerledger").innerHTML = led;
+
     generateHomeTablebydate(data1, startdate, enddate);
 }
 document.addEventListener("click", async function (e1) {
@@ -1227,7 +1246,7 @@ document.addEventListener("click", async function (e1) {
     }
 });
 
-document.getElementById("submit3").addEventListener("click", async function (e1) {
+document.getElementById("submit13").addEventListener("click", async function (e1) {
     e1.preventDefault(); // Prevent default form submission behavior
     var d1 = document.getElementById("typech");
     var n = document.getElementById("typech");
@@ -1357,6 +1376,8 @@ function generateHomeTablebydate(data, startdate, enddate) {
     </tr>`;
     out1 += `</table>`;
     document.getElementById("homeexp").innerHTML = out1;
+    document.getElementById("overview").style.display = "block";
+
 }
 
 function generateHomeTableSearch(data, v1) {
@@ -1606,4 +1627,6 @@ function generateHomeTable(data) {
     </tr>`;
     out += `</table>`;
     document.getElementById("homeexp").innerHTML = out;
+    document.getElementById("overview").style.display = "block";
+
 }

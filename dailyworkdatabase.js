@@ -141,6 +141,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 TotalTime: ttime,
                                 Price: rate
                             });
+
                             document.getElementById("done").style.display = "block";
                             removedone();
                         } catch (error) {
@@ -473,12 +474,16 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
         document.getElementById(
             "paymentSuccessPopup"
         ).style.display = "flex";
+        document.getElementById(
+            "paymentSuccessPopup1"
+        ).style.display = "flex";
 
         setTimeout(() => {
 
             document.getElementById(
                 "paymentSuccessPopup"
             ).style.display = "none";
+            document.getElementById("paymentSuccessPopup1").style.display = "none";
 
         }, 2000);
         removedone();

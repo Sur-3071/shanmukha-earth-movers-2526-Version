@@ -19,14 +19,14 @@ const db = getDatabase(app);
 document.getElementById('submit').addEventListener('click', function (e) {
     // alert(" hi its coming");
     e.preventDefault();
-    const d = document.getElementById("d1").value;
+    const d = document.getElementById("tractd1").value;
     const drivername = document.getElementById("dname1").value;
 
     const customer = document.getElementById("cname").value;
     const day = document.getElementById("time").value;
     const price = document.getElementById("aname").value;
-    const trips = document.getElementById("trips").value;
-    const wid = document.getElementById("wid1").value;
+    const trips = document.getElementById("tractortrips").value;
+    const wid = document.getElementById("wid10").value;
     const db1 = DBConstants.TractorTrips;
     const db2 = DBConstants.TractorAmount;
     if (d.length > 0 && drivername.length > 0 && customer.length > 0 && price.length > 0 && trips.length > 0) {
@@ -44,10 +44,10 @@ document.getElementById('submit').addEventListener('click', function (e) {
         })
             .then(() => {
                 document.getElementById("form").reset();
-                var d = document.getElementById("done");
+                var d = document.getElementById("done10");
                 d.style.display = "block";
                 removedone()
-                GetSystemId("1");
+                GetSystemId("wid10");
             })
             .catch((error) => {
                 console.error("Error adding document: ", error);
@@ -72,6 +72,7 @@ document.getElementById('submit').addEventListener('click', function (e) {
 //     }
 
 export function editDriverData(e){
+    alert("Editing data...");
     e.preventDefault();
     const d = document.getElementById("editdate").value;
     // alert(d);
@@ -115,17 +116,17 @@ export function editDriverData(e){
             });
     }
     else {
-        alert("Please Enter All The Fields Properly");
+        alert("Please Enter All The Fields Properly for editing");
     }
 }
 window.editDriverData = editDriverData;
 amountdataentry.addEventListener('click', function (e) {
     e.preventDefault();
-    const d = document.getElementById("d2").value;
+    const d = document.getElementById("tractd2").value;
     const drivername = document.getElementById("dname3").value;
     const pur = document.getElementById("pur").value;
     const amount = document.getElementById("amount").value;
-    const wid = document.getElementById("wid2").value;
+    const wid = document.getElementById("wid30").value;
     const db2 = DBConstants.TractorAmount;
 
     // Set data to Firebase database
@@ -141,10 +142,10 @@ amountdataentry.addEventListener('click', function (e) {
         })
             .then(() => {
                 document.getElementById("form1").reset();
-                var d = document.getElementById("done");
+                var d = document.getElementById("done10");
                 d.style.display = "block";
                 removedone();
-                GetSystemId("3");
+                GetSystemId("wid30");
             })
             .catch((error) => {
                 console.error("Error adding document: ", error);
