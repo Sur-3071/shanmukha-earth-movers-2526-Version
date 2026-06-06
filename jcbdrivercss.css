@@ -87,6 +87,15 @@ label {
     border-radius: 10px;
     margin-bottom: 10px;
 }
+.month-header1 {
+    background: #6ae4a3;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
 
 .month-details p {
     margin: 6px 0;

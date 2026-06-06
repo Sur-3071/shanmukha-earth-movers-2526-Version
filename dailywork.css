@@ -314,6 +314,11 @@ span {
     font-size: 26px;
     font-weight: bold;
 }
+.month-details span
+{
+    font-size: 13px;
+    font-weight: bold;
+}
 
 #typech {
     width: 350px;

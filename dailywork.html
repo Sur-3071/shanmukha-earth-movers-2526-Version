@@ -399,10 +399,10 @@
             //     moneyconvert(dadyTotals.Total) + "<br>" +
             //     moneyconvert(dadyTotals.Jcb);
             document.getElementById("dadyexp").innerHTML =
-                `<div style="font-size:12px;font-weight:bold; margin-bottom:3px;">
+                `<div style="font-size:18px;font-weight:bold; margin-bottom:3px;">
         <strong>Total Expenses:</strong> ${moneyconvert(dadyTotals.Total)}
      </div>
-     <div style="font-size:12px;font-weight:bold;">
+     <div style="font-size:18px;font-weight:bold;">
         <strong>JCB Expenses:</strong> ${moneyconvert(dadyTotals.Jcb)}
      </div>`;
             // document.getElementById("sureshexp").innerHTML =
@@ -410,23 +410,23 @@
             //     moneyconvert(sureshTotals.Jcb);
 
             document.getElementById("sureshexp").innerHTML =
-                `<div style="font-size:12px;font-weight:bold; margin-bottom:3px;">
+                `<div style="font-size:18px;font-weight:bold; margin-bottom:3px;">
         <strong>Total Expenses:</strong> ${moneyconvert(sureshTotals.Total)}
      </div>
-     <div style="font-size:12px;font-weight:bold;">
+     <div style="font-size:18px;font-weight:bold;">
         <strong>JCB Expenses:</strong> ${moneyconvert(sureshTotals.Jcb)}
      </div>`;
             document.getElementById("allexp").innerHTML =
-                `<div style="font-size:12px;font-weight:bold; margin-bottom:3px;">
+                `<div style="font-size:18px;font-weight:bold; margin-bottom:3px;">
         <strong>Total Expenses:</strong> ${moneyconvert(sureshTotals.Total + dadyTotals.Total)}
      </div>
-     <div style="font-size:12px;font-weight:bold;">
+     <div style="font-size:18px;font-weight:bold;">
         <strong>JCB Expenses:</strong> ${moneyconvert(sureshTotals.Jcb + dadyTotals.Jcb)}
      </div>`;
             // document.getElementById("allexp").innerHTML = moneyconvert(sureshTotals.Total + dadyTotals.Total);
 
             // Apply styles
-            document.getElementById("dadyexp").style.color = "skyblue";
+            document.getElementById("dadyexp").style.color = "black";
             document.getElementById("sureshexp").style.color = "red";
             document.getElementById("allexp").style.color = "green";
         }
@@ -1375,12 +1375,12 @@ ${tableHTML}
             <span>Tractor Driver Bill</span>
         </button>
 
-        <button id="todayworkbtn" class="confet">
+        <button id="todayworkbtn" class="confet" onclick="TodayWorkBlock()">
             <i class="fa-solid fa-calendar-day"></i>
             <span>Today's Work</span>
         </button>
 
-        <button id="last7Btn" class="confet">
+        <button id="last7Btn" class="confet" onclick="TodayWorkBlock()">
             <i class="fa-solid fa-calendar-week"></i>
             <span>7 Days work</span>
         </button>
@@ -1432,19 +1432,19 @@ ${tableHTML}
             <div class="box" onclick="openQuarter(1)">
                 <h2 style="color: rgb(75, 166, 236);"> Quarter 1</h2>
                 <h2 style="color: rgb(75, 166, 236);">(August – November)</h2>
-                <h1 id="profitquat1"></h1>
+                <h1 id="profitquat1" style="font-size: 24px; font-weight: bold;"></h1>
                 <h1 id="quat1"></h1>
             </div>
             <div class="box" onclick="openQuarter(2)">
                 <h2 style="color: rgb(75, 166, 236);">Quarter 2 </h2>
                 <h2 style="color: rgb(75, 166, 236);">(December – March)</h2>
-                <h1 id="profitquat2"></h1>
+                <h1 id="profitquat2" style="font-size: 24px; font-weight: bold;"></h1>
                 <h1 id="quat2"></h1>
             </div>
             <div class="box" onclick="openQuarter(3)">
                 <h2 style="color: rgb(75, 166, 236);">Quarter 3 </h2>
                 <h2 style="color: rgb(75, 166, 236);">(April – July)</h2>
-                <h1 id="profitquat3"></h1>
+                <h1 id="profitquat3" style="font-size: 24px; font-weight: bold;"></h1>
                 <h1 id="quat3"></h1>
             </div>
             <div class="box" id="Dady" onclick="openPopup1()">
@@ -1828,7 +1828,7 @@ ${tableHTML}
 
         <div class="holiday-card">
 
-            <div class="month-header">
+            <div class="month-header1">
 
                 <h2>${month}</h2>
 
@@ -2334,11 +2334,11 @@ ${tableHTML}
 
             <div class="box" id="suresh" onclick="openPopup2()">
                 <h2 style="color: rgb(75, 166, 236);">Suresh Expenses</h2>
-                <h1 id="sureshexp"></h1>
+                <h1 id="sureshexp" style="font-size: 24px; font-weight: bold;"></h1>
             </div>
             <div class="box" id="all" onclick="openPopup3()">
                 <h2 style="color: rgb(75, 166, 236);">Overall Expenses</h2>
-                <h1 id="allexp"></h1>
+                <h1 id="allexp" style="font-size: 24px; font-weight: bold;"></h1>
             </div>
         </div>
 
@@ -4189,8 +4189,7 @@ ${tableHTML}
                 ; document.getElementById("ledger").innerHTML = ""; document.getElementById("prevyear").style.display = "none";
         }
         function TodayWorkBlock() {
-            // Show customer bill div
-            // alert("Financial Year Block");
+            // alert("Today Work Block");
             const yearButtons = document.getElementsByClassName("year-container");
             for (let i = 0; i < yearButtons.length; i++) {
                 yearButtons[i].style.display = "none";
