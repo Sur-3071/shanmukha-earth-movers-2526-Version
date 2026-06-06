@@ -80,87 +80,87 @@ document.addEventListener("click", async function (e1) {
         }
         // alert(worktype);
         // var worktype="Contarct";
-                document.getElementById("userForm").reset();
+        document.getElementById("userForm").reset();
 
-      document.getElementById("dat7").value = Date;
+        document.getElementById("dat7").value = Date;
 
-document.getElementById("wid7").value = id;
+        document.getElementById("wid7").value = id;
 
-document.getElementById("name7").value = Name;
+        document.getElementById("name7").value = Name;
 
-document.getElementById("vil7").value = Villagename;
+        document.getElementById("vil7").value = Villagename;
 
-document.getElementById("hrsrate7").value = hrsamt;
+        document.getElementById("hrsrate7").value = hrsamt;
 
-document.getElementById("dis7").value = Disel;
+        document.getElementById("dis7").value = Disel;
 
-document.getElementById("con7").value = Contract;
+        document.getElementById("con7").value = Contract;
 
-document.getElementById("desc7").value = desc;
+        document.getElementById("desc7").value = desc;
 
-document.getElementById("stime7").value = Starting;
+        document.getElementById("stime7").value = Starting;
 
-document.getElementById("etime7").value = Ending;
+        document.getElementById("etime7").value = Ending;
 
-document.getElementById("ttime7").value = TotalTime;
+        document.getElementById("ttime7").value = TotalTime;
 
-document.getElementById("rate7").value = Price;
+        document.getElementById("rate7").value = Price;
 
-document.getElementById("trprate7").value = trpamt;
+        document.getElementById("trprate7").value = trpamt;
 
-document.getElementById("jcbtrprate7").value = jcbtrpamt;
+        document.getElementById("jcbtrprate7").value = jcbtrpamt;
 
-document.getElementById("trips7").value = Trips;
+        document.getElementById("trips7").value = Trips;
 
-document.getElementById("output7").value = output;
+        document.getElementById("output7").value = output;
 
-document.getElementById("worktype7").value = worktype;
+        document.getElementById("worktype7").value = worktype;
 
-document.getElementById("pay7").value = payment;
+        document.getElementById("pay7").value = payment;
 
-document.getElementById("beta7").value = beta;
+        document.getElementById("beta7").value = beta;
 
-document.getElementById("trprate17").value = hourstrpamt;
+        document.getElementById("trprate17").value = hourstrpamt;
 
-document.getElementById("output17").value = hoursdrivers;
+        document.getElementById("output17").value = hoursdrivers;
 
-document.getElementById("trips17").value = hourstrips;
+        document.getElementById("trips17").value = hourstrips;
 
-editData7();
+        editData7();
 
-editData17();
+        editData17();
 
-if (worktype == "Hours") {
+        if (worktype == "Hours") {
 
-    document.getElementById("loading7").style.display = "none";
+            document.getElementById("loading7").style.display = "none";
 
-    document.getElementById("contract7").style.display = "none";
+            document.getElementById("contract7").style.display = "none";
 
-    document.getElementById("hours7").style.display = "block";
+            document.getElementById("hours7").style.display = "block";
 
-    document.getElementById("loading17").style.display = "block";
+            document.getElementById("loading17").style.display = "block";
 
-}
-else {
+        }
+        else {
 
-    if (worktype == "Loading") {
+            if (worktype == "Loading") {
 
-        document.getElementById("hours7").style.display = "none";
+                document.getElementById("hours7").style.display = "none";
 
-        document.getElementById("loading7").style.display = "block";
+                document.getElementById("loading7").style.display = "block";
 
-        document.getElementById("contract7").style.display = "none";
+                document.getElementById("contract7").style.display = "none";
 
-    }
-    else {
+            }
+            else {
 
-        document.getElementById("hours7").style.display = "none";
+                document.getElementById("hours7").style.display = "none";
 
-        document.getElementById("loading7").style.display = "none";
+                document.getElementById("loading7").style.display = "none";
 
-        document.getElementById("contract7").style.display = "block";
-    }
-}
+                document.getElementById("contract7").style.display = "block";
+            }
+        }
         // When the user clicks the button, open the modal 
         btn.onclick = function () {
             modal.style.display = "block";
@@ -327,70 +327,70 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
     e.preventDefault();
     // alert("Submit button clicked.");
 
-   const dat = document.getElementById("dat7").value;
+    const dat = document.getElementById("dat7").value;
 
-const wid = document.getElementById("wid7").value;
+    const wid = document.getElementById("wid7").value;
 
-const name = document.getElementById("name7").value;
+    const name = document.getElementById("name7").value;
 
-const villname = document.getElementById("vil7").value;
+    const villname = document.getElementById("vil7").value;
 
-// const pno = document.getElementById("pno7").value;
+    // const pno = document.getElementById("pno7").value;
 
-const disel = document.getElementById("dis7").value;
+    const disel = document.getElementById("dis7").value;
 
-var con = document.getElementById("con7").value;
+    var con = document.getElementById("con7").value;
 
-var desc = document.getElementById("desc7").value;
+    var desc = document.getElementById("desc7").value;
 
-var stime = document.getElementById("stime7").value;
+    var stime = document.getElementById("stime7").value;
 
-var etime = document.getElementById("etime7").value;
+    var etime = document.getElementById("etime7").value;
 
-var ttime = document.getElementById("ttime7").value;
+    var ttime = document.getElementById("ttime7").value;
 
-const rate = document.getElementById("rate7").value;
+    const rate = document.getElementById("rate7").value;
 
-var hrsamt = document.getElementById("hrsrate7").value;
+    var hrsamt = document.getElementById("hrsrate7").value;
 
-var trpamt = document.getElementById("trprate7").value;
+    var trpamt = document.getElementById("trprate7").value;
 
-var jcbtrpamt = document.getElementById("jcbtrprate7").value;
+    var jcbtrpamt = document.getElementById("jcbtrprate7").value;
 
-var trips = document.getElementById("trips7").value;
+    var trips = document.getElementById("trips7").value;
 
-var output = document.getElementById("output7").value;
+    var output = document.getElementById("output7").value;
 
-var pay = document.getElementById("pay7").value;
+    var pay = document.getElementById("pay7").value;
 
-const beta = document.getElementById("beta7").value;
+    const beta = document.getElementById("beta7").value;
 
-var hourstrpamt = document.getElementById("trprate17").value;
+    var hourstrpamt = document.getElementById("trprate17").value;
 
-var hoursdrivers = document.getElementById("output17").value;
+    var hoursdrivers = document.getElementById("output17").value;
 
-var hourstrips = document.getElementById("trips17").value;
+    var hourstrips = document.getElementById("trips17").value;
 
-var hoursnoncompanytractors =
-    document.getElementById("hoursnoncompanytractors7").value;
+    var hoursnoncompanytractors =
+        document.getElementById("hoursnoncompanytractors7").value;
 
-var noncompanytractors =
-    document.getElementById("noncompanytractors7").value;
+    var noncompanytractors =
+        document.getElementById("noncompanytractors7").value;
 
-var overallamount = 0;
+    var overallamount = 0;
     // alert(trips+" "+con);
-    if (trips.length > 0 && trips!=="--") {
+    if (trips.length > 0 && trips !== "--") {
         const jcb = parseInt(jcbtrpamt) || 0;
         const tripAmt = parseInt(trpamt) || 0;
         const tripCount = parseInt(trips) || 0;
         const b = parseInt(beta) || 0;
 
-        overallamount = (jcb + tripAmt) * tripCount + b-(tripAmt * noncompanytractors);
+        overallamount = (jcb + tripAmt) * tripCount + b - (tripAmt * noncompanytractors);
 
     }
     else {
         // alert(trips+" "+con);
-        if (con.length > 0 && con!=="--") {
+        if (con.length > 0 && con !== "--") {
             const c = parseInt(con) || 0;
             const b = parseInt(beta) || 0;
 
@@ -404,7 +404,7 @@ var overallamount = 0;
             const hCnt = parseInt(hourstrips) || 0;
             const hoursnoncompanytractorstrips = parseInt(hoursnoncompanytractors) || 0;
 
-            overallamount = b + r + (hAmt * hCnt)-((hAmt * hoursnoncompanytractorstrips));
+            overallamount = b + r + (hAmt * hCnt) - ((hAmt * hoursnoncompanytractorstrips));
 
         }
     }
@@ -458,8 +458,11 @@ var overallamount = 0;
                         TotalTime: ttime,
                         Price: rate
                     });
-                    document.getElementById("done7").style.display = "block";
-                    removedone7();
+                    document.getElementById("paymentSuccessPopup5").style.display = "flex";
+                    // document.getElementById("done").style.display = "block";
+                    setTimeout(() => {
+                        document.getElementById("paymentSuccessPopup5").style.display = "none";
+                    }, 3000);
                 } catch (error) {
                     console.error("Error adding document: ", error);
                     alert("An error occurred. Please try again.");

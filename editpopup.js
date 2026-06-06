@@ -123,8 +123,11 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
                         TotalTime: ttime,
                         Price: rate
                     });
-                    document.getElementById("done").style.display = "block";
-                    removedone();
+                    document.getElementById("paymentSuccessPopup5").style.display = "flex";
+                            // document.getElementById("done").style.display = "block";
+                            setTimeout(() => {
+                                document.getElementById("paymentSuccessPopup5").style.display = "none";
+                            }, 3000);
                 } catch (error) {
                     console.error("Error adding document: ", error);
                     alert("An error occurred. Please try again.");

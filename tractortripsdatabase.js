@@ -35,18 +35,20 @@ document.getElementById('submit').addEventListener('click', function (e) {
         const dataRefset = ref(db, `${db1}/${wid}`);
 
         set(dataRefset, {
-            Date:d,
-            CustomerName:customer,
-            Shift:day,
-            Driver:drivername,
+            Date: d,
+            CustomerName: customer,
+            Shift: day,
+            Driver: drivername,
             Price: price,
             Trips: trips
         })
             .then(() => {
                 document.getElementById("form").reset();
-                var d = document.getElementById("done10");
-                d.style.display = "block";
-                removedone()
+                document.getElementById("paymentSuccessPopup5").style.display = "flex";
+                // document.getElementById("done").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("paymentSuccessPopup5").style.display = "none";
+                }, 3000);
                 GetSystemId("wid10");
             })
             .catch((error) => {
@@ -71,8 +73,8 @@ document.getElementById('submit').addEventListener('click', function (e) {
 //         }
 //     }
 
-export function editDriverData(e){
-    alert("Editing data...");
+export function editDriverData(e) {
+    // alert("Editing data...");
     e.preventDefault();
     const d = document.getElementById("editdate").value;
     // alert(d);
@@ -96,18 +98,20 @@ export function editDriverData(e){
         const dataRefset = ref(db, `${db1}/${sytemid}`);
 
         set(dataRefset, {
-            Date:d,
-            CustomerName:customer,
-            Shift:day,
-            Driver:drivername,
+            Date: d,
+            CustomerName: customer,
+            Shift: day,
+            Driver: drivername,
             Price: price,
             Trips: trips
         })
             .then(() => {
                 document.getElementById("form").reset();
-                var d = document.getElementById("done5");
-                d.style.display = "block";
-                removedone1()
+                document.getElementById("paymentSuccessPopup5").style.display = "flex";
+                // document.getElementById("done").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("paymentSuccessPopup5").style.display = "none";
+                }, 3000);
                 getDataBtn.click();
             })
             .catch((error) => {
@@ -135,16 +139,18 @@ amountdataentry.addEventListener('click', function (e) {
         const dataRefset = ref(db, `${db2}/${wid}/`);
 
         set(dataRefset, {
-            Date:d,
-            Driver:drivername,
+            Date: d,
+            Driver: drivername,
             Amount: amount,
             Purpose: pur
         })
             .then(() => {
                 document.getElementById("form1").reset();
-                var d = document.getElementById("done10");
-                d.style.display = "block";
-                removedone();
+                document.getElementById("paymentSuccessPopup5").style.display = "flex";
+                // document.getElementById("done").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("paymentSuccessPopup5").style.display = "none";
+                }, 3000);
                 GetSystemId("wid30");
             })
             .catch((error) => {
@@ -290,7 +296,7 @@ updatebtn.addEventListener('click', async function () {
             alert(`No trips found for ${drivername}`);
             return;
         }
-;
+        ;
         displayUpdatedtripsdata(filteredData)
 
     } catch (error) {

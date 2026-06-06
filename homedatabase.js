@@ -78,26 +78,22 @@ document.getElementById('submit9').addEventListener('click', async function (e) 
                                 var salexp = 0;
                             }
                             else {
-                                if(ptype==="Home")
-                                {
-                                var far = 0;
-                                var jcb = 0;
-                                var home = disel;
-                                var sal = 0;
-                                var salexp = 0;
+                                if (ptype === "Home") {
+                                    var far = 0;
+                                    var jcb = 0;
+                                    var home = disel;
+                                    var sal = 0;
+                                    var salexp = 0;
                                 }
-                                else
-                                {
-                                    if(ptype==="Salary")
-                                    {
+                                else {
+                                    if (ptype === "Salary") {
                                         var far = 0;
                                         var jcb = 0;
                                         var home = 0;
                                         var sal = disel;
                                         var salexp = 0;
                                     }
-                                    else
-                                    {
+                                    else {
                                         var far = 0;
                                         var jcb = 0;
                                         var home = 0;
@@ -107,9 +103,8 @@ document.getElementById('submit9').addEventListener('click', async function (e) 
                                 }
                             }
                         }
-                        if(ptype==="Salary" || ptype==="Salary Expenses")
-                        {
-                            disel=0;
+                        if (ptype === "Salary" || ptype === "Salary Expenses") {
+                            disel = 0;
                         }
                         await set(dataRefset, {
                             Date: dat,
@@ -121,11 +116,14 @@ document.getElementById('submit9').addEventListener('click', async function (e) 
                             Jcb: jcb,
                             Home: home,
                             Type: ptype,
-                            PersonType:pertype
+                            PersonType: pertype
                         });
 
-                        document.getElementById("done8").style.display = "block";
-                        removedone(); // Ensure this function is defined elsewhere
+                        document.getElementById("paymentSuccessPopup5").style.display = "flex";
+                        // document.getElementById("done").style.display = "block";
+                        setTimeout(() => {
+                            document.getElementById("paymentSuccessPopup5").style.display = "none";
+                        }, 3000); // Ensure this function is defined elsewhere
                     } catch (error) {
                         console.log("Error updating Firebase data:", error);
                     }

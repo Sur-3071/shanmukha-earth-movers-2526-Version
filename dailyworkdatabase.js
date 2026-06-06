@@ -141,9 +141,11 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 TotalTime: ttime,
                                 Price: rate
                             });
-
-                            document.getElementById("done").style.display = "block";
-                            removedone();
+                            document.getElementById("paymentSuccessPopup3").style.display = "flex";
+                            // document.getElementById("done").style.display = "block";
+                            setTimeout(() => {
+                                document.getElementById("paymentSuccessPopup3").style.display = "none";
+                            }, 2500);
                         } catch (error) {
                             console.error("Error adding document: ", error);
                             alert("An error occurred. Please try again.");
@@ -231,11 +233,14 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
                             Villagename: villname,
                         });
 
-                        document.getElementById("done").style.display = "block";
-                        removedone();
+                       document.getElementById("paymentSuccessPopup4").style.display = "flex";
+                            // document.getElementById("done").style.display = "block";
+                            setTimeout(() => {
+                                document.getElementById("paymentSuccessPopup4").style.display = "none";
+                            }, 2500);
                         setTimeout(() => {
                             location.reload();
-                        }, 2000);
+                        }, 4000);
                     } catch (error) {
                         console.log("Error updating Firebase data:", error);
                     }
@@ -874,10 +879,11 @@ function generateCustomerTable1(data) {
 
     out += `<table border="1px" id="customerTable1">
     <tr>
-    <th colspan="13" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red" id="heading">మొత్తం పని </h1></th>
+    <th colspan="14" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red" id="heading">మొత్తం పని </h1></th>
     </tr>
         <tr>
             <th>Date</th>
+            <th>Description</th>
             <th>HDrivers</th>
             <th>LDrivers</th>
             <th>Trips</th>
@@ -1069,6 +1075,7 @@ function generateCustomerTable1(data) {
     onmouseout="this.style.background='white'">
 
     <td style="padding:8px;font-size:25px !important;">${formatDate(activity.Date)}</td>
+    <td style="padding:8px;font-size:25px !important;">${activity.Description}</td>
     <td style="padding:8px; font-size:25px !important;">${HoursDrivers}</td>
     <td style="padding:8px; font-size:25px !important;">${LDrivers}</td>
     <td style="padding:8px; font-size:25px !important;">${activity.Trips}</td>
@@ -1128,7 +1135,7 @@ function generateCustomerTable1(data) {
         <td style="font-size:25px !important;">${totaltrips}</td>
         <td style="font-size:25px !important;">${totalcontract}</td>
         <td colspan="3" style="font-size:25px !important;">${hou}:${mint}</td>
-        <td colspan="4" style="font-size:25px !important;">Bill</td>
+        <td colspan="5" style="font-size:25px !important;">Bill</td>
         <td id="totalBill" style="font-size:25px !important;">--</td>
     </tr>`;
     let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
