@@ -150,7 +150,7 @@
                     setProfit("profitquat2", result.Q2);
                     setProfit("profitquat3", result.Q3);
                 }
-            }, 6000); // 6000 milliseconds = 6 seconds
+            }, 10000); // 10000 milliseconds = 10 seconds
         }
 
         checkQuarterResult();
@@ -1488,7 +1488,7 @@ ${tableHTML}
                     <h2 id="quarterTitle" class="quarter-title"></h2>
                     <p id="quarterSubtitle" class="quarter-subtitle"></p>
 
-                    <div id="Qutertable" style="width: 1000%;"></div>
+                    <div id="Qutertable"></div>
                 </div>
             </div>
             <div id="myModal5" class="modal">
@@ -2777,10 +2777,6 @@ ${tableHTML}
                 </div>
             </div>
             <img src="done1.png" id="done10" style="display: none; margin: 0 auto; height: 100px; width: 100px;">
-            <div id="convert">
-                <iframe src="https://www.typingbaba.com/translator/english-to-telugu-translation.php" id="trans"
-                    style="display: none;" width="80%" height="450px"></iframe>
-            </div>
             <div id="popupContainer"></div>
             <div id="outerhtml">
                 <div id="final bill">
@@ -3092,6 +3088,15 @@ ${tableHTML}
 
     </div>
 
+    <div id="internetPopup" class="internet-popup">
+        <div class="popup-content">
+            <h3>⚠ No Internet Connection</h3>
+            <button onclick="reloadPage()" class="refresh-btn">
+                Refresh
+            </button>
+        </div>
+    </div>
+
     <marquee behavior="scroll" direction="left" scrollamount="10">
         <img src="jcb.png" height="500px" width="500px" id="jcb">
     </marquee>
@@ -3114,6 +3119,32 @@ ${tableHTML}
     <script src="proxyurl.js"></script>
     <script>
 
+        function checkInternetConnection() {
+            const popup = document.getElementById("internetPopup");
+
+            if (!navigator.onLine) {
+                popup.style.display = "flex";
+            } else {
+                popup.style.display = "none";
+            }
+        }
+
+        function reloadPage() {
+            location.reload();
+        }
+
+        // Check when page opens
+        window.addEventListener("load", checkInternetConnection);
+
+        // Show popup when internet disconnects
+        window.addEventListener("offline", () => {
+            document.getElementById("internetPopup").style.display = "flex";
+        });
+
+        // Hide popup when internet reconnects
+        window.addEventListener("online", () => {
+            document.getElementById("internetPopup").style.display = "none";
+        });
         function toggleYear(id, btn) {
 
             const allSections = document.querySelectorAll('.year-content');
