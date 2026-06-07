@@ -142,13 +142,15 @@
             }
 
 
-            const quarterResult = localStorage.getItem("quarterResult");
+            setTimeout(() => {
+                const quarterResult = localStorage.getItem("quarterResult");
 
-            if (quarterResult !== null && quarterResult !== "") {
-                setProfit("profitquat1", result.Q1);
-                setProfit("profitquat2", result.Q2);
-                setProfit("profitquat3", result.Q3);
-            }
+                if (quarterResult !== null && quarterResult !== "") {
+                    setProfit("profitquat1", result.Q1);
+                    setProfit("profitquat2", result.Q2);
+                    setProfit("profitquat3", result.Q3);
+                }
+            }, 6000); // 6000 milliseconds = 6 seconds
         }
 
         checkQuarterResult();
@@ -1486,7 +1488,7 @@ ${tableHTML}
                     <h2 id="quarterTitle" class="quarter-title"></h2>
                     <p id="quarterSubtitle" class="quarter-subtitle"></p>
 
-                    <div id="Qutertable"></div>
+                    <div id="Qutertable" style="width: 1000%;"></div>
                 </div>
             </div>
             <div id="myModal5" class="modal">
@@ -2229,20 +2231,6 @@ ${tableHTML}
                         const holidays = totaldays - workedDays;
                         const totalexpenses = diseloil + salary + jcbemi + maintaince + home;
                         const avghrs = averageHoursPerDay(income, totaldays) || 0;
-                        // console.log(q.months);
-
-                        // console.log({
-                        //     income,
-                        //     diseloil,
-                        //     salary,
-                        //     Actualdays,
-                        //     jcbemi,
-                        //     maintaince,
-                        //     workedDays,
-                        //     home,
-                        //     profit,
-                        //     totalexpenses
-                        // });
 
                         quarters[index + 1] = {
                             title: q.title || "",

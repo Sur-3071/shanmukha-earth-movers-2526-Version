@@ -633,7 +633,7 @@ h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px; /* Standardized width */
-    margin-left: 300px;
+    margin-left: 330px;
 }
 
 #userForm15{
@@ -2260,9 +2260,33 @@ table {
 
 /* Quarter Table Items */
 #Qutertable {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+
+    margin: 20px 0 !important;
+    padding: 18px 26px !important;
+
+    width: 70% !important;      /* Full width */
+    max-width: none !important;  /* Remove 420px limit */
+    box-sizing: border-box !important;
+    margin-left: 170px !important;
+
+    background: linear-gradient(135deg, #e6f0ff, #f9fbff) !important;
+    color: #0047ab !important;
+
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    font-family: "Segoe UI", sans-serif !important;
+
+    border-left: 6px solid #0047ab !important;
+    border-radius: 12px !important;
+
+    text-align: center !important;
+
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12) !important;
+
+    animation: fadeIn 0.5s ease-in-out !important;
 }
 
 #Qutertable .quarter-item {
@@ -2307,7 +2331,7 @@ table {
 
     background: linear-gradient(135deg, #e6f0ff, #f9fbff);
     color: #0047ab;
-
+    width: 1000%;
     font-size: 20px;
     font-weight: 600;
     font-family: "Segoe UI", sans-serif;
