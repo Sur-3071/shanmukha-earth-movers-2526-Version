@@ -33,9 +33,9 @@
         };
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-        import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+        import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
         import DBConstants from './DatabaseConstants.js';
-        
+
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "tractor-driver-data.firebaseapp.com",
@@ -44,23 +44,24 @@
             messagingSenderId: "688935767962",
             appId: "1:688935767962:web:d3d8d7569fd2470dfef423"
         };
+        const app1 = initializeApp(firebaseConfig);
+        const db = getDatabase(app1);
+        const connectedRef = ref(db, ".info/connected");
 
+        onValue(connectedRef, (snap) => {
+            const connected = snap.val();
+
+            if (connected === true) {
+                document.getElementById("connectionPopup").style.display = "none";
+                // console.log("Firebase Connected");
+            } else {
+                document.getElementById("connectionPopup").style.display = "flex";
+                // console.log("Firebase Disconnected");
+            }
+        });
         async function loadAllExtraAmountsOnce() {
             const app = initializeApp(firebaseConfig);
             const db = getDatabase(app);
-            const connectedRef = ref(db, ".info/connected");
-
-            onValue(connectedRef, (snap) => {
-                const connected = snap.val();
-
-                if (connected === true) {
-                    document.getElementById("connectionPopup").style.display = "none";
-                    console.log("Firebase Connected");
-                } else {
-                    document.getElementById("connectionPopup").style.display = "flex";
-                    console.log("Firebase Disconnected");
-                }
-            });
             const customersRef = ref(db, DBConstants.CustomersAmount);
 
             try {
@@ -93,6 +94,171 @@
             }
         }
 
+        async function showAllTractorSummary() {
+
+            try {
+
+                const [tripsSnap, amountSnap] = await Promise.all([
+                    get(ref(db, DBConstants.TractorTrips)),
+                    get(ref(db, DBConstants.TractorAmount))
+                ]);
+
+                const summary = {};
+                // console.log(tripsSnap.val(), amountSnap.val());
+                // ===================
+                // TRIPS DATA
+                // ===================
+                if (tripsSnap.exists()) {
+
+                    const tripsData = tripsSnap.val();
+
+                    for (const id in tripsData) {
+
+                        const row = tripsData[id];
+
+                        const driver = row.Driver;
+
+                        const price = Number(row.Price || 0);
+                        const trips = Number(row.Trips || 0);
+
+                        const totalAmount = price * trips;
+
+                        if (!summary[driver]) {
+
+                            summary[driver] = {
+                                totalEarned: 0,
+                                totalGiven: 0
+                            };
+                        }
+
+                        summary[driver].totalEarned += totalAmount;
+                    }
+                }
+
+                // ===================
+                // GIVEN AMOUNTS
+                // ===================
+                if (amountSnap.exists()) {
+
+                    const amountData = amountSnap.val();
+
+                    for (const id in amountData) {
+
+                        const row = amountData[id];
+
+                        const driver = row.Driver;
+
+                        const amount = Number(row.Amount || 0);
+
+                        if (!summary[driver]) {
+
+                            summary[driver] = {
+                                totalEarned: 0,
+                                totalGiven: 0
+                            };
+                        }
+
+                        summary[driver].totalGiven += amount;
+                    }
+                }
+
+                renderSummary(summary);
+
+            } catch (err) {
+
+                console.error(err);
+                alert("Error loading summary");
+            }
+        }
+
+        function renderSummary(summary) {
+            let html = `
+<table 
+    border="1"
+    width="100%"
+    style="
+        border-collapse:collapse;
+        font-size:20px;
+        font-family:Poppins,sans-serif;
+        text-align:center;
+        box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    ">
+    
+    <tr>
+        <th style="
+            background:#4ba6ec;
+            color:white;
+            padding:15px;
+            font-size:22px;
+        ">
+            Driver Name
+        </th>
+
+        <th style="
+            background:#4ba6ec;
+            color:white;
+            padding:15px;
+            font-size:22px;
+        ">
+            Total Amount
+        </th>
+
+        <th style="
+            background:#4ba6ec;
+            color:white;
+            padding:15px;
+            font-size:22px;
+        ">
+            Given Amount
+        </th>
+
+        <th style="
+            background:#4ba6ec;
+            color:white;
+            padding:15px;
+            font-size:22px;
+        ">
+            Balance
+        </th>
+    </tr>
+`;
+
+            Object.keys(summary).forEach(driver => {
+
+                const total = summary[driver].totalEarned;
+                const given = summary[driver].totalGiven;
+                const balance = total - given;
+
+                html += `
+        <tr style="font-size:20px;font-weight:500;">
+            <td style="padding:12px;">${driver}</td>
+
+            <td style="padding:12px;">
+                ₹${total.toLocaleString()}
+            </td>
+
+            <td style="padding:12px;">
+                ₹${given.toLocaleString()}
+            </td>
+
+            <td style="
+                padding:12px;
+                font-weight:bold;
+                color:${balance >= 0 ? 'green' : 'red'};
+            ">
+                ₹${balance.toLocaleString()}
+            </td>
+        </tr>
+    `;
+            });
+
+            html += `</table>`;
+
+            document.getElementById("summaryDiv").innerHTML = html;
+        }
+
+        document.getElementById("allSummaryBtn")
+            .addEventListener("click", showAllTractorSummary);
 
         function checkQuarterResult() {
 
@@ -2632,6 +2798,9 @@ ${tableHTML}
                 <button type="button" id="b1" onclick="showPage('list1')">Add Data</button>
                 <button type="button" id="b2" onclick="showPage('list2')">Driver Data</button>
                 <button type="button" id="b3" onclick="showPage('list3')">Money Data</button>
+                <button type="button" id="allSummaryBtn" onclick="showPage('summaryDiv')">All Tractors Pending
+                    Bills</button>
+
 
             </div>
             <div id="maindiv">
@@ -2845,6 +3014,7 @@ ${tableHTML}
                     <div id="driverbal" align="center" style="padding-top: 50px;margin-bottom: 50px;">
                         <img src="nodata.png" id="def3" style="display: none; height: 150px; width: 500px;">
                     </div>
+                    <div id="summaryDiv"></div>
                 </div>
                 <div id="screenshot" align="center" style="display: none;">
                     <button type="button" value="submit" class="sub" id="screnshot1" onclick="captureDiv()"
@@ -3135,13 +3305,13 @@ ${tableHTML}
     </div>
 
     <div id="connectionPopup" class="connection-popup">
-    <div class="popup-box">
-        <h3>⚠ Connection Lost</h3>
-        <button onclick="retryConnection()">
-            Retry
-        </button>
+        <div class="popup-box">
+            <h3>⚠ Connection Lost</h3>
+            <button onclick="retryConnection()">
+                Retry
+            </button>
+        </div>
     </div>
-</div>
 
     <marquee behavior="scroll" direction="left" scrollamount="10">
         <img src="jcb.png" height="500px" width="500px" id="jcb">
@@ -4889,7 +5059,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         function showPage(pageId) {
 
-            const pages = ['list1', 'list2', 'list3'];
+            const pages = ['list1', 'list2', 'list3', 'summaryDiv'];
 
             // Reset all forms
             document.querySelectorAll("form").forEach(form => {
@@ -4971,16 +5141,13 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         function retryConnection() {
 
-    if (navigator.onLine) {
-        location.reload();
-    } else {
-        alert("Internet connection is still unavailable.");
-    }
+            if (navigator.onLine) {
+                location.reload();
+            } else {
+                alert("Internet connection is still unavailable.");
+            }
 
-}
-
-
-
+        }
 
     </script>
 

@@ -60,18 +60,6 @@ document.getElementById('submit').addEventListener('click', function (e) {
         alert("Please Enter All The Fields Properly");
     }
 });
-//  function GetSystemId(outputId) {
-//         // alert("yes " + outputId);
-
-//         const id = Date.now();
-
-//         if (outputId === "1") {
-//             document.getElementById("wid1").value = id;
-//         }
-//         else if (outputId === "3") {
-//             document.getElementById("wid2").value = id;
-//         }
-//     }
 
 export function editDriverData(e) {
     // alert("Editing data...");
@@ -162,31 +150,6 @@ amountdataentry.addEventListener('click', function (e) {
         alert("Please Fill All The Fields");
     }
 });
-// getDataBtn.addEventListener('click', function () {
-//     const drivername = document.getElementById("dname2").value;
-//     const db1 = "Trips";
-//     if (drivername != "select Driver Name") {
-//         const dataRefget = ref(db, `${db1}/${drivername}/`);
-
-//         get(dataRefget)
-//             .then((snapshot) => {
-//                 if (snapshot.exists()) {
-//                     const data = snapshot.val();
-//                     // console.log(data);
-//                     displaytripsdata(data,drivername)
-
-//                 } else {
-//                     alert("No data available");
-//                 }
-//             })
-//             .catch((error) => {
-//                 console.error("Error occurred while fetching data: ", error);
-//             });
-//     }
-//     else {
-//         alert("Please Select Driver Name");
-//     }
-// });
 
 getDataBtn.addEventListener('click', async function () {
 
@@ -237,29 +200,6 @@ getDataBtn.addEventListener('click', async function () {
 
 
 updatebtn.addEventListener('click', async function () {
-    // const drivername = document.getElementById("dname2").value;
-    // const db1 = "Trips";
-    // if (drivername != "select Driver Name") {
-    //     const dataRefget = ref(db, `${db1}/${drivername}/`);
-
-    //     get(dataRefget)
-    //         .then((snapshot) => {
-    //             if (snapshot.exists()) {
-    //                 const data = snapshot.val();
-    //                 // console.log(data);
-    //                 displayUpdatedtripsdata(data)
-
-    //             } else {
-    //                 alert("No data available");
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error occurred while fetching data: ", error);
-    //         });
-    // }
-    // else {
-    //     alert("Please Select Driver Name");
-    // }
 
     const drivername = document.getElementById("dname2").value.trim();
     const db1 = DBConstants.TractorTrips;
@@ -305,29 +245,6 @@ updatebtn.addEventListener('click', async function () {
     }
 });
 
-// getamount.addEventListener('click', function () {
-//     const drivername = document.getElementById("dname2").value;
-//     const db1 = "Amount";
-//     if (drivername != "select Driver Name") {
-//         const dataRefget = ref(db, `${db1}/${drivername}/`);
-//         get(dataRefget)
-//             .then((snapshot) => {
-//                 if (snapshot.exists()) {
-//                     const data = snapshot.val();
-//                     displayamountdata(data)
-
-//                 } else {
-//                     alert("No data available");
-//                 }
-//             })
-//             .catch((error) => {
-//                 console.error("Error occurred while fetching data: ", error);
-//             });
-//     }
-//     else {
-//         alert("Please Select Driver Name");
-//     }
-// });
 
 getamount.addEventListener('click', async function () {
 
@@ -376,43 +293,6 @@ getamount.addEventListener('click', async function () {
         alert("Failed to load amount data");
     }
 });
-
-// getbal.addEventListener('click', function () {
-//     const drivername = document.getElementById("dname2").value;
-//     const db1 = "Trips";
-//     const db2 = "Amount";
-//     const dataRefget = ref(db, `${db1}/${drivername}/`);
-//     const dataRefget1 = ref(db, `${db2}/${drivername}/`);
-//     if (drivername != "select Driver Name") {
-//         get(dataRefget).then((snapshot1) => {
-//             if (snapshot1.exists()) {
-//                 const data = snapshot1.val();
-//                 displaybal1(data, drivername)
-//             }
-//             else {
-//                 alert("No data available");
-//             }
-//         })
-//             .catch((error) => {
-//                 console.error("Error occurred while fetching data: ", error);
-//             });
-//         get(dataRefget1).then((snapshot1) => {
-//             if (snapshot1.exists()) {
-//                 const data = snapshot1.val();
-//                 displaybal2(data);
-//             }
-//             else {
-//                 alert("No data available");
-//             }
-//         })
-//             .catch((error) => {
-//                 console.error("Error occurred while fetching data: ", error);
-//             });
-//     }
-//     else {
-//         alert("Plesae Select Driver Name");
-//     }
-// });
 
 getbal.addEventListener('click', async function () {
 
