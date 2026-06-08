@@ -604,6 +604,7 @@
             const unpaidCustomers = {};
             const previousBalances = JSON.parse(localStorage.getItem("extraAmountsCache")) || {};
             const unpaidcustomerslist = [];
+            const paidcustomerslist = [];
             const workeddays = new Set();
             for (const customerPhone in data) {
                 if (data.hasOwnProperty(customerPhone)) {
@@ -646,6 +647,11 @@
                             };
 
                         }
+                    }
+                    else {
+                        activity.workid = customerPhone;
+
+                        paidcustomerslist.push(activity);
                     }
 
 
@@ -710,6 +716,7 @@
             );
 
             localStorage.setItem("unpaidCustomerslistdata", JSON.stringify(unpaidcustomerslist));
+            localStorage.setItem("paidCustomerslistdata", JSON.stringify(paidcustomerslist));
             for (let name in unpaidCustomers) {
 
                 // check if previous balance exists
@@ -745,7 +752,8 @@
             <th>Customer Name</th>
             <th>Date</th>
             <th>Days Completed</th>
-            <th>Overview</th>
+            <th>UnPaid Data</th>
+            <th>Paid Data</th>
             <th>Previous Balance</th>
             <th>Total JCB Price</th>
             <th>Remaining JCB Price</th>
@@ -781,10 +789,10 @@
                 <td>${data.Date}</td>
                 <td>${months}Months ${days}Days</td>
                 <td>
-  <button 
-    onclick="openPopup6('${name}', ${previous})" 
+  <button
+    onclick="openPopup6('${name}', ${previous}, 'UNPAID')"
     style="
-      background-color:#007bff;
+      background-color:#dc3545;
       color:white;
       border:none;
       padding:8px 14px;
@@ -792,12 +800,27 @@
       cursor:pointer;
       font-size:14px;
       font-weight:500;
-      transition:0.3s;
     "
-    onmouseover="this.style.backgroundColor='#0056b3'"
-    onmouseout="this.style.backgroundColor='#007bff'"
   >
-    View Data
+    Unpaid Data
+  </button>
+   </td>
+    <td>
+  <button
+    onclick="openPopup6('${name}', ${previous}, 'PAID')"
+    style="
+      background-color:#28a745;
+      color:white;
+      border:none;
+      padding:8px 14px;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:500;
+      margin-left:5px;
+    "
+  >
+    Paid Data
   </button>
 </td>
                 <td>${previous}</td>
@@ -813,7 +836,7 @@
                 // TOTAL ROW
                 tableHTML += `
         <tr style="font-weight:bold;background:#f2f2f2;">
-            <td colspan=4>Total</td>
+            <td colspan=5>Total</td>
             <td>${totalPrev}</td>
             <td>${totalJcb}</td>
             <td>${totalRemJcb}</td>
@@ -3258,7 +3281,7 @@ ${tableHTML}
             document.getElementById("myModal8").style.display = "flex";
         }
 
-        async function openPopup6(name, previousBalance) {
+        async function openPopup6(name, previousBalance, flag) {
 
             try {
 
@@ -3270,12 +3293,6 @@ ${tableHTML}
                 // Loading
                 // =========================================
 
-                //         document.getElementById("overviewtablemain").innerHTML = `
-                //     <div class="loading-box">
-                //         <div class="loader"></div>
-                //         <p>Data is loading, please wait...</p>
-                //     </div>
-                // `;
                 document.getElementById("overviewtablemain").innerHTML = `
         <div class="loading-box">
             <div class="loader"></div>
@@ -3290,17 +3307,23 @@ ${tableHTML}
                 // =========================================
                 // Fetch Data
                 // =========================================
-
-                const data =
-                    JSON.parse(
+                let data = "";
+                if (flag === "UNPAID") {
+                    data = JSON.parse(
                         localStorage.getItem("unpaidCustomerslistdata")
                     ) || {};
+                } else if (flag === "PAID") {
+                    data = JSON.parse(
+                        localStorage.getItem("paidCustomerslistdata")
+                    ) || {};
+                }
 
                 let rows = "";
 
                 let count = 1;
 
                 let totalUnpaid = 0;
+                let totalPaid = 0;
 
                 // =========================================
                 // Loop Data
@@ -3371,7 +3394,7 @@ ${tableHTML}
                             return result;
                         }
 
-                        return str.replace(/\n/g, "<br>");
+                        return str ? str.replace(/\n/g, "<br>") : "";
                     }
 
                     let HoursDrivers =
@@ -3389,6 +3412,8 @@ ${tableHTML}
 
                     if (activity.Payment !== "Paid") {
                         totalUnpaid += totalAmount;
+                    } else {
+                        totalPaid += totalAmount;
                     }
 
                     // =========================================
@@ -3795,7 +3820,7 @@ ${tableHTML}
                 </td>
 
                 <td>
-                    ${nameDateMap[name].size || 0}
+${nameDateMap[name] ? nameDateMap[name].size : 0}
                 </td>
 
             </tr>
@@ -3913,7 +3938,7 @@ ${tableHTML}
             if (
                 e.target.classList.contains("payment-btn")
             ) {
-
+                
                 let btn = e.target;
 
                 let customerName =
@@ -3959,11 +3984,6 @@ ${tableHTML}
                             newStatus;
                     }
                 }
-
-                // localStorage.setItem(
-                //     "unpaidCustomerslistdata",
-                //     JSON.stringify(data)
-                // );
 
                 // =====================================
                 // BUTTON UI

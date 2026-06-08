@@ -162,9 +162,11 @@ document.addEventListener("click", async function (e1) {
             }
         }
         // When the user clicks the button, open the modal 
-        btn.onclick = function () {
-            modal.style.display = "block";
-        }
+        btn.onclick = function (e1) {
+            if (e1.target && e1.target.className === "payment-edit-btn") {
+                modal.style.display = "block";
+            }
+        };
 
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
