@@ -35,6 +35,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
         import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
         import DBConstants from './DatabaseConstants.js';
+        
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "tractor-driver-data.firebaseapp.com",
@@ -47,6 +48,19 @@
         async function loadAllExtraAmountsOnce() {
             const app = initializeApp(firebaseConfig);
             const db = getDatabase(app);
+            const connectedRef = ref(db, ".info/connected");
+
+            onValue(connectedRef, (snap) => {
+                const connected = snap.val();
+
+                if (connected === true) {
+                    document.getElementById("connectionPopup").style.display = "none";
+                    console.log("Firebase Connected");
+                } else {
+                    document.getElementById("connectionPopup").style.display = "flex";
+                    console.log("Firebase Disconnected");
+                }
+            });
             const customersRef = ref(db, DBConstants.CustomersAmount);
 
             try {
@@ -3120,6 +3134,15 @@ ${tableHTML}
         </div>
     </div>
 
+    <div id="connectionPopup" class="connection-popup">
+    <div class="popup-box">
+        <h3>⚠ Connection Lost</h3>
+        <button onclick="retryConnection()">
+            Retry
+        </button>
+    </div>
+</div>
+
     <marquee behavior="scroll" direction="left" scrollamount="10">
         <img src="jcb.png" height="500px" width="500px" id="jcb">
     </marquee>
@@ -3938,7 +3961,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             if (
                 e.target.classList.contains("payment-btn")
             ) {
-                
+
                 let btn = e.target;
 
                 let customerName =
@@ -4945,6 +4968,16 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             }
 
         }
+
+        function retryConnection() {
+
+    if (navigator.onLine) {
+        location.reload();
+    } else {
+        alert("Internet connection is still unavailable.");
+    }
+
+}
 
 
 
