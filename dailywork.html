@@ -1781,8 +1781,9 @@ ${tableHTML}
 
                                     <input type="text" id="pay7" name="payid" placeholder="Payment Status" readonly
                                         required>
-                                    <input type="text" id="desc7" name="desc" placeholder="Description" required
-                                        onchange="formatCustomerNames(this.value,'desc7')">
+                                    <textarea id="desc7" name="desc" placeholder="Description" rows="20" cols="30"
+                                        required onchange="formatCustomerNames(this.value,'desc7')">
+</textarea>
 
 
                                     <select id="worktype7" required onchange="addflow7()">
@@ -2549,8 +2550,9 @@ ${tableHTML}
             <input type="tel" id="dis" name="dis" placeholder="Enter Disel Amount" required>
             <input type="text" id="wid" name="wid" placeholder="Work Id" required readonly>
             <input type="text" id="beta" name="beta" placeholder="Driver Beta" onchange="timecal()">
-            <input type="text" id="desc" name="desc" placeholder="Description" required
+            <textarea id="desc" name="desc" placeholder="Description" rows="10" cols="53"  required
                 onchange="formatCustomerNames(this.value,'desc')">
+</textarea>
             <select id="worktype" required onchange="addflow()">
                 <option hidden>select Work Type</option>
                 <option>Hours</option>
@@ -3089,8 +3091,9 @@ ${tableHTML}
                                 <input type="text" id="alltrprate" name="alltrprate" placeholder="Total Trip Price"
                                     required value="0">
                             </div>
-                            <input type="text" id="desc" name="desc" placeholder="Description" required
-                                onchange="formatCustomerNames(this.value,'desc7')">
+                            <textarea id="desc" name="desc" placeholder="Description" rows="10" cols="30" required
+                                onchange="formatCustomerNames(this.value,'desc')">
+</textarea>
                             <input type="time" id="stime" name="stime" placeholder="Starting Time" onchange="timecal()"
                                 required>
                             <input type="time" id="etime" name="etime" placeholder="Ending Time" onchange="timecal()"
@@ -3540,6 +3543,9 @@ ${tableHTML}
                     // =========================================
 
                     function formatDrivers(customerNames, driverData) {
+                        if (customerNames === "--") {
+                            customerNames = "Actual Owner"
+                        }
 
                         function isInvalid(value) {
                             return (
@@ -5246,8 +5252,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         }
 
-        function formatCustomerNames(customerNames, targetId) {
-            alert("Formatting customer names: " + customerNames);
+       function formatCustomerNames(customerNames, targetId) {
 
     if (
         customerNames === undefined ||
@@ -5269,14 +5274,18 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             return;
         }
 
-        // Already mapped
+        // If already mapped, don't add mapping again
         if (name.includes("→")) {
-            result += name.endsWith(",") ? name + "\n" : name + ",\n";
+
+            result += name.endsWith(",")
+                ? name + "\n\n"
+                : name + ",\n\n";
+
         } else {
 
-            const alphabet = String.fromCharCode(65 + index);
+            const alphabet = String.fromCharCode(65 + index); // A,B,C,D...
 
-            result += `${name} → ${alphabet},\n`;
+            result += `${name} → ${alphabet},\n\n`;
         }
     });
 
