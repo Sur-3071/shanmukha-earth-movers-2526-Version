@@ -1351,7 +1351,7 @@ ${tableHTML}
                         y: {
                             beginAtZero: true,
                             min: 0,
-                            max: 350000,
+                            max: 500000,
                             ticks: {
                                 stepSize: 25000
                             }
@@ -1525,14 +1525,6 @@ ${tableHTML}
             📊 Business Operations Dashboard
         </h2>
     </div>
-    <!-- <div id="cho">
-        <input type="button" value="Add Customer" id="addcus" class="confet" onclick="remainingbuttons()">
-        <input type="button" value="Add Work" id="addwork" class="confet" onclick="remainingbuttons()">
-        <input type="button" value="Work analysis" id="analytics" class="confet" onclick="remainingbuttons1()">
-        <input type="button" value="Add Customer Amount" id="addcusamt" class="confet" onclick="remainingbuttons()">
-        <input type="button" value="Customer Data" id="cusdta" class="confet" onclick="showCustomerData()">
-        <input type="button" value="Customer Bill" id="cusbill" class="confet" onclick="showCustomerBill()">
-    </div> -->
     <div id="cho">
 
         <button id="addcus" class="confet" onclick="remainingbuttons()">
@@ -1789,6 +1781,9 @@ ${tableHTML}
 
                                     <input type="text" id="pay7" name="payid" placeholder="Payment Status" readonly
                                         required>
+                                    <input type="text" id="desc7" name="desc" placeholder="Description" required
+                                        onchange="formatCustomerNames(this.value,'desc7')">
+
 
                                     <select id="worktype7" required onchange="addflow7()">
 
@@ -1856,9 +1851,6 @@ ${tableHTML}
                                                 placeholder="Total Trip Price" required value="0">
 
                                         </div>
-
-                                        <input type="text" id="desc7" name="desc" placeholder="Description" required>
-
                                         <input type="time" id="stime7" name="stime" onchange="timecal7()" required>
 
                                         <input type="time" id="etime7" name="etime" onchange="timecal7()" required>
@@ -2557,7 +2549,8 @@ ${tableHTML}
             <input type="tel" id="dis" name="dis" placeholder="Enter Disel Amount" required>
             <input type="text" id="wid" name="wid" placeholder="Work Id" required readonly>
             <input type="text" id="beta" name="beta" placeholder="Driver Beta" onchange="timecal()">
-            <input type="text" id="desc" name="desc" placeholder="Description" required>
+            <input type="text" id="desc" name="desc" placeholder="Description" required
+                onchange="formatCustomerNames(this.value,'desc')">
             <select id="worktype" required onchange="addflow()">
                 <option hidden>select Work Type</option>
                 <option>Hours</option>
@@ -3096,7 +3089,8 @@ ${tableHTML}
                                 <input type="text" id="alltrprate" name="alltrprate" placeholder="Total Trip Price"
                                     required value="0">
                             </div>
-                            <input type="text" id="desc" name="desc" placeholder="Description" required>
+                            <input type="text" id="desc" name="desc" placeholder="Description" required
+                                onchange="formatCustomerNames(this.value,'desc7')">
                             <input type="time" id="stime" name="stime" placeholder="Starting Time" onchange="timecal()"
                                 required>
                             <input type="time" id="etime" name="etime" placeholder="Ending Time" onchange="timecal()"
@@ -3545,56 +3539,159 @@ ${tableHTML}
                     // DRIVER FORMATTING
                     // =========================================
 
-                    function formatDrivers(str) {
+                    function formatDrivers(customerNames, driverData) {
 
-                        if (
-                            str === undefined ||
-                            str === null ||
-                            str === "undefined" ||
-                            str === "--"
-                        ) {
+                        function isInvalid(value) {
+                            return (
+                                value === undefined ||
+                                value === null ||
+                                value.toString().trim() === "" ||
+                                value.toString().trim().toLowerCase() === "undefined" ||
+                                value.toString().trim().toLowerCase() === "null" ||
+                                value.toString().trim() === "--"
+                            );
+                        }
+
+                        if (isInvalid(customerNames) || isInvalid(driverData)) {
                             return "--";
                         }
 
-                        let count = 0;
+                        // Customer Mapping
+                        const customerMap = {};
 
-                        for (let i = 0; i < str.length; i++) {
+                        customerNames.split(",").forEach((item, index) => {
 
-                            if (str[i] === "=") {
-                                count++;
-                            }
-                        }
+                            const key = String.fromCharCode(65 + index); // A,B,C,D...
 
-                        if (count > 1) {
+                            customerMap[key] = item.trim();
+                        });
 
-                            let arr =
-                                str.split(" ").filter(Boolean);
+                        // Driver Grouping
+                        const driverMap = {};
 
-                            let result = "";
+                        driverData.trim().split("\n").forEach(line => {
 
-                            for (let i = 0; i < arr.length; i += 3) {
+                            line = line.trim();
 
-                                if (arr[i] && arr[i + 2]) {
-
-                                    result +=
-                                        arr[i] +
-                                        " = " +
-                                        arr[i + 2] +
-                                        "<br>";
-                                }
+                            if (!line || !line.includes("=")) {
+                                return;
                             }
 
-                            return result;
-                        }
+                            const [left, value] = line.split("=");
 
-                        return str ? str.replace(/\n/g, "<br>") : "";
+                            const parts = left.trim().split("_");
+
+                            const customerCode = parts.pop(); // A/B/C/D
+
+                            const driverName = parts.join(" ");
+
+                            if (!driverMap[driverName]) {
+                                driverMap[driverName] = [];
+                            }
+
+                            driverMap[driverName].push({
+                                customer: customerMap[customerCode] || customerCode,
+                                trips: parseInt(value.trim()) || 0
+                            });
+                        });
+
+                        let html = "";
+
+                        Object.keys(driverMap).forEach(driver => {
+
+                            let total = 0;
+
+                            html += `
+        <div style="
+            border:1px solid #ddd;
+            border-radius:10px;
+            margin-bottom:15px;
+            overflow:hidden;
+            background:#fff;
+        ">
+            <div style="
+                background:#007bff;
+                color:white;
+                padding:10px;
+                font-size:16px;
+                font-weight:bold;
+            ">
+                ${driver}
+            </div>
+
+            <table style="
+                width:100%;
+                border-collapse:collapse;
+            ">
+                <thead>
+                    <tr style="background:#f5f5f5;">
+                        <th style="padding:8px;text-align:left;">
+                            Customer Name
+                        </th>
+                        <th style="padding:8px;text-align:right;">
+                            Trips
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+                            driverMap[driver].forEach(item => {
+
+                                total += item.trips;
+
+                                html += `
+                <tr>
+                    <td style="
+                        padding:8px;
+                        border-bottom:1px solid #eee;
+                    ">
+                        ${item.customer}
+                    </td>
+
+                    <td style="
+                        padding:8px;
+                        text-align:right;
+                        border-bottom:1px solid #eee;
+                    ">
+                        <b>${item.trips}</b>
+                    </td>
+                </tr>
+            `;
+                            });
+
+                            html += `
+                <tr style="background:#f8f8f8;">
+                    <td style="
+                        padding:8px;
+                        font-weight:bold;
+                        color:green;
+                    ">
+                        Total
+                    </td>
+
+                    <td style="
+                        padding:8px;
+                        text-align:right;
+                        font-weight:bold;
+                        color:green;
+                    ">
+                        ${total}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        `;
+                        });
+
+                        return html;
                     }
-
                     let HoursDrivers =
-                        formatDrivers(activity.HoursDrivers);
+                        formatDrivers(activity.Description, activity.HoursDrivers);
 
                     let LDrivers =
-                        formatDrivers(activity.Drivers);
+                        formatDrivers(activity.Description, activity.Drivers);
 
                     // =========================================
                     // TOTAL AMOUNT
@@ -5148,6 +5245,43 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             }
 
         }
+
+        function formatCustomerNames(customerNames, targetId) {
+            alert("Formatting customer names: " + customerNames);
+
+    if (
+        customerNames === undefined ||
+        customerNames === null ||
+        customerNames.toString().trim() === "" ||
+        customerNames.toString().trim() === "--"
+    ) {
+        document.getElementById(targetId).value = "";
+        return;
+    }
+
+    let result = "";
+
+    customerNames.split(",").forEach((name, index) => {
+
+        name = name.trim();
+
+        if (!name) {
+            return;
+        }
+
+        // Already mapped
+        if (name.includes("→")) {
+            result += name.endsWith(",") ? name + "\n" : name + ",\n";
+        } else {
+
+            const alphabet = String.fromCharCode(65 + index);
+
+            result += `${name} → ${alphabet},\n`;
+        }
+    });
+
+    document.getElementById(targetId).value = result.trim();
+}
 
     </script>
 

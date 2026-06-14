@@ -143,7 +143,4 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
             alert("Please Enter Customer Name Or place Or Location Name");
         }
     }
-    else {
-        alert("Please Choose Date");
-    }
 });

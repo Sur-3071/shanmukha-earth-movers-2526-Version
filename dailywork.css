@@ -1195,8 +1195,8 @@ input[type="checkbox"] {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    max-width: 350px; /* Reduced from 400px */
+    width: 1000%;
+    max-width: 650px; /* Reduced from 400px */
     margin-bottom: 10px; /* Reduced from 20px */
     padding-bottom: 50px; /* Reduced from 150px */
     margin-left: 260px;
@@ -1324,17 +1324,17 @@ h2 {
 }
 
 /* FORM CONTAINER */
-#formContainer2{
+/* #formContainer2{
     width:100%;
     padding:10px;
-}
+} */
 
 /* FORM */
-#userForm{
+/* #userForm{
     display:flex;
     flex-direction:column;
     gap:14px;
-}
+} */
 
 /* INPUTS */
 #userForm input,
@@ -1646,9 +1646,8 @@ h2 {
 
 .modal-content{
 
-    width:95%;
-
-    max-width:620px;
+    width: 95% !important;
+    max-width: 1400px !important;
 
     padding:25px;
 
@@ -1662,7 +1661,7 @@ h2 {
 
 #formContainer2{
     width:100%;
-    max-width:420px;
+    /* max-width:420px; */
     margin:auto;
     padding:10px;
 }
@@ -1670,17 +1669,16 @@ h2 {
 /* FORM */
 
 #userForm{
-    display:flex;
-    flex-direction:column;
-    gap:14px;
+    display:flex !important;
+    flex-direction:column !important;
+    gap:14px !important;
 
-    background:#fff;
+    width:1400% !important;   /* Increase as needed */
 
-    padding:20px;
-
-    border-radius:14px;
-
-    box-shadow:0 6px 16px rgba(0,0,0,.12);
+    background:#fff !important;
+    padding:20px !important;
+    border-radius:14px !important;
+    box-shadow:0 6px 16px rgba(0,0,0,.12) !important;
 }
 
 /* INPUTS */
@@ -2300,13 +2298,13 @@ table {
     transform: none; /* Removed scaling for better readability */
     width: 100%;
 }
-#userForm {
+/* #userForm {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-}
+} */
 
 #userForm7 {
     background-color: #ffffff;

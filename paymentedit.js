@@ -95,6 +95,7 @@ document.addEventListener("click", async function (e1) {
         document.getElementById("dis7").value = Disel;
 
         document.getElementById("con7").value = Contract;
+        // alert(desc);
 
         document.getElementById("desc7").value = desc;
 
