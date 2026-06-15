@@ -44,6 +44,20 @@
             messagingSenderId: "688935767962",
             appId: "1:688935767962:web:d3d8d7569fd2470dfef423"
         };
+document.getElementsByClassName("expense-banner")[0].innerHTML = `
+    🚜 Daily Expense:
+    Maintenance ₹${DBConstants.MAINTENANCE} |
+    JCB EMI ₹${DBConstants.JCB_EMI} |
+    Home ₹${DBConstants.HOME} |
+    Operator ₹${DBConstants.OPERATOR}
+    👉 Total: ₹${
+        DBConstants.MAINTENANCE +
+        DBConstants.JCB_EMI +
+        DBConstants.HOME +
+        DBConstants.OPERATOR
+    } / day
+`;
+
         const app1 = initializeApp(firebaseConfig);
         const db = getDatabase(app1);
         const connectedRef = ref(db, ".info/connected");
@@ -897,147 +911,9 @@
 
             localStorage.setItem("unpaidCustomerslistdata", JSON.stringify(unpaidcustomerslist));
             localStorage.setItem("paidCustomerslistdata", JSON.stringify(paidcustomerslist));
-            for (let name in unpaidCustomers) {
+            renderUnpaidTable();
 
-                // check if previous balance exists
-                if (previousBalances[name]) {
-                    unpaidCustomers[name].previousBalance = previousBalances[name];
-                } else {
-                    unpaidCustomers[name].previousBalance = 0;
-                }
 
-            }
-            // console.log(unpaidCustomers);
-            const sortedCustomers = Object.keys(unpaidCustomers)
-                .sort((a, b) => a.localeCompare(b))
-                .reduce((obj, key) => {
-                    obj[key] = unpaidCustomers[key];
-                    return obj;
-                }, {});
-
-            setTimeout(function () {
-
-                const container = document.getElementById("recoverytablemain");
-
-                let totalPrev = 0;
-                let totalJcb = 0;
-                let totalRemJcb = 0;
-                let totalOverall = 0;
-                let totalRemOverall = 0;
-
-                let tableHTML = `
-    <table border="1" id="unpaidTable" style="border-collapse:collapse; width:100%; text-align:center; font-size:18px; font-family:bold, sans-serif;">
-        <thead>
-           <tr>
-            <th>Customer Name</th>
-            <th>Date</th>
-            <th>Days Completed</th>
-            <th>UnPaid Data</th>
-            <th>Paid Data</th>
-            <th>Previous Balance</th>
-            <th>Total JCB Price</th>
-            <th>Remaining JCB Price</th>
-            <th>Total Overall Price</th>
-            <th>Remaining Overall Price</th>
-</tr>
-        </thead>
-        <tbody>
-    `;
-                for (let name in sortedCustomers) {
-
-                    const data = sortedCustomers[name];
-                    // console.log(name, data+" is the data");
-                    const previous = (data.previousBalance > 0 ? data.previousBalance : 0) || 0;
-                    const jcb = (data.jcbPrice > 0 ? data.jcbPrice : 0) || 0;
-                    const overall = (data.overallPrice > 0 ? data.overallPrice : 0) || 0;
-
-                    const remainingJcb = (jcb - previous) > 0 ? (jcb - previous) : 0;
-                    const remainingOverall = (overall - previous) > 0 ? (overall - previous) : 0;
-
-                    // accumulate totals
-                    totalPrev += previous;
-                    totalJcb += jcb;
-                    totalRemJcb += remainingJcb;
-                    totalOverall += overall;
-                    totalRemOverall += remainingOverall;
-                    let months = Math.floor(data.daysPassed / 30);
-                    let days = data.daysPassed % 30;
-
-                    tableHTML += `
-            <tr>
-                <td>${name}</td>
-                <td>${data.Date}</td>
-                <td>${months}Months ${days}Days</td>
-                <td>
-  <button
-    onclick="openPopup6('${name}', ${previous}, 'UNPAID')"
-    style="
-      background-color:#dc3545;
-      color:white;
-      border:none;
-      padding:8px 14px;
-      border-radius:6px;
-      cursor:pointer;
-      font-size:14px;
-      font-weight:500;
-    "
-  >
-    Unpaid Data
-  </button>
-   </td>
-    <td>
-  <button
-    onclick="openPopup6('${name}', ${previous}, 'PAID')"
-    style="
-      background-color:#28a745;
-      color:white;
-      border:none;
-      padding:8px 14px;
-      border-radius:6px;
-      cursor:pointer;
-      font-size:14px;
-      font-weight:500;
-      margin-left:5px;
-    "
-  >
-    Paid Data
-  </button>
-</td>
-                <td>${previous}</td>
-                <td>${jcb}</td>
-                <td>${remainingJcb}</td>
-                <td>${overall}</td>
-  <td>${remainingOverall}</td>
-</td>
-            </tr>
-        `;
-                }
-
-                // TOTAL ROW
-                tableHTML += `
-        <tr style="font-weight:bold;background:#f2f2f2;">
-            <td colspan=5>Total</td>
-            <td>${totalPrev}</td>
-            <td>${totalJcb}</td>
-            <td>${totalRemJcb}</td>
-            <td>${totalOverall}</td>
-            <td>${totalRemOverall}</td>
-        </tr>
-    `;
-
-                tableHTML += `
-        </tbody>
-    </table>
-    `;
-
-                container.innerHTML = `
-<h2 class="table-heading">Unpaid Customers</h2>
-${tableHTML}
-`;
-
-                // console.log(unpaidCustomer);
-
-            }, 8000);
 
             const currenttoday = new Date();
             const currentYear = currenttoday.getFullYear();
@@ -1393,7 +1269,6 @@ ${tableHTML}
             var homeexp = 20000;
             var imprhrs = parseInt((((365 * 8000) - totalwork) / (remin)) / 1000)
             var impmin = parseInt((((((365 * 8000) - totalwork) / (remin)) / 1000) - imprhrs) * 60)
-            //3700 is the average cost per day (400 for maintains + 1800  for jcb emi and 665 is the home expenses and 835 for jcb operator salary
             proft = totalwork - (differenceInDays * 3700) - oila;
             // console.log(totalwork, workday, differenceInDays, oila, proft);
 
@@ -1478,7 +1353,7 @@ ${tableHTML}
                     workedDays += worked[i];
                     holidays += holiday[i];
                 });
-                const maintaince = actualDays * 400;
+                const maintaince = actualDays * DBConstants.MAINTENANCE;
                 profitSum = (income) - (salary + jcbemi + maintaince + home + oilUsed);
 
                 return {
@@ -1610,7 +1485,7 @@ ${tableHTML}
                 <h2 style="color: rgb(37, 188, 230);">Total Profit</h2>
                 <h1 id="proft"></h1>
             </div>
-            <div class="box" onclick="openPopup5()">
+            <div class="box" id="recoveryamount" onclick="openPopup5()">
                 <h2 style="color: rgb(75, 166, 236);">Recovery Amount</h2>
                 <h1 id="perdayhrs"></h1>
             </div>
@@ -2419,7 +2294,7 @@ ${tableHTML}
                         const totaldays = d.totalDays || 0;
                         const salary = Actualdays * 835;
                         const jcbemi = Actualdays * 1800;
-                        const maintaince = Actualdays * 400;
+                        const maintaince = Actualdays * 400
                         const home = Actualdays * 665;
                         const profit = income - diseloil - salary - jcbemi - maintaince - home;
                         const profitType = profit >= 0 ? "profit" : "loss";
@@ -2550,7 +2425,7 @@ ${tableHTML}
             <input type="tel" id="dis" name="dis" placeholder="Enter Disel Amount" required>
             <input type="text" id="wid" name="wid" placeholder="Work Id" required readonly>
             <input type="text" id="beta" name="beta" placeholder="Driver Beta" onchange="timecal()">
-            <textarea id="desc" name="desc" placeholder="Description" rows="10" cols="53"  required
+            <textarea id="desc" name="desc" placeholder="Description" rows="10" cols="53" required
                 onchange="formatCustomerNames(this.value,'desc')">
 </textarea>
             <select id="worktype" required onchange="addflow()">
@@ -3313,14 +3188,7 @@ ${tableHTML}
     <marquee behavior="scroll" direction="left" scrollamount="10">
         <img src="jcb.png" height="500px" width="500px" id="jcb">
     </marquee>
-    <div class="expense-banner">
-        🚜 Daily Expense:
-        Maintenance ₹400 |
-        JCB EMI ₹1800 |
-        Home ₹665 |
-        Operator ₹835
-        👉 Total: ₹3700 / day
-    </div>
+    <div class="expense-banner"></div>
     </div>
     <!-- Load the main script as a module -->
     <script type="module" src="dailyworkdatabase.js"></script>
@@ -3331,7 +3199,277 @@ ${tableHTML}
     <script src="dailywork.js"></script>
     <script src="proxyurl.js"></script>
     <script>
+        function getDaysFromDate(startDate) {
 
+            const start = new Date(startDate);
+            const today = new Date();
+
+            // remove time part (important)
+            start.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+
+            const diffTime = today - start;
+
+            // +1 because you said "including start and today"
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+
+            let daysText = "-";
+
+            const months = Math.floor(diffDays / 30);
+            const days = diffDays % 30;
+
+            daysText = `${months} Months ${days} Days`;
+
+
+            return daysText;
+        }
+
+        function renderUnpaidTable() {
+
+            const container = document.getElementById("recoverytablemain");
+
+            // =========================
+            // SAFE NUMBER CONVERTER
+            // =========================
+            const toNum = (val) => {
+                const n = Number(val);
+                return isNaN(n) ? 0 : n;
+            };
+
+            // =========================
+            // LOAD DATA
+            // =========================
+            const unpaidCustomerslist =
+                JSON.parse(localStorage.getItem("unpaidCustomerslistdata")) || [];
+
+            const paidCustomerslist =
+                JSON.parse(localStorage.getItem("paidCustomerslistdata")) || [];
+
+            const extraAmountsCache =
+                JSON.parse(localStorage.getItem("extraAmountsCache")) || {};
+
+            const customerMap = {};
+
+            // =========================
+            // BUILD DATA (YOUR NEW LOGIC)
+            // =========================
+            const addRecords = (list) => {
+                list.forEach(c => {
+
+                    const name = c.Name;
+
+                    if (!customerMap[name]) {
+                        customerMap[name] = {
+                            name,
+                            Date: c.Date || "",
+                            daysPassed: getDaysFromDate(c.Date) || 0,
+
+                            previousBalance: toNum(extraAmountsCache[name] || 0),
+
+                            Totalpaidjcbprice: 0,
+                            Totalpaidoverallprice: 0,
+
+                            Totalunpaidjcbprice: 0,
+                            Totalunpaidoverallprice: 0
+                        };
+                    }
+
+                    if (c.Payment === "UnPaid") {
+
+                        customerMap[name].Totalunpaidjcbprice += toNum(c.Price || 0);
+                        customerMap[name].Totalunpaidoverallprice += toNum(c.OverallPrice || 0);
+
+                    } else if (c.Payment === "Paid") {
+
+                        customerMap[name].Totalpaidjcbprice += toNum(c.Price || 0);
+                        customerMap[name].Totalpaidoverallprice += toNum(c.OverallPrice || 0);
+                    }
+                });
+            };
+
+            // =========================
+            // APPLY BOTH LISTS
+            // =========================
+            addRecords(unpaidCustomerslist);
+            addRecords(paidCustomerslist);
+
+            // =========================
+            // CALCULATE FINAL VALUES
+            // =========================
+            Object.values(customerMap).forEach(c => {
+
+                const totalJcb = c.Totalpaidjcbprice + c.Totalunpaidjcbprice;
+                const totalOverall = c.Totalpaidoverallprice + c.Totalunpaidoverallprice;
+
+                const prev = c.previousBalance;
+
+                // Remaining after previous balance
+                c.jcbRemaining = Math.max(totalJcb - prev - c.Totalpaidjcbprice, 0);
+                c.overallRemaining = Math.max(totalOverall - prev - c.Totalpaidoverallprice, 0);
+
+                c.jcbTotal = totalJcb;
+                c.overallTotal = totalOverall;
+
+                c.paidAmount = prev;
+            });
+
+            // =========================
+            // SPLIT GROUPS
+            // =========================
+            const unpaidList = [];
+            const paidList = [];
+
+            Object.values(customerMap).forEach(c => {
+
+                if (c.jcbRemaining > 0 || c.overallRemaining > 0) {
+                    unpaidList.push(c);
+                } else {
+                    paidList.push(c);
+                }
+            });
+
+            // =========================
+            // SORT A → Z
+            // =========================
+            unpaidList.sort((a, b) => a.name.localeCompare(b.name));
+            paidList.sort((a, b) => a.name.localeCompare(b.name));
+
+            // =========================
+            // TOTALS
+            // =========================
+            let totalJcb = 0;
+            let totalJcbRem = 0;
+            let totalOverall = 0;
+            let totalOverallRem = 0;
+
+            // =========================
+            // TABLE START
+            // =========================
+            let tableHTML = `
+        <table border="1" style="border-collapse:collapse;width:100%;text-align:center;font-size:16px;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Days</th>
+                <th>Unpaid</th>
+                <th>Paid</th>
+                <th>Previous Balance</th>
+                <th>JCB Total</th>
+                <th>JCB Remaining</th>
+                <th>Overall Total</th>
+                <th>Overall Remaining</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+
+            // =========================
+            // ROW RENDER
+            // =========================
+            const renderRow = (c) => {
+
+                totalJcb += c.jcbTotal;
+                totalJcbRem += c.jcbRemaining;
+                totalOverall += c.overallTotal;
+                totalOverallRem += c.overallRemaining;
+
+                const unpaid = c.jcbRemaining;
+                const paid = c.paidAmount;
+
+                let status = "";
+
+                if (c.jcbRemaining === 0 && c.overallRemaining === 0) {
+                    status = "🥇 GOLDEN Customer";
+                } else {
+                    status = "🔴 PENDING";
+                }
+                tableHTML += `
+<tr>
+    <td>${c.name}</td>
+    <td>${c.Date}</td>
+    <td>${status === "🔴 PENDING" ? c.daysPassed : "---"}</td>
+<td>
+<button
+id="UnPaid-${c.name}"
+    onclick="openPopup6('${c.name}', ${c.previousBalance || 0}, 'UNPAID')"
+    style="
+        background:#dc3545;
+        color:white;
+        padding:6px 14px;
+        border:none;
+        border-radius:5px;
+        white-space:nowrap;
+        width:max-content;
+        display:inline-block;
+    ">
+    Unpaid Data View
+</button>
+                </td>
+                    <td>
+                            <button
+                            id="Paid-${c.name}"
+                onclick="openPopup6('${c.name}', ${c.previousBalance || 0}, 'PAID')"
+                style="
+                    background:#28a745;
+                    color:white;
+                    padding:6px 12px;
+                    border:none;
+                    border-radius:5px;
+                    white-space:nowrap;
+                    width:max-content;
+                ">
+                Paid Data View
+            </button>
+                </td>
+
+                <td>${c.previousBalance}</td>
+                <td>${c.jcbTotal}</td>
+                <td class="blink">${c.jcbRemaining}</td>
+                <td>${c.overallTotal}</td>
+                <td class="blink">${c.overallRemaining}</td>
+                <td>${status}</td>
+            </tr>
+        `;
+            };
+
+            // =========================
+            // ORDER: UNPAID FIRST
+            // =========================
+            unpaidList.forEach(renderRow);
+
+            // =========================
+            // ORDER: PAID LAST
+            // =========================
+            paidList.forEach(renderRow);
+
+            // =========================
+            // TOTAL ROW
+            // =========================
+            tableHTML += `
+        <tr style="font-weight:bold;background:#f2f2f2;">
+            <td colspan="5">TOTAL</td>
+            <td></td>
+            <td>${totalJcb}</td>
+            <td>${totalJcbRem}</td>
+            <td>${totalOverall}</td>
+            <td>${totalOverallRem}</td>
+            <td></td>
+        </tr>
+    `;
+
+            tableHTML += `</tbody></table>`;
+
+            // =========================
+            // RENDER
+            // =========================
+            container.innerHTML = `
+        <h2 class="table-heading">Customer Billing Dashboard</h2>
+        ${tableHTML}
+    `;
+        }
         function checkInternetConnection() {
             const popup = document.getElementById("internetPopup");
 
@@ -3464,6 +3602,7 @@ ${tableHTML}
             document.getElementById("myModal4").style.display = "flex";
         }
         async function openPopup5() {
+            renderUnpaidTable();
             document.getElementById("myModal5").style.display = "flex";
         }
 
@@ -3484,14 +3623,14 @@ ${tableHTML}
                 // =========================================
 
                 document.getElementById("overviewtablemain").innerHTML = `
-        <div class="loading-box">
-            <div class="loader"></div>
+                <div class="loading-box">
+                    <div class="loader"></div>
 
-            <p class="loading-text">
-                Data is loading, please wait...
-            </p>
-        </div>
-    `;
+                    <p class="loading-text">
+                        Data is loading, please wait...
+                    </p>
+                </div>
+            `;
                 await new Promise(resolve => setTimeout(resolve, 500));
 
                 // =========================================
@@ -3981,6 +4120,8 @@ ${tableHTML}
 
                     <td>${count++}</td>
 
+                    <td>${activity.workid}</td>
+
                     <td>${formattedDate}</td>
 
                     <td>${workType}</td>
@@ -4069,7 +4210,7 @@ ${tableHTML}
                 background:#f2f2f2;
             ">
 
-                <td colspan="7">
+                <td colspan="8">
                     Current UnPaid
                 </td>
 
@@ -4083,7 +4224,7 @@ ${tableHTML}
                 font-weight:bold;
             ">
 
-                <td colspan="7">
+                <td colspan="8">
                     Previous Balance
                 </td>
 
@@ -4098,7 +4239,7 @@ ${tableHTML}
                 color:red;
             ">
 
-                <td colspan="7">
+                <td colspan="8">
                     Total Remaining
                 </td>
 
@@ -4111,7 +4252,7 @@ ${tableHTML}
                 font-weight:bold;
             ">
 
-                <td colspan="7">
+                <td colspan="8">
                     Total Number of Days Worked
                 </td>
 
@@ -4144,6 +4285,8 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
                     <tr>
 
                         <th>S.No</th>
+
+                        <th>Work Id</th>
 
                         <th>Date</th>
 
@@ -5252,45 +5395,45 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         }
 
-       function formatCustomerNames(customerNames, targetId) {
+        function formatCustomerNames(customerNames, targetId) {
 
-    if (
-        customerNames === undefined ||
-        customerNames === null ||
-        customerNames.toString().trim() === "" ||
-        customerNames.toString().trim() === "--"
-    ) {
-        document.getElementById(targetId).value = "";
-        return;
-    }
+            if (
+                customerNames === undefined ||
+                customerNames === null ||
+                customerNames.toString().trim() === "" ||
+                customerNames.toString().trim() === "--"
+            ) {
+                document.getElementById(targetId).value = "";
+                return;
+            }
 
-    let result = "";
+            let result = "";
 
-    customerNames.split(",").forEach((name, index) => {
+            customerNames.split(",").forEach((name, index) => {
 
-        name = name.trim();
+                name = name.trim();
 
-        if (!name) {
-            return;
+                if (!name) {
+                    return;
+                }
+
+                // If already mapped, don't add mapping again
+                if (name.includes("→")) {
+
+                    result += name.endsWith(",")
+                        ? name + "\n\n"
+                        : name + ",\n\n";
+
+                } else {
+
+                    const alphabet = String.fromCharCode(65 + index); // A,B,C,D...
+
+                    result += `${name} → ${alphabet},\n\n`;
+                }
+            });
+
+            document.getElementById(targetId).value = result.trim();
         }
-
-        // If already mapped, don't add mapping again
-        if (name.includes("→")) {
-
-            result += name.endsWith(",")
-                ? name + "\n\n"
-                : name + ",\n\n";
-
-        } else {
-
-            const alphabet = String.fromCharCode(65 + index); // A,B,C,D...
-
-            result += `${name} → ${alphabet},\n\n`;
-        }
-    });
-
-    document.getElementById(targetId).value = result.trim();
-}
 
     </script>
 

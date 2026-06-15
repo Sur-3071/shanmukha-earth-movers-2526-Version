@@ -402,7 +402,7 @@ function generateTable(data) {
     <td>${workday}</td>
     <td>${differenceInDays - workday}</td>
     <td>${disel}</td>
-    <td>${differenceInDays * 400}</td>
+    <td>${differenceInDays * DBConstants.MAINTENANCE}</td>
     <td>${differenceInDays * 1800}</td>
     <td>${differenceInDays * 665}</td>
     <td>${differenceInDays * 835}</td>
@@ -1091,7 +1091,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
     <td>${workday}</td>
     <td>${differenceInDays - workday}</td>
     <td>${disel}</td>
-    <td>${differenceInDays * 400}</td>
+    <td>${differenceInDays * DBConstants.MAINTENANCE}</td>
     <td>${differenceInDays * 1800}</td>
     <td>${differenceInDays * 665}</td>
     <td>${differenceInDays * 835}</td>

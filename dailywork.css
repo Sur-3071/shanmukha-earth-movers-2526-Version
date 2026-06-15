@@ -281,8 +281,8 @@ td{
   padding: 25px;
   border-radius: 12px;
   display: inline-block;   /* grow/shrink with content */
-  min-width: 900px;        /* small default */
-  max-width: 190%;          /* responsive */
+  min-width: 1100px;        /* small default */
+  max-width: 390%;          /* responsive */
   max-height: 80vh;        /* limit height to 80% of screen */
   overflow-y: auto;        /* scroll vertically if too tall */
   overflow-x: auto;        /* scroll horizontally if content too wide */
@@ -1640,6 +1640,17 @@ h2 {
     border-radius:10px;
 
     cursor:pointer;
+}
+.blink {
+    animation: blinkAnim 1s infinite;
+    font-weight: bold;
+    color: red;
+}
+
+@keyframes blinkAnim {
+    0% { opacity: 1; }
+    50% { opacity: 0.2; }
+    100% { opacity: 1; }
 }
 
 /* MODAL CONTENT */

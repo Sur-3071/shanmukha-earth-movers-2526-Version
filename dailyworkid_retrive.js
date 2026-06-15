@@ -34,189 +34,392 @@ async function selectVillage() {
     }
 }
 
+// document.addEventListener("click", async function (e) {
+
+//     const db1 = DBConstants.DailyWorkDB;
+
+//     if (
+//         e.target.classList.contains("payment-btn")
+//     ) {
+
+//         try {
+
+//             let btn = e.target;
+
+//             let customerId = btn.id;
+
+//             // =====================================
+//             // GET LOCAL STORAGE
+//             // =====================================
+
+//             let data =
+//                 JSON.parse(
+//                     localStorage.getItem(
+//                         "unpaidCustomerslistdata"
+//                     )
+//                 ) || {};
+
+//             // =====================================
+//             // FIND ACTIVITY USING workid
+//             // =====================================
+
+//             let activity = null;
+
+//             for (const key in data) {
+
+//                 if (
+//                     data[key].workid == customerId
+//                 ) {
+
+//                     activity = data[key];
+
+//                     break;
+//                 }
+//             }
+
+//             // =====================================
+//             // NOT FOUND
+//             // =====================================
+
+//             if (!activity) {
+
+//                 console.log(
+//                     "Activity not found"
+//                 );
+
+//                 return;
+//             }
+
+//             // =====================================
+//             // TOGGLE STATUS
+//             // =====================================
+
+//             let currentStatus =
+//                 activity.Payment || "UnPaid";
+
+//             let newStatus =
+//                 currentStatus === "Paid"
+//                     ? "UnPaid"
+//                     : "Paid";
+
+//             activity.Payment =
+//                 newStatus;
+
+//             // =====================================
+//             // UPDATE LOCAL STORAGE
+//             // =====================================
+
+//             // localStorage.setItem(
+//             //     "unpaidCustomerslistdata",
+//             //     JSON.stringify(data)
+//             // );
+
+//             // =====================================
+//             // FIREBASE UPDATE
+//             // =====================================
+
+//             const updatedData = {
+
+//                 Contract:
+//                     activity.Contract,
+
+//                 Date:
+//                     activity.Date,
+
+//                 Disel:
+//                     activity.Disel,
+
+//                 Ending:
+//                     activity.Ending,
+
+//                 Name:
+//                     activity.Name,
+
+//                 Payment:
+//                     newStatus,
+
+//                 PhoneNumber:
+//                     activity.PhoneNumber,
+
+//                 Price:
+//                     activity.Price,
+
+//                 Shift:
+//                     activity.Shift,
+
+//                 Starting:
+//                     activity.Starting,
+
+//                 TotalTime:
+//                     activity.TotalTime,
+
+//                 Trips:
+//                     activity.Trips,
+
+//                 Villagename:
+//                     activity.Villagename,
+
+//                 Description:
+//                     activity.Description,
+
+//                 Drivers:
+//                     activity.Drivers,
+
+//                 HoursPrice:
+//                     activity.HoursPrice,
+
+//                 TripsPrice:
+//                     activity.TripsPrice,
+
+//                 Beta:
+//                     activity.Beta || 0,
+
+//                 OverallPrice:
+//                     activity.OverallPrice,
+
+//                 HoursTrips:
+//                     activity.HoursTrips,
+
+//                 HoursTripsAmount:
+//                     activity.HoursTripsAmount,
+
+//                 HoursDrivers:
+//                     activity.HoursDrivers,
+
+//                 JcbTripPrice:
+//                     activity.JcbTripPrice
+//             };
+
+//             const transactionRef =
+//                 ref(
+//                     db2,
+//                     `${db1}/${customerId}`
+//                 );
+
+//             await set(
+//                 transactionRef,
+//                 updatedData
+//             );
+
+//             // =====================================
+//             // BUTTON UI
+//             // =====================================
+
+//             btn.innerText =
+//                 newStatus;
+
+//             btn.style.backgroundColor =
+//                 newStatus === "Paid"
+//                     ? "green"
+//                     : "red";
+
+
+//                     document.getElementById("paymentSuccessPopup5").style.display = "flex";
+//                     // document.getElementById("done").style.display = "block";
+//                     setTimeout(() => {
+//                         document.getElementById("paymentSuccessPopup5").style.display = "none";
+//                     }, 1500);
+
+//                     // let newPaymentStatus = updatedCustomer.paymentStatus;
+
+//                     let unpaidCustomerslistdata =
+//                         JSON.parse(localStorage.getItem("unpaidCustomerslistdata")) || [];
+
+//                     let paidCustomerslistdata =
+//                         JSON.parse(localStorage.getItem("paidCustomerslistdata")) || [];
+
+//                     // Remove customer from both lists first
+//                     unpaidCustomerslistdata =
+//                         unpaidCustomerslistdata.filter(x => x.workid !== wid);
+
+//                     paidCustomerslistdata =
+//                         paidCustomerslistdata.filter(x => x.workid !== wid);
+
+//                     // Add to correct list
+//                     if (newStatus === "Paid") {
+//                         paidCustomerslistdata.push(customerData);
+//                     } else {
+//                         unpaidCustomerslistdata.push(customerData);
+//                     }
+
+//                     localStorage.setItem(
+//                         "unpaidCustomerslistdata",
+//                         JSON.stringify(unpaidCustomerslistdata)
+//                     );
+
+//                     localStorage.setItem(
+//                         "paidCustomerslistdata",
+//                         JSON.stringify(paidCustomerslistdata)
+//                     );
+
+//                     setTimeout(() => {
+//                         document.getElementById("myModal7").style.display = "none";
+//                     }, 1500);
+
+//                     const clickablecustomerElement = document.getElementById(`UnPaid-${name}`)
+//                     setTimeout(() => {
+
+//                         closePopup5();
+//                         closePopup6();
+
+//                         const recoveryBtn = document.getElementById("recoveryamount");
+
+//                         if (recoveryBtn) {
+//                             recoveryBtn.click();
+//                         }
+
+//                         setTimeout(() => {
+
+//                             if (clickablecustomerElement) {
+//                                 clickablecustomerElement.click();
+//                             }
+
+//                         }, 300); // small delay is enough
+
+//                     }, 1500);
+
+//         } catch (error) {
+
+//             console.log(error);
+//         }
+//     }
+// });
+
 document.addEventListener("click", async function (e) {
 
     const db1 = DBConstants.DailyWorkDB;
 
-    if (
-        e.target.classList.contains("payment-btn")
-    ) {
+    if (!e.target.classList.contains("payment-btn")) return;
 
-        try {
+    try {
 
-            let btn = e.target;
+        const btn = e.target;
+        const customerId = btn.id; // workid
 
-            let customerId = btn.id;
+        // =====================================
+        // LOAD LOCAL STORAGE
+        // =====================================
 
-            // =====================================
-            // GET LOCAL STORAGE
-            // =====================================
+        let unpaidCustomerslistdata =
+            JSON.parse(localStorage.getItem("unpaidCustomerslistdata")) || [];
 
-            let data =
-                JSON.parse(
-                    localStorage.getItem(
-                        "unpaidCustomerslistdata"
-                    )
-                ) || {};
+        let paidCustomerslistdata =
+            JSON.parse(localStorage.getItem("paidCustomerslistdata")) || [];
 
-            // =====================================
-            // FIND ACTIVITY USING workid
-            // =====================================
+        // =====================================
+        // FIND CUSTOMER (FROM BOTH LISTS)
+        // =====================================
 
-            let activity = null;
+        let activity = null;
 
-            for (const key in data) {
+        for (const item of unpaidCustomerslistdata) {
+            if (item.workid == customerId) {
+                activity = item;
+                break;
+            }
+        }
 
-                if (
-                    data[key].workid == customerId
-                ) {
-
-                    activity = data[key];
-
+        if (!activity) {
+            for (const item of paidCustomerslistdata) {
+                if (item.workid == customerId) {
+                    activity = item;
                     break;
                 }
             }
-
-            // =====================================
-            // NOT FOUND
-            // =====================================
-
-            if (!activity) {
-
-                console.log(
-                    "Activity not found"
-                );
-
-                return;
-            }
-
-            // =====================================
-            // TOGGLE STATUS
-            // =====================================
-
-            let currentStatus =
-                activity.Payment || "UnPaid";
-
-            let newStatus =
-                currentStatus === "Paid"
-                    ? "UnPaid"
-                    : "Paid";
-
-            activity.Payment =
-                newStatus;
-
-            // =====================================
-            // UPDATE LOCAL STORAGE
-            // =====================================
-
-            localStorage.setItem(
-                "unpaidCustomerslistdata",
-                JSON.stringify(data)
-            );
-
-            // =====================================
-            // FIREBASE UPDATE
-            // =====================================
-
-            const updatedData = {
-
-                Contract:
-                    activity.Contract,
-
-                Date:
-                    activity.Date,
-
-                Disel:
-                    activity.Disel,
-
-                Ending:
-                    activity.Ending,
-
-                Name:
-                    activity.Name,
-
-                Payment:
-                    newStatus,
-
-                PhoneNumber:
-                    activity.PhoneNumber,
-
-                Price:
-                    activity.Price,
-
-                Shift:
-                    activity.Shift,
-
-                Starting:
-                    activity.Starting,
-
-                TotalTime:
-                    activity.TotalTime,
-
-                Trips:
-                    activity.Trips,
-
-                Villagename:
-                    activity.Villagename,
-
-                Description:
-                    activity.Description,
-
-                Drivers:
-                    activity.Drivers,
-
-                HoursPrice:
-                    activity.HoursPrice,
-
-                TripsPrice:
-                    activity.TripsPrice,
-
-                Beta:
-                    activity.Beta || 0,
-
-                OverallPrice:
-                    activity.OverallPrice,
-
-                HoursTrips:
-                    activity.HoursTrips,
-
-                HoursTripsAmount:
-                    activity.HoursTripsAmount,
-
-                HoursDrivers:
-                    activity.HoursDrivers,
-
-                JcbTripPrice:
-                    activity.JcbTripPrice
-            };
-
-            const transactionRef =
-                ref(
-                    db2,
-                    `${db1}/${customerId}`
-                );
-
-            await set(
-                transactionRef,
-                updatedData
-            );
-
-            // =====================================
-            // BUTTON UI
-            // =====================================
-
-            btn.innerText =
-                newStatus;
-
-            btn.style.backgroundColor =
-                newStatus === "Paid"
-                    ? "green"
-                    : "red";
-
-        } catch (error) {
-
-            console.log(error);
         }
+
+        if (!activity) {
+            console.log("Activity not found");
+            return;
+        }
+
+        // =====================================
+        // TOGGLE STATUS
+        // =====================================
+
+        const newStatus =
+            activity.Payment === "Paid" ? "UnPaid" : "Paid";
+
+        activity.Payment = newStatus; // KEEP workid safe here
+
+        // =====================================
+        // FIREBASE CLEAN COPY (REMOVE workid)
+        // =====================================
+
+        const activityCopy = { ...activity };
+        delete activityCopy.workid;
+
+        const updatedData = {
+            ...activityCopy,
+            Payment: newStatus
+        };
+
+        const transactionRef =
+            ref(db2, `${db1}/${customerId}`);
+
+        await set(transactionRef, updatedData);
+
+        // =====================================
+        // UPDATE LOCAL STORAGE LISTS
+        // =====================================
+
+        unpaidCustomerslistdata =
+            unpaidCustomerslistdata.filter(x => x.workid !== customerId);
+
+        paidCustomerslistdata =
+            paidCustomerslistdata.filter(x => x.workid !== customerId);
+
+        if (newStatus === "Paid") {
+            paidCustomerslistdata.push({
+                ...activity,
+                workid: customerId,
+                Payment: newStatus
+            });
+        } else {
+            unpaidCustomerslistdata.push({
+                ...activity,
+                workid: customerId,
+                Payment: newStatus
+            });
+        }
+
+        localStorage.setItem(
+            "unpaidCustomerslistdata",
+            JSON.stringify(unpaidCustomerslistdata)
+        );
+
+        localStorage.setItem(
+            "paidCustomerslistdata",
+            JSON.stringify(paidCustomerslistdata)
+        );
+
+        // =====================================
+        // UI UPDATE
+        // =====================================
+
+        btn.innerText = newStatus;
+        btn.style.backgroundColor =
+            newStatus === "Paid" ? "green" : "red";
+
+        document.getElementById("paymentSuccessPopup5").style.display = "flex";
+
+        setTimeout(() => {
+            document.getElementById("paymentSuccessPopup5").style.display = "none";
+        }, 1500);
+
+        // =====================================
+        // REFRESH TABLE
+        // =====================================
+
+        setTimeout(() => {
+
+            const recoveryBtn = document.getElementById("recoveryamount");
+            if (recoveryBtn) recoveryBtn.click();
+
+        }, 1500);
+
+    } catch (error) {
+        console.log(error);
     }
 });
 
@@ -443,11 +646,11 @@ document.addEventListener(
 
                 const db1 =
                     DBConstants
-                    .CustomersAmount_Id;
+                        .CustomersAmount_Id;
 
                 const db3 =
                     DBConstants
-                    .CustomersAmount;
+                        .CustomersAmount;
 
                 const dataRefget =
                     ref(
@@ -484,4 +687,4 @@ document.addEventListener(
                 );
             }
         }
-});
+    });

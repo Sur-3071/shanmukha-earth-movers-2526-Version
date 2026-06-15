@@ -348,6 +348,9 @@ function removereadonly7() {
         input.removeAttribute('readonly');
 
     });
+    generateOutput7();
+    generateOutput17();
+
 }
 
 
@@ -366,7 +369,7 @@ function addRow7() {
        <input type="text"
               placeholder="Driver Name"
               name="driverName7[]"
-              onchange="removereadonly7()">
+              onkeyup="removereadonly7()">
 
        <input type="number"
               placeholder="Trips"
@@ -401,7 +404,7 @@ function addRow17() {
        <input type="text"
               placeholder="Driver Name"
               name="driverName17[]"
-              onchange="removereadonly7()">
+              onkeyup="removereadonly7()">
 
        <input type="number"
               placeholder="Trips"

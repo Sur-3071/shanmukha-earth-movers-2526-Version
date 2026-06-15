@@ -436,7 +436,8 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                             Work_Id: parseInt(wid) + 1
                         });
                     }
-                    await set(dataRefset, {
+
+                    const customerData = {
                         Date: dat,
                         Name: name,
                         Villagename: villname,
@@ -460,12 +461,72 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                         Ending: etime,
                         TotalTime: ttime,
                         Price: rate
-                    });
+                    };
+                    await set(dataRefset, customerData);
+                    customerData.workid = wid;
                     document.getElementById("paymentSuccessPopup5").style.display = "flex";
                     // document.getElementById("done").style.display = "block";
                     setTimeout(() => {
                         document.getElementById("paymentSuccessPopup5").style.display = "none";
-                    }, 3000);
+                    }, 1500);
+
+                    // let newPaymentStatus = updatedCustomer.paymentStatus;
+
+                    let unpaidCustomerslistdata =
+                        JSON.parse(localStorage.getItem("unpaidCustomerslistdata")) || [];
+
+                    let paidCustomerslistdata =
+                        JSON.parse(localStorage.getItem("paidCustomerslistdata")) || [];
+
+                    // Remove customer from both lists first
+                    unpaidCustomerslistdata =
+                        unpaidCustomerslistdata.filter(x => x.workid !== wid);
+
+                    paidCustomerslistdata =
+                        paidCustomerslistdata.filter(x => x.workid !== wid);
+
+                    // Add to correct list
+                    if (customerData.Payment === "PAID") {
+                        paidCustomerslistdata.push(customerData);
+                    } else {
+                        unpaidCustomerslistdata.push(customerData);
+                    }
+
+                    localStorage.setItem(
+                        "unpaidCustomerslistdata",
+                        JSON.stringify(unpaidCustomerslistdata)
+                    );
+
+                    localStorage.setItem(
+                        "paidCustomerslistdata",
+                        JSON.stringify(paidCustomerslistdata)
+                    );
+
+                    setTimeout(() => {
+                        document.getElementById("myModal7").style.display = "none";
+                    }, 1500);
+
+                    const clickablecustomerElement = document.getElementById(`UnPaid-${name}`)
+                    setTimeout(() => {
+
+                        closePopup5();
+                        closePopup6();
+
+                        const recoveryBtn = document.getElementById("recoveryamount");
+
+                        if (recoveryBtn) {
+                            recoveryBtn.click();
+                        }
+
+                        setTimeout(() => {
+
+                            if (clickablecustomerElement) {
+                                clickablecustomerElement.click();
+                            }
+
+                        }, 300); // small delay is enough
+
+                    }, 1500);
                 } catch (error) {
                     console.error("Error adding document: ", error);
                     alert("An error occurred. Please try again.");
