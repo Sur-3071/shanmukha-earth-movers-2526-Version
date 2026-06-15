@@ -1653,6 +1653,126 @@ h2 {
     100% { opacity: 1; }
 }
 
+/* =========================
+   OVERVIEW CONTAINER
+========================= */
+#overview {
+    width: 1260px;
+    margin: 0 auto;
+    padding: 0;
+    overflow: visible;
+    box-sizing: border-box;
+}
+
+/* =========================
+   SCROLL CONTAINER
+========================= */
+#enterdata {
+    height:500px;
+    max-height: 650px;
+
+    overflow-y: auto;
+    overflow-x: auto;
+
+    margin: 0;
+    padding: 0;
+
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+
+    background: #fff;
+
+    box-sizing: border-box;
+
+    scroll-behavior: smooth;
+}
+
+/* =========================
+   TABLE
+========================= */
+#enterdata table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* =========================
+   HEADER
+========================= */
+#enterdata thead {
+    margin: 0;
+    padding: 0;
+}
+
+#enterdata th {
+    position: sticky;
+    top: 0;
+
+    background: #045f10;
+
+    z-index: 100;
+
+    margin: 0;
+    padding: 10px;
+
+    border: 1px solid #ddd;
+
+    box-sizing: border-box;
+}
+
+/* =========================
+   BODY CELLS
+========================= */
+#enterdata td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    margin: 0;
+}
+
+/* =========================
+   ROW HOVER
+========================= */
+#enterdata tbody tr:hover {
+    background: #f5f5f5;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+#enterdata::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+#enterdata::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#enterdata::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+#enterdata::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media screen and (max-width: 1300px) {
+
+    #overview {
+        width: 100%;
+    }
+
+    #enterdata {
+        width: 100%;
+    }
+}
+
 /* MODAL CONTENT */
 
 .modal-content{
