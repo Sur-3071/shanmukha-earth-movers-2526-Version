@@ -959,6 +959,7 @@ text-transform:uppercase;
 border-bottom:3px solid #1faa59;
 display:inline-block;
 padding-bottom:6px;
+margin-left:300px;
 }
 
 .loader{
@@ -1160,7 +1161,7 @@ input[type="checkbox"] {
 }
 
 .close {
-    color: #aaa;
+    color: red;
     float: right;
     font-size: 24px; /* Reduced from 28px */
     font-weight: bold;

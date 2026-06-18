@@ -3388,6 +3388,7 @@
         <table border="1" style="border-collapse:collapse;width:100%;text-align:center;font-size:16px;">
         <thead>
             <tr>
+                <th>S.No</th>
                 <th>Name</th>
                 <th>Date</th>
                 <th>Days</th>
@@ -3407,8 +3408,9 @@
             // =========================
             // ROW RENDER
             // =========================
+            var count=0;
             const renderRow = (c) => {
-
+                count++;
                 totalJcb += c.jcbTotal;
                 totalJcbRem += c.jcbRemaining;
                 totalOverall += c.overallTotal;
@@ -3420,15 +3422,16 @@
                 let status = "";
 
                 if (c.jcbRemaining === 0 && c.overallRemaining === 0) {
-                    status = "🥇 GOLDEN Customer";
+                    status = "🥇 Golden Customer";
                 } else {
-                    status = "🔴 PENDING";
+                    status = "🔴 Pending";
                 }
                 tableHTML += `
 <tr>
-    <td>${c.name}</td>
-    <td>${c.Date}</td>
-    <td>${status === "🔴 PENDING" ? c.daysPassed : "---"}</td>
+    <td>${count}</td>
+    <td style="white-space: nowrap;width: max-content;">${c.name}</td>
+    <td style="white-space: nowrap;width: max-content;">${c.Date}</td>
+    <td style="white-space: nowrap;width: max-content;">${status === "🔴 Pending" ? c.daysPassed : "---"}</td>
 <td>
 <button
 id="UnPaid-${c.name}"
@@ -3436,7 +3439,7 @@ id="UnPaid-${c.name}"
     style="
         background:#dc3545;
         color:white;
-        padding:6px 14px;
+        padding:15px 14px;
         border:none;
         border-radius:5px;
         white-space:nowrap;
@@ -3453,7 +3456,7 @@ id="UnPaid-${c.name}"
                 style="
                     background:#28a745;
                     color:white;
-                    padding:6px 12px;
+                    padding:15px 12px;
                     border:none;
                     border-radius:5px;
                     white-space:nowrap;
@@ -3468,7 +3471,7 @@ id="UnPaid-${c.name}"
                 <td class="blink">${c.jcbRemaining}</td>
                 <td>${c.overallTotal}</td>
                 <td class="blink">${c.overallRemaining}</td>
-                <td>${status}</td>
+                <td style="white-space: nowrap;width: max-content;">${status}</td>
             </tr>
         `;
             };
@@ -3488,7 +3491,7 @@ id="UnPaid-${c.name}"
             // =========================
             tableHTML += `
         <tr style="font-weight:bold;background:#f2f2f2;">
-            <td colspan="5">TOTAL</td>
+            <td colspan="6">TOTAL</td>
             <td></td>
             <td>${totalJcb}</td>
             <td>${totalJcbRem}</td>
