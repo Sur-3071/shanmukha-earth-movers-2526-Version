@@ -17,6 +17,8 @@ const db = getDatabase(app);
 
 document.getElementById('submit1').addEventListener('click', async function (e) {
     e.preventDefault();
+    showProcessingPopup();
+
     const dat = document.getElementById("dat").value;
     const wid = document.getElementById("wid").value;
     const name = document.getElementById("name").value;
@@ -141,6 +143,8 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 TotalTime: ttime,
                                 Price: rate
                             });
+                            hideProcessingPopup();
+
                             document.getElementById("paymentSuccessPopup3").style.display = "flex";
                             // document.getElementById("done").style.display = "block";
                             setTimeout(() => {
@@ -204,6 +208,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
 
 document.getElementById('submit2').addEventListener('click', async function (e) {
     e.preventDefault();
+    showProcessingPopup();
     const wid = document.getElementById("cid").value;
     const name = document.getElementById("name1").value.toUpperCase();
     const villname = document.getElementById("vil1").value.toUpperCase();
@@ -232,6 +237,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
                             Name: name,
                             Villagename: villname,
                         });
+                        hideProcessingPopup();
 
                         document.getElementById("paymentSuccessPopup4").style.display = "flex";
                         // document.getElementById("done").style.display = "block";
@@ -272,6 +278,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
 
 document.getElementById('submit3').addEventListener('click', async function (e) {
     e.preventDefault();
+    
     const dte = document.getElementById("dat1").value;
     const name = document.getElementById("name2").value;
     const wid = document.getElementById("cid1").value;
@@ -656,6 +663,7 @@ function checkcustomer(data) {
 
 
 function generateCustomerTable(data) {
+    showProcessingPopup();
     var collection = 0;
     var recovery = 0;
     let out = `<table border="1" id="customerTable1" style="border-collapse: collapse; width: 100%; text-align: center;">

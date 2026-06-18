@@ -44,18 +44,17 @@
             messagingSenderId: "688935767962",
             appId: "1:688935767962:web:d3d8d7569fd2470dfef423"
         };
-document.getElementsByClassName("expense-banner")[0].innerHTML = `
+        document.getElementsByClassName("expense-banner")[0].innerHTML = `
     🚜 Daily Expense:
     Maintenance ₹${DBConstants.MAINTENANCE} |
     JCB EMI ₹${DBConstants.JCB_EMI} |
     Home ₹${DBConstants.HOME} |
     Operator ₹${DBConstants.OPERATOR}
-    👉 Total: ₹${
-        DBConstants.MAINTENANCE +
-        DBConstants.JCB_EMI +
-        DBConstants.HOME +
-        DBConstants.OPERATOR
-    } / day
+    👉 Total: ₹${DBConstants.MAINTENANCE +
+            DBConstants.JCB_EMI +
+            DBConstants.HOME +
+            DBConstants.OPERATOR
+            } / day
 `;
 
         const app1 = initializeApp(firebaseConfig);
@@ -2486,7 +2485,7 @@ document.getElementsByClassName("expense-banner")[0].innerHTML = `
             <input type="text" id="name1" name="name" placeholder="Customer Name" required>
             <input type="text" id="vil1" class=village name="vil" placeholder="Village" required>
             <input type="text" id="cid" name="cid" placeholder="Customer Id" required readonly>
-            <input type="button" value="Add Data" id="submit2">
+            <input type="button" value="Add New Customer" id="submit2">
         </form>
     </div>
     <div id="custamountcontainer" style="display: none;">
@@ -2577,7 +2576,7 @@ document.getElementsByClassName("expense-banner")[0].innerHTML = `
 
             <input type="text" id="wid8" name="wid8" placeholder="Work Id" required readonly>
 
-            <input type="button" value="Add Data" id="submit9">
+            <input type="button" value="Add Expenses Data" id="submit9">
         </form>
     </div>
 
@@ -3184,6 +3183,36 @@ document.getElementsByClassName("expense-banner")[0].innerHTML = `
             </button>
         </div>
     </div>
+    <div id="processingPopup" style="
+        display:none;
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.5);
+        z-index:99999;
+        justify-content:center;
+        align-items:center;
+        backdrop-filter:blur(4px);
+     ">
+
+        <div class="processing-box">
+
+            <div class="processing-loader"></div>
+
+            <div class="processing-title">
+                Please Wait...
+            </div>
+
+            <div class="processing-text">
+                Processing your request
+                <span>.</span><span>.</span><span>.</span>
+            </div>
+
+        </div>
+
+    </div>
 
     <marquee behavior="scroll" direction="left" scrollamount="10">
         <img src="jcb.png" height="500px" width="500px" id="jcb">
@@ -3199,6 +3228,15 @@ document.getElementsByClassName("expense-banner")[0].innerHTML = `
     <script src="dailywork.js"></script>
     <script src="proxyurl.js"></script>
     <script>
+
+
+        function showProcessingPopup() {
+            document.getElementById("processingPopup").style.display = "flex";
+        }
+
+        function hideProcessingPopup() {
+            document.getElementById("processingPopup").style.display = "none";
+        }
         function getDaysFromDate(startDate) {
 
             const start = new Date(startDate);
@@ -3713,7 +3751,9 @@ id="UnPaid-${c.name}"
 
                         // Driver Grouping
                         const driverMap = {};
-
+                        if (!driverData) {
+                            return;
+                        }
                         driverData.trim().split("\n").forEach(line => {
 
                             line = line.trim();

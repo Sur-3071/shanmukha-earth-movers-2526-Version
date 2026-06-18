@@ -19,6 +19,7 @@ const db = getDatabase(app);
 document.getElementById('submit').addEventListener('click', function (e) {
     // alert(" hi its coming");
     e.preventDefault();
+    showProcessingPopup();
     const d = document.getElementById("tractd1").value;
     const drivername = document.getElementById("dname1").value;
 
@@ -43,6 +44,8 @@ document.getElementById('submit').addEventListener('click', function (e) {
             Trips: trips
         })
             .then(() => {
+                hideProcessingPopup();
+
                 document.getElementById("form").reset();
                 document.getElementById("paymentSuccessPopup5").style.display = "flex";
                 // document.getElementById("done").style.display = "block";
@@ -64,6 +67,7 @@ document.getElementById('submit').addEventListener('click', function (e) {
 export function editDriverData(e) {
     // alert("Editing data...");
     e.preventDefault();
+    showProcessingPopup();
     const d = document.getElementById("editdate").value;
     // alert(d);
     const sytemid = document.getElementById("sno").value;
@@ -94,6 +98,8 @@ export function editDriverData(e) {
             Trips: trips
         })
             .then(() => {
+                hideProcessingPopup();
+
                 document.getElementById("form").reset();
                 document.getElementById("paymentSuccessPopup5").style.display = "flex";
                 // document.getElementById("done").style.display = "block";
@@ -114,6 +120,7 @@ export function editDriverData(e) {
 window.editDriverData = editDriverData;
 amountdataentry.addEventListener('click', function (e) {
     e.preventDefault();
+    showProcessingPopup();
     const d = document.getElementById("tractd2").value;
     const drivername = document.getElementById("dname3").value;
     const pur = document.getElementById("pur").value;
@@ -133,6 +140,8 @@ amountdataentry.addEventListener('click', function (e) {
             Purpose: pur
         })
             .then(() => {
+                hideProcessingPopup();
+
                 document.getElementById("form1").reset();
                 document.getElementById("paymentSuccessPopup5").style.display = "flex";
                 // document.getElementById("done").style.display = "block";

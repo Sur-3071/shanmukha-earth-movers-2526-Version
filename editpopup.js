@@ -17,7 +17,7 @@ const db = getDatabase(app);
 
 document.getElementById('submit4').addEventListener('click', async function (e) {
     e.preventDefault();
-
+    showProcessingPopup();
     const dat = document.getElementById("dat").value;
     const wid = document.getElementById("wid").value;
     const name = document.getElementById("name").value;
@@ -44,18 +44,18 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
     var noncompanytractors = document.getElementById("noncompanytractors").value;
     var overallamount = 0;
     // alert(trips+" "+con);
-    if (trips.length > 0 && trips!=="--") {
+    if (trips.length > 0 && trips !== "--") {
         const jcb = parseInt(jcbtrpamt) || 0;
         const tripAmt = parseInt(trpamt) || 0;
         const tripCount = parseInt(trips) || 0;
         const b = parseInt(beta) || 0;
 
-        overallamount = (jcb + tripAmt) * tripCount + b-(tripAmt * noncompanytractors);
+        overallamount = (jcb + tripAmt) * tripCount + b - (tripAmt * noncompanytractors);
 
     }
     else {
         // alert(trips+" "+con);
-        if (con.length > 0 && con!=="--") {
+        if (con.length > 0 && con !== "--") {
             const c = parseInt(con) || 0;
             const b = parseInt(beta) || 0;
 
@@ -69,7 +69,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
             const hCnt = parseInt(hourstrips) || 0;
             const hoursnoncompanytractorstrips = parseInt(hoursnoncompanytractors) || 0;
 
-            overallamount = b + r + (hAmt * hCnt)-((hAmt * hoursnoncompanytractorstrips));
+            overallamount = b + r + (hAmt * hCnt) - ((hAmt * hoursnoncompanytractorstrips));
 
         }
     }
@@ -80,6 +80,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
         etime = "--";
         hrsamt = "--";
     }
+
     if (dat.length > 0) {
         if (name.length > 0) {
             if (villname.length > 0) {
@@ -123,11 +124,13 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
                         TotalTime: ttime,
                         Price: rate
                     });
+                    hideProcessingPopup();
+
                     document.getElementById("paymentSuccessPopup5").style.display = "flex";
-                            // document.getElementById("done").style.display = "block";
-                            setTimeout(() => {
-                                document.getElementById("paymentSuccessPopup5").style.display = "none";
-                            }, 3000);
+                    // document.getElementById("done").style.display = "block";
+                    setTimeout(() => {
+                        document.getElementById("paymentSuccessPopup5").style.display = "none";
+                    }, 3000);
                 } catch (error) {
                     console.error("Error adding document: ", error);
                     alert("An error occurred. Please try again.");

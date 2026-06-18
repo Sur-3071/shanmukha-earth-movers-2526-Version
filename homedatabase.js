@@ -18,6 +18,7 @@ const db = getDatabase(app);
 
 document.getElementById('submit9').addEventListener('click', async function (e) {
     e.preventDefault();
+    showProcessingPopup();
     const dat = document.getElementById("dat8").value;
     const wid = document.getElementById("wid8").value;
     const name = document.getElementById("name8").value;
@@ -118,6 +119,7 @@ document.getElementById('submit9').addEventListener('click', async function (e) 
                             Type: ptype,
                             PersonType: pertype
                         });
+                        hideProcessingPopup();
 
                         document.getElementById("paymentSuccessPopup5").style.display = "flex";
                         // document.getElementById("done").style.display = "block";

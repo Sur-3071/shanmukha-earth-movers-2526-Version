@@ -39,7 +39,7 @@ document.getElementById('submit10').addEventListener('click', async function (e)
 
 
     document.getElementById("userForm9").reset();
-
+    showProcessingPopup();
     if (dat.length > 0) {
         if (monthname.length > 0) {
             if (purpose.length > 0) {
@@ -52,6 +52,8 @@ document.getElementById('submit10').addEventListener('click', async function (e)
                         Month: monthname,
                         Purpose: purpose
                     });
+                    hideProcessingPopup();
+
                     document.getElementById("paymentSuccessPopup2").style.display = "flex";
 
                     document.getElementById("done").style.display = "block";
@@ -99,7 +101,7 @@ document.getElementById('submit20').addEventListener('click', async function (e)
     const paymentMethod = document.getElementById("paymentMethod").value;
     const purpose = document.getElementById("reason").value;
     document.getElementById("userForm8").reset();
-
+    showProcessingPopup();
     if (dat.length > 0) {
         if (monthname.length > 0) {
             if (amount.length > 0) {
@@ -115,6 +117,8 @@ document.getElementById('submit20').addEventListener('click', async function (e)
                             PaymentMethod: paymentMethod,
                             Purpose: purpose
                         });
+                        hideProcessingPopup();
+
                         document.getElementById("paymentSuccessPopup2").style.display = "flex";
 
                         document.getElementById("done").style.display = "block";

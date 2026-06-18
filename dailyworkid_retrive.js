@@ -292,6 +292,7 @@ document.addEventListener("click", async function (e) {
     if (!e.target.classList.contains("payment-btn")) return;
 
     try {
+        showProcessingPopup();
 
         const btn = e.target;
         const customerId = btn.id; // workid
@@ -400,6 +401,7 @@ document.addEventListener("click", async function (e) {
         btn.innerText = newStatus;
         btn.style.backgroundColor =
             newStatus === "Paid" ? "green" : "red";
+                                        hideProcessingPopup();
 
         document.getElementById("paymentSuccessPopup5").style.display = "flex";
 

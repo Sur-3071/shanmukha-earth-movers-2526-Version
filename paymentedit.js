@@ -328,6 +328,7 @@ function editData17() {
 
 document.getElementById('submit8').addEventListener('click', async function (e) {
     e.preventDefault();
+    showProcessingPopup();
     // alert("Submit button clicked.");
 
     const dat = document.getElementById("dat7").value;
@@ -464,6 +465,8 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                     };
                     await set(dataRefset, customerData);
                     customerData.workid = wid;
+                    hideProcessingPopup();
+
                     document.getElementById("paymentSuccessPopup5").style.display = "flex";
                     // document.getElementById("done").style.display = "block";
                     setTimeout(() => {
@@ -486,7 +489,7 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                         paidCustomerslistdata.filter(x => x.workid !== wid);
 
                     // Add to correct list
-                    if (customerData.Payment === "PAID") {
+                    if (customerData.Payment === "Paid") {
                         paidCustomerslistdata.push(customerData);
                     } else {
                         unpaidCustomerslistdata.push(customerData);
@@ -506,7 +509,9 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                         document.getElementById("myModal7").style.display = "none";
                     }, 1500);
 
-                    const clickablecustomerElement = document.getElementById(`UnPaid-${name}`)
+                    const unpaidclickablecustomerElement = document.getElementById(`UnPaid-${name}`)
+                    const paidclickablecustomerElement = document.getElementById(`Paid-${name}`)
+
                     setTimeout(() => {
 
                         closePopup5();
@@ -520,8 +525,15 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
 
                         setTimeout(() => {
 
-                            if (clickablecustomerElement) {
-                                clickablecustomerElement.click();
+                            if (paidclickablecustomerElement || unpaidclickablecustomerElement) {
+                                if (customerData.Payment === "Paid") {
+                                    paidclickablecustomerElement.click();
+
+                                }
+                                else {
+                                    unpaidclickablecustomerElement.click();
+
+                                }
                             }
 
                         }, 300); // small delay is enough
