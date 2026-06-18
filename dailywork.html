@@ -3039,7 +3039,7 @@ document.getElementsByClassName("expense-banner")[0].innerHTML = `
     <div style="display: none;" id="nodata1">
         <img src="nodata.png">
     </div>
-    <div style="margin-top: 100px;" id="captureDiv">
+    <div style="margin-top: 100px;" id="captureDiv" class="scroll-container">
         <h1 class="heading" id="cusname" style="font-size: 50px;  color: green;" align="center"></h1>
         <div id="customeralldata">
         </div>
@@ -3058,7 +3058,7 @@ document.getElementsByClassName("expense-banner")[0].innerHTML = `
         </div>
     </div>
 
-    <div style="margin-top: 100px;" id="captureDiv1">
+    <div style="margin-top: 100px;" id="captureDiv1" class="scroll-container">
         <h1 class="heading" id="cusname" style="font-size: 50px;  color: green;" align="center"></h1>
         <div id="customeralldata2">
         </div>
@@ -4852,7 +4852,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             let finalPrice = 0;
 
             if (type === "Trips") {
-                finalPrice = ((rate + parseInt(tracttrips)) * trips) + parseInt(beta);
+                finalPrice = ((rate) * trips) + parseInt(beta);
             } else if (type === "Hours") {
                 finalPrice = Math.round((mins / 60) * rate) + parseInt(beta) + (parseInt(htrip) * parseInt(htriprate));
             }

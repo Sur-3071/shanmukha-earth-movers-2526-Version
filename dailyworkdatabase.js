@@ -233,11 +233,11 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
                             Villagename: villname,
                         });
 
-                       document.getElementById("paymentSuccessPopup4").style.display = "flex";
-                            // document.getElementById("done").style.display = "block";
-                            setTimeout(() => {
-                                document.getElementById("paymentSuccessPopup4").style.display = "none";
-                            }, 2500);
+                        document.getElementById("paymentSuccessPopup4").style.display = "flex";
+                        // document.getElementById("done").style.display = "block";
+                        setTimeout(() => {
+                            document.getElementById("paymentSuccessPopup4").style.display = "none";
+                        }, 2500);
                         setTimeout(() => {
                             location.reload();
                         }, 4000);
@@ -880,13 +880,12 @@ function generateCustomerTable1(data) {
 
     out += `<table border="1px" id="customerTable1">
     <tr>
-    <th colspan="14" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red" id="heading">మొత్తం పని </h1></th>
+    <th colspan="13" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red;" id="heading">మొత్తం పని </h1></th>
     </tr>
         <tr>
             <th>Date</th>
             <th>Description</th>
-            <th>HDrivers</th>
-            <th>LDrivers</th>
+            <th>Drivers Names</th>
             <th>Trips</th>
             <th>Contract</th>
             <th>Starting</th>
@@ -1070,25 +1069,31 @@ function generateCustomerTable1(data) {
                     uniqueDates.add(activity.Date); // automatically unique
                 }
 
+                const driverNames =
+                    HoursDrivers && HoursDrivers.trim() !== "--"
+                        ? HoursDrivers
+                        : LDrivers && LDrivers.trim() !== "--"
+                            ? LDrivers
+                            : "--";
+
                 out += `<tr data-type="${type}" data-trips="${activity.Trips}" data-mins="${totalMins}"
     style="font-size:16px; font-weight:600; text-align:center;"
     onmouseover="this.style.background='#f5faff'"
     onmouseout="this.style.background='white'">
 
-    <td style="padding:8px;font-size:25px !important;">${formatDate(activity.Date)}</td>
-    <td style="padding:8px;font-size:25px !important;">${activity.Description}</td>
-    <td style="padding:8px; font-size:25px !important;">${HoursDrivers}</td>
-    <td style="padding:8px; font-size:25px !important;">${LDrivers}</td>
+    <td style="padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${formatDate(activity.Date)}</td>
+    <td style="padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${activity.Description}</td>
+    <td style="padding:8px; font-size:25px !important;white-space: nowrap;width: max-content;">${driverNames}</td>
     <td style="padding:8px; font-size:25px !important;">${activity.Trips}</td>
     <td style="padding:8px; font-size:25px !important;">${activity.Contract}</td>
-    <td style="padding:8px; font-size:25px !important;">${convertTo12Hour(activity.Starting)}</td>
-    <td style="padding:8px; font-size:25px !important;">${convertTo12Hour(activity.Ending)}</td>
+    <td style="padding:8px; font-size:25px !important;white-space: nowrap;width: max-content;">${convertTo12Hour(activity.Starting)}</td>
+    <td style="padding:8px; font-size:25px !important;white-space: nowrap;width: max-content;">${convertTo12Hour(activity.Ending)}</td>
     <td style="padding:8px; font-size:25px !important;">${activity.TotalTime}</td>
     <td style="padding:8px; font-size:25px !important;">${HoursTrips}</td>
     <td style="padding:8px; color:#2c5aa0; font-size:25px !important;">${HoursTripsAmount}</td>
     <td style="padding:8px; font-weight:700; font-size:25px !important;">${beta}</td>
 
-    <td style="padding:8px; font-size:25px !important;">
+    <td style="padding:8px; font-size:25px !important;white-space: nowrap;width: max-content;">
         <select class="rateDropdown"
             onchange="calculateFinalPrice(this,'${beta}', '${HoursTrips}','${tracttrips}', '${HoursTripsAmount}'); formeldger2();"
             ${type === "Contract" ? "disabled" : ""}
@@ -1136,7 +1141,7 @@ function generateCustomerTable1(data) {
         <td style="font-size:25px !important;">${totaltrips}</td>
         <td style="font-size:25px !important;">${totalcontract}</td>
         <td colspan="3" style="font-size:25px !important;">${hou}:${mint}</td>
-        <td colspan="5" style="font-size:25px !important;">Bill</td>
+        <td colspan="4" style="font-size:25px !important;">Bill</td>
         <td id="totalBill" style="font-size:25px !important;">--</td>
     </tr>`;
     let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">

@@ -1668,7 +1668,6 @@ h2 {
    SCROLL CONTAINER
 ========================= */
 #enterdata {
-    height:500px;
     max-height: 650px;
 
     overflow-y: auto;
