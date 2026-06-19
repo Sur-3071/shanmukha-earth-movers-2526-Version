@@ -3030,6 +3030,21 @@
         </div>
         <div id="ownerledger">
         </div>
+
+        <div style="text-align:center; margin:20px 0;">
+            <button onclick="printOverviewLedger()" style="
+            background-color:#2d6cdf;
+            color:white;
+            padding:10px 20px;
+            border:none;
+            border-radius:6px;
+            font-size:16px;
+            cursor:pointer;
+            box-shadow:0 2px 6px rgba(0,0,0,0.2);
+        ">
+                Print Ledger
+            </button>
+        </div>
     </div>
     <!-- customer already exists -->
     <div style="display: none;" id="nodata">
@@ -3231,6 +3246,7 @@
 
 
         function showProcessingPopup() {
+            // alert("its getting");
             document.getElementById("processingPopup").style.display = "flex";
         }
 
@@ -3408,7 +3424,7 @@
             // =========================
             // ROW RENDER
             // =========================
-            var count=0;
+            var count = 0;
             const renderRow = (c) => {
                 count++;
                 totalJcb += c.jcbTotal;
@@ -3596,7 +3612,7 @@ id="UnPaid-${c.name}"
                 },
                 jsPDF: {
                     unit: 'mm',
-                    format: 'a3',    // A3 size
+                    format: 'a2',    // A3 size
                     orientation: 'landscape'  // Landscape
                 }
             };
@@ -3604,27 +3620,76 @@ id="UnPaid-${c.name}"
             html2pdf().set(opt).from(element).save();
         }
 
-        function printLedger() {
-            document.getElementsByClassName("expense-banner")[0].style.display = "none"; // hide print button before capture
-            const element = document.body;
-            var customername = document.getElementById("name3").value;
-            if (!customername.toLowerCase().includes("garu")) {
-                customername += " GARU";
-            }
-            customername += "_" + getFormattedDate();
+        function printOverviewLedger() {
+            const element = document.getElementById("overview");
+
+            const months = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            const now = new Date();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+
+            const fileName = `${monthName}_${year}_Ledger.pdf`;
+
             const opt = {
-                margin: 10,
-                filename: customername + '.pdf',
-                image: { type: 'jpeg', quality: 1 },
+                margin: 2,
+                filename: fileName,
+                image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: {
-                    scale: 3,        // increase clarity
+                    scale: 1.5,
                     useCORS: true,
                     scrollY: 0
                 },
                 jsPDF: {
                     unit: 'mm',
-                    format: 'a3',    // A3 size
-                    orientation: 'landscape'  // Landscape
+                    format: 'a2',
+                    orientation: 'landscape'
+                }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function printLedger() {
+
+            document.getElementsByClassName("expense-banner")[0].style.display = "none";
+
+            const element = document.body;
+
+            var customername = document.getElementById("name3").value || "Ledger";
+
+            if (!customername.toLowerCase().includes("garu")) {
+                customername += " GARU";
+            }
+
+            customername += "_" + getFormattedDate();
+
+            const opt = {
+
+                margin: [10, 5, 10, 5],   // LEFT-RIGHT margin reduced (IMPORTANT)
+
+                filename: customername + '.pdf',
+
+                image: { type: 'jpeg', quality: 1 },
+
+                html2canvas: {
+                    scale: 2,          // reduce from 3 → prevents overflow cut
+                    useCORS: true,
+                    scrollY: 0,
+                    windowWidth: document.body.scrollWidth   // IMPORTANT FIX
+                },
+
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a2',      // keep A3 (better than A2 stability)
+                    orientation: 'landscape'
+                },
+
+                pagebreak: {
+                    mode: ['css', 'legacy']   // IMPORTANT for proper page splitting
                 }
             };
 

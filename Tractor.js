@@ -109,7 +109,7 @@ function addamount() {
 }
 
 function transalate() {
-    
+
     let convert = document.getElementById("cname");
     let content = document.getElementById("cname").value;
     let transLINK = `https://api.mymemory.translated.net/get?q=${content}&langpair=en-GB|te-IN`;
@@ -184,6 +184,7 @@ function removedone1() {
     }, 2000);
 }
 function displayUpdatedtripsdata(data) {
+    showProcessingPopup();
     document.getElementById("screenshot").style.display = "block";
     var r = document.getElementById("tripsdata");
     r.innerHTML = "";
@@ -192,7 +193,7 @@ function displayUpdatedtripsdata(data) {
     var out = `<table border="1px" class="blodfont">
     <tr>
         <th style="font-weight:bold;font-size:25px">తోలకం</th>
-        <th style="font-weight:bold;font-size:25px">తేదీ</th>
+        <th style="font-weight:bold;font-size:25px;">తేదీ</th>
         <th style="font-weight:bold;font-size:25px">వినియోగదారుని పేరు</th>
         <th style="font-weight:bold;font-size:25px">పగలు/రాత్రి</th>
         <th style="font-weight:bold;font-size:25px">ధర</th>
@@ -200,55 +201,6 @@ function displayUpdatedtripsdata(data) {
         <th style="font-weight:bold;font-size:25px">మొత్తం</th>
     </tr>`;
 
-    // // Initialize the counter for Sno
-    // var sno = 1;
-    // var s = 0;
-    // // Iterate over the dates in the data object
-    // var totaltrips = 0;
-    // for (const date in data) {
-    //     if (data.hasOwnProperty(date)) {
-    //         // Iterate over the names within each date
-    //         for (const name in data[date]) {
-    //             if (data[date].hasOwnProperty(name)) {
-    //                 const activities = data[date][name];
-    //                 for (const activity in activities) {
-    //                     if (activities.hasOwnProperty(activity)) {
-    //                         var trips = parseInt(activities[activity]['Trips']);
-    //                         var daytype = activities[activity];
-    //                         // console.log(parseInt(activities[activity]['Trips']));
-    //                         totaltrips += trips;
-    //                         var amount = parseInt(activities[activity]['Price']);
-    //                         s += (trips * amount);
-    //                         out += `<tr>
-    //                             <td style="font-weight:bold;font-size:25px">` + sno + `</td>
-    //                             <td style="font-weight:bold;font-size:25px">` + formatDateToNormal(date) + `</td>
-    //                             <td style="font-weight:bold;font-size:25px">` + name + `</td>
-    //                             <td style="font-weight:bold;font-size:25px">` + activity + `</td>
-    //                             <td style="font-weight:bold;font-size:25px">` + activities[activity]['Price'] + `</td>
-    //                             <td style="font-weight:bold;font-size:25px">` + activities[activity]['Trips'] + `</td>
-    //                             <td style="font-weight:bold;font-size:25px">` + trips * amount + `</td>
-    //                         </tr>`;
-
-    //                         // Increment the Sno counter
-    //                         sno++;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    // out += `<tr>
-    //     <td colspan="5" style="font-weight:bold;font-size:25px">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
-    //     <td colspan="1" style="font-weight:bold;font-size:25px">` + totaltrips + `</td>
-    //     <td colspan="1" style="font-weight:bold;font-size:25px">` + s + `</td>
-    // </tr>`
-    // // Close the table structure
-    // out += "</table>";
-
-    // // Update the innerHTML of the element
-    // r.innerHTML = out;
-    // r.style.display = "block";
 
     let sno = 1;
     let totaltrips = 0;
@@ -274,7 +226,7 @@ function displayUpdatedtripsdata(data) {
             out += `
         <tr>
             <td style="font-weight:bold;font-size:35px">${sno}</td>
-            <td style="font-weight:bold;font-size:35px">${formatDateToNormal(date)}</td>
+            <td style="font-weight:bold;font-size:35px;white-space: nowrap;width: max-content;">${formatDateToNormal(date)}</td>
             <td style="font-weight:bold;font-size:35px">${name}</td>
             <td style="font-weight:bold;font-size:35px">${shift}</td>
             <td style="display:none;">${drivername}</td>
@@ -300,13 +252,14 @@ function displayUpdatedtripsdata(data) {
 
     // Close table
     out += "</table>";
-
+    hideProcessingPopup();
     // Render
     r.innerHTML = out;
     r.style.display = "block";
 }
 function displaytripsdata(data, drivername) {
     // alert("parrel call");
+    showProcessingPopup();
     driver = drivername;
     document.getElementById("screenshot").style.display = "block";
     var r = document.getElementById("tripsdata");
@@ -326,59 +279,6 @@ function displaytripsdata(data, drivername) {
         <th style="font-weight:bold;font-size:25px">మొత్తం</th>
     </tr>`;
 
-    // // Initialize the counter for Sno
-    // var sno = 1;
-    // var s = 0;
-    // // Iterate over the dates in the data object
-    // var totaltrips = 0;
-    // for (const date in data) {
-    //     if (data.hasOwnProperty(date)) {
-    //         // Iterate over the names within each date
-    //         for (const name in data[date]) {
-    //             if (data[date].hasOwnProperty(name)) {
-    //                 const activities = data[date][name];
-    //                 for (const activity in activities) {
-    //                     if (activities.hasOwnProperty(activity)) {
-    //                         var trips = parseInt(activities[activity]['Trips']);
-    //                         var daytype = activities[activity];
-    //                         // console.log(parseInt(activities[activity]['Trips']));
-    //                         totaltrips += trips;
-    //                         var amount = parseInt(activities[activity]['Price']);
-    //                         s += (trips * amount);
-    //                         out += `<tr>
-    //                             <td style="font-weight:bold;font-size:25px">` + sno + `</td>
-    //                             <td style="font-weight:bold;font-size:25px">` + formatDateToNormal(date) + `</td>
-    //                             <td style="font-weight:bold;font-size:25px">` + name + `</td>
-    //                             <td style="font-weight:bold;font-size:25px">` + activity + `</td>
-    //                             <td style="display:none;">`+ drivername + `</td>
-    //                             <td style="font-weight:bold;font-size:25px"><button type="button" class="edit" onclick="openPopup1(this)">Edit</button></td>
-    //                             <td style="font-weight:bold;font-size:25px">` + activities[activity]['Price'] + `</td>
-    //                             <td style="font-weight:bold;font-size:25px">` + activities[activity]['Trips'] + `</td>
-    //                             <td style="font-weight:bold;font-size:25px">` + trips * amount + `</td>
-    //                         </tr>`;
-
-    //                         // Increment the Sno counter
-    //                         sno++;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    // out += `<tr>
-    //     <td colspan="6" style="font-weight:bold;font-size:25px">ట్రిప్పులు మొత్తానికి అయిన డబ్బులు</td>
-    //     <td colspan="1" style="font-weight:bold;font-size:25px">` + totaltrips + `</td>
-    //     <td colspan="1" style="font-weight:bold;font-size:25px">` + s + `</td>
-    // </tr>`
-    // // Close the table structure
-    // out += "</table>";
-
-    // // Update the innerHTML of the element
-    // r.innerHTML = out;
-    // r.style.display = "block";
-
-    // Initialize counters
     let sno = 1;
     let totaltrips = 0;
     let s = 0;
@@ -404,7 +304,7 @@ function displaytripsdata(data, drivername) {
         <tr>
             <td style="font-weight:bold;font-size:25px;padding:15px">${sno}</td>
             <td style="font-weight:bold;font-size:25px;padding:15px">${key}</td>
-            <td style="font-weight:bold;font-size:25px;padding:15px">${formatDateToNormal(date)}</td>
+            <td style="font-weight:bold;font-size:25px;padding:15px;white-space: nowrap;width: max-content;">${formatDateToNormal(date)}</td>
             <td style="font-weight:bold;font-size:25px;padding:15px">${name}</td>
             <td style="font-weight:bold;font-size:25px;padding:15px">${shift}</td>
             <td style="display:none;">${drivername}</td>
@@ -433,7 +333,7 @@ function displaytripsdata(data, drivername) {
 
     // Close table
     out += "</table>";
-
+    hideProcessingPopup();
     // Render
     r.innerHTML = out;
     r.style.display = "block";
@@ -444,6 +344,7 @@ function displaytripsdata(data, drivername) {
 
 
 function displayamountdata(data) {
+    showProcessingPopup();
     // console.log(data);
     var r = document.getElementById("amountdata");
     r.innerHTML = "";
@@ -457,38 +358,7 @@ function displayamountdata(data) {
     <th style="font-weight:bold;font-size:25px">డబ్బులు తీసుకున్నవి</th>
 </tr>`;
 
-    // // Initialize the counter for Sno
-    // var sno = 1;
-    // var s = 0;
-    // // Iterate over the dates in the data object
-    // for (const date in data) {
-    //     // console.log(date[0]);
-    //     if (data.hasOwnProperty(date)) {
-    //         // Iterate over the names within each date
-    //         var amount = parseInt(data[date]['Amount'])
-    //         s += amount
-    //         out += `<tr>
-    //                 <td style="font-weight:bold;font-size:25px">` + sno + `</td>
-    //                 <td style="font-weight:bold;font-size:25px">` + formatDateToNormal(date) + `</td>
-    //                 <td style="font-weight:bold;font-size:25px">` + data[date]['Purpose'] + `</td>
-    //                 <td style="font-weight:bold;font-size:25px">` + data[date]['Amount'] + `</td>
-    //             </tr>`;
 
-    //         // Increment the Sno counter
-    //         sno++;
-
-    //     }
-    // }
-    // out += `<tr>
-    //       <td colspan="3" style="font-weight:bold;font-size:25px">మొత్తాO డబ్బులు తీసుకున్నవి</td>
-    //       <td colspan="1" style="font-weight:bold;font-size:25px">`+ s + `</td>
-    //     </tr>`
-    // // Close the table structure
-    // out += "</table>";
-
-    // // Update the innerHTML of the element
-    // r.innerHTML = out;
-    // r.style.display = "block";
 
     // Initialize the counter for Sno
     var sno = 1;
@@ -519,7 +389,7 @@ function displayamountdata(data) {
     <td colspan="3" style="font-weight:bold;font-size:25px">మొత్తం డబ్బులు తీసుకున్నవి</td>
     <td style="font-weight:bold;font-size:25px">${s}</td>
 </tr>`;
-
+    hideProcessingPopup();
     // Close table
     out += "</table>";
 
@@ -529,41 +399,9 @@ function displayamountdata(data) {
 
 }
 function done() {
-    // console.log("drivername" + name1);
-    // console.log("total trips: " + totaltrips);
-    // console.log("amounttaken: " + amounttaken);
-    // console.log("totalamount: " + totalamount);
-    // console.log("bal: " + (totalamount - amounttaken));
-}
-// function displaybal1(data, n) {
-//     amounttaken = 0;
-//     name1 = n;
-//     totaltrips = 0;
-//     totalamount = 0;
-//     // Iterate over the dates in the data object
-//     for (const date in data) {
-//         if (data.hasOwnProperty(date)) {
-//             // Iterate over the names within each date
-//             for (const name in data[date]) {
-//                 if (data[date].hasOwnProperty(name)) {
-//                     const activities = data[date][name];
-//                     for (const activity in activities) {
-//                         if (activities.hasOwnProperty(activity)) {
-//                             var trips = parseInt(activities[activity]['Trips']);
-//                             var amount = parseInt(activities[activity]['Price']);
-//                             totalamount += (trips * amount);
-//                             totaltrips += trips;
-//                             drivername = data[date][name];
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }
-//     done();
-//     displaybalanacedata();
 
-// }
+}
+
 
 function displaybal1(data, n) {
 
@@ -589,19 +427,6 @@ function displaybal1(data, n) {
     displaybalanacedata();
 }
 
-// function displaybal2(data) {
-//     amounttaken = 0;
-//     // Iterate over the dates in the data object
-//     for (const date in data) {
-//         if (data.hasOwnProperty(date)) {
-//             // Iterate over the names within each date
-//             var amount = parseInt(data[date]['Amount'])
-//             amounttaken += amount
-//         }
-//     }
-//     done();
-//     displaybalanacedata();
-// }
 
 function displaybal2(data) {
 
@@ -622,6 +447,7 @@ function displaybal2(data) {
 
 
 function displaybalanacedata() {
+    showProcessingPopup();
     var r = document.getElementById("driverbal");
     r.innerHTML = "";
 
@@ -643,7 +469,7 @@ function displaybalanacedata() {
     </tr>`
     // Close the table structure
     out += "</table>";
-
+    hideProcessingPopup();
     // Update the innerHTML of the element
     r.innerHTML = out;
     r.style.display = "block";

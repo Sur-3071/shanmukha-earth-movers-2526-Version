@@ -111,6 +111,7 @@ await loadAllExtraAmountsOnce();
 
 
 function generateTable(data) {
+    showProcessingPopup();
     // Get today's date
     const today = new Date();
 
@@ -314,7 +315,7 @@ function generateTable(data) {
 
             out += `<tr>
                         <td>${customerPhone}</td>
-                        <td>${formattedDate}</td>
+                        <td style="white-space: nowrap;width: max-content;">${formattedDate}</td>
                         <td>${activity.Name}</td>
                         <td>${activity.Villagename}</td>
                         <td>${activity.Description}</td>
@@ -324,8 +325,8 @@ function generateTable(data) {
                         <td>${tripamount}</td>
                         <td>${jcbtripamount}</td>
                         <td>${activity.Contract}</td>
-                        <td>${convertTo12Hour(activity.Starting)}</td>
-                        <td>${convertTo12Hour(activity.Ending)}</td>
+                        <td style="white-space: nowrap;width: max-content;">${convertTo12Hour(activity.Starting)}</td>
+                        <td style="white-space: nowrap;width: max-content;">${convertTo12Hour(activity.Ending)}</td>
                         <td>${activity.TotalTime}</td>
                         <td>${activity.HoursPrice}</td>
                         <td>${beta}</td>
@@ -409,6 +410,7 @@ function generateTable(data) {
     <td>${pro}</td>
     </tr>`;
     led += `</table>`;
+    hideProcessingPopup();
     document.getElementById("ownerledger").innerHTML = led;
 }
 
@@ -600,6 +602,7 @@ function editData1() {
 }
 
 function SearchTable(data) {
+    showProcessingPopup();
     var d = document.getElementById("ownerledger");
     var name = document.getElementById("search").value.trim();
     // console.log(name.length);
@@ -889,6 +892,7 @@ function SearchTable(data) {
         </tr>`;
 
         out += `</table>`;
+        hideProcessingPopup();
         document.getElementById("enterdata").innerHTML = out;
         document.getElementById("overview").style.display = "block";
 
@@ -951,6 +955,7 @@ async function RePrint1(startdate, enddate) {
 
 }
 function generateTableByDate(data, startdate, enddate, data1) {
+    showProcessingPopup();
     var collection = 0;
     let out = `<table border="1px">
        <tr>
@@ -1098,6 +1103,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
     <td>${pro}</td>
     </tr>`;
     led += `</table>`;
+    hideProcessingPopup();
     document.getElementById("ownerledger").innerHTML = led;
 
     generateHomeTablebydate(data1, startdate, enddate);
@@ -1300,7 +1306,7 @@ async function RePrintHome() {
     }
 }
 function generateHomeTablebydate(data, startdate, enddate) {
-
+    showProcessingPopup();
     // console.log(data);
 
     let out1 = `<table border="1px">
@@ -1375,12 +1381,14 @@ function generateHomeTablebydate(data, startdate, enddate) {
     <td id="am">${amt}</td>
     </tr>`;
     out1 += `</table>`;
+    hideProcessingPopup();
     document.getElementById("homeexp").innerHTML = out1;
     document.getElementById("overview").style.display = "block";
 
 }
 
 function generateHomeTableSearch(data, v1) {
+    showProcessingPopup();
     let out = `<table border="1px">
         <tr>
             <th id="csize">Purpose Id</th>
@@ -1546,12 +1554,14 @@ function generateHomeTableSearch(data, v1) {
     <td id="am">${amt}</td>
     </tr>`;
     out += `</table>`;
+    hideProcessingPopup();
     document.getElementById("homeexp").innerHTML = out;
 }
 
 
 function generateHomeTable(data) {
     // alert("coming");
+    showProcessingPopup();
     let out = `<table border="1px">
         <tr>
             <th id="csize">Purpose Id</th>
@@ -1626,6 +1636,7 @@ function generateHomeTable(data) {
     <td id="am">${amt}</td>
     </tr>`;
     out += `</table>`;
+    hideProcessingPopup();
     document.getElementById("homeexp").innerHTML = out;
     document.getElementById("overview").style.display = "block";
 

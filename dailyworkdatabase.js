@@ -278,7 +278,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
 
 document.getElementById('submit3').addEventListener('click', async function (e) {
     e.preventDefault();
-    
+
     const dte = document.getElementById("dat1").value;
     const name = document.getElementById("name2").value;
     const wid = document.getElementById("cid1").value;
@@ -581,6 +581,7 @@ async function RePrint51() {
             // console.log(data);
             generateCustomerTable1(data);
             getExtraAmountofuser();
+
             // generateTable(data);
         } else {
             alert("No data available");
@@ -701,155 +702,201 @@ function generateCustomerTable(data) {
     var overallbeta = 0;
     var rowCount = 0; // 🔥 added for page control
     const uniqueDates = new Set();
-    // data.sort((a, b) => {
-    //     return new Date(a.Date) - new Date(b.Date);
-    // });
 
-    for (const customerPhone in data) {
-        if (data.hasOwnProperty(customerPhone)) {
-            const activity = data[customerPhone];
-            var editid = customerPhone + "v";
-            // console.log(formname,activity.Name,formname.length,activity.Name.length);
-            if (activity.Name.toLowerCase().trim() == formname.trim()) {
-                var HoursDrivers = 0;
-                if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
-                    let str = activity.HoursDrivers || "";
-                    // alert(str);
-                    let count = 0;
+    
+for (const customerPhone in data) {
 
-                    for (let i = 0; i < str.length; i++) {
-                        if (str[i] === "=") {
-                            count++;
-                        }
+    if (data.hasOwnProperty(customerPhone)) {
+
+        const activity = data[customerPhone];
+        var editid = customerPhone + "v";
+
+        if (activity.Name.toLowerCase().trim() == formname.trim()) {
+
+            // =====================================
+            // BUILD KEY MAP (INSIDE LOOP)
+            // Example:
+            // Venkatesulu babai → A
+            // =====================================
+            const keyMap = {};
+
+            if (activity.Description) {
+                activity.Description.split(",").forEach(item => {
+                    const parts = item.split("→").map(x => x.trim());
+
+                    if (parts.length === 2) {
+                        const name = parts[0];
+                        const key = parts[1];
+                        keyMap[key] = name;
                     }
-                    if (activity.Beta !== undefined && activity.Beta !== "undefined" && activity.Beta !== null) {
-                        beta = activity.Beta;
-                        overallbeta += parseInt(beta);
-                    }
-
-                    if (count > 1) {
-
-                        let arr = str.split(" ").filter(Boolean);
-                        let result = "";
-
-                        for (let i = 0; i < arr.length; i += 3) {
-                            if (arr[i] && arr[i + 2]) {       // <— check before adding
-                                result += arr[i] + " = " + arr[i + 2] + "\n";
-                            }
-                        }
-                        // console.log(result);
-
-                        result = result.replace(/\n/g, "<br>");
-                        HoursDrivers = result;
-
-                    }
-                    else {
-                        HoursDrivers = str;
-                    }
-
-                }
-                // console.log(HoursTripsAmount+" "+HoursTrips);
-                var LDrivers = 0;
-                if (activity.Drivers !== undefined) {
-                    let str = activity.Drivers;
-                    let count1 = 0;
-
-                    for (let i = 0; i < str.length; i++) {
-                        if (str[i] === "=") {
-                            count1++;
-                        }
-                    }
-                    if (count1 > 1) {
-                        let arr = str.split(" ").filter(Boolean);
-                        let result = "";
-
-                        for (let i = 0; i < arr.length; i += 3) {
-                            if (arr[i] && arr[i + 2]) {       // <— check before adding
-                                result += arr[i] + " = " + arr[i + 2] + "\n";
-                            }
-                        }
-
-                        result = result.replace(/\n/g, "<br>");
-                        LDrivers = result;
-                    }
-                    else {
-                        LDrivers = str;
-                    }
-                }
-                var pri = 0;
-                // recovery += parseInt(amount);
-                if (activity.Trips !== "--") {
-                    // pri=parseInt(activity.Trips)*parseInt(tripamt);
-                    totaltrips += parseInt(activity.Trips);
-                    Driverslist = LDrivers;
-                }
-                if (activity.Contract !== "--") {
-                    totalcontarct += parseInt(activity.Contract);
-                    // pri=parseInt(activity.Contract);
-                }
-
-                if (activity.Starting !== "--") {
-                    Driverslist = HoursDrivers;
-                    var timesplit = activity.TotalTime;
-                    var v = timesplit.split(':');
-                    hou += parseInt(v[0]);
-                    mint += parseInt(v[1]);
-                    // var permin=parseInt(hrsamt)/60;
-                    // var totmin=parseInt(v[0])*60+parseInt(v[1]);
-                    // pri=totmin*permin;
-                }
-
-                collection += parseInt(activity.Price);
-                // console.log(activity);
-                var bal = 0;
-                if (activity.Payment !== "Paid") {
-                    bal = activity.Price;
-                }
-                overallamount += isNaN(activity.OverallPrice) ? 0 : activity.OverallPrice;
-                rec += parseInt(bal);
-
-                if (activity.Date) {
-                    uniqueDates.add(activity.Date); // automatically unique
-                }
-                rowCount++;
-
-                // 🔥 PAGE BREAK CONTROL (ONLY ADDITION)
-                // if (rowCount % 15=== 0) {
-                //     out += `<tr style="page-break-before: always;"></tr>`;
-                // }
-                let color = activity.Payment === "Paid" ? "green" : "red";
-
-                out += `<tr style="font-size:16px; text-align:center;">
-
-                    <td style="padding:4px;font-weight:600; font-size:20px !important;">${customerPhone}</td>
-                    <td style="padding:4px;font-weight:600; font-size:20px !important; min-width:150px;">${formatDate(activity.Date)}</td>
-                    <td style="padding:4px;font-weight:600; font-size:20px !important;">${activity.Description}</td>
-                    <td style="padding:4px;font-weight:600; font-size:20px !important; min-width:150px;">${Driverslist}</td>
-                    <td style="padding:4px;font-weight:600; font-size:20px !important;">${activity.Trips}</td>
-                    <td style="padding:4px;font-weight:600; font-size:20px !important;">${activity.Contract}</td>
-                    <td style="padding:4px;font-weight:600; font-size:20px !important;min-width:100px;">${convertTo12Hour(activity.Starting)}</td>
-                    <td style="padding:4px;font-weight:600; font-size:20px !important;min-width:100px;">${convertTo12Hour(activity.Ending)}</td>
-                    <td style="padding:4px;font-weight:600; font-size:20px !important;">${activity.TotalTime}</td>
-                    <td style="padding:4px; font-weight:bold; font-size:20px !important;">${beta}</td>
-
-                    <td id="${activity.PhoneNumber}" 
-                        style="color:${color}; font-size:20px; font-weight:bold; padding:4px;">
-                        ${activity.Payment}
-                    </td>
-
-                    <td style="font-size:18px; font-weight:600; color:#2c5aa0; padding:4px;">
-                        ₹${moneyconvert(parseInt(activity.Price))}
-                    </td>
-
-                    <td style="font-size:18px; font-weight:600; color:#1e8e3e; padding:4px;">
-                        ₹${moneyconvert(parseInt(activity.OverallPrice))}
-                    </td>
-
-                </tr>`;
-
+                });
             }
+
+            // =====================================
+            // DRIVER PARSER FUNCTION (LOCAL)
+            // =====================================
+            const parseDrivers = (str) => {
+
+                if (!str || str === "undefined") return str;
+
+                const matches = String(str).match(/[A-Za-z0-9_]+\s*=\s*\d+/g) || [];
+
+                if (matches.length === 0) return str;
+
+                let result = "";
+
+                for (let i = 0; i < matches.length; i++) {
+
+                    let [left, value] = matches[i].split("=").map(s => s.trim());
+                    let parts = left.split("_");
+
+                    let key = parts.pop();              // A, B, C
+                    let driverName = parts.join(" ");   // Kone Venkanna
+
+                    let actualName = keyMap[key] || key;
+
+                    result += `${i + 1}. ${driverName} → ${actualName} = ${value}<br>`;
+                }
+
+                return result;
+            };
+
+            // =====================================
+            // HOURS + LOADING DRIVERS
+            // =====================================
+            let HoursDrivers = 0;
+            let LDrivers = 0;
+
+            if (activity.HoursDrivers !== undefined &&
+                activity.HoursDrivers !== "undefined" &&
+                activity.HoursDrivers !== null) {
+
+                HoursDrivers = parseDrivers(activity.HoursDrivers);
+            }
+
+            if (activity.Drivers !== undefined &&
+                activity.Drivers !== "undefined" &&
+                activity.Drivers !== null) {
+
+                LDrivers = parseDrivers(activity.Drivers);
+            }
+
+            // =====================================
+            // YOUR EXISTING LOGIC (UNCHANGED)
+            // =====================================
+            var pri = 0;
+
+            if (activity.Trips !== "--") {
+                totaltrips += parseInt(activity.Trips);
+                Driverslist = LDrivers;
+            }
+
+            if (activity.Contract !== "--") {
+                totalcontarct += parseInt(activity.Contract);
+            }
+
+            if (activity.Starting !== "--") {
+                Driverslist = HoursDrivers;
+
+                var timesplit = activity.TotalTime;
+                var v = timesplit.split(':');
+
+                hou += parseInt(v[0]);
+                mint += parseInt(v[1]);
+            }
+
+            collection += parseInt(activity.Price);
+
+            var bal = 0;
+            if (activity.Payment !== "Paid") {
+                bal = activity.Price;
+            }
+
+            overallamount += isNaN(activity.OverallPrice) ? 0 : activity.OverallPrice;
+            rec += parseInt(bal);
+
+            if (activity.Date) {
+                uniqueDates.add(activity.Date);
+            }
+
+            rowCount++;
+
+            if (activity.Beta !== undefined &&
+                activity.Beta !== "undefined" &&
+                activity.Beta !== null) {
+
+                beta = activity.Beta;
+                overallbeta += parseInt(beta);
+            }
+
+            const formattedDescription = (activity.Description || "")
+                    .split(",")
+                    .map((item, index) => `${index + 1}. ${item.trim()}`)
+                    .join("<br>");
+
+            let color = activity.Payment === "Paid" ? "green" : "red";
+
+            // =====================================
+            // OUTPUT ROW
+            // =====================================
+            out += `<tr style="font-size:16px; text-align:center;">
+
+                <td style="padding:4px;font-weight:600; font-size:20px !important;">
+                    ${customerPhone}
+                </td>
+
+                <td style="padding:4px;font-weight:600; font-size:20px !important; min-width:150px;">
+                    ${formatDate(activity.Date)}
+                </td>
+
+                <td style="text-align:left;padding:4px;font-weight:600; font-size:20px !important;white-space: nowrap;width: max-content;">
+                    ${formattedDescription}
+                </td>
+
+                <td style="text-align:left;padding:4px;font-weight:600; font-size:20px !important; min-width:150px;white-space: nowrap;width: max-content;">
+                    ${Driverslist}
+                </td>
+
+                <td style="padding:4px;font-weight:600; font-size:20px !important;">
+                    ${activity.Trips}
+                </td>
+
+                <td style="padding:4px;font-weight:600; font-size:20px !important;">
+                    ${activity.Contract}
+                </td>
+
+                <td style="padding:4px;font-weight:600; font-size:20px !important;min-width:100px;">
+                    ${convertTo12Hour(activity.Starting)}
+                </td>
+
+                <td style="padding:4px;font-weight:600; font-size:20px !important;min-width:100px;">
+                    ${convertTo12Hour(activity.Ending)}
+                </td>
+
+                <td style="padding:4px;font-weight:600; font-size:20px !important;">
+                    ${activity.TotalTime}
+                </td>
+
+                <td style="padding:4px; font-weight:bold; font-size:20px !important;">
+                    ${beta}
+                </td>
+
+                <td style="color:${color}; font-size:20px; font-weight:bold; padding:4px;">
+                    ${activity.Payment}
+                </td>
+
+                <td style="font-size:18px; font-weight:600; color:#2c5aa0; padding:4px;">
+                    ₹${moneyconvert(parseInt(activity.Price))}
+                </td>
+
+                <td style="font-size:18px; font-weight:600; color:#1e8e3e; padding:4px;">
+                    ₹${moneyconvert(parseInt(activity.OverallPrice))}
+                </td>
+
+            </tr>`;
         }
     }
+}
     var mintohou = parseInt(mint / 60);
     mint = mint - 60 * mintohou;
     hou += mintohou;
@@ -865,6 +912,7 @@ function generateCustomerTable(data) {
             <td id="col">${moneyconvert(overallamount)}</td>
             </tr>`;
     out += `</table>`;
+    hideProcessingPopup();
     document.getElementById("customeralldata2").innerHTML = "";
     document.getElementById("customeralldata").innerHTML =
         `<div class="table-scroll-only">${out}</div>`;
@@ -884,6 +932,7 @@ function formatDate(isoDate) {
 
 function generateCustomerTable1(data) {
     // alert("i am coming");
+    showProcessingPopup();
     let out = "";
 
     out += `<table border="1px" id="customerTable1">
@@ -953,7 +1002,7 @@ function generateCustomerTable1(data) {
                 var beta = 0;
                 var HoursTrips = 0;
                 var HoursTripsAmount = 0;
-                var HoursDrivers = 0;
+                // var HoursDrivers = 0;
                 var jcbtripprice = 0;
                 if (activity.JcbTripPrice !== undefined && activity.JcbTripPrice !== "undefined" && activity.JcbTripPrice !== null) {
                     jcbtripprice = activity.JcbTripPrice;
@@ -968,85 +1017,104 @@ function generateCustomerTable1(data) {
                 if (activity.HoursTripsAmount !== undefined && activity.HoursTripsAmount !== "undefined" && activity.HoursTripsAmount !== null) {
                     HoursTripsAmount = activity.HoursTripsAmount;
                 }
-                if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
-                    let str = activity.HoursDrivers || "";
-                    // alert(str);
-                    let count = 0;
-                    var Hnonpaytrips = 0;
-                    for (let i = 0; i < str.length; i++) {
-                        if (str[i] === "=") {
-                            count++;
-                        }
-                    }
+// =====================================
+// BUILD KEY MAP FROM DESCRIPTION
+// Format: Name → A,B,C
+// =====================================
+const buildKeyMap = (desc) => {
+    const map = {};
 
-                    if (count > 1) {
+    if (!desc) return map;
 
-                        let arr = str.split(" ").filter(Boolean);
-                        let result = "";
+    desc.split(",").forEach(item => {
+        const parts = item.split("→").map(x => x.trim());
 
-                        for (let i = 0; i < arr.length; i += 3) {
-                            if (arr[i] && arr[i + 2]) {       // <— check before adding
-                                if (arr[i].toLowerCase().includes("own")) {
-                                    Hnonpaytrips += parseInt(arr[i + 2]);
-                                }
-                                result += arr[i] + " = " + arr[i + 2] + "\n";
-                            }
-                        }
-                        // console.log(result);
+        if (parts.length === 2) {
+            const name = parts[0]; // Venkatesulu babai
+            const key = parts[1];  // A
 
-                        result = result.replace(/\n/g, "<br>");
-                        HoursDrivers = result;
+            map[key] = name;
+        }
+    });
 
-                    }
-                    else {
-                        let [name, value] = str.split("=").map(s => s.trim());
+    return map;
+};
 
-                        if (name.toLowerCase().includes("own")) {
-                            Hnonpaytrips += parseInt(value);
-                        }
-                        HoursDrivers = str;
-                    }
+// =====================================
+// COMMON DRIVER PARSER
+// =====================================
+const parseDrivers = (input, keyMap) => {
 
-                }
-                // console.log(HoursTripsAmount+" "+HoursTrips);
-                var Lnonpaytrips = 0;
-                var LDrivers = 0;
-                if (activity.Drivers !== undefined) {
-                    let str = activity.Drivers;
-                    let count1 = 0;
+    let nonPayTrips = 0;
 
-                    for (let i = 0; i < str.length; i++) {
-                        if (str[i] === "=") {
-                            count1++;
-                        }
-                    }
-                    if (count1 > 1) {
-                        let arr = str.split(" ").filter(Boolean);
-                        let result = "";
+    if (!input || input === "undefined") {
+        return {
+            html: "--",
+            nonPayTrips
+        };
+    }
 
-                        for (let i = 0; i < arr.length; i += 3) {
-                            if (arr[i] && arr[i + 2]) {
-                                if (arr[i].toLowerCase().includes("own")) {
-                                    Lnonpaytrips += parseInt(arr[i + 2]);
-                                }
-                                result += arr[i] + " = " + arr[i + 2] + "\n";
-                            }
-                        }
+    const matches =
+        String(input).match(/[A-Za-z0-9_]+\s*=\s*\d+/g) || [];
 
-                        result = result.replace(/\n/g, "<br>");
-                        LDrivers = result;
-                    }
-                    else {
-                        // LDrivers = str;
-                        let [name, value] = str.split("=").map(s => s.trim());
+    const html = matches.map((item, index) => {
 
-                        if (name.toLowerCase().includes("own")) {
-                            Lnonpaytrips += parseInt(value);
-                        }
+        const [left, value] = item.split("=").map(x => x.trim());
+        const parts = left.split("_");
 
-                        LDrivers = str;
-                    }
-                }
+        const key = parts.pop();              // A, B, C...
+        const driverName = parts.join(" ");   // Kone Venkanna
+
+        const actualName = keyMap[key] || key;
+
+        // NON PAY LOGIC (OWN)
+        if (left.toLowerCase().includes("own")) {
+            nonPayTrips += Number(value) || 0;
+        }
+
+        return `${index + 1}. ${driverName} → ${actualName} = ${value}`;
+
+    }).join("<br>");
+
+    return {
+        html: html || "--",
+        nonPayTrips
+    };
+};
+
+// =====================================
+// BUILD KEY MAP (FROM DESCRIPTION)
+// Example:
+// Venkatesulu babai → A
+// bindanapu suribabu → B
+// =====================================
+const keyMap = buildKeyMap(activity.Description);
+
+// =====================================
+// HOURS DRIVERS
+// =====================================
+const hoursResult = parseDrivers(activity.HoursDrivers, keyMap);
+
+const HoursDrivers = hoursResult.html;
+const Hnonpaytrips = hoursResult.nonPayTrips;
+
+// =====================================
+// LOADING DRIVERS
+// =====================================
+const loadingResult = parseDrivers(activity.Drivers, keyMap);
+
+const LDrivers = loadingResult.html;
+const Lnonpaytrips = loadingResult.nonPayTrips;
+
+// =====================================
+// FINAL OUTPUT (SHOW HOURS FIRST, ELSE LOADING)
+// =====================================
+const driverNames =
+    HoursDrivers !== "--"
+        ? HoursDrivers
+        : LDrivers !== "--"
+            ? LDrivers
+            : "--";
                 var totalpriceload = 0;
 
                 // alert(defaultRate);
@@ -1077,12 +1145,11 @@ function generateCustomerTable1(data) {
                     uniqueDates.add(activity.Date); // automatically unique
                 }
 
-                const driverNames =
-                    HoursDrivers && HoursDrivers.trim() !== "--"
-                        ? HoursDrivers
-                        : LDrivers && LDrivers.trim() !== "--"
-                            ? LDrivers
-                            : "--";
+
+                const formattedDescription = (activity.Description || "")
+                    .split(",")
+                    .map((item, index) => `${index + 1}. ${item.trim()}`)
+                    .join("<br>");
 
                 out += `<tr data-type="${type}" data-trips="${activity.Trips}" data-mins="${totalMins}"
     style="font-size:16px; font-weight:600; text-align:center;"
@@ -1090,8 +1157,8 @@ function generateCustomerTable1(data) {
     onmouseout="this.style.background='white'">
 
     <td style="padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${formatDate(activity.Date)}</td>
-    <td style="padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${activity.Description}</td>
-    <td style="padding:8px; font-size:25px !important;white-space: nowrap;width: max-content;">${driverNames}</td>
+    <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${formattedDescription}</td>
+    <td style="text-align:left;padding:8px; font-size:25px !important;white-space: nowrap;width: max-content;">${driverNames}</td>
     <td style="padding:8px; font-size:25px !important;">${activity.Trips}</td>
     <td style="padding:8px; font-size:25px !important;">${activity.Contract}</td>
     <td style="padding:8px; font-size:25px !important;white-space: nowrap;width: max-content;">${convertTo12Hour(activity.Starting)}</td>
@@ -1111,6 +1178,7 @@ function generateCustomerTable1(data) {
                 border:1px solid #ccc;
                 font-weight:600;
                 cursor:pointer;
+                width:100px;
             ">
             ${dropdown}
         </select>
@@ -1154,6 +1222,8 @@ function generateCustomerTable1(data) {
     </tr>`;
     let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
 ${headname} GARU</h1>`;
+hideProcessingPopup();
+
 
     out += `</table>`;
     document.getElementById("customeralldata2").innerHTML = heading + out;
