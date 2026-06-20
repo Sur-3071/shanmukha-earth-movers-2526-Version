@@ -278,7 +278,7 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
 
 document.getElementById('submit3').addEventListener('click', async function (e) {
     e.preventDefault();
-
+    showProcessingPopup();
     const dte = document.getElementById("dat1").value;
     const name = document.getElementById("name2").value;
     const wid = document.getElementById("cid1").value;
@@ -483,6 +483,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
         document.getElementById("done").style.display = "block";
         // document.getElementById("paydone").style.display = "block";
         // showPaymentSuccess();
+        hideProcessingPopup();
         document.getElementById(
             "paymentSuccessPopup"
         ).style.display = "flex";
@@ -703,143 +704,143 @@ function generateCustomerTable(data) {
     var rowCount = 0; // 🔥 added for page control
     const uniqueDates = new Set();
 
-    
-for (const customerPhone in data) {
 
-    if (data.hasOwnProperty(customerPhone)) {
+    for (const customerPhone in data) {
 
-        const activity = data[customerPhone];
-        var editid = customerPhone + "v";
+        if (data.hasOwnProperty(customerPhone)) {
 
-        if (activity.Name.toLowerCase().trim() == formname.trim()) {
+            const activity = data[customerPhone];
+            var editid = customerPhone + "v";
 
-            // =====================================
-            // BUILD KEY MAP (INSIDE LOOP)
-            // Example:
-            // Venkatesulu babai → A
-            // =====================================
-            const keyMap = {};
+            if (activity.Name.toLowerCase().trim() == formname.trim()) {
 
-            if (activity.Description) {
-                activity.Description.split(",").forEach(item => {
-                    const parts = item.split("→").map(x => x.trim());
+                // =====================================
+                // BUILD KEY MAP (INSIDE LOOP)
+                // Example:
+                // Venkatesulu babai → A
+                // =====================================
+                const keyMap = {};
 
-                    if (parts.length === 2) {
-                        const name = parts[0];
-                        const key = parts[1];
-                        keyMap[key] = name;
-                    }
-                });
-            }
+                if (activity.Description) {
+                    activity.Description.split(",").forEach(item => {
+                        const parts = item.split("→").map(x => x.trim());
 
-            // =====================================
-            // DRIVER PARSER FUNCTION (LOCAL)
-            // =====================================
-            const parseDrivers = (str) => {
-
-                if (!str || str === "undefined") return str;
-
-                const matches = String(str).match(/[A-Za-z0-9_]+\s*=\s*\d+/g) || [];
-
-                if (matches.length === 0) return str;
-
-                let result = "";
-
-                for (let i = 0; i < matches.length; i++) {
-
-                    let [left, value] = matches[i].split("=").map(s => s.trim());
-                    let parts = left.split("_");
-
-                    let key = parts.pop();              // A, B, C
-                    let driverName = parts.join(" ");   // Kone Venkanna
-
-                    let actualName = keyMap[key] || key;
-
-                    result += `${i + 1}. ${driverName} → ${actualName} = ${value}<br>`;
+                        if (parts.length === 2) {
+                            const name = parts[0];
+                            const key = parts[1];
+                            keyMap[key] = name;
+                        }
+                    });
                 }
 
-                return result;
-            };
+                // =====================================
+                // DRIVER PARSER FUNCTION (LOCAL)
+                // =====================================
+                const parseDrivers = (str) => {
 
-            // =====================================
-            // HOURS + LOADING DRIVERS
-            // =====================================
-            let HoursDrivers = 0;
-            let LDrivers = 0;
+                    if (!str || str === "undefined") return str;
 
-            if (activity.HoursDrivers !== undefined &&
-                activity.HoursDrivers !== "undefined" &&
-                activity.HoursDrivers !== null) {
+                    const matches = String(str).match(/[A-Za-z0-9_]+\s*=\s*\d+/g) || [];
 
-                HoursDrivers = parseDrivers(activity.HoursDrivers);
-            }
+                    if (matches.length === 0) return str;
 
-            if (activity.Drivers !== undefined &&
-                activity.Drivers !== "undefined" &&
-                activity.Drivers !== null) {
+                    let result = "";
 
-                LDrivers = parseDrivers(activity.Drivers);
-            }
+                    for (let i = 0; i < matches.length; i++) {
 
-            // =====================================
-            // YOUR EXISTING LOGIC (UNCHANGED)
-            // =====================================
-            var pri = 0;
+                        let [left, value] = matches[i].split("=").map(s => s.trim());
+                        let parts = left.split("_");
 
-            if (activity.Trips !== "--") {
-                totaltrips += parseInt(activity.Trips);
-                Driverslist = LDrivers;
-            }
+                        let key = parts.pop();              // A, B, C
+                        let driverName = parts.join(" ");   // Kone Venkanna
 
-            if (activity.Contract !== "--") {
-                totalcontarct += parseInt(activity.Contract);
-            }
+                        let actualName = keyMap[key] || key;
 
-            if (activity.Starting !== "--") {
-                Driverslist = HoursDrivers;
+                        result += `${i + 1}. ${driverName} → ${actualName} = ${value}<br>`;
+                    }
 
-                var timesplit = activity.TotalTime;
-                var v = timesplit.split(':');
+                    return result;
+                };
 
-                hou += parseInt(v[0]);
-                mint += parseInt(v[1]);
-            }
+                // =====================================
+                // HOURS + LOADING DRIVERS
+                // =====================================
+                let HoursDrivers = 0;
+                let LDrivers = 0;
 
-            collection += parseInt(activity.Price);
+                if (activity.HoursDrivers !== undefined &&
+                    activity.HoursDrivers !== "undefined" &&
+                    activity.HoursDrivers !== null) {
 
-            var bal = 0;
-            if (activity.Payment !== "Paid") {
-                bal = activity.Price;
-            }
+                    HoursDrivers = parseDrivers(activity.HoursDrivers);
+                }
 
-            overallamount += isNaN(activity.OverallPrice) ? 0 : activity.OverallPrice;
-            rec += parseInt(bal);
+                if (activity.Drivers !== undefined &&
+                    activity.Drivers !== "undefined" &&
+                    activity.Drivers !== null) {
 
-            if (activity.Date) {
-                uniqueDates.add(activity.Date);
-            }
+                    LDrivers = parseDrivers(activity.Drivers);
+                }
 
-            rowCount++;
+                // =====================================
+                // YOUR EXISTING LOGIC (UNCHANGED)
+                // =====================================
+                var pri = 0;
 
-            if (activity.Beta !== undefined &&
-                activity.Beta !== "undefined" &&
-                activity.Beta !== null) {
+                if (activity.Trips !== "--") {
+                    totaltrips += parseInt(activity.Trips);
+                    Driverslist = LDrivers;
+                }
 
-                beta = activity.Beta;
-                overallbeta += parseInt(beta);
-            }
+                if (activity.Contract !== "--") {
+                    totalcontarct += parseInt(activity.Contract);
+                }
 
-            const formattedDescription = (activity.Description || "")
+                if (activity.Starting !== "--") {
+                    Driverslist = HoursDrivers;
+
+                    var timesplit = activity.TotalTime;
+                    var v = timesplit.split(':');
+
+                    hou += parseInt(v[0]);
+                    mint += parseInt(v[1]);
+                }
+
+                collection += parseInt(activity.Price);
+
+                var bal = 0;
+                if (activity.Payment !== "Paid") {
+                    bal = activity.Price;
+                }
+
+                overallamount += isNaN(activity.OverallPrice) ? 0 : activity.OverallPrice;
+                rec += parseInt(bal);
+
+                if (activity.Date) {
+                    uniqueDates.add(activity.Date);
+                }
+
+                rowCount++;
+
+                if (activity.Beta !== undefined &&
+                    activity.Beta !== "undefined" &&
+                    activity.Beta !== null) {
+
+                    beta = activity.Beta;
+                    overallbeta += parseInt(beta);
+                }
+
+                const formattedDescription = (activity.Description || "")
                     .split(",")
                     .map((item, index) => `${index + 1}. ${item.trim()}`)
                     .join("<br>");
 
-            let color = activity.Payment === "Paid" ? "green" : "red";
+                let color = activity.Payment === "Paid" ? "green" : "red";
 
-            // =====================================
-            // OUTPUT ROW
-            // =====================================
-            out += `<tr style="font-size:16px; text-align:center;">
+                // =====================================
+                // OUTPUT ROW
+                // =====================================
+                out += `<tr style="font-size:16px; text-align:center;">
 
                 <td style="padding:4px;font-weight:600; font-size:20px !important;">
                     ${customerPhone}
@@ -894,9 +895,9 @@ for (const customerPhone in data) {
                 </td>
 
             </tr>`;
+            }
         }
     }
-}
     var mintohou = parseInt(mint / 60);
     mint = mint - 60 * mintohou;
     hou += mintohou;
@@ -1017,104 +1018,104 @@ function generateCustomerTable1(data) {
                 if (activity.HoursTripsAmount !== undefined && activity.HoursTripsAmount !== "undefined" && activity.HoursTripsAmount !== null) {
                     HoursTripsAmount = activity.HoursTripsAmount;
                 }
-// =====================================
-// BUILD KEY MAP FROM DESCRIPTION
-// Format: Name → A,B,C
-// =====================================
-const buildKeyMap = (desc) => {
-    const map = {};
+                // =====================================
+                // BUILD KEY MAP FROM DESCRIPTION
+                // Format: Name → A,B,C
+                // =====================================
+                const buildKeyMap = (desc) => {
+                    const map = {};
 
-    if (!desc) return map;
+                    if (!desc) return map;
 
-    desc.split(",").forEach(item => {
-        const parts = item.split("→").map(x => x.trim());
+                    desc.split(",").forEach(item => {
+                        const parts = item.split("→").map(x => x.trim());
 
-        if (parts.length === 2) {
-            const name = parts[0]; // Venkatesulu babai
-            const key = parts[1];  // A
+                        if (parts.length === 2) {
+                            const name = parts[0]; // Venkatesulu babai
+                            const key = parts[1];  // A
 
-            map[key] = name;
-        }
-    });
+                            map[key] = name;
+                        }
+                    });
 
-    return map;
-};
+                    return map;
+                };
 
-// =====================================
-// COMMON DRIVER PARSER
-// =====================================
-const parseDrivers = (input, keyMap) => {
+                // =====================================
+                // COMMON DRIVER PARSER
+                // =====================================
+                const parseDrivers = (input, keyMap) => {
 
-    let nonPayTrips = 0;
+                    let nonPayTrips = 0;
 
-    if (!input || input === "undefined") {
-        return {
-            html: "--",
-            nonPayTrips
-        };
-    }
+                    if (!input || input === "undefined") {
+                        return {
+                            html: "--",
+                            nonPayTrips
+                        };
+                    }
 
-    const matches =
-        String(input).match(/[A-Za-z0-9_]+\s*=\s*\d+/g) || [];
+                    const matches =
+                        String(input).match(/[A-Za-z0-9_]+\s*=\s*\d+/g) || [];
 
-    const html = matches.map((item, index) => {
+                    const html = matches.map((item, index) => {
 
-        const [left, value] = item.split("=").map(x => x.trim());
-        const parts = left.split("_");
+                        const [left, value] = item.split("=").map(x => x.trim());
+                        const parts = left.split("_");
 
-        const key = parts.pop();              // A, B, C...
-        const driverName = parts.join(" ");   // Kone Venkanna
+                        const key = parts.pop();              // A, B, C...
+                        const driverName = parts.join(" ");   // Kone Venkanna
 
-        const actualName = keyMap[key] || key;
+                        const actualName = keyMap[key] || key;
 
-        // NON PAY LOGIC (OWN)
-        if (left.toLowerCase().includes("own")) {
-            nonPayTrips += Number(value) || 0;
-        }
+                        // NON PAY LOGIC (OWN)
+                        if (left.toLowerCase().includes("own")) {
+                            nonPayTrips += Number(value) || 0;
+                        }
 
-        return `${index + 1}. ${driverName} → ${actualName} = ${value}`;
+                        return `${index + 1}. ${driverName} → ${actualName} = ${value}`;
 
-    }).join("<br>");
+                    }).join("<br>");
 
-    return {
-        html: html || "--",
-        nonPayTrips
-    };
-};
+                    return {
+                        html: html || "--",
+                        nonPayTrips
+                    };
+                };
 
-// =====================================
-// BUILD KEY MAP (FROM DESCRIPTION)
-// Example:
-// Venkatesulu babai → A
-// bindanapu suribabu → B
-// =====================================
-const keyMap = buildKeyMap(activity.Description);
+                // =====================================
+                // BUILD KEY MAP (FROM DESCRIPTION)
+                // Example:
+                // Venkatesulu babai → A
+                // bindanapu suribabu → B
+                // =====================================
+                const keyMap = buildKeyMap(activity.Description);
 
-// =====================================
-// HOURS DRIVERS
-// =====================================
-const hoursResult = parseDrivers(activity.HoursDrivers, keyMap);
+                // =====================================
+                // HOURS DRIVERS
+                // =====================================
+                const hoursResult = parseDrivers(activity.HoursDrivers, keyMap);
 
-const HoursDrivers = hoursResult.html;
-const Hnonpaytrips = hoursResult.nonPayTrips;
+                const HoursDrivers = hoursResult.html;
+                const Hnonpaytrips = hoursResult.nonPayTrips;
 
-// =====================================
-// LOADING DRIVERS
-// =====================================
-const loadingResult = parseDrivers(activity.Drivers, keyMap);
+                // =====================================
+                // LOADING DRIVERS
+                // =====================================
+                const loadingResult = parseDrivers(activity.Drivers, keyMap);
 
-const LDrivers = loadingResult.html;
-const Lnonpaytrips = loadingResult.nonPayTrips;
+                const LDrivers = loadingResult.html;
+                const Lnonpaytrips = loadingResult.nonPayTrips;
 
-// =====================================
-// FINAL OUTPUT (SHOW HOURS FIRST, ELSE LOADING)
-// =====================================
-const driverNames =
-    HoursDrivers !== "--"
-        ? HoursDrivers
-        : LDrivers !== "--"
-            ? LDrivers
-            : "--";
+                // =====================================
+                // FINAL OUTPUT (SHOW HOURS FIRST, ELSE LOADING)
+                // =====================================
+                const driverNames =
+                    HoursDrivers !== "--"
+                        ? HoursDrivers
+                        : LDrivers !== "--"
+                            ? LDrivers
+                            : "--";
                 var totalpriceload = 0;
 
                 // alert(defaultRate);
@@ -1222,7 +1223,7 @@ const driverNames =
     </tr>`;
     let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
 ${headname} GARU</h1>`;
-hideProcessingPopup();
+    hideProcessingPopup();
 
 
     out += `</table>`;

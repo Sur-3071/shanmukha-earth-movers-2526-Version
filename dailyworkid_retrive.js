@@ -285,6 +285,146 @@ async function selectVillage() {
 //     }
 // });
 
+// document.addEventListener("click", async function (e) {
+
+//     const db1 = DBConstants.DailyWorkDB;
+
+//     if (!e.target.classList.contains("payment-btn")) return;
+
+//     try {
+//         showProcessingPopup();
+
+//         const btn = e.target;
+//         const customerId = btn.id; // workid
+
+//         // =====================================
+//         // LOAD LOCAL STORAGE
+//         // =====================================
+
+//         let unpaidCustomerslistdata =
+//             JSON.parse(localStorage.getItem("unpaidCustomerslistdata")) || [];
+
+//         let paidCustomerslistdata =
+//             JSON.parse(localStorage.getItem("paidCustomerslistdata")) || [];
+
+//         // =====================================
+//         // FIND CUSTOMER (FROM BOTH LISTS)
+//         // =====================================
+
+//         let activity = null;
+
+//         for (const item of unpaidCustomerslistdata) {
+//             if (item.workid == customerId) {
+//                 activity = item;
+//                 break;
+//             }
+//         }
+
+//         if (!activity) {
+//             for (const item of paidCustomerslistdata) {
+//                 if (item.workid == customerId) {
+//                     activity = item;
+//                     break;
+//                 }
+//             }
+//         }
+
+//         if (!activity) {
+//             console.log("Activity not found");
+//             return;
+//         }
+
+//         // =====================================
+//         // TOGGLE STATUS
+//         // =====================================
+
+//         const newStatus =
+//             activity.Payment === "Paid" ? "UnPaid" : "Paid";
+
+//         activity.Payment = newStatus; // KEEP workid safe here
+
+//         // =====================================
+//         // FIREBASE CLEAN COPY (REMOVE workid)
+//         // =====================================
+
+//         const activityCopy = { ...activity };
+//         delete activityCopy.workid;
+
+//         const updatedData = {
+//             ...activityCopy,
+//             Payment: newStatus
+//         };
+
+//         const transactionRef =
+//             ref(db2, `${db1}/${customerId}`);
+
+//         await set(transactionRef, updatedData);
+
+//         // =====================================
+//         // UPDATE LOCAL STORAGE LISTS
+//         // =====================================
+
+//         unpaidCustomerslistdata =
+//             unpaidCustomerslistdata.filter(x => x.workid !== customerId);
+
+//         paidCustomerslistdata =
+//             paidCustomerslistdata.filter(x => x.workid !== customerId);
+
+//         if (newStatus === "Paid") {
+//             paidCustomerslistdata.push({
+//                 ...activity,
+//                 workid: customerId,
+//                 Payment: newStatus
+//             });
+//         } else {
+//             unpaidCustomerslistdata.push({
+//                 ...activity,
+//                 workid: customerId,
+//                 Payment: newStatus
+//             });
+//         }
+
+//         localStorage.setItem(
+//             "unpaidCustomerslistdata",
+//             JSON.stringify(unpaidCustomerslistdata)
+//         );
+
+//         localStorage.setItem(
+//             "paidCustomerslistdata",
+//             JSON.stringify(paidCustomerslistdata)
+//         );
+
+//         // =====================================
+//         // UI UPDATE
+//         // =====================================
+
+//         btn.innerText = newStatus;
+//         btn.style.backgroundColor =
+//             newStatus === "Paid" ? "green" : "red";
+//                                         hideProcessingPopup();
+
+//         document.getElementById("paymentSuccessPopup5").style.display = "flex";
+
+//         setTimeout(() => {
+//             document.getElementById("paymentSuccessPopup5").style.display = "none";
+//         }, 1500);
+
+//         // =====================================
+//         // REFRESH TABLE
+//         // =====================================
+
+//         setTimeout(() => {
+
+//             const recoveryBtn = document.getElementById("recoveryamount");
+//             if (recoveryBtn) recoveryBtn.click();
+
+//         }, 1500);
+
+//     } catch (error) {
+//         console.log(error);
+//     }
+// });
+
 document.addEventListener("click", async function (e) {
 
     const db1 = DBConstants.DailyWorkDB;
@@ -292,10 +432,12 @@ document.addEventListener("click", async function (e) {
     if (!e.target.classList.contains("payment-btn")) return;
 
     try {
+
         showProcessingPopup();
 
         const btn = e.target;
         const customerId = btn.id; // workid
+        const amount = parseInt(btn.dataset.amount) || 0;
 
         // =====================================
         // LOAD LOCAL STORAGE
@@ -308,12 +450,13 @@ document.addEventListener("click", async function (e) {
             JSON.parse(localStorage.getItem("paidCustomerslistdata")) || [];
 
         // =====================================
-        // FIND CUSTOMER (FROM BOTH LISTS)
+        // FIND CUSTOMER
         // =====================================
 
         let activity = null;
 
         for (const item of unpaidCustomerslistdata) {
+
             if (item.workid == customerId) {
                 activity = item;
                 break;
@@ -321,7 +464,9 @@ document.addEventListener("click", async function (e) {
         }
 
         if (!activity) {
+
             for (const item of paidCustomerslistdata) {
+
                 if (item.workid == customerId) {
                     activity = item;
                     break;
@@ -330,6 +475,8 @@ document.addEventListener("click", async function (e) {
         }
 
         if (!activity) {
+
+            hideProcessingPopup();
             console.log("Activity not found");
             return;
         }
@@ -339,12 +486,14 @@ document.addEventListener("click", async function (e) {
         // =====================================
 
         const newStatus =
-            activity.Payment === "Paid" ? "UnPaid" : "Paid";
+            activity.Payment === "Paid"
+                ? "UnPaid"
+                : "Paid";
 
-        activity.Payment = newStatus; // KEEP workid safe here
+        activity.Payment = newStatus;
 
         // =====================================
-        // FIREBASE CLEAN COPY (REMOVE workid)
+        // FIREBASE UPDATE
         // =====================================
 
         const activityCopy = { ...activity };
@@ -361,28 +510,43 @@ document.addEventListener("click", async function (e) {
         await set(transactionRef, updatedData);
 
         // =====================================
-        // UPDATE LOCAL STORAGE LISTS
+        // REMOVE FROM BOTH LISTS
         // =====================================
 
         unpaidCustomerslistdata =
-            unpaidCustomerslistdata.filter(x => x.workid !== customerId);
+            unpaidCustomerslistdata.filter(
+                x => String(x.workid) !== String(customerId)
+            );
 
         paidCustomerslistdata =
-            paidCustomerslistdata.filter(x => x.workid !== customerId);
+            paidCustomerslistdata.filter(
+                x => String(x.workid) !== String(customerId)
+            );
+
+        // =====================================
+        // ADD TO CORRECT LIST
+        // =====================================
 
         if (newStatus === "Paid") {
+
             paidCustomerslistdata.push({
                 ...activity,
                 workid: customerId,
                 Payment: newStatus
             });
+
         } else {
+
             unpaidCustomerslistdata.push({
                 ...activity,
                 workid: customerId,
                 Payment: newStatus
             });
         }
+
+        // =====================================
+        // SAVE LOCAL STORAGE
+        // =====================================
 
         localStorage.setItem(
             "unpaidCustomerslistdata",
@@ -395,33 +559,145 @@ document.addEventListener("click", async function (e) {
         );
 
         // =====================================
-        // UI UPDATE
+        // BUTTON UI UPDATE
         // =====================================
 
         btn.innerText = newStatus;
-        btn.style.backgroundColor =
-            newStatus === "Paid" ? "green" : "red";
-                                        hideProcessingPopup();
 
-        document.getElementById("paymentSuccessPopup5").style.display = "flex";
+        btn.style.backgroundColor =
+            newStatus === "Paid"
+                ? "green"
+                : "red";
+
+        // =====================================
+        // BALANCE CELL UPDATE
+        // =====================================
+
+        let balanceCell =
+            btn.closest("tr")
+                ?.querySelector(".balance-amount");
+
+        if (balanceCell) {
+
+            balanceCell.innerText =
+                newStatus === "Paid"
+                    ? 0
+                    : amount;
+        }
+
+        // =====================================
+        // SUMMARY UPDATE
+        // =====================================
+
+        let unpaidCell =
+            document.querySelector(".current-unpaid");
+
+        let remainingCell =
+            document.querySelector(".remaining-unpaid");
+
+        if (unpaidCell) {
+
+            let current =
+                parseInt(unpaidCell.innerText) || 0;
+
+            unpaidCell.innerText =
+                newStatus === "Paid"
+                    ? current - amount
+                    : current + amount;
+        }
+
+        if (remainingCell) {
+
+            let current =
+                parseInt(remainingCell.innerText) || 0;
+
+            remainingCell.innerText =
+                newStatus === "Paid"
+                    ? current - amount
+                    : current + amount;
+        }
+
+        // =====================================
+        // SUCCESS POPUP
+        // =====================================
+
+        hideProcessingPopup();
+
+        document.getElementById(
+            "paymentSuccessPopup5"
+        ).style.display = "flex";
 
         setTimeout(() => {
-            document.getElementById("paymentSuccessPopup5").style.display = "none";
+
+            document.getElementById(
+                "paymentSuccessPopup5"
+            ).style.display = "none";
+
         }, 1500);
 
         // =====================================
-        // REFRESH TABLE
+        // CUSTOMER REFRESH
         // =====================================
+
+        const customerName = activity.Name;
+
+        const unpaidclickablecustomerElement =
+            document.getElementById(
+                `UnPaid-${customerName}`
+            );
+
+        const paidclickablecustomerElement =
+            document.getElementById(
+                `Paid-${customerName}`
+            );
 
         setTimeout(() => {
 
-            const recoveryBtn = document.getElementById("recoveryamount");
-            if (recoveryBtn) recoveryBtn.click();
+            if (typeof closePopup5 === "function") {
+                closePopup5();
+            }
+
+            if (typeof closePopup6 === "function") {
+                closePopup6();
+            }
+
+            const recoveryBtn =
+                document.getElementById(
+                    "recoveryamount"
+                );
+
+            if (recoveryBtn) {
+                recoveryBtn.click();
+            }
+
+            setTimeout(() => {
+
+                if (newStatus === "UnPaid") {
+
+                    if (
+                        paidclickablecustomerElement
+                    ) {
+                        paidclickablecustomerElement.click();
+                    }
+
+                } else {
+
+                    if (
+                        unpaidclickablecustomerElement
+                    ) {
+                        unpaidclickablecustomerElement.click();
+                    }
+                }
+
+            }, 300);
 
         }, 1500);
 
     } catch (error) {
-        console.log(error);
+
+        hideProcessingPopup();
+        console.error(error);
+        alert("Error updating payment status");
     }
 });
 

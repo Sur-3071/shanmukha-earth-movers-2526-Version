@@ -955,9 +955,66 @@ async function RePrint1(startdate, enddate) {
 
 }
 function generateTableByDate(data, startdate, enddate, data1) {
-    showProcessingPopup();
+    let out = "";
+    const start = new Date(startdate);
+    const end = new Date(enddate);
+
+    const diffDays = Math.round(
+        (end - start) / (1000 * 60 * 60 * 24)
+    );
+        console.log(diffDays);
+
+
+    if (diffDays === 0) {
+
+        out += `
+    <div style="text-align:center;">
+        <h1
+            style="
+                font-family: Georgia, serif;
+                font-size: 42px;
+                font-weight: bold;
+                background: linear-gradient(to right, #f7971e, #ffd200);
+                color: #222;
+                padding: 15px 30px;
+                border-radius: 50px;
+                display: inline-block;
+                margin: 20px auto;
+                box-shadow: 0 6px 20px rgba(247,151,30,0.4);
+                text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+                letter-spacing: 3px;
+                border: 3px solid #fff;
+            ">
+            🚜 Today's Work 🚜
+        </h1>
+    </div>`;
+    }
+    else if (diffDays === 6) {
+
+        out += `
+    <div style="text-align:center;">
+        <h1
+            style="
+                font-family: Georgia, serif;
+                font-size: 42px;
+                font-weight: bold;
+                background: linear-gradient(to right, #f7971e, #ffd200);
+                color: #222;
+                padding: 15px 30px;
+                border-radius: 50px;
+                display: inline-block;
+                margin: 20px auto;
+                box-shadow: 0 6px 20px rgba(247,151,30,0.4);
+                text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+                letter-spacing: 3px;
+                border: 3px solid #fff;
+            ">
+            🚜 Last Week Work 🚜
+        </h1>
+    </div>`;
+    }
     var collection = 0;
-    let out = `<table border="1px">
+    out += `<table border="1px">
        <tr>
             <th id="csize">Customer Id</th>
             <th id="csize1">Date</th>

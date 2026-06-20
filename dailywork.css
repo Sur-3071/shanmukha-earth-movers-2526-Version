@@ -639,13 +639,41 @@ h2 {
     font-weight: 700; /* Simplified from 1900 (invalid value) */
 }
 
-#userForm1, #userForm3, #userForm4, #userForm5, #userForm8, #userForm10 {
+#userForm1, #userForm8, #userForm10 {
     background-color: #ffffff;
     padding: 15px; /* Reduced from 20px */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px; /* Standardized width */
+}
+
+#userForm3{
+ background-color: #ffffff;
+    padding: 15px; /* Reduced from 20px */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Standardized width */
+    margin-left: 80px;
+}
+#userForm4{
+ background-color: #ffffff;
+    padding: 15px; /* Reduced from 20px */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Standardized width */
+    margin-left: 120px;
+}
+#userForm5{
+ background-color: #ffffff;
+    padding: 15px; /* Reduced from 20px */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Standardized width */
+    margin-left: 120px;
 }
 #userForm6{
  background-color: #ffffff;
@@ -1689,7 +1717,7 @@ h2 {
 @media screen and (max-width: 768px) {
 
     #desc {
-        width: 95%;
+        width: 85%;
         min-height: 120px;
         font-size: 16px;
     }
