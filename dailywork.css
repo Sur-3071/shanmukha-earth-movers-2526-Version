@@ -13,7 +13,34 @@ body {
 
     position: absolute !important;
 
-    width: 100% !important;
+    width: 135% !important;
+
+    max-height: 320px !important;
+
+    overflow-y: auto !important;
+
+    background: rgba(255,255,255,0.98) !important;
+
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+
+    border-radius: 18px !important;
+
+    border: 1px solid rgba(255,255,255,0.3) !important;
+
+   box-shadow: 0 15px 35px rgba(0,0,0,0.12), 0 5px 15px rgba(75,166,236,0.15) !important;
+
+    overflow-x: hidden !important;
+
+    z-index: 99999 !important;
+
+    animation: premiumDropdownOpen 0.35s ease !important;
+}
+#workentrysearch .dropdown-list {
+
+    position: absolute !important;
+
+    width: 00% !important;
 
     max-height: 320px !important;
 
@@ -667,6 +694,14 @@ h2 {
     width: 112% !important;
     max-width: 900px; /* Standardized width */
 }
+#userForm8 {
+    background-color: #ffffff;
+    padding: 15px; /* Reduced from 20px */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100% !important;
+    max-width: 900px; /* Standardized width */
+}
 
 #userForm3{
  background-color: #ffffff;
@@ -674,8 +709,8 @@ h2 {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px; /* Standardized width */
-    margin-left: 80px;
+    max-width: 550px; /* Standardized width */
+    margin-left: 30px;
 }
 #userForm4{
  background-color: #ffffff;
@@ -683,8 +718,8 @@ h2 {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px; /* Standardized width */
-    margin-left: 120px;
+    max-width: 550px; /* Standardized width */
+    margin-left: 50px;
 }
 #userForm5{
  background-color: #ffffff;
@@ -692,8 +727,8 @@ h2 {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px; /* Standardized width */
-    margin-left: 120px;
+    max-width: 550px; /* Standardized width */
+    margin-left: 50px;
 }
 #userForm6{
  background-color: #ffffff;
@@ -1191,6 +1226,15 @@ input, select {
     margin-left:0 !important;
     margin-right:0 !important;
     display:block !important;
+}
+#userForm3 .dropdown-input,
+#userForm4 .dropdown-input,
+#userForm5 .dropdown-input {
+    width: 520px !important;
+    max-width: 600px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    display: block !important;
 }
 .dropdown-input{
     width:370px !important;

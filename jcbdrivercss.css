@@ -35,7 +35,7 @@ h1, h2 {
     outline: none;
     cursor: pointer;
     transition: 0.3s ease;
-    width: 260px;
+    width: 2800px;
     background-color: #fff;
 }
 #monthDropdown1 select:focus {

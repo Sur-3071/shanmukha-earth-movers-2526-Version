@@ -2446,8 +2446,8 @@
             <div class="dropdown">
                 <input type="text" id="name" class="dropdown-input" placeholder="Select Customer" readonly>
 
-                <div class="dropdown-list" id="nameDropdown">
-                    <div class="search-box">
+                <div class="dropdown-list" id="nameDropdown" id="workentrysearch">
+                    <div class="search-box" style="width:500px">
                         <input type="text" id="nameSearch" placeholder="Type to search...">
                     </div>
                     <div id="nameItems"></div>
@@ -4632,7 +4632,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             }
         }
 
-        async function openPopup7() {
+    async function openPopup7() {
             // Open modal immediately
             document.getElementById("myModal7").style.display = "flex";
 
