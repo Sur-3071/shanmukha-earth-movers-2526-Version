@@ -381,6 +381,26 @@ span {
   background-size: 18px;
 }
 
+#desc {
+    width: 530px;
+    height: 180px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+    #desc {
+        width: 320px;
+        height: 140px;
+        font-size: 14px;
+    }
+}
+
 /* FULL SCREEN OVERLAY */
 
 .payment-popup{
@@ -1165,8 +1185,15 @@ input, select {
     box-sizing: border-box;
     font-size: 16px;
 }
-.dropdown-input{
+#userForm1 .dropdown-input{
     width:530px !important;
+    max-width:600px !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    display:block !important;
+}
+.dropdown-input{
+    width:370px !important;
     max-width:600px !important;
     margin-left:0 !important;
     margin-right:0 !important;
@@ -1714,17 +1741,6 @@ h2 {
     box-sizing: border-box;
 }
 
-@media screen and (max-width: 768px) {
-
-    #desc {
-        width: 55% !important;;
-        min-height: 120px;
-        font-size: 16px;
-    }
-
-
-    
-}
 
 .processing-box{
     background:white;
