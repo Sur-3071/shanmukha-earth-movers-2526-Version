@@ -644,8 +644,8 @@ h2 {
     padding: 15px; /* Reduced from 20px */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px; /* Standardized width */
+    width: 112% !important;
+    max-width: 900px; /* Standardized width */
 }
 
 #userForm3{
@@ -813,7 +813,7 @@ h2 {
 
 
 .dropdown-input {
-    width: 100%;
+    width: 140%;
     padding: 10px;
     border: 1px solid #ccc;
     cursor: pointer;
@@ -1166,8 +1166,8 @@ input, select {
     font-size: 16px;
 }
 .dropdown-input{
-    width:370px !important;
-    max-width:500px !important;
+    width:530px !important;
+    max-width:600px !important;
     margin-left:0 !important;
     margin-right:0 !important;
     display:block !important;
@@ -1234,8 +1234,8 @@ input[type="checkbox"] {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    max-width: 400px; /* Reduced from 400px */
+    width: 120%;
+    max-width: 500px; /* Reduced from 400px */
     margin-bottom: 10px; /* Reduced from 20px */
     padding-bottom: 50px; /* Reduced from 150px */
     
