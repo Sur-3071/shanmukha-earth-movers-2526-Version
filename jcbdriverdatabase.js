@@ -131,21 +131,25 @@ document.getElementById('submit20').addEventListener('click', async function (e)
                     }
                 }
                 else {
+                    hideProcessingPopup();
                     alert("The Amount Must be in Integer");
                     datarebuild();
                 }
             }
             else {
+                hideProcessingPopup();
                 alert("Please Enter Amount");
                 datarebuild();
             }
         }
         else {
+            hideProcessingPopup();
             alert("Please Select Month");
             datarebuild();
         }
     }
     else {
+        hideProcessingPopup();
         alert("Please Choose Date");
         datarebuild();
     }
@@ -166,6 +170,7 @@ document.getElementById('submit20').addEventListener('click', async function (e)
 
 document.getElementById('toggleBtn').addEventListener('click', async function (e) {
     e.preventDefault();
+    showProcessingPopup();
     const salaryDiv = document.getElementById("salaryTableContainer");
     const leaveDiv = document.getElementById("leaveTableContainer");
     try {
@@ -521,7 +526,7 @@ function generateTable(data) {
 function updateMonthCards(monthlySummary) {
     const driverSalary = 15000;   // fixed base salary per month
     const allowedLeaves = 2;      // standard allowed leaves per month
-
+    hideProcessingPopup();
     Object.keys(monthsMap).forEach(month => {
         const card = document.getElementById(`card-${month}`);
         // console.log(month);

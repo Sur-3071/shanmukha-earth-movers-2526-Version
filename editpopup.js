@@ -132,6 +132,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
                         document.getElementById("paymentSuccessPopup5").style.display = "none";
                     }, 3000);
                 } catch (error) {
+                    hideProcessingPopup();
                     console.error("Error adding document: ", error);
                     alert("An error occurred. Please try again.");
                 }
@@ -139,10 +140,12 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
 
             }
             else {
+                hideProcessingPopup();
                 alert("Please Enter Village Name");
             }
         }
         else {
+            hideProcessingPopup();
             alert("Please Enter Customer Name Or place Or Location Name");
         }
     }

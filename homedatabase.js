@@ -127,21 +127,26 @@ document.getElementById('submit9').addEventListener('click', async function (e) 
                             document.getElementById("paymentSuccessPopup5").style.display = "none";
                         }, 3000); // Ensure this function is defined elsewhere
                     } catch (error) {
+                        hideProcessingPopup();
                         console.log("Error updating Firebase data:", error);
                     }
                 } else {
+                    hideProcessingPopup();
                     alert("Snapshot does not exist or is invalid");
                     datarebuild();
                 }
             } else {
+                hideProcessingPopup();
                 alert("Amount is empty");
                 datarebuild();
             }
         } else {
+            hideProcessingPopup();
             alert("Name is empty");
             datarebuild();
         }
     } else {
+        hideProcessingPopup();
         alert("Date is empty");
         datarebuild();
     }

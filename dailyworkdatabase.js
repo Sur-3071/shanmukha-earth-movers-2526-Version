@@ -156,26 +156,32 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                         }
                     }
                     else {
+                        hideProcessingPopup();
+
                         alert("Please select shift type");
                         datarebuild();
                     }
                 }
                 else {
+                    hideProcessingPopup();
                     alert("Please Enter Disel Amount");
                     datarebuild();
                 }
             }
             else {
+                hideProcessingPopup();
                 alert("Please Enter Village Name");
                 datarebuild();
             }
         }
         else {
+            hideProcessingPopup();
             alert("Please Enter Customer Name Or place Or Location Name");
             datarebuild();
         }
     }
     else {
+        hideProcessingPopup();
         alert("Please Choose Date");
         datarebuild();
     }
@@ -252,11 +258,13 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
                     }
                 }
                 else {
+                    hideProcessingPopup();
                     alert("Word Id Error");
                     datarebuild();
                 }
             }
             else {
+                hideProcessingPopup();
                 document.getElementById("nodata").style.display = "block";
                 document.getElementById("userForm2").reset();
                 setTimeout(() => {
@@ -266,11 +274,13 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
             }
         }
         else {
+            hideProcessingPopup();
             alert("Please Enter Village Name");
             datarebuild();
         }
     }
     else {
+        hideProcessingPopup();
         alert("Please Enter Customer Name Or place Or Location Name");
         datarebuild();
     }

@@ -55,11 +55,13 @@ document.getElementById('submit').addEventListener('click', function (e) {
                 GetSystemId("wid10");
             })
             .catch((error) => {
+                hideProcessingPopup();
                 console.error("Error adding document: ", error);
                 alert("An error occurred. Please try again.");
             });
     }
     else {
+        hideProcessingPopup();
         alert("Please Enter All The Fields Properly");
     }
 });
@@ -109,11 +111,13 @@ export function editDriverData(e) {
                 getDataBtn.click();
             })
             .catch((error) => {
+                hideProcessingPopup();
                 console.error("Error adding document: ", error);
                 alert("An error occurred. Please try again.");
             });
     }
     else {
+        hideProcessingPopup();
         alert("Please Enter All The Fields Properly for editing");
     }
 }
@@ -151,11 +155,13 @@ amountdataentry.addEventListener('click', function (e) {
                 GetSystemId("wid30");
             })
             .catch((error) => {
+                hideProcessingPopup();
                 console.error("Error adding document: ", error);
                 alert("An error occurred. Please try again.");
             });
     }
     else {
+        hideProcessingPopup();
         alert("Please Fill All The Fields");
     }
 });
@@ -164,8 +170,9 @@ getDataBtn.addEventListener('click', async function () {
 
     const drivername = document.getElementById("dname2").value.trim();
     const db1 = DBConstants.TractorTrips;
-
+    showProcessingPopup();
     if (!drivername || drivername === "select Driver Name") {
+        hideProcessingPopup();
         alert("Please Select Driver Name");
         return;
     }
@@ -197,11 +204,12 @@ getDataBtn.addEventListener('click', async function () {
             alert(`No trips found for ${drivername}`);
             return;
         }
-
+        hideProcessingPopup();
         // Send only matching records
         displaytripsdata(filteredData, drivername);
 
     } catch (error) {
+        hideProcessingPopup();
         console.error("Error occurred while fetching data:", error);
         alert("Failed to load data");
     }
@@ -212,7 +220,7 @@ updatebtn.addEventListener('click', async function () {
 
     const drivername = document.getElementById("dname2").value.trim();
     const db1 = DBConstants.TractorTrips;
-
+    showProcessingPopup();
     if (!drivername || drivername === "select Driver Name") {
         alert("Please Select Driver Name");
         return;
@@ -245,10 +253,11 @@ updatebtn.addEventListener('click', async function () {
             alert(`No trips found for ${drivername}`);
             return;
         }
-        ;
+        hideProcessingPopup();
         displayUpdatedtripsdata(filteredData)
 
     } catch (error) {
+        hideProcessingPopup();
         console.error("Error occurred while fetching data:", error);
         alert("Failed to load data");
     }
@@ -259,8 +268,9 @@ getamount.addEventListener('click', async function () {
 
     const drivername = document.getElementById("dname2").value.trim();
     const db1 = DBConstants.TractorAmount;
-
+    showProcessingPopup();
     if (!drivername || drivername === "select Driver Name") {
+        hideProcessingPopup();
         alert("Please Select Driver Name");
         return;
     }
@@ -295,9 +305,11 @@ getamount.addEventListener('click', async function () {
         }
 
         // Send only matched data
+        hideProcessingPopup();
         displayamountdata(filteredData);
 
     } catch (error) {
+        hideProcessingPopup();
         console.error("Error occurred while fetching data:", error);
         alert("Failed to load amount data");
     }
@@ -306,8 +318,10 @@ getamount.addEventListener('click', async function () {
 getbal.addEventListener('click', async function () {
 
     const drivername = document.getElementById("dname2").value.trim();
+    showProcessingPopup();
 
     if (!drivername || drivername === "select Driver Name") {
+        hideProcessingPopup();
         alert("Please Select Driver Name");
         return;
     }
@@ -355,10 +369,12 @@ getbal.addEventListener('click', async function () {
         }
 
         // Send to UI functions
+        hideProcessingPopup();
         displaybal1(filteredTrips, drivername);
         displaybal2(filteredAmounts);
 
     } catch (error) {
+        hideProcessingPopup();
         console.error("Error occurred while fetching data:", error);
         alert("Failed to load balance data");
     }

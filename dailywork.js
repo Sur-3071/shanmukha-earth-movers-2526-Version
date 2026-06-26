@@ -217,6 +217,27 @@ function addflow() {
     }
 
 }
+function addflow7() {
+    var c = document.getElementById("worktype7").value;
+    if (c == "Hours") {
+        document.getElementById("loading7").style.display = "none";
+        document.getElementById("contract7").style.display = "none";
+        document.getElementById("hours7").style.display = "block";
+    }
+    else {
+        if (c == "Loading") {
+            document.getElementById("hours7").style.display = "none";
+            document.getElementById("loading7").style.display = "block";
+            document.getElementById("contract7").style.display = "none";
+        }
+        else {
+            document.getElementById("hours7").style.display = "none";
+            document.getElementById("loading7").style.display = "none";
+            document.getElementById("contract7").style.display = "block";
+        }
+    }
+
+}
 document.addEventListener("click", function (event) {
     // Check if a button with class "pay" was clicked
     if (event.target.classList.contains("pay")) {
@@ -322,14 +343,305 @@ function conprice7() {
 
 
 
+// function removedone7() {
+
+//     setTimeout(function () {
+
+//         var v7 = document.getElementById("done7");
+
+//         v7.style.display = "none";
+//         document.getElementById("userForm").reset();
+
+//     }, 3000);
+// }
+
+
+
+// function removereadonly7() {
+
+//     const inputs =
+//         document.querySelectorAll(
+//             '#userForm input[type="text"], #userForm input[type="number"]'
+//         );
+
+//     inputs.forEach(input => {
+
+//         input.removeAttribute('readonly');
+
+//     });
+//     generateOutput7();
+//     generateOutput17();
+
+// }
+
+
+
+// function addRow7() {
+
+//     const container =
+//         document.getElementById('container437');
+
+//     const newRow =
+//         document.createElement('div');
+
+//     newRow.className = 'row7';
+
+//     newRow.innerHTML = `
+//        <input type="text"
+//               placeholder="Driver Name"
+//               name="driverName7[]"
+//               onkeyup="removereadonly7(),updateTotalTrips7()">
+
+//        <input type="number"
+//               placeholder="Trips"
+//               name="trips7[]"
+//               readonly
+//               required
+//               onkeyup="updateTotalTrips7()">
+
+//        <button type="button"
+//                class="remove-button"
+//                onclick="removeRow7(this)">
+//                X
+//        </button>
+//     `;
+
+//     container.appendChild(newRow);
+// }
+
+
+
+// function addRow17() {
+
+//     const container1 =
+//         document.getElementById('container21');
+
+//     const newRow1 =
+//         document.createElement('div');
+
+//     newRow1.className = 'row17';
+
+//     newRow1.innerHTML = `
+//        <input type="text"
+//               placeholder="Driver Name"
+//               name="driverName17[]"
+//               onkeyup="removereadonly7(),updateTotalTrips17()">
+
+//        <input type="number"
+//               placeholder="Trips"
+//               name="trips17[]"
+//               readonly
+//               required
+//               onkeyup="updateTotalTrips17()">
+
+//        <button type="button"
+//                class="remove-button"
+//                onclick="removeRow17(this)">
+//                X
+//        </button>
+//     `;
+
+//     container1.appendChild(newRow1);
+// }
+
+
+
+// function removeRow7(button) {
+
+//     const row = button.parentElement;
+
+//     row.remove();
+
+//     updateTotalTrips7();
+// }
+
+
+
+// function removeRow17(button) {
+
+//     const row = button.parentElement;
+
+//     row.remove();
+
+//     updateTotalTrips17();
+// }
+
+
+
+// function updateTotalTrips7() {
+
+//     const driverNames =
+//         document.querySelectorAll('input[name="driverName7[]"]');
+
+//     const tripInputs =
+//         document.querySelectorAll('input[name="trips7[]"]');
+
+//     let paytotal = 0;
+
+//     let total = 0;
+
+//     driverNames.forEach((driverName, index) => {
+
+//         const trip = tripInputs[index].value || 0;
+
+//         const name =
+//             (driverName.value.toLowerCase()
+//                 || "Unknown Driver")
+//                 .trim()
+//                 .replace(/\s+/g, "_");
+
+//         if (name.includes("own")) {
+
+//             const value = parseInt(trip) || 0;
+
+//             paytotal += value;
+//         }
+
+//         total += parseInt(trip) || 0;
+//     });
+
+//     document.getElementById('trips7').value = total;
+
+//     document.getElementById('noncompanytractors7').value = paytotal;
+
+//     tripprice7();
+// }
+
+
+
+// function updateTotalTrips17() {
+
+//     const driverNames =
+//         document.querySelectorAll('input[name="driverName17[]"]');
+
+//     const tripInputs =
+//         document.querySelectorAll('input[name="trips17[]"]');
+
+//     let paytotal = 0;
+
+//     let total = 0;
+
+//     driverNames.forEach((driverName, index) => {
+
+//         const trip = tripInputs[index].value || 0;
+
+//         const name =
+//             (driverName.value.toLowerCase()
+//                 || "Unknown Driver")
+//                 .trim()
+//                 .replace(/\s+/g, "_");
+
+//         if (name.includes("own")) {
+
+//             const value = parseInt(trip) || 0;
+
+//             paytotal += value;
+//         }
+
+//         total += parseInt(trip) || 0;
+//     });
+
+//     document.getElementById('trips17').value = total;
+
+//     document.getElementById('hoursnoncompanytractors7').value = paytotal;
+
+//     tripprice17();
+// }
+
+
+
+// function tripprice7() {
+
+//     var c1 =
+//         document.getElementById("trips7").value || "0";
+
+//     var c3 =
+//         parseInt(document.getElementById("jcbtrprate7").value || "0");
+
+//     var c2 = parseInt(c1) * c3;
+
+//     var beta =
+//         document.getElementById("beta7").value || "0";
+
+//     var fin =
+//         isNaN(c2)
+//             ? parseInt(beta)
+//             : (parseInt(beta) + c2);
+
+//     document.getElementById("rate7").value = fin;
+
+//     generateOutput7();
+// }
+
+
+
+// function generateOutput7() {
+
+//     const driverNames =
+//         document.querySelectorAll('input[name="driverName7[]"]');
+
+//     const trips =
+//         document.querySelectorAll('input[name="trips7[]"]');
+
+//     const outputDiv =
+//         document.getElementById('output7');
+
+//     outputDiv.value = "";
+
+//     driverNames.forEach((driverName, index) => {
+
+//         const trip = trips[index].value || 0;
+
+//         const name =
+//             (driverName.value || "Unknown Driver")
+//                 .trim()
+//                 .replace(/\s+/g, "_");
+
+//         const line = `${name} = ${trip}`;
+
+//         outputDiv.value += line + "\n";
+//     });
+// }
+
+
+// function tripprice17() {
+//     // alert("tripprice1");
+//     var c1 = document.getElementById("trips17").value;
+//     var c3 = parseInt(document.getElementById("trprate17").value);
+//     var c2 = parseInt(c1) * c3;
+//     document.getElementById("alltrprate7").value = c2;
+//     generateOutput17();
+// }
+
+// function generateOutput17() {
+//     // alert("hi");
+//     const driverNames = document.querySelectorAll('input[name="driverName17[]"]');
+//     const trips = document.querySelectorAll('input[name="trips17[]"]');
+//     const outputDiv = document.getElementById('output17');
+//     outputDiv.value = "";
+//     driverNames.forEach((driverName, index) => {
+//         const trip = trips[index].value || 0;
+//         const name = (driverName.value || "Unknown Driver").trim().replace(/\s+/g, "_");
+//         const line = `${name} = ${trip}`;
+//         outputDiv.value += line + " " + "\n";
+//     });
+// }
+
 function removedone7() {
 
     setTimeout(function () {
 
-        var v7 = document.getElementById("done7");
+        const v7 = document.getElementById("done7");
 
-        v7.style.display = "none";
-        document.getElementById("userForm").reset();
+        if (v7) {
+            v7.style.display = "none";
+        }
+
+        const form = document.getElementById("userForm");
+
+        if (form) {
+            form.reset();
+        }
 
     }, 3000);
 }
@@ -338,98 +650,109 @@ function removedone7() {
 
 function removereadonly7() {
 
-    const inputs =
-        document.querySelectorAll(
-            '#userForm input[type="text"], #userForm input[type="number"]'
-        );
+    const inputs = document.querySelectorAll(
+        '#userForm input[type="text"], #userForm input[type="number"]'
+    );
 
     inputs.forEach(input => {
-
-        input.removeAttribute('readonly');
-
+        input.removeAttribute("readonly");
     });
+
     generateOutput7();
     generateOutput17();
-
 }
 
 
 
 function addRow7() {
 
-    const container =
-        document.getElementById('container437');
+    const container = document.getElementById("container437");
 
-    const newRow =
-        document.createElement('div');
+    if (!container) return;
 
-    newRow.className = 'row7';
+    const newRow = document.createElement("div");
+
+    newRow.className = "row7";
 
     newRow.innerHTML = `
-       <input type="text"
-              placeholder="Driver Name"
-              name="driverName7[]"
-              onkeyup="removereadonly7()">
+        <input
+            type="text"
+            placeholder="Driver Name"
+            name="driverName7[]"
+            onkeyup="removereadonly7(); updateTotalTrips7();">
 
-       <input type="number"
-              placeholder="Trips"
-              name="trips7[]"
-              readonly
-              required
-              onkeyup="updateTotalTrips7()">
+        <input
+            type="number"
+            placeholder="Trips"
+            name="trips7[]"
+            readonly
+            required
+            onkeyup="updateTotalTrips7()">
 
-       <button type="button"
-               class="remove-button"
-               onclick="removeRow7(this)">
-               X
-       </button>
+        <button
+            type="button"
+            class="remove-button"
+            onclick="removeRow7(this)">
+            X
+        </button>
     `;
 
     container.appendChild(newRow);
+
+    updateTotalTrips7();
 }
 
 
 
 function addRow17() {
 
-    const container1 =
-        document.getElementById('container21');
+    const container = document.getElementById("container21");
 
-    const newRow1 =
-        document.createElement('div');
+    if (!container) return;
 
-    newRow1.className = 'row17';
+    const newRow = document.createElement("div");
 
-    newRow1.innerHTML = `
-       <input type="text"
-              placeholder="Driver Name"
-              name="driverName17[]"
-              onkeyup="removereadonly7()">
+    newRow.className = "row17";
 
-       <input type="number"
-              placeholder="Trips"
-              name="trips17[]"
-              readonly
-              required
-              onkeyup="updateTotalTrips17()">
+    newRow.innerHTML = `
+        <input
+            type="text"
+            placeholder="Driver Name"
+            name="driverName17[]"
+            onkeyup="removereadonly7(); updateTotalTrips17();">
 
-       <button type="button"
-               class="remove-button"
-               onclick="removeRow17(this)">
-               X
-       </button>
+        <input
+            type="number"
+            placeholder="Trips"
+            name="trips17[]"
+            readonly
+            required
+            onkeyup="updateTotalTrips17()">
+
+        <button
+            type="button"
+            class="remove-button"
+            onclick="removeRow17(this)">
+            X
+        </button>
     `;
 
-    container1.appendChild(newRow1);
+    container.appendChild(newRow);
+
+    updateTotalTrips17();
 }
 
 
 
 function removeRow7(button) {
 
+    if (!button) return;
+
     const row = button.parentElement;
 
-    row.remove();
+    if (row) {
+        row.remove();
+    }
 
     updateTotalTrips7();
 }
@@ -438,14 +761,16 @@ function removeRow7(button) {
 
 function removeRow17(button) {
 
+    if (!button) return;
+
     const row = button.parentElement;
 
-    row.remove();
+    if (row) {
+        row.remove();
+    }
 
     updateTotalTrips17();
 }
-
-
 
 function updateTotalTrips7() {
 
@@ -455,33 +780,53 @@ function updateTotalTrips7() {
     const tripInputs =
         document.querySelectorAll('input[name="trips7[]"]');
 
-    let paytotal = 0;
+    const tripsField =
+        document.getElementById("trips7");
 
+    const ownTripsField =
+        document.getElementById("noncompanytractors7");
+
+    let paytotal = 0;
     let total = 0;
+
+    // No rows found
+    if (driverNames.length === 0 || tripInputs.length === 0) {
+
+        if (tripsField) tripsField.value = 0;
+        if (ownTripsField) ownTripsField.value = 0;
+
+        tripprice7();
+        return;
+    }
 
     driverNames.forEach((driverName, index) => {
 
-        const trip = tripInputs[index].value || 0;
+        // Skip if matching trip input doesn't exist
+        if (!tripInputs[index]) return;
+
+        const trip =
+            parseInt(tripInputs[index].value) || 0;
 
         const name =
-            (driverName.value.toLowerCase()
-                || "Unknown Driver")
+            (driverName.value || "")
+                .toLowerCase()
                 .trim()
                 .replace(/\s+/g, "_");
 
         if (name.includes("own")) {
-
-            const value = parseInt(trip) || 0;
-
-            paytotal += value;
+            paytotal += trip;
         }
 
-        total += parseInt(trip) || 0;
+        total += trip;
     });
 
-    document.getElementById('trips7').value = total;
+    if (tripsField) {
+        tripsField.value = total;
+    }
 
-    document.getElementById('noncompanytractors7').value = paytotal;
+    if (ownTripsField) {
+        ownTripsField.value = paytotal;
+    }
 
     tripprice7();
 }
@@ -496,58 +841,75 @@ function updateTotalTrips17() {
     const tripInputs =
         document.querySelectorAll('input[name="trips17[]"]');
 
-    let paytotal = 0;
+    const tripsField =
+        document.getElementById("trips17");
 
+    const ownTripsField =
+        document.getElementById("hoursnoncompanytractors7");
+
+    let paytotal = 0;
     let total = 0;
+
+    // No rows found
+    if (driverNames.length === 0 || tripInputs.length === 0) {
+
+        if (tripsField) tripsField.value = 0;
+        if (ownTripsField) ownTripsField.value = 0;
+
+        tripprice17();
+        return;
+    }
 
     driverNames.forEach((driverName, index) => {
 
-        const trip = tripInputs[index].value || 0;
+        // Skip if matching trip input doesn't exist
+        if (!tripInputs[index]) return;
+
+        const trip =
+            parseInt(tripInputs[index].value) || 0;
 
         const name =
-            (driverName.value.toLowerCase()
-                || "Unknown Driver")
+            (driverName.value || "")
+                .toLowerCase()
                 .trim()
                 .replace(/\s+/g, "_");
 
         if (name.includes("own")) {
-
-            const value = parseInt(trip) || 0;
-
-            paytotal += value;
+            paytotal += trip;
         }
 
-        total += parseInt(trip) || 0;
+        total += trip;
     });
 
-    document.getElementById('trips17').value = total;
+    if (tripsField) {
+        tripsField.value = total;
+    }
 
-    document.getElementById('hoursnoncompanytractors7').value = paytotal;
+    if (ownTripsField) {
+        ownTripsField.value = paytotal;
+    }
 
     tripprice17();
 }
 
-
-
 function tripprice7() {
 
-    var c1 =
-        document.getElementById("trips7").value || "0";
+    const tripsField = document.getElementById("trips7");
+    const jcbRateField = document.getElementById("jcbtrprate7");
+    const betaField = document.getElementById("beta7");
+    const rateField = document.getElementById("rate7");
 
-    var c3 =
-        parseInt(document.getElementById("jcbtrprate7").value || "0");
+    if (!tripsField || !jcbRateField || !betaField || !rateField) {
+        return;
+    }
 
-    var c2 = parseInt(c1) * c3;
+    const totalTrips = parseInt(tripsField.value) || 0;
+    const jcbRate = parseInt(jcbRateField.value) || 0;
+    const beta = parseInt(betaField.value) || 0;
 
-    var beta =
-        document.getElementById("beta7").value || "0";
+    const totalAmount = (totalTrips * jcbRate) + beta;
 
-    var fin =
-        isNaN(c2)
-            ? parseInt(beta)
-            : (parseInt(beta) + c2);
-
-    document.getElementById("rate7").value = fin;
+    rateField.value = totalAmount;
 
     generateOutput7();
 }
@@ -563,46 +925,90 @@ function generateOutput7() {
         document.querySelectorAll('input[name="trips7[]"]');
 
     const outputDiv =
-        document.getElementById('output7');
+        document.getElementById("output7");
+
+    if (!outputDiv) return;
 
     outputDiv.value = "";
 
+    if (driverNames.length === 0 || trips.length === 0) {
+        return;
+    }
+
     driverNames.forEach((driverName, index) => {
 
-        const trip = trips[index].value || 0;
+        if (!trips[index]) return;
 
-        const name =
-            (driverName.value || "Unknown Driver")
-                .trim()
-                .replace(/\s+/g, "_");
+        const trip = parseInt(trips[index].value) || 0;
 
-        const line = `${name} = ${trip}`;
+        const name = (driverName.value || "").trim();
 
-        outputDiv.value += line + "\n";
+        // Ignore completely empty rows
+        if (name === "" && trip === 0) {
+            return;
+        }
+
+        outputDiv.value += `${name || "Unknown Driver"} = ${trip}\n`;
+
     });
 }
 
 
+
 function tripprice17() {
-    // alert("tripprice1");
-    var c1 = document.getElementById("trips17").value;
-    var c3 = parseInt(document.getElementById("trprate17").value);
-    var c2 = parseInt(c1) * c3;
-    document.getElementById("alltrprate7").value = c2;
+
+    const tripsField = document.getElementById("trips17");
+    const tripRateField = document.getElementById("trprate17");
+    const totalField = document.getElementById("alltrprate7");
+
+    if (!tripsField || !tripRateField || !totalField) {
+        return;
+    }
+
+    const totalTrips = parseInt(tripsField.value) || 0;
+    const tripRate = parseInt(tripRateField.value) || 0;
+
+    totalField.value = totalTrips * tripRate;
+
     generateOutput17();
 }
 
+
+
 function generateOutput17() {
-    // alert("hi");
-    const driverNames = document.querySelectorAll('input[name="driverName17[]"]');
-    const trips = document.querySelectorAll('input[name="trips17[]"]');
-    const outputDiv = document.getElementById('output17');
+
+    const driverNames =
+        document.querySelectorAll('input[name="driverName17[]"]');
+
+    const trips =
+        document.querySelectorAll('input[name="trips17[]"]');
+
+    const outputDiv =
+        document.getElementById("output17");
+
+    if (!outputDiv) return;
+
     outputDiv.value = "";
+
+    if (driverNames.length === 0 || trips.length === 0) {
+        return;
+    }
+
     driverNames.forEach((driverName, index) => {
-        const trip = trips[index].value || 0;
-        const name = (driverName.value || "Unknown Driver").trim().replace(/\s+/g, "_");
-        const line = `${name} = ${trip}`;
-        outputDiv.value += line + " " + "\n";
+
+        if (!trips[index]) return;
+
+        const trip = parseInt(trips[index].value) || 0;
+
+        const name = (driverName.value || "").trim();
+
+        // Ignore completely empty rows
+        if (name === "" && trip === 0) {
+            return;
+        }
+
+        outputDiv.value += `${name || "Unknown Driver"} = ${trip}\n`;
+
     });
 }
 

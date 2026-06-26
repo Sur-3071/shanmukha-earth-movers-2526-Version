@@ -227,7 +227,7 @@ function editData7() {
                        placeholder="Driver Name"
                        name="driverName7[]"
                        value="${driver}"
-                       onchange="removereadonly7()"
+                       onkeyup="removereadonly7(),updateTotalTrips7()"
                        required>
 
                 <input type="number"
@@ -298,7 +298,7 @@ function editData17() {
                        placeholder="Driver Name"
                        name="driverName17[]"
                        value="${driver}"
-                       onchange="removereadonly7()"
+                       onkeyup="removereadonly7(),updateTotalTrips17()"
                        required>
 
                 <input type="number"
@@ -326,53 +326,270 @@ function editData17() {
 
 
 
+// document.getElementById('submit8').addEventListener('click', async function (e) {
+//     e.preventDefault();
+//     showProcessingPopup();
+//     // alert("Submit button clicked.");
+
+//     const dat = document.getElementById("dat7").value;
+
+//     const wid = document.getElementById("wid7").value;
+
+//     const name = document.getElementById("name7").value;
+
+//     const villname = document.getElementById("vil7").value;
+
+//     // const pno = document.getElementById("pno7").value;
+
+//     const disel = document.getElementById("dis7").value;
+
+//     var con = document.getElementById("con7").value;
+
+//     var desc = document.getElementById("desc7").value;
+
+//     var stime = document.getElementById("stime7").value;
+
+//     var etime = document.getElementById("etime7").value;
+
+//     var ttime = document.getElementById("ttime7").value;
+
+//     const rate = document.getElementById("rate7").value;
+
+//     var hrsamt = document.getElementById("hrsrate7").value;
+
+//     var trpamt = document.getElementById("trprate7").value;
+
+//     var jcbtrpamt = document.getElementById("jcbtrprate7").value;
+
+//     var trips = document.getElementById("trips7").value;
+
+//     var output = document.getElementById("output7").value;
+
+//     var pay = document.getElementById("pay7").value;
+
+//     const beta = document.getElementById("beta7").value;
+
+//     var hourstrpamt = document.getElementById("trprate17").value;
+
+//     var hoursdrivers = document.getElementById("output17").value;
+
+//     var hourstrips = document.getElementById("trips17").value;
+
+//     var hoursnoncompanytractors =
+//         document.getElementById("hoursnoncompanytractors7").value;
+
+//     var noncompanytractors =
+//         document.getElementById("noncompanytractors7").value;
+
+//     var overallamount = 0;
+//     // alert(trips+" "+con);
+//     if (trips.length > 0 && trips !== "--") {
+//         const jcb = parseInt(jcbtrpamt) || 0;
+//         const tripAmt = parseInt(trpamt) || 0;
+//         const tripCount = parseInt(trips) || 0;
+//         const b = parseInt(beta) || 0;
+
+//         overallamount = (jcb + tripAmt) * tripCount + b - (tripAmt * noncompanytractors);
+
+//     }
+//     else {
+//         // alert(trips+" "+con);
+//         if (con.length > 0 && con !== "--") {
+//             const c = parseInt(con) || 0;
+//             const b = parseInt(beta) || 0;
+
+//             overallamount = c + b;
+
+//         }
+//         else {
+//             const b = parseInt(beta) || 0;
+//             const r = parseInt(rate) || 0;
+//             const hAmt = parseInt(hourstrpamt) || 0;
+//             const hCnt = parseInt(hourstrips) || 0;
+//             const hoursnoncompanytractorstrips = parseInt(hoursnoncompanytractors) || 0;
+
+//             overallamount = b + r + (hAmt * hCnt) - ((hAmt * hoursnoncompanytractorstrips));
+
+//         }
+//     }
+//     // alert(overallamount);
+//     if (stime.length === 0) {
+
+//         stime = "--";
+//         etime = "--";
+//         hrsamt = "--";
+//     }
+//     if (dat.length > 0) {
+//         if (name.length > 0) {
+//             if (villname.length > 0) {
+
+//                 const db1 = DBConstants.DailyWorkDB;
+//                 const db2 = "Work_Count";
+//                 const db3 = "Work_Id";
+//                 const w_id = ref(db, `${db2}`);
+//                 const dataRefset = ref(db, `${db1}/${wid}`);
+//                 var databasecount = ref(db, `${db2}/${db3}`);
+//                 const snapshot = await get(databasecount);
+//                 var workid = parseInt(snapshot.val());
+//                 try {
+//                     if (workid == wid) {
+//                         await set(w_id, {
+//                             Work_Id: parseInt(wid) + 1
+//                         });
+//                     }
+
+//                     const customerData = {
+//                         Date: dat,
+//                         Name: name,
+//                         Villagename: villname,
+//                         PhoneNumber: "**",
+//                         Shift: "**",
+//                         Beta: beta,
+//                         HoursTrips: hourstrips,
+//                         HoursTripsAmount: hourstrpamt,
+//                         HoursDrivers: hoursdrivers,
+//                         Description: desc,
+//                         Contract: con,
+//                         Payment: pay,
+//                         Disel: disel,
+//                         Trips: trips,
+//                         Drivers: output,
+//                         HoursPrice: hrsamt,
+//                         TripsPrice: trpamt,
+//                         JcbTripPrice: jcbtrpamt,
+//                         OverallPrice: overallamount,
+//                         Starting: stime,
+//                         Ending: etime,
+//                         TotalTime: ttime,
+//                         Price: rate
+//                     };
+//                     await set(dataRefset, customerData);
+//                     customerData.workid = wid;
+//                     hideProcessingPopup();
+
+//                     document.getElementById("paymentSuccessPopup5").style.display = "flex";
+//                     // document.getElementById("done").style.display = "block";
+//                     setTimeout(() => {
+//                         document.getElementById("paymentSuccessPopup5").style.display = "none";
+//                     }, 1500);
+
+//                     // let newPaymentStatus = updatedCustomer.paymentStatus;
+
+//                     let unpaidCustomerslistdata =
+//                         JSON.parse(localStorage.getItem("unpaidCustomerslistdata")) || [];
+
+//                     let paidCustomerslistdata =
+//                         JSON.parse(localStorage.getItem("paidCustomerslistdata")) || [];
+
+//                     // Remove customer from both lists first
+//                     unpaidCustomerslistdata =
+//                         unpaidCustomerslistdata.filter(x => x.workid !== wid);
+
+//                     paidCustomerslistdata =
+//                         paidCustomerslistdata.filter(x => x.workid !== wid);
+
+//                     // Add to correct list
+//                     if (customerData.Payment === "Paid") {
+//                         paidCustomerslistdata.push(customerData);
+//                     } else {
+//                         unpaidCustomerslistdata.push(customerData);
+//                     }
+
+//                     localStorage.setItem(
+//                         "unpaidCustomerslistdata",
+//                         JSON.stringify(unpaidCustomerslistdata)
+//                     );
+
+//                     localStorage.setItem(
+//                         "paidCustomerslistdata",
+//                         JSON.stringify(paidCustomerslistdata)
+//                     );
+
+//                     setTimeout(() => {
+//                         document.getElementById("myModal7").style.display = "none";
+//                     }, 1500);
+
+//                     const unpaidclickablecustomerElement = document.getElementById(`UnPaid-${name}`)
+//                     const paidclickablecustomerElement = document.getElementById(`Paid-${name}`)
+
+//                     setTimeout(() => {
+
+//                         closePopup5();
+//                         closePopup6();
+
+//                         const recoveryBtn = document.getElementById("recoveryamount");
+
+//                         if (recoveryBtn) {
+//                             recoveryBtn.click();
+//                         }
+
+//                         setTimeout(() => {
+
+//                             if (paidclickablecustomerElement || unpaidclickablecustomerElement) {
+//                                 if (customerData.Payment === "Paid") {
+//                                     paidclickablecustomerElement.click();
+
+//                                 }
+//                                 else {
+//                                     unpaidclickablecustomerElement.click();
+
+//                                 }
+//                             }
+
+//                         }, 300); // small delay is enough
+
+//                     }, 1500);
+//                 } catch (error) {
+//                     console.error("Error adding document: ", error);
+//                     alert("An error occurred. Please try again.");
+//                 }
+
+
+//             }
+//             else {
+//                 alert("Please Enter Village Name");
+//             }
+//         }
+//         else {
+//             alert("Please Enter Customer Name Or place Or Location Name");
+//         }
+//     }
+//     else {
+//         alert("Please Choose Date");
+//     }
+// });
+
+
 document.getElementById('submit8').addEventListener('click', async function (e) {
     e.preventDefault();
     showProcessingPopup();
-    // alert("Submit button clicked.");
 
     const dat = document.getElementById("dat7").value;
-
     const wid = document.getElementById("wid7").value;
-
     const name = document.getElementById("name7").value;
-
     const villname = document.getElementById("vil7").value;
-
-    // const pno = document.getElementById("pno7").value;
-
     const disel = document.getElementById("dis7").value;
 
     var con = document.getElementById("con7").value;
-
     var desc = document.getElementById("desc7").value;
-
     var stime = document.getElementById("stime7").value;
-
     var etime = document.getElementById("etime7").value;
-
     var ttime = document.getElementById("ttime7").value;
-
-    const rate = document.getElementById("rate7").value;
+    
+    // Changed from const to let to allow reassignment in cleanup logic
+    let rate = document.getElementById("rate7").value; 
 
     var hrsamt = document.getElementById("hrsrate7").value;
-
     var trpamt = document.getElementById("trprate7").value;
-
     var jcbtrpamt = document.getElementById("jcbtrprate7").value;
 
     var trips = document.getElementById("trips7").value;
-
     var output = document.getElementById("output7").value;
-
     var pay = document.getElementById("pay7").value;
-
     const beta = document.getElementById("beta7").value;
 
     var hourstrpamt = document.getElementById("trprate17").value;
-
     var hoursdrivers = document.getElementById("output17").value;
-
     var hourstrips = document.getElementById("trips17").value;
 
     var hoursnoncompanytractors =
@@ -381,44 +598,108 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
     var noncompanytractors =
         document.getElementById("noncompanytractors7").value;
 
-    var overallamount = 0;
-    // alert(trips+" "+con);
-    if (trips.length > 0 && trips !== "--") {
-        const jcb = parseInt(jcbtrpamt) || 0;
-        const tripAmt = parseInt(trpamt) || 0;
-        const tripCount = parseInt(trips) || 0;
-        const b = parseInt(beta) || 0;
+    // NEW FIELD
+    const workType = document.getElementById("worktype7").value;
 
-        overallamount = (jcb + tripAmt) * tripCount + b - (tripAmt * noncompanytractors);
+    let overallamount = 0;
 
+    // Calculate amount based on Work Type
+    switch (workType) {
+
+        case "Loading":
+            {
+                const jcb = parseInt(jcbtrpamt) || 0;
+                const tripAmt = parseInt(trpamt) || 0;
+                const tripCount = parseInt(trips) || 0;
+                const b = parseInt(beta) || 0;
+                const nonCompany = parseInt(noncompanytractors) || 0;
+
+                overallamount =
+                    ((jcb + tripAmt) * tripCount) +
+                    b -
+                    (tripAmt * nonCompany);
+            }
+            break;
+
+        case "Contract":
+            {
+                const c = parseInt(con) || 0;
+                const b = parseInt(beta) || 0;
+
+                overallamount = c + b;
+            }
+            break;
+
+        case "Hours":
+            {
+                const b = parseInt(beta) || 0;
+                const r = parseInt(rate) || 0;
+                const hAmt = parseInt(hourstrpamt) || 0;
+                const hCnt = parseInt(hourstrips) || 0;
+                // alert(hoursnoncompanytractors);
+                const nonCompanyTrips =
+                    parseInt(hoursnoncompanytractors) || 0;
+
+                overallamount =
+                    b +
+                    r +
+                    (hAmt * hCnt) -
+                    (hAmt * nonCompanyTrips);
+            }
+            break;
+
+        default:
+            overallamount = 0;
     }
-    else {
-        // alert(trips+" "+con);
-        if (con.length > 0 && con !== "--") {
-            const c = parseInt(con) || 0;
-            const b = parseInt(beta) || 0;
 
-            overallamount = c + b;
+    // Clear unwanted values based on Work Type
+    if (workType === "Hours") {
 
-        }
-        else {
-            const b = parseInt(beta) || 0;
-            const r = parseInt(rate) || 0;
-            const hAmt = parseInt(hourstrpamt) || 0;
-            const hCnt = parseInt(hourstrips) || 0;
-            const hoursnoncompanytractorstrips = parseInt(hoursnoncompanytractors) || 0;
+        // Loading fields
+        trips = "--";
+        output = "--";
+        trpamt = "--";
+        jcbtrpamt = "--";
+        noncompanytractors = "--";
 
-            overallamount = b + r + (hAmt * hCnt) - ((hAmt * hoursnoncompanytractorstrips));
+        // Contract fields
+        con = "--";
 
-        }
-    }
-    // alert(overallamount);
-    if (stime.length === 0) {
+    } else if (workType === "Loading") {
 
+        // Hours fields
+        hrsamt = "--";
+        hourstrpamt = "--";
+        hourstrips = "--";
+        hoursdrivers = "--";
+        hoursnoncompanytractors = "--";
         stime = "--";
         etime = "--";
+        ttime = "--";
+
+        // Contract fields
+        con = "--";
+
+    } else if (workType === "Contract") {
+
+        // Hours fields
         hrsamt = "--";
+        hourstrpamt = "--";
+        hourstrips = "--";
+        hoursdrivers = "--";
+        hoursnoncompanytractors = "--";
+        stime = "--";
+        etime = "--";
+        ttime = "--";
+
+        // Loading fields
+        trips = "--";
+        output = "--";
+        trpamt = "--";
+        jcbtrpamt = "--";
+        noncompanytractors = "--";
     }
+
     if (dat.length > 0) {
         if (name.length > 0) {
             if (villname.length > 0) {
@@ -426,12 +707,16 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                 const db1 = DBConstants.DailyWorkDB;
                 const db2 = "Work_Count";
                 const db3 = "Work_Id";
+
                 const w_id = ref(db, `${db2}`);
                 const dataRefset = ref(db, `${db1}/${wid}`);
-                var databasecount = ref(db, `${db2}/${db3}`);
+                const databasecount = ref(db, `${db2}/${db3}`);
+
                 const snapshot = await get(databasecount);
-                var workid = parseInt(snapshot.val());
+                const workid = parseInt(snapshot.val());
+
                 try {
+
                     if (workid == wid) {
                         await set(w_id, {
                             Work_Id: parseInt(wid) + 1
@@ -439,41 +724,54 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                     }
 
                     const customerData = {
+
                         Date: dat,
                         Name: name,
                         Villagename: villname,
                         PhoneNumber: "**",
                         Shift: "**",
+
                         Beta: beta,
+
                         HoursTrips: hourstrips,
                         HoursTripsAmount: hourstrpamt,
                         HoursDrivers: hoursdrivers,
+
                         Description: desc,
+
                         Contract: con,
+
                         Payment: pay,
+
                         Disel: disel,
+
                         Trips: trips,
                         Drivers: output,
+
                         HoursPrice: hrsamt,
                         TripsPrice: trpamt,
                         JcbTripPrice: jcbtrpamt,
+
                         OverallPrice: overallamount,
+
                         Starting: stime,
                         Ending: etime,
                         TotalTime: ttime,
+
                         Price: rate
                     };
+
                     await set(dataRefset, customerData);
+
                     customerData.workid = wid;
+
                     hideProcessingPopup();
 
                     document.getElementById("paymentSuccessPopup5").style.display = "flex";
-                    // document.getElementById("done").style.display = "block";
+
                     setTimeout(() => {
                         document.getElementById("paymentSuccessPopup5").style.display = "none";
                     }, 1500);
-
-                    // let newPaymentStatus = updatedCustomer.paymentStatus;
 
                     let unpaidCustomerslistdata =
                         JSON.parse(localStorage.getItem("unpaidCustomerslistdata")) || [];
@@ -481,14 +779,12 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                     let paidCustomerslistdata =
                         JSON.parse(localStorage.getItem("paidCustomerslistdata")) || [];
 
-                    // Remove customer from both lists first
                     unpaidCustomerslistdata =
                         unpaidCustomerslistdata.filter(x => x.workid !== wid);
 
                     paidCustomerslistdata =
                         paidCustomerslistdata.filter(x => x.workid !== wid);
 
-                    // Add to correct list
                     if (customerData.Payment === "Paid") {
                         paidCustomerslistdata.push(customerData);
                     } else {
@@ -509,15 +805,19 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                         document.getElementById("myModal7").style.display = "none";
                     }, 1500);
 
-                    const unpaidclickablecustomerElement = document.getElementById(`UnPaid-${name}`)
-                    const paidclickablecustomerElement = document.getElementById(`Paid-${name}`)
+                    const unpaidclickablecustomerElement =
+                        document.getElementById(`UnPaid-${name}`);
+
+                    const paidclickablecustomerElement =
+                        document.getElementById(`Paid-${name}`);
 
                     setTimeout(() => {
 
                         closePopup5();
                         closePopup6();
 
-                        const recoveryBtn = document.getElementById("recoveryamount");
+                        const recoveryBtn =
+                            document.getElementById("recoveryamount");
 
                         if (recoveryBtn) {
                             recoveryBtn.click();
@@ -526,37 +826,47 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                         setTimeout(() => {
 
                             if (paidclickablecustomerElement || unpaidclickablecustomerElement) {
+
                                 if (customerData.Payment === "Paid") {
                                     paidclickablecustomerElement.click();
-
-                                }
-                                else {
+                                } else {
                                     unpaidclickablecustomerElement.click();
-
                                 }
+
                             }
 
-                        }, 300); // small delay is enough
+                        }, 300);
 
                     }, 1500);
+
                 } catch (error) {
+
                     console.error("Error adding document: ", error);
+                    hideProcessingPopup();
                     alert("An error occurred. Please try again.");
+
                 }
 
+            } else {
 
-            }
-            else {
+                hideProcessingPopup();
                 alert("Please Enter Village Name");
-            }
-        }
-        else {
-            alert("Please Enter Customer Name Or place Or Location Name");
-        }
-    }
-    else {
-        alert("Please Choose Date");
-    }
-});
 
+            }
+
+        } else {
+
+            hideProcessingPopup();
+            alert("Please Enter Customer Name Or place Or Location Name");
+
+        }
+
+    } else {
+
+        hideProcessingPopup();
+        alert("Please Choose Date");
+
+    }
+
+});
 

@@ -897,6 +897,7 @@ function SearchTable(data) {
         document.getElementById("overview").style.display = "block";
 
     } else {
+        hideProcessingPopup();
         d.style.display = "block";
         RePrint();
     }
