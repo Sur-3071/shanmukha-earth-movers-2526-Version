@@ -169,6 +169,7 @@ amountdataentry.addEventListener('click', function (e) {
 getDataBtn.addEventListener('click', async function () {
 
     const drivername = document.getElementById("dname2").value.trim();
+    document.querySelector(".customer-title").textContent = drivername;
     const db1 = DBConstants.TractorTrips;
     showProcessingPopup();
     if (!drivername || drivername === "select Driver Name") {
@@ -182,6 +183,7 @@ getDataBtn.addEventListener('click', async function () {
         const snapshot = await get(dataRefget);
 
         if (!snapshot.exists()) {
+            hideProcessingPopup();
             alert("No trips data available");
             return;
         }
@@ -201,6 +203,7 @@ getDataBtn.addEventListener('click', async function () {
         }
 
         if (Object.keys(filteredData).length === 0) {
+            hideProcessingPopup();
             alert(`No trips found for ${drivername}`);
             return;
         }
@@ -231,6 +234,7 @@ updatebtn.addEventListener('click', async function () {
         const snapshot = await get(dataRefget);
 
         if (!snapshot.exists()) {
+            hideProcessingPopup();
             alert("No trips data available");
             return;
         }
@@ -250,6 +254,7 @@ updatebtn.addEventListener('click', async function () {
         }
 
         if (Object.keys(filteredData).length === 0) {
+            hideProcessingPopup();
             alert(`No trips found for ${drivername}`);
             return;
         }
@@ -280,6 +285,7 @@ getamount.addEventListener('click', async function () {
         const snapshot = await get(dataRefget);
 
         if (!snapshot.exists()) {
+            hideProcessingPopup();
             alert("No amount data available");
             return;
         }
@@ -300,6 +306,7 @@ getamount.addEventListener('click', async function () {
         }
 
         if (Object.keys(filteredData).length === 0) {
+            hideProcessingPopup();
             alert(`No amount records found for ${drivername}`);
             return;
         }
@@ -364,6 +371,7 @@ getbal.addEventListener('click', async function () {
             Object.keys(filteredTrips).length === 0 &&
             Object.keys(filteredAmounts).length === 0
         ) {
+            hideProcessingPopup();
             alert("No data found for this driver");
             return;
         }

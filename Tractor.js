@@ -146,14 +146,14 @@ function box2() {
     p1.style.display = "none";
     p2.style.display = "none";
     p3.style.display = "none";
-    if (photo.length > 0) {
-        var d = document.getElementById(list[photo]);
-        d.style.display = "none";
-    }
+    // if (photo.length > 0) {
+    //     var d = document.getElementById(list[photo]);
+    //     d.style.display = "none";
+    // }
     photo = document.getElementById('dname2').value;
-    var d1 = list[photo]
-    var d2 = document.getElementById(d1);
-    d2.style.display = "block";
+    // var d1 = list[photo]
+    // var d2 = document.getElementById(d1);
+    // d2.style.display = "block";
 }
 function box3() {
     var d = document.getElementById('dname3').value;
