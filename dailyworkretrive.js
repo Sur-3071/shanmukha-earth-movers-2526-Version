@@ -321,7 +321,7 @@ function generateTable(data) {
                                     if (firstCustomer)
                                         driver += " → " + firstCustomer;
                                     else
-                                        driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+                                        driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
                                 }
 
                             } else {
@@ -331,15 +331,15 @@ function generateTable(data) {
                                 if (firstCustomer)
                                     driver += " → " + firstCustomer;
                                 else
-                                    driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+                                    driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
                             }
 
                         } else {
 
                             if (suffixMatch)
-                                driver = driver.replace(/_(\w)$/, " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase()));
+                                driver = driver.replace(/_(\w)$/, " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase()));
                             else
-                                driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+                                driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
 
                         }
 
@@ -402,7 +402,7 @@ function generateTable(data) {
                                     if (firstCustomer)
                                         driver += " → " + firstCustomer;
                                     else
-                                        driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+                                        driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
 
                                 }
 
@@ -413,7 +413,7 @@ function generateTable(data) {
                                 if (firstCustomer)
                                     driver += " → " + firstCustomer;
                                 else
-                                    driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+                                    driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
 
                             }
 
@@ -422,7 +422,7 @@ function generateTable(data) {
                             if (suffixMatch)
                                 driver = driver.replace(/_(\w)$/, " → Customer");
                             else
-                                driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+                                driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
 
                         }
 
@@ -446,7 +446,7 @@ function generateTable(data) {
             var totaltractortrips = "--";
 
             if (
-                HoursDrivers !=="--"
+                HoursDrivers !== "--"
             ) {
 
                 drivers = HoursDrivers;
@@ -516,7 +516,7 @@ function generateTable(data) {
             //     amount=parseInt(amount)+parseInt(activity.Beta);
             // }
             var beta = activity.Beta === "undefined" || activity.Beta === undefined || activity.Beta === "undefined" ? 0 : activity.Beta
-            
+
             var overallpricemoney = isNaN(activity.OverallPrice) || activity.OverallPrice === undefined ? activity.Price : activity.OverallPrice;
 
             overallcollection += parseInt(overallpricemoney);
@@ -531,12 +531,19 @@ function generateTable(data) {
             if (drivers && drivers !== "--" && drivers !== "undefined" && drivers.trim() !== "") {
                 drivers = drivers.split("<br>").filter(x => x.trim() !== "").map((x, i) => (i + 1) + ". " + x.trim()).join("<br>");
             }
+
+            const formattedDescription = (activity.Description || "")
+                .split(",")
+                .slice(0, -1) // Removes the last item
+                .map((item, index) => `${index + 1}. ${item.trim()}`)
+                .join("<br>");
+
             out += `<tr>
                         <td>${customerPhone}</td>
                         <td style="white-space: nowrap;width: max-content;">${formattedDate}</td>
                         <td>${activity.Name}</td>
                         <td>${activity.Villagename}</td>
-                        <td>${activity.Description}</td>
+                        <td style="white-space: nowrap; width: max-content; text-align: left;">${formattedDescription}</td>
                         <td>${activity.Disel}</td>
                         <td>${totaltractortrips}</td>
                         <td style="white-space: nowrap; width: max-content; text-align: left;">${drivers}</td>
