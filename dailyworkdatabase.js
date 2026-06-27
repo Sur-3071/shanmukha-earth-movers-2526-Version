@@ -313,6 +313,7 @@ document.getElementById('submit3').addEventListener('click', async function (e) 
 
 document.getElementById('submit7').addEventListener('click', async function (e) {
     e.preventDefault();
+    showProcessingPopup();
     const dte = document.getElementById("dat6").value;
     const name = document.getElementById("name6").value;
     const wid = document.getElementById("cid6").value;
