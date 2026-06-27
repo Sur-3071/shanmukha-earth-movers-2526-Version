@@ -572,6 +572,7 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
 
     var con = document.getElementById("con7").value;
     var desc = document.getElementById("desc7").value;
+    // alert(desc);
     var stime = document.getElementById("stime7").value;
     var etime = document.getElementById("etime7").value;
     var ttime = document.getElementById("ttime7").value;

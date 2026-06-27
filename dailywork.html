@@ -108,6 +108,7 @@
         }
 
         async function showAllTractorSummary() {
+            showProcessingPopup();
 
             try {
 
@@ -174,18 +175,110 @@
                         summary[driver].totalGiven += amount;
                     }
                 }
-
+                hideProcessingPopup();
                 renderSummary(summary);
 
             } catch (err) {
-
+                hideProcessingPopup();
                 console.error(err);
                 alert("Error loading summary");
             }
         }
 
-        function renderSummary(summary) {
-            let html = `
+//         function renderSummary(summary) {
+//             let html = `
+// <table 
+//     border="1"
+//     width="100%"
+//     style="
+//         border-collapse:collapse;
+//         font-size:20px;
+//         font-family:Poppins,sans-serif;
+//         text-align:center;
+//         box-shadow:0 4px 10px rgba(0,0,0,0.1);
+//     ">
+    
+//     <tr>
+//         <th style="
+//             background:#4ba6ec;
+//             color:white;
+//             padding:15px;
+//             font-size:22px;
+//         ">
+//             Driver Name
+//         </th>
+
+//         <th style="
+//             background:#4ba6ec;
+//             color:white;
+//             padding:15px;
+//             font-size:22px;
+//         ">
+//             Total Amount
+//         </th>
+
+//         <th style="
+//             background:#4ba6ec;
+//             color:white;
+//             padding:15px;
+//             font-size:22px;
+//         ">
+//             Given Amount
+//         </th>
+
+//         <th style="
+//             background:#4ba6ec;
+//             color:white;
+//             padding:15px;
+//             font-size:22px;
+//         ">
+//             Balance
+//         </th>
+//     </tr>
+// `;
+
+//             Object.keys(summary).forEach(driver => {
+
+//                 const total = summary[driver].totalEarned;
+//                 const given = summary[driver].totalGiven;
+//                 const balance = total - given;
+
+//                 html += `
+//         <tr style="font-size:20px;font-weight:500;">
+//             <td style="padding:12px;">${driver}</td>
+
+//             <td style="padding:12px;">
+//                 ₹${total.toLocaleString()}
+//             </td>
+
+//             <td style="padding:12px;">
+//                 ₹${given.toLocaleString()}
+//             </td>
+
+//             <td style="
+//                 padding:12px;
+//                 font-weight:bold;
+//                 color:${balance >= 0 ? 'green' : 'red'};
+//             ">
+//                 ₹${balance.toLocaleString()}
+//             </td>
+//         </tr>
+//     `;
+//             });
+
+//             html += `</table>`;
+
+//             document.getElementById("summaryDiv").innerHTML = html;
+//         }
+
+
+function renderSummary(summary) {
+
+    let grandTotal = 0;
+    let grandGiven = 0;
+    let grandBalance = 0;
+
+    let html = `
 <table 
     border="1"
     width="100%"
@@ -196,7 +289,7 @@
         text-align:center;
         box-shadow:0 4px 10px rgba(0,0,0,0.1);
     ">
-    
+
     <tr>
         <th style="
             background:#4ba6ec;
@@ -236,15 +329,22 @@
     </tr>
 `;
 
-            Object.keys(summary).forEach(driver => {
+    Object.keys(summary).forEach(driver => {
 
-                const total = summary[driver].totalEarned;
-                const given = summary[driver].totalGiven;
-                const balance = total - given;
+        const total = summary[driver].totalEarned;
+        const given = summary[driver].totalGiven;
+        const balance = total - given;
 
-                html += `
+        // Add to grand totals
+        grandTotal += total;
+        grandGiven += given;
+        grandBalance += balance;
+
+        html += `
         <tr style="font-size:20px;font-weight:500;">
-            <td style="padding:12px;">${driver}</td>
+            <td style="padding:12px;">
+                ${driver}
+            </td>
 
             <td style="padding:12px;">
                 ₹${total.toLocaleString()}
@@ -262,13 +362,41 @@
                 ₹${balance.toLocaleString()}
             </td>
         </tr>
+        `;
+    });
+
+    // Grand Total Row
+    html += `
+    <tr style="
+        background:#f4f4f4;
+        font-size:22px;
+        font-weight:bold;
+    ">
+        <td style="padding:15px;">
+            TOTAL
+        </td>
+
+        <td style="padding:15px;color:#0d6efd;">
+            ₹${grandTotal.toLocaleString()}
+        </td>
+
+        <td style="padding:15px;color:#ff9800;">
+            ₹${grandGiven.toLocaleString()}
+        </td>
+
+        <td style="
+            padding:15px;
+            color:${grandBalance >= 0 ? 'green' : 'red'};
+        ">
+            ₹${grandBalance.toLocaleString()}
+        </td>
+    </tr>
     `;
-            });
 
-            html += `</table>`;
+    html += `</table>`;
 
-            document.getElementById("summaryDiv").innerHTML = html;
-        }
+    document.getElementById("summaryDiv").innerHTML = html;
+}
 
         document.getElementById("allSummaryBtn")
             .addEventListener("click", showAllTractorSummary);
@@ -5544,7 +5672,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
                 customerNames.toString().trim() === "" ||
                 customerNames.toString().trim() === "--"
             ) {
-                document.getElementById(targetId).value = "";
+                document.getElementById(targetId).value = "--";
                 return;
             }
 

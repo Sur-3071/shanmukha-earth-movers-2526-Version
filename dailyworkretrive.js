@@ -169,68 +169,299 @@ function generateTable(data) {
             var overallrecovery = activity.Payment === "Paid" ? 0 : activity.OverallPrice;
             var balanaceamount = 0;
             var customerName = activity.Name;
-            var HoursDrivers = 0;
-            if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
-                let str = activity.HoursDrivers || "";
-                // alert(str);
-                let count = 0;
+            // var HoursDrivers = 0;
+            // if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
+            //     let str = activity.HoursDrivers || "";
+            //     // alert(str);
+            //     let count = 0;
 
-                for (let i = 0; i < str.length; i++) {
-                    if (str[i] === "=") {
-                        count++;
+            //     for (let i = 0; i < str.length; i++) {
+            //         if (str[i] === "=") {
+            //             count++;
+            //         }
+            //     }
+
+            //     if (count > 1) {
+
+            //         let arr = str.split(" ").filter(Boolean);
+            //         // console.log(arr);
+            //         let result = "";
+
+            //         for (let i = 0; i < arr.length; i += 3) {
+            //             if (arr[i] && arr[i + 2]) {       // <— check before adding
+            //                 result += arr[i] + " = " + arr[i + 2] + "\n";
+            //             }
+            //         }
+            //         // console.log(result);
+
+            //         result = result.replace(/\n/g, "<br>");
+            //         HoursDrivers = result;
+
+            //     }
+            //     else {
+            //         HoursDrivers = str;
+            //     }
+
+            // }
+            // // console.log(activity.Drivers);
+            // var LDrivers = 0;
+            // if (activity.Drivers !== undefined) {
+            //     let str = activity.Drivers;
+            //     let count1 = 0;
+
+            //     for (let i = 0; i < str.length; i++) {
+            //         if (str[i] === "=") {
+            //             count1++;
+            //         }
+            //     }
+            //     if (count1 > 1) {
+            //         // alert("yes more then two drivers");
+            //         let arr = str.split(" ").filter(Boolean);
+            //         let result = "";
+
+            //         for (let i = 0; i < arr.length; i += 3) {
+            //             if (arr[i] && arr[i + 2]) {       // <— check before adding
+            //                 result += arr[i] + " = " + arr[i + 2] + "\n";
+            //             }
+            //         }
+
+            //         result = result.replace(/\n/g, "<br>");
+            //         LDrivers = result;
+            //     }
+            //     else {
+            //         LDrivers = str;
+            //     }
+            // }
+
+            //================ DESCRIPTION MAPPING =================
+
+            let customerMap = {};
+            let hasDescription = false;
+
+            if (
+                activity.Description &&
+                activity.Description !== "--" &&
+                activity.Description !== "undefined" &&
+                activity.Description.trim() !== ""
+            ) {
+
+                hasDescription = true;
+
+                let desc = activity.Description
+                    .replace(/\r?\n/g, " ")
+                    .trim();
+
+                desc.split(",").forEach(item => {
+
+                    item = item.trim();
+
+                    if (!item) return;
+
+                    let parts = item.split("→");
+
+                    if (parts.length === 2) {
+
+                        let customer = parts[0].trim();
+                        let code = parts[1].trim().toUpperCase();
+
+                        customerMap[code] = customer;
+
                     }
-                }
 
-                if (count > 1) {
-
-                    let arr = str.split(" ").filter(Boolean);
-                    // console.log(arr);
-                    let result = "";
-
-                    for (let i = 0; i < arr.length; i += 3) {
-                        if (arr[i] && arr[i + 2]) {       // <— check before adding
-                            result += arr[i] + " = " + arr[i + 2] + "\n";
-                        }
-                    }
-                    // console.log(result);
-
-                    result = result.replace(/\n/g, "<br>");
-                    HoursDrivers = result;
-
-                }
-                else {
-                    HoursDrivers = str;
-                }
+                });
 
             }
-            // console.log(activity.Drivers);
-            var LDrivers = 0;
-            if (activity.Drivers !== undefined) {
-                let str = activity.Drivers;
-                let count1 = 0;
 
-                for (let i = 0; i < str.length; i++) {
-                    if (str[i] === "=") {
-                        count1++;
-                    }
-                }
-                if (count1 > 1) {
-                    // alert("yes more then two drivers");
-                    let arr = str.split(" ").filter(Boolean);
-                    let result = "";
 
-                    for (let i = 0; i < arr.length; i += 3) {
-                        if (arr[i] && arr[i + 2]) {       // <— check before adding
-                            result += arr[i] + " = " + arr[i + 2] + "\n";
+            //================ HOURS DRIVERS =================
+
+            var HoursDrivers = "--";
+
+            if (
+                activity.HoursDrivers &&
+                activity.HoursDrivers !== "--" &&
+                activity.HoursDrivers !== "undefined"
+            ) {
+
+                let str = activity.HoursDrivers.toString();
+
+                str = str.replace(/\r?\n/g, " ");
+                str = str.replace(/=\s*=\s*=/g, "=");
+                str = str.replace(/\s+/g, " ").trim();
+
+                let result = "";
+
+                const matches = str.match(/([A-Za-z0-9_]+)\s*=\s*(\d+)/g);
+
+                if (matches) {
+
+                    result = matches.map(item => {
+
+                        let parts = item.split("=");
+
+                        let driver = parts[0].trim();
+                        let value = parts[1].trim();
+
+                        let suffixMatch = driver.match(/_(\w)$/);
+
+                        if (hasDescription) {
+
+                            if (suffixMatch) {
+
+                                let code = suffixMatch[1].toUpperCase();
+
+                                if (customerMap[code]) {
+
+                                    driver = driver.replace(/_(\w)$/, " → " + customerMap[code]);
+
+                                } else {
+
+                                    let firstCustomer = Object.values(customerMap)[0];
+
+                                    if (firstCustomer)
+                                        driver += " → " + firstCustomer;
+                                    else
+                                        driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+                                }
+
+                            } else {
+
+                                let firstCustomer = Object.values(customerMap)[0];
+
+                                if (firstCustomer)
+                                    driver += " → " + firstCustomer;
+                                else
+                                    driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+                            }
+
+                        } else {
+
+                            if (suffixMatch)
+                                driver = driver.replace(/_(\w)$/, " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase()));
+                            else
+                                driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+
                         }
-                    }
 
-                    result = result.replace(/\n/g, "<br>");
-                    LDrivers = result;
+                        return driver + " = " + value;
+
+                    }).join("<br>");
+
                 }
-                else {
-                    LDrivers = str;
+
+                HoursDrivers = result || "--";
+
+            }
+
+
+            //================ LOADING DRIVERS =================
+
+            var LDrivers = "--";
+
+            if (
+                activity.Drivers &&
+                activity.Drivers !== "--" &&
+                activity.Drivers !== "undefined"
+            ) {
+
+                let str = activity.Drivers.toString();
+
+                str = str.replace(/\r?\n/g, " ");
+                str = str.replace(/=\s*=\s*=/g, "=");
+                str = str.replace(/\s+/g, " ").trim();
+
+                let result = "";
+
+                const matches = str.match(/([A-Za-z0-9_]+)\s*=\s*(\d+)/g);
+
+                if (matches) {
+
+                    result = matches.map(item => {
+
+                        let parts = item.split("=");
+
+                        let driver = parts[0].trim();
+                        let value = parts[1].trim();
+
+                        let suffixMatch = driver.match(/_(\w)$/);
+
+                        if (hasDescription) {
+
+                            if (suffixMatch) {
+
+                                let code = suffixMatch[1].toUpperCase();
+
+                                if (customerMap[code]) {
+
+                                    driver = driver.replace(/_(\w)$/, " → " + customerMap[code]);
+
+                                } else {
+
+                                    let firstCustomer = Object.values(customerMap)[0];
+
+                                    if (firstCustomer)
+                                        driver += " → " + firstCustomer;
+                                    else
+                                        driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+
+                                }
+
+                            } else {
+
+                                let firstCustomer = Object.values(customerMap)[0];
+
+                                if (firstCustomer)
+                                    driver += " → " + firstCustomer;
+                                else
+                                    driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+
+                            }
+
+                        } else {
+
+                            if (suffixMatch)
+                                driver = driver.replace(/_(\w)$/, " → Customer");
+                            else
+                                driver += " → "+activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+
+                        }
+
+                        return driver + " = " + value;
+
+                    }).join("<br>");
+
                 }
+
+                LDrivers = result || "--";
+
+            }
+
+            // console.log(HoursDrivers+" ===>"+LDrivers);
+
+            //================ SELECT DRIVER =================
+
+            var drivers = "--";
+            var tripamount = "--";
+            var jcbtripamount = "--";
+            var totaltractortrips = "--";
+
+            if (
+                HoursDrivers !=="--"
+            ) {
+
+                drivers = HoursDrivers;
+                totaltractortrips = activity.HoursTrips || "--";
+                tripamount = activity.HoursTripsAmount || "--";
+                jcbtripamount = "--";
+
+            }
+            else {
+
+                drivers = LDrivers;
+                totaltractortrips = activity.Trips || "--";
+                tripamount = activity.TripsPrice || "--";
+                jcbtripamount = activity.JcbTripPrice || "--";
+
             }
             if (!processedCustomers.has(customerName) && activity.Payment === "UnPaid") {
 
@@ -285,23 +516,7 @@ function generateTable(data) {
             //     amount=parseInt(amount)+parseInt(activity.Beta);
             // }
             var beta = activity.Beta === "undefined" || activity.Beta === undefined || activity.Beta === "undefined" ? 0 : activity.Beta
-            // console.log(beta);
-            var drivers = "";
-            var tripamount = "";
-            var jcbtripamount = "--";
-            var totaltractortrips = 0;
-            if (activity.Drivers === "--") {
-                drivers = HoursDrivers;
-                totaltractortrips = activity.HoursTrips;
-                tripamount = activity.HoursTripsAmount
-            }
-            else {
-                drivers = LDrivers;
-                tripamount = activity.TripsPrice;
-                jcbtripamount = activity.JcbTripPrice;
-                totaltractortrips = activity.Trips;
-            }
-            // console.log()
+            
             var overallpricemoney = isNaN(activity.OverallPrice) || activity.OverallPrice === undefined ? activity.Price : activity.OverallPrice;
 
             overallcollection += parseInt(overallpricemoney);
@@ -313,6 +528,9 @@ function generateTable(data) {
 
             const formattedDate = `${day}-${month}-${year}`;
 
+            if (drivers && drivers !== "--" && drivers !== "undefined" && drivers.trim() !== "") {
+                drivers = drivers.split("<br>").filter(x => x.trim() !== "").map((x, i) => (i + 1) + ". " + x.trim()).join("<br>");
+            }
             out += `<tr>
                         <td>${customerPhone}</td>
                         <td style="white-space: nowrap;width: max-content;">${formattedDate}</td>
@@ -321,7 +539,7 @@ function generateTable(data) {
                         <td>${activity.Description}</td>
                         <td>${activity.Disel}</td>
                         <td>${totaltractortrips}</td>
-                        <td>${drivers}</td>
+                        <td style="white-space: nowrap; width: max-content; text-align: left;">${drivers}</td>
                         <td>${tripamount}</td>
                         <td>${jcbtripamount}</td>
                         <td>${activity.Contract}</td>
@@ -963,7 +1181,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
     const diffDays = Math.round(
         (end - start) / (1000 * 60 * 60 * 24)
     );
-        console.log(diffDays);
+    console.log(diffDays);
 
 
     if (diffDays === 0) {
