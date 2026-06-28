@@ -1247,6 +1247,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
             <th id="csize1">Customer Name</th>
             <th id="csize1">Village</th>
             <th id="csize1">Description</th>
+            <th id="csize1">Drivers</th>
             <th id="csize1">Disel</th>
             <th id="csize">Trips</th>
             <th id="csize">Contract</th>
@@ -1316,18 +1317,269 @@ function generateTableByDate(data, startdate, enddate, data1) {
                     hou += parseInt(v[0]);
                     mint += parseInt(v[1]);
                 }
+
+                const originalDate = new Date(activity.Date);
+
+                const day = String(originalDate.getDate()).padStart(2, '0');
+                const month = String(originalDate.getMonth() + 1).padStart(2, '0');
+                const year = originalDate.getFullYear();
+
+                const formattedDate = `${day}-${month}-${year}`;
+
+
+                //================ DESCRIPTION MAPPING =================
+
+                let customerMap = {};
+                let hasDescription = false;
+
+                if (
+                    activity.Description &&
+                    activity.Description !== "--" &&
+                    activity.Description !== "undefined" &&
+                    activity.Description.trim() !== ""
+                ) {
+
+                    hasDescription = true;
+
+                    let desc = activity.Description
+                        .replace(/\r?\n/g, " ")
+                        .trim();
+
+                    desc.split(",").forEach(item => {
+
+                        item = item.trim();
+
+                        if (!item) return;
+
+                        let parts = item.split("→");
+
+                        if (parts.length === 2) {
+
+                            let customer = parts[0].trim();
+                            let code = parts[1].trim().toUpperCase();
+
+                            customerMap[code] = customer;
+
+                        }
+
+                    });
+
+                }
+
+
+                //================ HOURS DRIVERS =================
+
+                var HoursDrivers = "--";
+
+                if (
+                    activity.HoursDrivers &&
+                    activity.HoursDrivers !== "--" &&
+                    activity.HoursDrivers !== "undefined"
+                ) {
+
+                    let str = activity.HoursDrivers.toString();
+
+                    str = str.replace(/\r?\n/g, " ");
+                    str = str.replace(/=\s*=\s*=/g, "=");
+                    str = str.replace(/\s+/g, " ").trim();
+
+                    let result = "";
+
+                    const matches = str.match(/([A-Za-z0-9_]+)\s*=\s*(\d+)/g);
+
+                    if (matches) {
+
+                        result = matches.map(item => {
+
+                            let parts = item.split("=");
+
+                            let driver = parts[0].trim();
+                            let value = parts[1].trim();
+
+                            let suffixMatch = driver.match(/_(\w)$/);
+
+                            if (hasDescription) {
+
+                                if (suffixMatch) {
+
+                                    let code = suffixMatch[1].toUpperCase();
+
+                                    if (customerMap[code]) {
+
+                                        driver = driver.replace(/_(\w)$/, " → " + customerMap[code]);
+
+                                    } else {
+
+                                        let firstCustomer = Object.values(customerMap)[0];
+
+                                        if (firstCustomer)
+                                            driver += " → " + firstCustomer;
+                                        else
+                                            driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+                                    }
+
+                                } else {
+
+                                    let firstCustomer = Object.values(customerMap)[0];
+
+                                    if (firstCustomer)
+                                        driver += " → " + firstCustomer;
+                                    else
+                                        driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+                                }
+
+                            } else {
+
+                                if (suffixMatch)
+                                    driver = driver.replace(/_(\w)$/, " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase()));
+                                else
+                                    driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+
+                            }
+
+                            return driver + " = " + value;
+
+                        }).join("<br>");
+
+                    }
+
+                    HoursDrivers = result || "--";
+
+                }
+
+
+                //================ LOADING DRIVERS =================
+
+                var LDrivers = "--";
+
+                if (
+                    activity.Drivers &&
+                    activity.Drivers !== "--" &&
+                    activity.Drivers !== "undefined"
+                ) {
+
+                    let str = activity.Drivers.toString();
+
+                    str = str.replace(/\r?\n/g, " ");
+                    str = str.replace(/=\s*=\s*=/g, "=");
+                    str = str.replace(/\s+/g, " ").trim();
+
+                    let result = "";
+
+                    const matches = str.match(/([A-Za-z0-9_]+)\s*=\s*(\d+)/g);
+
+                    if (matches) {
+
+                        result = matches.map(item => {
+
+                            let parts = item.split("=");
+
+                            let driver = parts[0].trim();
+                            let value = parts[1].trim();
+
+                            let suffixMatch = driver.match(/_(\w)$/);
+
+                            if (hasDescription) {
+
+                                if (suffixMatch) {
+
+                                    let code = suffixMatch[1].toUpperCase();
+
+                                    if (customerMap[code]) {
+
+                                        driver = driver.replace(/_(\w)$/, " → " + customerMap[code]);
+
+                                    } else {
+
+                                        let firstCustomer = Object.values(customerMap)[0];
+
+                                        if (firstCustomer)
+                                            driver += " → " + firstCustomer;
+                                        else
+                                            driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+
+                                    }
+
+                                } else {
+
+                                    let firstCustomer = Object.values(customerMap)[0];
+
+                                    if (firstCustomer)
+                                        driver += " → " + firstCustomer;
+                                    else
+                                        driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+
+                                }
+
+                            } else {
+
+                                if (suffixMatch)
+                                    driver = driver.replace(/_(\w)$/, " → Customer");
+                                else
+                                    driver += " → " + activity.Name.trim().toLowerCase().replace(/\b\w/g, c => c.toLowerCase());;
+
+                            }
+
+                            return driver + " = " + value;
+
+                        }).join("<br>");
+
+                    }
+
+                    LDrivers = result || "--";
+
+                }
+
+                // console.log(HoursDrivers+" ===>"+LDrivers);
+
+                //================ SELECT DRIVER =================
+
+                var drivers = "--";
+                var tripamount = "--";
+                var jcbtripamount = "--";
+                var totaltractortrips = "--";
+
+                if (
+                    HoursDrivers !== "--"
+                ) {
+
+                    drivers = HoursDrivers;
+                    totaltractortrips = activity.HoursTrips || "--";
+                    tripamount = activity.HoursTripsAmount || "--";
+                    jcbtripamount = "--";
+
+                }
+                else {
+
+                    drivers = LDrivers;
+                    totaltractortrips = activity.Trips || "--";
+                    tripamount = activity.TripsPrice || "--";
+                    jcbtripamount = activity.JcbTripPrice || "--";
+
+                }
+
+                if (drivers && drivers !== "--" && drivers !== "undefined" && drivers.trim() !== "") {
+                    drivers = drivers.split("<br>").filter(x => x.trim() !== "").map((x, i) => (i + 1) + ". " + x.trim()).join("<br>");
+                }
+
+                const formattedDescription = (activity.Description || "")
+                    .split(",")
+                    .slice(0, -1) // Removes the last item
+                    .map((item, index) => `${index + 1}. ${item.trim()}`)
+                    .join("<br>");
                 collection = collection + parseInt(activity.Price);
                 out += `<tr>
                         <td>${customerPhone}</td>
-                        <td>${activity.Date}</td>
-                        <td>${activity.Name}</td>
+                        <td style="white-space: nowrap; width: max-content;">${formattedDate}</td>
+                        <td style="white-space: nowrap; width: max-content;">${activity.Name}</td>
                         <td>${activity.Villagename}</td>
-                        <td>${activity.Description}</td>
+                        <td style="white-space: nowrap; width: max-content; text-align: left;">${formattedDescription}</td>
+                        <td style="white-space: nowrap; width: max-content; text-align: left;">${drivers}</td>
                         <td>${activity.Disel}</td>
                         <td>${activity.Trips}</td>
                         <td>${activity.Contract}</td>
-                        <td>${convertTo12Hour(activity.Starting)}</td>
-                        <td>${convertTo12Hour(activity.Ending)}</td>
+                        <td style="white-space: nowrap; width: max-content;">${convertTo12Hour(activity.Starting)}</td>
+                        <td style="white-space: nowrap; width: max-content;">${convertTo12Hour(activity.Ending)}</td>
                         <td>${activity.TotalTime}</td>
                         <td>${activity.Beta}</td>
                         <td>${activity.Price}</td>
@@ -1342,7 +1594,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
     hou += mintohou;
     totaltime = hou + ":" + mint;
     out += `<tr>
-           <td colspan="5" id="col">Total Work Analaysis</td>
+           <td colspan="6" id="col">Total Work Analaysis</td>
             <td id="am">${disel}</td>
             <td id="am">${totaltrips}</td>
             <td id="am">${totalcontarct}</td>
