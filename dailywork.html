@@ -185,100 +185,100 @@
             }
         }
 
-//         function renderSummary(summary) {
-//             let html = `
-// <table 
-//     border="1"
-//     width="100%"
-//     style="
-//         border-collapse:collapse;
-//         font-size:20px;
-//         font-family:Poppins,sans-serif;
-//         text-align:center;
-//         box-shadow:0 4px 10px rgba(0,0,0,0.1);
-//     ">
-    
-//     <tr>
-//         <th style="
-//             background:#4ba6ec;
-//             color:white;
-//             padding:15px;
-//             font-size:22px;
-//         ">
-//             Driver Name
-//         </th>
+        //         function renderSummary(summary) {
+        //             let html = `
+        // <table 
+        //     border="1"
+        //     width="100%"
+        //     style="
+        //         border-collapse:collapse;
+        //         font-size:20px;
+        //         font-family:Poppins,sans-serif;
+        //         text-align:center;
+        //         box-shadow:0 4px 10px rgba(0,0,0,0.1);
+        //     ">
 
-//         <th style="
-//             background:#4ba6ec;
-//             color:white;
-//             padding:15px;
-//             font-size:22px;
-//         ">
-//             Total Amount
-//         </th>
+        //     <tr>
+        //         <th style="
+        //             background:#4ba6ec;
+        //             color:white;
+        //             padding:15px;
+        //             font-size:22px;
+        //         ">
+        //             Driver Name
+        //         </th>
 
-//         <th style="
-//             background:#4ba6ec;
-//             color:white;
-//             padding:15px;
-//             font-size:22px;
-//         ">
-//             Given Amount
-//         </th>
+        //         <th style="
+        //             background:#4ba6ec;
+        //             color:white;
+        //             padding:15px;
+        //             font-size:22px;
+        //         ">
+        //             Total Amount
+        //         </th>
 
-//         <th style="
-//             background:#4ba6ec;
-//             color:white;
-//             padding:15px;
-//             font-size:22px;
-//         ">
-//             Balance
-//         </th>
-//     </tr>
-// `;
+        //         <th style="
+        //             background:#4ba6ec;
+        //             color:white;
+        //             padding:15px;
+        //             font-size:22px;
+        //         ">
+        //             Given Amount
+        //         </th>
 
-//             Object.keys(summary).forEach(driver => {
+        //         <th style="
+        //             background:#4ba6ec;
+        //             color:white;
+        //             padding:15px;
+        //             font-size:22px;
+        //         ">
+        //             Balance
+        //         </th>
+        //     </tr>
+        // `;
 
-//                 const total = summary[driver].totalEarned;
-//                 const given = summary[driver].totalGiven;
-//                 const balance = total - given;
+        //             Object.keys(summary).forEach(driver => {
 
-//                 html += `
-//         <tr style="font-size:20px;font-weight:500;">
-//             <td style="padding:12px;">${driver}</td>
+        //                 const total = summary[driver].totalEarned;
+        //                 const given = summary[driver].totalGiven;
+        //                 const balance = total - given;
 
-//             <td style="padding:12px;">
-//                 ₹${total.toLocaleString()}
-//             </td>
+        //                 html += `
+        //         <tr style="font-size:20px;font-weight:500;">
+        //             <td style="padding:12px;">${driver}</td>
 
-//             <td style="padding:12px;">
-//                 ₹${given.toLocaleString()}
-//             </td>
+        //             <td style="padding:12px;">
+        //                 ₹${total.toLocaleString()}
+        //             </td>
 
-//             <td style="
-//                 padding:12px;
-//                 font-weight:bold;
-//                 color:${balance >= 0 ? 'green' : 'red'};
-//             ">
-//                 ₹${balance.toLocaleString()}
-//             </td>
-//         </tr>
-//     `;
-//             });
+        //             <td style="padding:12px;">
+        //                 ₹${given.toLocaleString()}
+        //             </td>
 
-//             html += `</table>`;
+        //             <td style="
+        //                 padding:12px;
+        //                 font-weight:bold;
+        //                 color:${balance >= 0 ? 'green' : 'red'};
+        //             ">
+        //                 ₹${balance.toLocaleString()}
+        //             </td>
+        //         </tr>
+        //     `;
+        //             });
 
-//             document.getElementById("summaryDiv").innerHTML = html;
-//         }
+        //             html += `</table>`;
+
+        //             document.getElementById("summaryDiv").innerHTML = html;
+        //         }
 
 
-function renderSummary(summary) {
+        function renderSummary(summary) {
 
-    let grandTotal = 0;
-    let grandGiven = 0;
-    let grandBalance = 0;
+            let grandTotal = 0;
+            let grandGiven = 0;
+            let grandBalance = 0;
 
-    let html = `
+            let html = `
 <table 
     border="1"
     width="100%"
@@ -329,18 +329,18 @@ function renderSummary(summary) {
     </tr>
 `;
 
-    Object.keys(summary).forEach(driver => {
+            Object.keys(summary).forEach(driver => {
 
-        const total = summary[driver].totalEarned;
-        const given = summary[driver].totalGiven;
-        const balance = total - given;
+                const total = summary[driver].totalEarned;
+                const given = summary[driver].totalGiven;
+                const balance = total - given;
 
-        // Add to grand totals
-        grandTotal += total;
-        grandGiven += given;
-        grandBalance += balance;
+                // Add to grand totals
+                grandTotal += total;
+                grandGiven += given;
+                grandBalance += balance;
 
-        html += `
+                html += `
         <tr style="font-size:20px;font-weight:500;">
             <td style="padding:12px;">
                 ${driver}
@@ -363,10 +363,10 @@ function renderSummary(summary) {
             </td>
         </tr>
         `;
-    });
+            });
 
-    // Grand Total Row
-    html += `
+            // Grand Total Row
+            html += `
     <tr style="
         background:#f4f4f4;
         font-size:22px;
@@ -393,10 +393,10 @@ function renderSummary(summary) {
     </tr>
     `;
 
-    html += `</table>`;
+            html += `</table>`;
 
-    document.getElementById("summaryDiv").innerHTML = html;
-}
+            document.getElementById("summaryDiv").innerHTML = html;
+        }
 
         document.getElementById("allSummaryBtn")
             .addEventListener("click", showAllTractorSummary);
@@ -2983,7 +2983,7 @@ function renderSummary(summary) {
                                         <option>Nagu</option>
                                         <option>Radhakrishna</option>
                                         <option>Ravuri Suri Babu</option>
-                                
+
                                     </select>
                                 </td>
                             </tr>
@@ -3050,7 +3050,7 @@ function renderSummary(summary) {
                                         <option>Nagu</option>
                                         <option>Radhakrishna</option>
                                         <option>Ravuri Suri Babu</option>
-    
+
                                     </select>
                                 </td>
                             </tr>
@@ -3281,8 +3281,9 @@ function renderSummary(summary) {
                 </div>
             </div>
         </div>
-        <div>
-            <input type="text" placeholder="Search Box" id="search">
+        <div class="search-container" style="display: none;">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search..." id="search">
         </div>
 
         <div class="select-wrapper" style="margin-left: 50px; margin-top: 100px;">
@@ -4753,7 +4754,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             }
         }
 
-    async function openPopup7() {
+        async function openPopup7() {
             // Open modal immediately
             document.getElementById("myModal7").style.display = "flex";
 

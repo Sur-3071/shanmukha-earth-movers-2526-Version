@@ -748,6 +748,97 @@ h2 {
     max-width: 400px;
     margin-left: 330px;
 }
+
+/* Search Container */
+.search-container{
+    position: relative;
+    width: 350px;
+    max-width: 100%;
+    margin: 20px auto;
+}
+
+/* Search Input */
+#search{
+    width: 100%;
+    padding: 14px 20px 14px 50px;
+    font-size: 16px;
+    border: 2px solid transparent;
+    border-radius: 50px;
+    outline: none;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transition: all .35s ease;
+    color: #333;
+}
+
+/* Placeholder */
+#search::placeholder{
+    color: #888;
+    transition: .3s;
+}
+
+/* Search Icon */
+.search-icon{
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #777;
+    transition: .35s ease;
+    pointer-events: none;
+}
+
+/* Hover Effect */
+#search:hover{
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+}
+
+/* Focus Animation */
+#search:focus{
+    border-color: #72ef70;
+    box-shadow: 0 0 0 5px rgba(79,70,229,.2),
+                0 12px 30px rgba(79,70,229,.3);
+    transform: scale(1.03);
+}
+
+/* Icon Animation */
+#search:focus + .search-icon{
+    color: #72ef70;
+}
+
+/* Placeholder Animation */
+#search:focus::placeholder{
+    opacity: .5;
+    transform: translateX(5px);
+}
+
+/* Floating Animation */
+.search-container{
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%,100%{
+        transform: translateY(0);
+    }
+    50%{
+        transform: translateY(-3px);
+    }
+}
+
+/* Mobile */
+@media(max-width:600px){
+    .search-container{
+        width:100%;
+    }
+
+    #search{
+        font-size:15px;
+        padding:13px 18px 13px 45px;
+    }
+}
 .internet-popup {
     display: none;
     position: fixed;
@@ -1174,17 +1265,7 @@ button:active {
     padding: 50px 0; /* Reduced from 150px top, 50px bottom */
 }
 
-#search {
-    display: none;
-    width: 100%;
-    max-width: 350px; /* Reduced from 400px */
-    height: 50px; /* Reduced from 60px */
-    border-radius: 25px;
-    outline: 3px solid lightgreen; /* Reduced from 5px */
-    margin: 20px 0; /* Reduced from 50px top, 80px bottom */
-    font-size: 20px; /* Reduced from 25px */
-    margin-left: 450px;
-}
+
 
 #daycnt {
     margin: 30px 0; /* Reduced from 100px top, 50px bottom, 60px left */
@@ -2874,12 +2955,6 @@ table {
 
     #col, #am {
         font-size: 20px; /* Reduced from 24px */
-    }
-
-    #search {
-        width: 90%;
-        height: 40px; /* Reduced from 50px */
-        font-size: 18px; /* Reduced from 20px */
     }
 
     .box {

@@ -16,10 +16,12 @@ const db = getDatabase(app);
 // Get a reference to the database service
 document.getElementById("submit12").addEventListener("click", async function (e1) {
     e1.preventDefault(); // Prevent default form submission behavior
-    var d1 = document.getElementById("search");
-    var n = document.getElementById("search");
-    n.value = "";
+    var d1 = document.querySelector(".search-container");
+    var search = document.querySelector("#search"); // or ".search" if it's also a class
+
+    search.value = "";
     d1.style.display = "block";
+    search.focus();
     RePrint();
     // Get the value from the input field
 
