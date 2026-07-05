@@ -216,6 +216,367 @@ document.getElementById('toggleBtn').addEventListener('click', async function (e
 
 });
 
+// function generateTable(data) {
+
+//     monthsMap = {
+//         "January": [0, 0],
+//         "February": [0, 0],
+//         "March": [0, 0],
+//         "April": [0, 0],
+//         "May": [0, 0],
+//         "June": [0, 0],
+//         "July": [0, 0],
+//         "August": [0, 0],
+//         "September": [0, 0],
+//         "October": [0, 0],
+//         "November": [0, 0],
+//         "December": [0, 0]
+//     };
+
+//     const salaryDiv = document.getElementById("salaryTableContainer");
+//     const leaveDiv = document.getElementById("leaveTableContainer");
+
+//     salaryDiv.innerHTML = "";
+//     leaveDiv.innerHTML = "";
+
+//     // ==========================
+//     // Calculate leave count first
+//     // ==========================
+//     if (data.Leaves && Object.keys(data.Leaves).length > 0) {
+//         Object.values(data.Leaves).forEach(entry => {
+//             if (monthsMap[entry.Month]) {
+//                 monthsMap[entry.Month][1]++;
+//             }
+//         });
+//     }
+
+//     // ==========================
+//     // Salary Table
+//     // ==========================
+//     if (data.Salary && Object.keys(data.Salary).length > 0) {
+
+//         const box = document.createElement("div");
+//         box.classList.add("table-box", "salary-table");
+
+//         const table = document.createElement("table");
+
+//         table.innerHTML = `
+//             <caption>💰 Salary Data</caption>
+//             <tr>
+//                 <th>Date</th>
+//                 <th>Payment Method</th>
+//                 <th>Purpose</th>
+//                 <th>Amount (₹)</th>
+//             </tr>
+//         `;
+
+//         const salaryGroups = {};
+
+//         Object.values(data.Salary).forEach(entry => {
+
+//             const cycleMonth = entry.Month;
+
+//             if (!salaryGroups[cycleMonth]) {
+//                 salaryGroups[cycleMonth] = [];
+//             }
+
+//             salaryGroups[cycleMonth].push(entry);
+
+//         });
+
+//         let overallTotal = 0;
+
+//         Object.keys(salaryGroups).forEach(month => {
+
+//             const monthHeader = document.createElement("tr");
+
+//             monthHeader.innerHTML = `
+//                 <td colspan="4"
+//                     style="
+//                         background:#1976d2;
+//                         color:white;
+//                         font-weight:bold;
+//                         text-align:center;
+//                         font-size:18px;
+//                         padding:10px;
+//                     ">
+//                     ${month}
+//                     (18th - 17th Cycle)
+//                 </td>
+//             `;
+
+//             table.appendChild(monthHeader);
+
+//             let monthTotal = 0;
+
+//             salaryGroups[month].forEach(entry => {
+
+//                 const amount = parseFloat(entry.Salary) || 0;
+
+//                 monthTotal += amount;
+//                 overallTotal += amount;
+
+//                 monthsMap[entry.Month][0] += amount;
+
+//                 const row = document.createElement("tr");
+
+//                 row.innerHTML = `
+//                     <td style="white-space: nowrap;width: max-content;">${formatDate(entry.Date)}</td>
+//                     <td>${entry.PaymentMethod === undefined ? 'Phonepe' : entry.PaymentMethod}</td>
+//                     <td>${entry.Purpose === undefined ? 'Salary Payment' : entry.Purpose}</td>
+//                     <td>₹${amount.toLocaleString("en-IN")}</td>
+//                 `;
+
+//                 table.appendChild(row);
+
+//             });
+
+//             // ==========================
+//             // Salary Cut
+//             // ==========================
+
+//             const allowedLeaves = 2;
+//             const perDaySalary = 500;
+
+//             const totalLeaves = monthsMap[month][1];
+
+//             const extraLeaves = Math.max(0, totalLeaves - allowedLeaves);
+
+//             const salaryCut = extraLeaves * perDaySalary;
+
+//             if (salaryCut > 0) {
+
+//                 const cutRow = document.createElement("tr");
+
+//                 cutRow.innerHTML = `
+//                     <td colspan="3"
+//                         style="
+//                             background:#ffebee;
+//                             color:#d32f2f;
+//                             font-weight:bold;
+//                         ">
+//                         Salary Cuttings (${extraLeaves} Extra Leave${extraLeaves > 1 ? "s" : ""})
+//                     </td>
+
+//                     <td
+//                         style="
+//                             background:#ffebee;
+//                             color:#d32f2f;
+//                             font-weight:bold;
+//                         ">
+//                         -₹${salaryCut.toLocaleString("en-IN")}
+//                     </td>
+//                 `;
+
+//                 table.appendChild(cutRow);
+
+//             }
+
+//             const finalMonthTotal = monthTotal + salaryCut;
+//             overallTotal += salaryCut;
+
+//             const subtotalRow = document.createElement("tr");
+
+//             subtotalRow.innerHTML = `
+//                 <td colspan="3"
+//                     style="
+//                         font-weight:bold;
+//                         background:#e3f2fd;
+//                     ">
+//                     ${month} Total
+//                 </td>
+
+//                 <td
+//                     style="
+//                         font-weight:bold;
+//                         background:#e3f2fd;
+//                     ">
+//                     ₹${finalMonthTotal.toLocaleString("en-IN")}
+//                 </td>
+//             `;
+
+//             table.appendChild(subtotalRow);
+
+//         });
+
+//         const totalRow = document.createElement("tr");
+
+//         totalRow.classList.add("total-row");
+
+//         totalRow.innerHTML = `
+//             <td colspan="3">
+//                 Overall Total
+//             </td>
+
+//             <td>
+//                 ₹${overallTotal.toLocaleString("en-IN")}
+//             </td>
+//         `;
+
+//         table.appendChild(totalRow);
+
+//         box.appendChild(table);
+//         salaryDiv.appendChild(box);
+
+//     } else {
+
+//         salaryDiv.innerHTML = `
+//             <div style="
+//                 padding:10px;
+//                 font-size:14px;
+//                 font-weight:600;
+//                 color:#b00020;
+//                 background:#ffe5e8;
+//                 border:1px solid #ffb3bd;
+//                 border-radius:8px;
+//                 text-align:center;
+//                 margin-top:8px;
+//             ">
+//                 No Salary Records Found
+//             </div>
+//         `;
+//     }
+
+//         // ==========================
+//     // Leave Table
+//     // ==========================
+
+//     if (data.Leaves && Object.keys(data.Leaves).length > 0) {
+
+//         const box = document.createElement("div");
+//         box.classList.add("table-box", "leave-table");
+
+//         const table = document.createElement("table");
+
+//         table.innerHTML = `
+//             <caption>🌴 Leave Data</caption>
+//             <tr>
+//                 <th>Date</th>
+//                 <th>Purpose</th>
+//             </tr>
+//         `;
+
+//         const leaveGroups = {};
+
+//         Object.values(data.Leaves).forEach(entry => {
+
+//             const cycleMonth = entry.Month;
+
+//             if (!leaveGroups[cycleMonth]) {
+//                 leaveGroups[cycleMonth] = [];
+//             }
+
+//             leaveGroups[cycleMonth].push(entry);
+
+//         });
+
+//         let overallLeaves = 0;
+
+//         Object.keys(leaveGroups).forEach(month => {
+
+//             const monthHeader = document.createElement("tr");
+
+//             monthHeader.innerHTML = `
+//                 <td colspan="2"
+//                     style="
+//                         background:#43a047;
+//                         color:white;
+//                         font-weight:bold;
+//                         text-align:center;
+//                         font-size:18px;
+//                         padding:10px;
+//                     ">
+//                     ${month}
+//                     (18th - 17th Cycle)
+//                 </td>
+//             `;
+
+//             table.appendChild(monthHeader);
+
+//             let monthLeaves = 0;
+
+//             leaveGroups[month].forEach(entry => {
+
+//                 const row = document.createElement("tr");
+
+//                 row.innerHTML = `
+//                     <td>${formatDate(entry.Date)}</td>
+//                     <td>${entry.Purpose}</td>
+//                 `;
+
+//                 table.appendChild(row);
+
+//                 monthLeaves++;
+//                 overallLeaves++;
+
+//             });
+
+//             const subtotalRow = document.createElement("tr");
+
+//             subtotalRow.innerHTML = `
+//                 <td
+//                     style="
+//                         font-weight:bold;
+//                         background:#e8f5e9;
+//                     ">
+//                     ${month} Total Leaves
+//                 </td>
+
+//                 <td
+//                     style="
+//                         font-weight:bold;
+//                         background:#e8f5e9;
+//                     ">
+//                     ${monthLeaves}
+//                 </td>
+//             `;
+
+//             table.appendChild(subtotalRow);
+
+//         });
+
+//         const totalRow = document.createElement("tr");
+
+//         totalRow.classList.add("total-row");
+
+//         totalRow.innerHTML = `
+//             <td>
+//                 Overall Leaves
+//             </td>
+
+//             <td>
+//                 ${overallLeaves}
+//             </td>
+//         `;
+
+//         table.appendChild(totalRow);
+
+//         box.appendChild(table);
+//         leaveDiv.appendChild(box);
+
+//     } else {
+
+//         leaveDiv.innerHTML = `
+//             <div style="
+//                 padding:10px;
+//                 font-size:14px;
+//                 font-weight:600;
+//                 color:#b00020;
+//                 background:#ffe5e8;
+//                 border:1px solid #ffb3bd;
+//                 border-radius:8px;
+//                 text-align:center;
+//                 margin-top:8px;
+//             ">
+//                 No Leave Records Found
+//             </div>
+//         `;
+//     }
+
+//     updateMonthCards(monthsMap);
+
+// }
+
 function generateTable(data) {
 
     monthsMap = {
@@ -233,292 +594,430 @@ function generateTable(data) {
         "December": [0, 0]
     };
 
-
-    // console.log("📦 Incoming Data:", data);
     const salaryDiv = document.getElementById("salaryTableContainer");
     const leaveDiv = document.getElementById("leaveTableContainer");
 
     salaryDiv.innerHTML = "";
     leaveDiv.innerHTML = "";
 
-    if (data.Salary && Object.keys(data.Salary).length > 0) {
+    // ==========================
+    // Calculate Leave Count First
+    // ==========================
+    if (data.Leaves) {
+        Object.values(data.Leaves).forEach(entry => {
+            if (monthsMap[entry.Month]) {
+                monthsMap[entry.Month][1]++;
+            }
+        });
+    }
 
-    const box = document.createElement("div");
-    box.classList.add("table-box", "salary-table");
+    // ==========================
+    // Salary Table
+    // ==========================
+    if (data.Salary && Object.keys(data.Salary).length > 0 || data.Leaves) {
 
-    const table = document.createElement("table");
+        const box = document.createElement("div");
+        box.classList.add("table-box", "salary-table");
 
-    table.innerHTML = `
-        <caption>💰 Salary Data</caption>
-        <tr>
-            <th>Date</th>
-            <th>Payment Method</th>
-            <th>Purpose</th>
-            <th>Amount (₹)</th>
-        </tr>
-    `;
+        const table = document.createElement("table");
 
-    const salaryGroups = {};
-
-    Object.values(data.Salary).forEach(entry => {
-
-        const cycleMonth =
-            entry.Month;
-
-        if (!salaryGroups[cycleMonth]) {
-            salaryGroups[cycleMonth] = [];
-        }
-
-        salaryGroups[cycleMonth].push(entry);
-    });
-
-    let overallTotal = 0;
-
-    Object.keys(salaryGroups).forEach(month => {
-
-        const monthHeader =
-            document.createElement("tr");
-
-        monthHeader.innerHTML = `
-            <td colspan="4"
-                style="
-                    background:#1976d2;
-                    color:white;
-                    font-weight:bold;
-                    text-align:center;
-                    font-size:18px;
-                    padding:10px;
-                ">
-                ${month}
-                (18th - 17th Cycle)
-            </td>
+        table.innerHTML = `
+            <caption>💰 Salary Data</caption>
+            <tr>
+                <th>Date</th>
+                <th>Payment Method</th>
+                <th>Purpose</th>
+                <th>Amount (₹)</th>
+            </tr>
         `;
 
-        table.appendChild(monthHeader);
+        const salaryGroups = {};
+        const leaveGroups = {};
 
-        let monthTotal = 0;
+        // -------------------------
+        // Salary Groups
+        // -------------------------
+        Object.values(data.Salary || {}).forEach(entry => {
 
-        salaryGroups[month].forEach(entry => {
+            if (!salaryGroups[entry.Month]) {
+                salaryGroups[entry.Month] = [];
+            }
 
-            const amount =
-                parseFloat(entry.Salary) || 0;
+            salaryGroups[entry.Month].push(entry);
 
-            monthTotal += amount;
-            overallTotal += amount;
-
-            monthsMap[entry.Month][0] += parseInt(amount);
-
-            const row =
-                document.createElement("tr");
-
-            row.innerHTML = `
-                <td>${entry.Date}</td>
-                <td>${entry.PaymentMethod === undefined ? 'Phonepe' : entry.PaymentMethod}</td>
-                <td>${entry.Purpose === undefined ? 'Salary Payment' : entry.Purpose}</td>
-                <td>₹${amount.toLocaleString("en-IN")}</td>
-            `;
-
-            table.appendChild(row);
         });
 
-        const subtotalRow =
-            document.createElement("tr");
+        // -------------------------
+        // Leave Groups
+        // -------------------------
+        Object.values(data.Leaves || {}).forEach(entry => {
 
-        subtotalRow.innerHTML = `
-            <td colspan="3"
-                style="
-                    font-weight:bold;
-                    background:#e3f2fd;
-                ">
-                ${month} Total
+            if (!leaveGroups[entry.Month]) {
+                leaveGroups[entry.Month] = [];
+            }
+
+            leaveGroups[entry.Month].push(entry);
+
+        });
+
+        let overallTotal = 0;
+
+        const monthOrder = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ];
+
+        const today = new Date();
+        const currentMonthIndex = today.getMonth();
+
+        monthOrder.forEach((month, index) => {
+
+            // Hide future months
+            if (index > currentMonthIndex) {
+                return;
+            }
+
+            const salaryEntries = salaryGroups[month] || [];
+            const leaveEntries = leaveGroups[month] || [];
+
+            // Skip if there is no salary and no leave
+            if (salaryEntries.length === 0 && leaveEntries.length === 0) {
+                return;
+            }
+
+            const monthHeader = document.createElement("tr");
+
+            monthHeader.innerHTML = `
+                <td colspan="4"
+                    style="
+                        background:#1976d2;
+                        color:white;
+                        font-weight:bold;
+                        text-align:center;
+                        font-size:18px;
+                        padding:10px;
+                    ">
+                    ${month}
+                    (18th - 17th Cycle)
+                </td>
+            `;
+
+            table.appendChild(monthHeader);
+
+            let monthTotal = 0;
+
+            // ==========================
+            // Salary Entries
+            // ==========================
+            salaryEntries.forEach(entry => {
+
+                const amount = parseFloat(entry.Salary) || 0;
+
+                monthTotal += amount;
+                overallTotal += amount;
+
+                monthsMap[entry.Month][0] += amount;
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td style="white-space: nowrap;width: max-content;">${formatDate(entry.Date)}</td>
+                    <td>${entry.PaymentMethod === undefined ? 'Phonepe' : entry.PaymentMethod}</td>
+                    <td>${entry.Purpose === undefined ? 'Salary Payment' : entry.Purpose}</td>
+                    <td>₹${amount.toLocaleString("en-IN")}</td>
+                `;
+
+                table.appendChild(row);
+
+            });
+
+            // ==========================
+            // Salary Cut Calculation
+            // ==========================
+
+            const allowedLeaves = 2;
+            const perDaySalary = 500;
+
+            const totalLeaves = monthsMap[month][1];
+
+            const extraLeaves = Math.max(0, totalLeaves - allowedLeaves);
+
+            const salaryCut = extraLeaves * perDaySalary;
+
+            // Show Salary Cut only if applicable
+            if (salaryCut > 0) {
+
+                const cutRow = document.createElement("tr");
+
+                cutRow.innerHTML = `
+                    <td colspan="3"
+                        style="
+                            background:#ffebee;
+                            color:#d32f2f;
+                            font-weight:bold;
+                        ">
+                        Salary Cut (${extraLeaves} Extra Leave${extraLeaves > 1 ? "s" : ""})
+                    </td>
+
+                    <td
+                        style="
+                            background:#ffebee;
+                            color:#d32f2f;
+                            font-weight:bold;
+                        ">
+                        -₹${salaryCut.toLocaleString("en-IN")}
+                    </td>
+                `;
+
+                table.appendChild(cutRow);
+            }
+
+            // ==========================
+            // Month Total
+            // ==========================
+
+            const finalMonthTotal = monthTotal + salaryCut;
+
+            overallTotal += salaryCut;
+
+            const subtotalRow = document.createElement("tr");
+
+            subtotalRow.innerHTML = `
+                <td colspan="3"
+                    style="
+                        font-weight:bold;
+                        background:#e3f2fd;
+                    ">
+                    ${month} Total
+                </td>
+
+                <td
+                    style="
+                        font-weight:bold;
+                        background:#e3f2fd;
+                    ">
+                        ₹${finalMonthTotal.toLocaleString("en-IN")}
+                </td>
+            `;
+
+            table.appendChild(subtotalRow);
+
+        });
+
+        // ==========================
+        // Overall Total
+        // ==========================
+
+        const totalRow = document.createElement("tr");
+
+        totalRow.classList.add("total-row");
+
+        totalRow.innerHTML = `
+            <td colspan="3">
+                Overall Total
             </td>
 
-            <td
-                style="
-                    font-weight:bold;
-                    background:#e3f2fd;
-                ">
-                ₹${monthTotal.toLocaleString("en-IN")}
+            <td>
+                ₹${overallTotal.toLocaleString("en-IN")}
             </td>
         `;
 
-        table.appendChild(subtotalRow);
-    });
+        table.appendChild(totalRow);
 
-    const totalRow =
-        document.createElement("tr");
+        box.appendChild(table);
+        salaryDiv.appendChild(box);
 
-    totalRow.classList.add("total-row");
+    } else {
 
-    totalRow.innerHTML = `
-        <td colspan="3">
-            Overall Total
-        </td>
+        salaryDiv.innerHTML = `
+            <div style="
+                padding:10px;
+                font-size:14px;
+                font-weight:600;
+                color:#b00020;
+                background:#ffe5e8;
+                border:1px solid #ffb3bd;
+                border-radius:8px;
+                text-align:center;
+                margin-top:8px;
+            ">
+                No Salary Records Found
+            </div>
+        `;
+    }
 
-        <td>
-            ₹${overallTotal.toLocaleString("en-IN")}
-        </td>
-    `;
-
-    table.appendChild(totalRow);
-
-    box.appendChild(table);
-    salaryDiv.appendChild(box);
-
-} else {
-
-    salaryDiv.innerHTML = `
-        <div style="
-            padding:10px;
-            font-size:14px;
-            font-weight:600;
-            color:#b00020;
-            background:#ffe5e8;
-            border:1px solid #ffb3bd;
-            border-radius:8px;
-            text-align:center;
-            margin-top:8px;
-        ">
-            No Salary Records Found
-        </div>
-    `;
-}
-
-
+        // ==========================
+    // Leave Table
+    // ==========================
     if (data.Leaves && Object.keys(data.Leaves).length > 0) {
 
-    const box = document.createElement("div");
-    box.classList.add("table-box", "leave-table");
+        const box = document.createElement("div");
+        box.classList.add("table-box", "leave-table");
 
-    const table = document.createElement("table");
+        const table = document.createElement("table");
 
-    table.innerHTML = `
-        <caption>🌴 Leave Data</caption>
-        <tr>
-            <th>Date</th>
-            <th>Purpose</th>
-        </tr>
-    `;
-
-    const leaveGroups = {};
-
-    Object.values(data.Leaves).forEach(entry => {
-
-        const cycleMonth =entry.Month;
-
-        if (!leaveGroups[cycleMonth]) {
-            leaveGroups[cycleMonth] = [];
-        }
-
-        leaveGroups[cycleMonth].push(entry);
-    });
-
-    let overallLeaves = 0;
-
-    Object.keys(leaveGroups).forEach(month => {
-
-        const monthHeader =
-            document.createElement("tr");
-
-        monthHeader.innerHTML = `
-            <td colspan="2"
-                style="
-                    background:#43a047;
-                    color:white;
-                    font-weight:bold;
-                    text-align:center;
-                    font-size:18px;
-                    padding:10px;
-                ">
-                ${month}
-                (18th - 17th Cycle)
-            </td>
+        table.innerHTML = `
+            <caption>🌴 Leave Data</caption>
+            <tr>
+                <th>Date</th>
+                <th>Purpose</th>
+            </tr>
         `;
 
-        table.appendChild(monthHeader);
+        const leaveGroups = {};
 
-        let monthLeaves = 0;
+        Object.values(data.Leaves).forEach(entry => {
 
-        leaveGroups[month].forEach(entry => {
+            if (!leaveGroups[entry.Month]) {
+                leaveGroups[entry.Month] = [];
+            }
 
-            monthsMap[entry.Month][1] += 1;
+            leaveGroups[entry.Month].push(entry);
 
-            const row =
-                document.createElement("tr");
-
-            row.innerHTML = `
-                <td>${entry.Date}</td>
-                <td>${entry.Purpose}</td>
-            `;
-
-            table.appendChild(row);
-
-            monthLeaves++;
-            overallLeaves++;
         });
 
-        const subtotalRow =
-            document.createElement("tr");
+        let overallLeaves = 0;
 
-        subtotalRow.innerHTML = `
-            <td
-                style="
-                    font-weight:bold;
-                    background:#e8f5e9;
-                ">
-                ${month} Total Leaves
+        const monthOrder = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ];
+
+        const currentMonthIndex = new Date().getMonth();
+
+        monthOrder.forEach((month, index) => {
+
+            // Don't show future months
+            if (index > currentMonthIndex) {
+                return;
+            }
+
+            const leaveEntries = leaveGroups[month] || [];
+
+            // Skip months having no leave
+            if (leaveEntries.length === 0) {
+                return;
+            }
+
+            const monthHeader = document.createElement("tr");
+
+            monthHeader.innerHTML = `
+                <td colspan="2"
+                    style="
+                        background:#43a047;
+                        color:white;
+                        font-weight:bold;
+                        text-align:center;
+                        font-size:18px;
+                        padding:10px;
+                    ">
+                    ${month}
+                    (18th - 17th Cycle)
+                </td>
+            `;
+
+            table.appendChild(monthHeader);
+
+            let monthLeaves = 0;
+
+            leaveEntries.forEach(entry => {
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${formatDate(entry.Date)}</td>
+                    <td>${entry.Purpose}</td>
+                `;
+
+                table.appendChild(row);
+
+                monthLeaves++;
+                overallLeaves++;
+
+            });
+
+            const subtotalRow = document.createElement("tr");
+
+            subtotalRow.innerHTML = `
+                <td
+                    style="
+                        font-weight:bold;
+                        background:#e8f5e9;
+                    ">
+                    ${month} Total Leaves
+                </td>
+
+                <td
+                    style="
+                        font-weight:bold;
+                        background:#e8f5e9;
+                    ">
+                    ${monthLeaves}
+                </td>
+            `;
+
+            table.appendChild(subtotalRow);
+
+        });
+
+        const totalRow = document.createElement("tr");
+
+        totalRow.classList.add("total-row");
+
+        totalRow.innerHTML = `
+            <td>
+                Overall Leaves
             </td>
 
-            <td
-                style="
-                    font-weight:bold;
-                    background:#e8f5e9;
-                ">
-                ${monthLeaves}
+            <td>
+                ${overallLeaves}
             </td>
         `;
 
-        table.appendChild(subtotalRow);
-    });
+        table.appendChild(totalRow);
 
-    const totalRow =
-        document.createElement("tr");
+        box.appendChild(table);
+        leaveDiv.appendChild(box);
 
-    totalRow.classList.add("total-row");
+    } else {
 
-    totalRow.innerHTML = `
-        <td>
-            Overall Leaves
-        </td>
+        leaveDiv.innerHTML = `
+            <div style="
+                padding:10px;
+                font-size:14px;
+                font-weight:600;
+                color:#b00020;
+                background:#ffe5e8;
+                border:1px solid #ffb3bd;
+                border-radius:8px;
+                text-align:center;
+                margin-top:8px;
+            ">
+                No Leave Records Found
+            </div>
+        `;
+    }
 
-        <td>
-            ${overallLeaves}
-        </td>
-    `;
-
-    table.appendChild(totalRow);
-
-    box.appendChild(table);
-    leaveDiv.appendChild(box);
-
-} else {
-
-    leaveDiv.innerHTML = `
-        <div style="
-            padding:10px;
-            font-size:14px;
-            font-weight:600;
-            color:#b00020;
-            background:#ffe5e8;
-            border:1px solid #ffb3bd;
-            border-radius:8px;
-            text-align:center;
-            margin-top:8px;
-        ">
-            No Leave Records Found
-        </div>
-    `;
-}
     updateMonthCards(monthsMap);
 
 }
@@ -572,5 +1071,19 @@ function updateMonthCards(monthlySummary) {
         }
     });
 }
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+}
+
+// Example
+const formattedDate = formatDate("2026-04-04");
+// console.log(formattedDate);
 
 
