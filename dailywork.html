@@ -4301,10 +4301,9 @@ id="UnPaid-${c.name}"
                         let hoursDriverText =
                             activity.HoursDrivers || "";
 
-                        let ownMatch =
-                            hoursDriverText.match(
-                                /own\s*=\s*(\d+)/i
-                            );
+                        const ownMatch = hoursDriverText.match(
+                            /(?:own|సొంత)\s*=\s*(\d+)/i
+                        );
 
                         if (ownMatch) {
 
@@ -4389,10 +4388,10 @@ id="UnPaid-${c.name}"
                         let driverText =
                             activity.Drivers || "";
 
-                        let ownMatch =
-                            driverText.match(
-                                /own\s*=\s*(\d+)/i
-                            );
+
+                        const ownMatch = driverText.match(
+                            /(?:own|సొంత)\s*=\s*(\d+)/i
+                        );
 
                         if (ownMatch) {
 
@@ -5694,80 +5693,80 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById(targetId).value = result.trim();
         }
 
-async function translateText(input) {
-    try {
-        let text = input.value.trim();
-        if (!text) return;
+        async function translateText(input) {
+            try {
+                let text = input.value.trim();
+                if (!text) return;
 
-        // Telugu Unicode
-        const teluguRegex = /^[\u0C00-\u0C7F\s]+$/;
+                // Telugu Unicode
+                const teluguRegex = /^[\u0C00-\u0C7F\s]+$/;
 
-        // Split by comma and process each part separately
-        const parts = text.split(",");
-        const finalParts = [];
+                // Split by comma and process each part separately
+                const parts = text.split(",");
+                const finalParts = [];
 
-        for (let part of parts) {
-            part = part.trim();
-            if (!part) continue;
+                for (let part of parts) {
+                    part = part.trim();
+                    if (!part) continue;
 
-            let arrowSuffix = "";
-            let lastLetter = "";
+                    let arrowSuffix = "";
+                    let lastLetter = "";
 
-            // Preserve → part
-            if (part.includes("→")) {
-                const arr = part.split("→");
-                part = arr[0].trim();
-                arrowSuffix = "→" + arr.slice(1).join("→").trim();
-            } else {
-                // Handle trailing single English letter (e.g. Suribabu A)
-                let words = part.split(/\s+/);
+                    // Preserve → part
+                    if (part.includes("→")) {
+                        const arr = part.split("→");
+                        part = arr[0].trim();
+                        arrowSuffix = "→" + arr.slice(1).join("→").trim();
+                    } else {
+                        // Handle trailing single English letter (e.g. Suribabu A)
+                        let words = part.split(/\s+/);
 
-                if (
-                    words.length > 1 &&
-                    /^[A-Za-z]$/.test(words[words.length - 1])
-                ) {
-                    lastLetter = words.pop().toUpperCase();
-                    part = words.join(" ");
+                        if (
+                            words.length > 1 &&
+                            /^[A-Za-z]$/.test(words[words.length - 1])
+                        ) {
+                            lastLetter = words.pop().toUpperCase();
+                            part = words.join(" ");
+                        }
+                    }
+
+                    let translatedText = part;
+
+                    // Translate only if not already Telugu
+                    if (!teluguRegex.test(part)) {
+                        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(part)}&langpair=en|te`;
+
+                        const res = await fetch(url);
+
+                        if (!res.ok) {
+                            throw new Error(`HTTP Error: ${res.status}`);
+                        }
+
+                        const data = await res.json();
+
+                        translatedText =
+                            data.responseData?.translatedText || part;
+
+                        translatedText = translatedText.replace(/\s+/g, "_");
+                    }
+
+                    // Add preserved suffix
+                    if (arrowSuffix) {
+                        translatedText += arrowSuffix;
+                    } else if (lastLetter) {
+                        translatedText += "_" + lastLetter;
+                    }
+
+                    finalParts.push(translatedText);
                 }
+
+                // Join back with commas
+                input.value = finalParts.join(",");
+
+            } catch (error) {
+                console.error("Translation Error:", error);
             }
-
-            let translatedText = part;
-
-            // Translate only if not already Telugu
-            if (!teluguRegex.test(part)) {
-                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(part)}&langpair=en|te`;
-
-                const res = await fetch(url);
-
-                if (!res.ok) {
-                    throw new Error(`HTTP Error: ${res.status}`);
-                }
-
-                const data = await res.json();
-
-                translatedText =
-                    data.responseData?.translatedText || part;
-
-                translatedText = translatedText.replace(/\s+/g, "_");
-            }
-
-            // Add preserved suffix
-            if (arrowSuffix) {
-                translatedText += arrowSuffix;
-            } else if (lastLetter) {
-                translatedText += "_" + lastLetter;
-            }
-
-            finalParts.push(translatedText);
         }
-
-        // Join back with commas
-        input.value = finalParts.join(",");
-
-    } catch (error) {
-        console.error("Translation Error:", error);
-    }
-}
         document.getElementById("desc").addEventListener("change", async function () {
 
             // First function

@@ -788,7 +788,7 @@ function editData() {
         const [driver, trips] = line.split('=').map(item => item.trim());
 
         if (driver && trips) {
-            if (driver.toLowerCase().includes("own")) {
+            if (driver.toLowerCase().includes("own") || driver.toLowerCase().includes("సొంత")) {
                 nonpaytrips += parseInt(trips);
             }
             const newRow = document.createElement('div');
@@ -816,7 +816,7 @@ function editData1() {
         const [driver, trips] = line.split('=').map(item => item.trim());
 
         if (driver && trips) {
-            if (driver.toLowerCase().includes("own")) {
+            if (driver.toLowerCase().includes("own") || driver.toLowerCase().includes("సొంత")) {
                 nonpaytrips += parseInt(trips);
             }
             const newRow = document.createElement('div');

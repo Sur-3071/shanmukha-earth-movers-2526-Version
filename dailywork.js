@@ -121,7 +121,7 @@ function updateTotalTrips() {
     driverNames.forEach((driverName, index) => {
         const trip = tripInputs[index].value || 0;
         const name = (driverName.value.toLowerCase() || "Unknown Driver").trim().replace(/\s+/g, "_");
-        if (name.includes("own")) {
+        if (name.includes("own") || name.includes("సొంత")) {
             const value = parseInt(trip) || 0;
             paytotal += value;
         }
@@ -142,7 +142,7 @@ function updateTotalTrips1() {
     driverNames.forEach((driverName, index) => {
         const trip = tripInputs[index].value || 0;
         const name = (driverName.value.toLowerCase() || "Unknown Driver").trim().replace(/\s+/g, "_");
-        if (name.includes("own")) {
+        if (name.includes("own") || name.includes("సొంత")) {
             const value = parseInt(trip) || 0;
             paytotal += value;
         }
@@ -170,8 +170,10 @@ function generateOutput() {
     driverNames.forEach((driverName, index) => {
         const trip = trips[index].value || 0;
         const name = (driverName.value || "Unknown Driver").trim().replace(/\s+/g, "_");
-        const line = `${name} = ${trip}`;
-        outputDiv.value += line + " " + "\n";
+        if (name.includes("own") || name.includes("సొంత")) {
+            const line = `${name} = ${trip}`;
+            outputDiv.value += line + " " + "\n";
+        }
     });
 }
 function tripprice1() {
@@ -811,7 +813,7 @@ function updateTotalTrips7() {
                 .trim()
                 .replace(/\s+/g, "_");
 
-        if (name.includes("own")) {
+        if (name.includes("own") || name.includes("సొంత")) {
             paytotal += trip;
         }
 
@@ -872,7 +874,7 @@ function updateTotalTrips17() {
                 .trim()
                 .replace(/\s+/g, "_");
 
-        if (name.includes("own")) {
+        if (name.includes("own") || name.includes("సొంత")) {
             paytotal += trip;
         }
 

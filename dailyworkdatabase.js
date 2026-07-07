@@ -1080,7 +1080,7 @@ function generateCustomerTable1(data) {
                         const actualName = keyMap[key] || key;
 
                         // NON PAY LOGIC (OWN)
-                        if (left.toLowerCase().includes("own")) {
+                        if (left.toLowerCase().includes("own") || left.toLowerCase().includes("సొంత")) {
                             nonPayTrips += Number(value) || 0;
                         }
 

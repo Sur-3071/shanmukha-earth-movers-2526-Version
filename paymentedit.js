@@ -211,7 +211,7 @@ function editData7() {
 
         if (driver && trips) {
 
-            if (driver.toLowerCase().includes("own")) {
+            if (driver.toLowerCase().includes("own") || driver.toLowerCase().includes("సొంత")) {
 
                 nonpaytrips += parseInt(trips);
             }
@@ -281,7 +281,7 @@ function editData17() {
 
         if (driver && trips) {
 
-            if (driver.toLowerCase().includes("own")) {
+            if (driver.toLowerCase().includes("own") || driver.toLowerCase().includes("సొంత")) {
 
                 nonpaytrips += parseInt(trips);
             }
