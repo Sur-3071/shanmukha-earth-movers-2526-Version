@@ -227,7 +227,6 @@ function editData7() {
                        placeholder="Driver Name"
                        name="driverName7[]"
                        value="${driver}"
-                       onkeyup="removereadonly7(),updateTotalTrips7()"
                        required>
 
                 <input type="number"
@@ -298,7 +297,6 @@ function editData17() {
                        placeholder="Driver Name"
                        name="driverName17[]"
                        value="${driver}"
-                       onkeyup="removereadonly7(),updateTotalTrips17()"
                        required>
 
                 <input type="number"

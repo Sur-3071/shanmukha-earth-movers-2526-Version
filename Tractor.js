@@ -108,37 +108,97 @@ function addamount() {
     }
 }
 
-function transalate() {
+// function transalate() {
 
-    let convert = document.getElementById("cname");
-    let content = document.getElementById("cname").value;
-    let transLINK = `https://api.mymemory.translated.net/get?q=${content}&langpair=en-GB|te-IN`;
+//     let convert = document.getElementById("cname");
+//     let content = document.getElementById("cname").value;
+//     let transLINK = `https://api.mymemory.translated.net/get?q=${content}&langpair=en-GB|te-IN`;
 
-    fetch(transLINK)
-        .then(response => response.json())
-        .then(data => {
-            // Handle the translated data here
-            convert.innerHTML = "";
-            let text = data.responseData.translatedText;
-            // alert(text);
-            convert.value = text;
-        });
+//     fetch(transLINK)
+//         .then(response => response.json())
+//         .then(data => {
+//             // Handle the translated data here
+//             convert.innerHTML = "";
+//             let text = data.responseData.translatedText;
+//             // alert(text);
+//             convert.value = text;
+//         });
+// }
+
+async function transalate() {
+    try {
+        let convert = document.getElementById("cname");
+        let content = document.getElementById("cname").value;
+        if (content.length <= 0) {
+            // alert("Please Enter Customer Name");
+            return;
+        }
+
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(content)}&langpair=en|te`;
+
+        const res = await fetch(url);
+
+        if (!res.ok) {
+            throw new Error(`HTTP Error: ${res.status}`);
+        }
+
+        const data = await res.json();
+        // Handle the translated data here
+        convert.innerHTML = "";
+        let text = data.responseData.translatedText;
+        // alert(text);
+        convert.value = text;
+
+    } catch (error) {
+        console.error(error);
+    }
 }
-function transalatepur() {
-    let convert = document.getElementById("pur");
-    let content = document.getElementById("pur").value;
-    let transLINK = `https://api.mymemory.translated.net/get?q=${content}&langpair=en-GB|te-IN`;
+// function transalatepur() {
+//     let convert = document.getElementById("pur");
+//     let content = document.getElementById("pur").value;
+//     let transLINK = `https://api.mymemory.translated.net/get?q=${content}&langpair=en-GB|te-IN`;
 
-    fetch(transLINK)
-        .then(response => response.json())
-        .then(data => {
-            // Handle the translated data here
-            convert.innerHTML = "";
-            let text = data.responseData.translatedText;
-            // alert(text);
-            convert.value = text;
-        });
+//     fetch(transLINK)
+//         .then(response => response.json())
+//         .then(data => {
+//             // Handle the translated data here
+//             convert.innerHTML = "";
+//             let text = data.responseData.translatedText;
+//             // alert(text);
+//             convert.value = text;
+//         });
+// }
+
+async function transalatepur() {
+    try {
+        let convert = document.getElementById("pur");
+        let content = document.getElementById("pur").value;
+        if (content.length <= 0) {
+            // alert("Please Enter Customer Name");
+            return;
+        }
+
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(content)}&langpair=en|te`;
+
+        const res = await fetch(url);
+
+        if (!res.ok) {
+            throw new Error(`HTTP Error: ${res.status}`);
+        }
+
+        const data = await res.json();
+        // Handle the translated data here
+        convert.innerHTML = "";
+        let text = data.responseData.translatedText;
+        // alert(text);
+        convert.value = text;
+
+    } catch (error) {
+        console.error(error);
+    }
 }
+
+
 function box2() {
     var p1 = document.getElementById("tripsdata");
     var p2 = document.getElementById("amountdata");

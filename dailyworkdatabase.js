@@ -751,7 +751,7 @@ function generateCustomerTable(data) {
 
                     if (!str || str === "undefined") return str;
 
-                    const matches = String(str).match(/[A-Za-z0-9_]+\s*=\s*\d+/g) || [];
+                    const matches = String(str).match(/([\u0C00-\u0C7FA-Za-z0-9_]+)\s*=\s*(\d+)/g) || [];
 
                     if (matches.length === 0) return str;
 
@@ -1067,7 +1067,7 @@ function generateCustomerTable1(data) {
                     }
 
                     const matches =
-                        String(input).match(/[A-Za-z0-9_]+\s*=\s*\d+/g) || [];
+                        String(input).match(/([\u0C00-\u0C7FA-Za-z0-9_]+)\s*=\s*(\d+)/g) || [];
 
                     const html = matches.map((item, index) => {
 

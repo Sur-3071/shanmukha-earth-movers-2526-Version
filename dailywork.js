@@ -82,7 +82,7 @@ function addRow() {
     const newRow = document.createElement('div');
     newRow.className = 'row';
     newRow.innerHTML = `
-       <input type="text" placeholder="Driver Name" name="driverName[]"  onchange="removereadonly()">
+       <input type="text" placeholder="Driver Name" name="driverName[]">
        <input type="number" placeholder="Trips" name="trips[]"  readonly required onkeyup="updateTotalTrips()">
        <button class="remove-button" onclick="removeRow(this)">X</button>
     `;
@@ -93,7 +93,7 @@ function addRow1() {
     const newRow1 = document.createElement('div');
     newRow1.className = 'row1';
     newRow1.innerHTML = `
-       <input type="text" placeholder="Driver Name" name="driverName1[]"  onchange="removereadonly()">
+       <input type="text" placeholder="Driver Name" name="driverName1[]">
        <input type="number" placeholder="Trips" name="trips1[]"  readonly required onkeyup="updateTotalTrips1()">
        <button class="remove-button" onclick="removeRow1(this)">X</button>
     `;
@@ -678,8 +678,7 @@ function addRow7() {
         <input
             type="text"
             placeholder="Driver Name"
-            name="driverName7[]"
-            onkeyup="removereadonly7(); updateTotalTrips7();">
+            name="driverName7[]">
 
         <input
             type="number"
@@ -718,8 +717,7 @@ function addRow17() {
         <input
             type="text"
             placeholder="Driver Name"
-            name="driverName17[]"
-            onkeyup="removereadonly7(); updateTotalTrips17();">
+            name="driverName17[]">
 
         <input
             type="number"

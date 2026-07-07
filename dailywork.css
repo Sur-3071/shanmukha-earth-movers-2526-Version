@@ -408,7 +408,7 @@ span {
   background-size: 18px;
 }
 
-#desc {
+#desc,#output1,#output {
     width: 530px;
     height: 180px;
     padding: 10px;

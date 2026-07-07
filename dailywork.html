@@ -1802,7 +1802,7 @@
                                     <input type="text" id="pay7" name="payid" placeholder="Payment Status" readonly
                                         required>
                                     <textarea id="desc7" name="desc" placeholder="Description" rows="20" cols="30"
-                                        required onchange="formatCustomerNames(this.value,'desc7')">
+                                        required>
 </textarea>
 
 
@@ -2587,8 +2587,7 @@
             <input type="tel" id="dis" name="dis" placeholder="Enter Disel Amount" required>
             <input type="text" id="wid" name="wid" placeholder="Work Id" required readonly>
             <input type="text" id="beta" name="beta" placeholder="Driver Beta" onchange="timecal()">
-            <textarea id="desc" name="desc" placeholder="Description" required
-                onchange="formatCustomerNames(this.value,'desc')">
+            <textarea id="desc" name="desc" placeholder="Description" required>
 </textarea>
             <select id="worktype" required onchange="addflow()">
                 <option hidden>select Work Type</option>
@@ -2609,8 +2608,7 @@
                             <button type="button" class="add-button" onclick="addRow1()">Add Driver</button>
                         </div>
                     </div>
-                    <textarea id="output1" placeholder="All Drivers list" rows="4" cols="30"
-                        style="font-size: 20px; display: none;" readonly></textarea>
+                    <textarea id="output1" placeholder="All Drivers list" readonly></textarea>
                     <input type="text" id="trips1" placeholder="Number of Trips" readonly required value="0">
                     <input type="text" id="hoursnoncompanytractors" placeholder="Number of Non Company Tractor Trips"
                         readonly required>
@@ -2630,8 +2628,7 @@
                         <button type="button" class="add-button" onclick="addRow()">Add Driver</button>
                     </div>
                 </div>
-                <textarea id="output" placeholder="All Drivers list" rows="4" cols="35"
-                    style="font-size: 20px; display: none;" readonly></textarea>
+                <textarea id="output" placeholder="All Drivers list" readonly></textarea>
                 <input type="text" id="trips" placeholder="Number of Trips" readonly required>
                 <input type="text" id="noncompanytractors" placeholder="Number of Non Company Tractor Trips" readonly
                     required>
@@ -3242,8 +3239,7 @@
                                 <input type="text" id="alltrprate" name="alltrprate" placeholder="Total Trip Price"
                                     required value="0">
                             </div>
-                            <textarea id="desc" name="desc" placeholder="Description" rows="10" cols="30" required
-                                onchange="formatCustomerNames(this.value,'desc')">
+                            <textarea id="desc" name="desc" placeholder="Description" rows="10" cols="30" required>
 </textarea>
                             <input type="time" id="stime" name="stime" placeholder="Starting Time" onchange="timecal()"
                                 required>
@@ -5697,6 +5693,133 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
             document.getElementById(targetId).value = result.trim();
         }
+
+async function translateText(input) {
+    try {
+        let text = input.value.trim();
+        if (!text) return;
+
+        // Telugu Unicode
+        const teluguRegex = /^[\u0C00-\u0C7F\s]+$/;
+
+        // Split by comma and process each part separately
+        const parts = text.split(",");
+        const finalParts = [];
+
+        for (let part of parts) {
+            part = part.trim();
+            if (!part) continue;
+
+            let arrowSuffix = "";
+            let lastLetter = "";
+
+            // Preserve → part
+            if (part.includes("→")) {
+                const arr = part.split("→");
+                part = arr[0].trim();
+                arrowSuffix = "→" + arr.slice(1).join("→").trim();
+            } else {
+                // Handle trailing single English letter (e.g. Suribabu A)
+                let words = part.split(/\s+/);
+
+                if (
+                    words.length > 1 &&
+                    /^[A-Za-z]$/.test(words[words.length - 1])
+                ) {
+                    lastLetter = words.pop().toUpperCase();
+                    part = words.join(" ");
+                }
+            }
+
+            let translatedText = part;
+
+            // Translate only if not already Telugu
+            if (!teluguRegex.test(part)) {
+                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(part)}&langpair=en|te`;
+
+                const res = await fetch(url);
+
+                if (!res.ok) {
+                    throw new Error(`HTTP Error: ${res.status}`);
+                }
+
+                const data = await res.json();
+
+                translatedText =
+                    data.responseData?.translatedText || part;
+
+                translatedText = translatedText.replace(/\s+/g, "_");
+            }
+
+            // Add preserved suffix
+            if (arrowSuffix) {
+                translatedText += arrowSuffix;
+            } else if (lastLetter) {
+                translatedText += "_" + lastLetter;
+            }
+
+            finalParts.push(translatedText);
+        }
+
+        // Join back with commas
+        input.value = finalParts.join(",");
+
+    } catch (error) {
+        console.error("Translation Error:", error);
+    }
+}
+        document.getElementById("desc").addEventListener("change", async function () {
+
+            // First function
+            await translateText(this);
+
+            // Then your existing function
+            formatCustomerNames(this.value, "desc");
+
+        });
+        document.getElementById("desc7").addEventListener("change", async function () {
+
+            // First function
+            await translateText(this);
+
+            // Then your existing function
+            formatCustomerNames(this.value, "desc7");
+
+        });
+
+        // driverName[]
+        document.addEventListener("change", async function (e) {
+            if (e.target.name === "driverName[]") {
+                await translateText(e.target);
+                removereadonly();
+            }
+        });
+
+        // driverName1[]
+        document.addEventListener("change", async function (e) {
+            if (e.target.name === "driverName1[]") {
+                await translateText(e.target);
+                removereadonly();
+            }
+        });
+
+        // driverName7[]
+        document.addEventListener("change", async function (e) {
+            if (e.target.name === "driverName7[]") {
+                await translateText(e.target);
+                removereadonly7();
+                updateTotalTrips7();
+            }
+        });
+
+        // driverName17[]
+        document.addEventListener("change", async function (e) {
+            if (e.target.name === "driverName17[]") {
+                await translateText(e.target);
+                removereadonly7();
+                updateTotalTrips17();
+            }
+        });
 
     </script>
 

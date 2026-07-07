@@ -293,7 +293,10 @@ function generateTable(data) {
 
                 let result = "";
 
-                const matches = str.match(/([A-Za-z0-9_]+)\s*=\s*(\d+)/g);
+                const regex = /([\u0C00-\u0C7FA-Za-z0-9_]+)\s*=\s*(\d+)/g;
+
+
+                const matches = str.match(regex);
 
                 if (matches) {
 
@@ -373,9 +376,10 @@ function generateTable(data) {
                 str = str.replace(/\s+/g, " ").trim();
 
                 let result = "";
+                const regex = /([\u0C00-\u0C7FA-Za-z0-9_]+)\s*=\s*(\d+)/g;
 
-                const matches = str.match(/([A-Za-z0-9_]+)\s*=\s*(\d+)/g);
 
+                const matches = str.match(regex);
                 if (matches) {
 
                     result = matches.map(item => {
@@ -790,7 +794,7 @@ function editData() {
             const newRow = document.createElement('div');
             newRow.className = 'row';
             newRow.innerHTML = `
-        <input type="text" placeholder="Driver Name" name="driverName[]" value="${driver}" onchange="removereadonly()" required>
+        <input type="text" placeholder="Driver Name" name="driverName[]" value="${driver}" required>
         <input type="number" placeholder="Trips" name="trips[]" value="${trips}"  required onkeyup="updateTotalTrips()">
         <button class="remove-button" onclick="removeRow(this)">X</button>
       `;
@@ -818,7 +822,7 @@ function editData1() {
             const newRow = document.createElement('div');
             newRow.className = 'row1';
             newRow.innerHTML = `
-        <input type="text" placeholder="Driver Name" name="driverName1[]" value="${driver}" onchange="removereadonly()" required>
+        <input type="text" placeholder="Driver Name" name="driverName1[]" value="${driver}" required>
         <input type="number" placeholder="Trips" name="trips1[]" value="${trips}"  required onkeyup="updateTotalTrips1()">
         <button class="remove-button" onclick="removeRow1(this)">X</button>
       `;
@@ -1387,7 +1391,10 @@ function generateTableByDate(data, startdate, enddate, data1) {
 
                     let result = "";
 
-                    const matches = str.match(/([A-Za-z0-9_]+)\s*=\s*(\d+)/g);
+                    const regex = /([\u0C00-\u0C7FA-Za-z0-9_]+)\s*=\s*(\d+)/g;
+
+
+                    const matches = str.match(regex);
 
                     if (matches) {
 
@@ -1468,7 +1475,10 @@ function generateTableByDate(data, startdate, enddate, data1) {
 
                     let result = "";
 
-                    const matches = str.match(/([A-Za-z0-9_]+)\s*=\s*(\d+)/g);
+                    const regex = /([\u0C00-\u0C7FA-Za-z0-9_]+)\s*=\s*(\d+)/g;
+
+
+                    const matches = str.match(regex);
 
                     if (matches) {
 
