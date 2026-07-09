@@ -13,6 +13,7 @@ const DBConstants = {
     JCB_EMI: 1800,
     HOME: 665,
     OPERATOR: 835
+
 };
 
 export default DBConstants;
