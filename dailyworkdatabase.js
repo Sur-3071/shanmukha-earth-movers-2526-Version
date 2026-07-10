@@ -47,9 +47,9 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     // alert(beta,hourstrpamt,hoursdrivers,hourstrips);
     var overallamount = 0;
     document.getElementById("userForm1").reset();
-    setTimeout(() => {
-        location.reload();
-    }, 2000);
+    // setTimeout(() => {
+    //     location.reload();
+    // }, 2000);
     if (trips.length > 0 && trips !== "0") {
         stime = "--";
         etime = "--";

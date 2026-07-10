@@ -189,92 +189,6 @@
             }
         }
 
-        //         function renderSummary(summary) {
-        //             let html = `
-        // <table 
-        //     border="1"
-        //     width="100%"
-        //     style="
-        //         border-collapse:collapse;
-        //         font-size:20px;
-        //         font-family:Poppins,sans-serif;
-        //         text-align:center;
-        //         box-shadow:0 4px 10px rgba(0,0,0,0.1);
-        //     ">
-
-        //     <tr>
-        //         <th style="
-        //             background:#4ba6ec;
-        //             color:white;
-        //             padding:15px;
-        //             font-size:22px;
-        //         ">
-        //             Driver Name
-        //         </th>
-
-        //         <th style="
-        //             background:#4ba6ec;
-        //             color:white;
-        //             padding:15px;
-        //             font-size:22px;
-        //         ">
-        //             Total Amount
-        //         </th>
-
-        //         <th style="
-        //             background:#4ba6ec;
-        //             color:white;
-        //             padding:15px;
-        //             font-size:22px;
-        //         ">
-        //             Given Amount
-        //         </th>
-
-        //         <th style="
-        //             background:#4ba6ec;
-        //             color:white;
-        //             padding:15px;
-        //             font-size:22px;
-        //         ">
-        //             Balance
-        //         </th>
-        //     </tr>
-        // `;
-
-        //             Object.keys(summary).forEach(driver => {
-
-        //                 const total = summary[driver].totalEarned;
-        //                 const given = summary[driver].totalGiven;
-        //                 const balance = total - given;
-
-        //                 html += `
-        //         <tr style="font-size:20px;font-weight:500;">
-        //             <td style="padding:12px;">${driver}</td>
-
-        //             <td style="padding:12px;">
-        //                 ₹${total.toLocaleString()}
-        //             </td>
-
-        //             <td style="padding:12px;">
-        //                 ₹${given.toLocaleString()}
-        //             </td>
-
-        //             <td style="
-        //                 padding:12px;
-        //                 font-weight:bold;
-        //                 color:${balance >= 0 ? 'green' : 'red'};
-        //             ">
-        //                 ₹${balance.toLocaleString()}
-        //             </td>
-        //         </tr>
-        //     `;
-        //             });
-
-        //             html += `</table>`;
-
-        //             document.getElementById("summaryDiv").innerHTML = html;
-        //         }
-
 
         function renderSummary(summary) {
 
@@ -1419,9 +1333,9 @@
         function calculateQuarterWiseResult() {
 
             return {
-                Q1: calculate([8, 9, 10, 11], "Quarter 1", "August – November"),
-                Q2: calculate([12, 1, 2, 3], "Quarter 2", "December – March"),
-                Q3: calculate([4, 5, 6, 7], "Quarter 3", "April – July")
+                Q1: calculate([8, 9, 10, 11], "Quarter 1", "Aug – Nov"),
+                Q2: calculate([12, 1, 2, 3], "Quarter 2", "Dec – Mar"),
+                Q3: calculate([4, 5, 6, 7], "Quarter 3", "Apr – July")
             };
 
             function calculate(indexes, title, monthsLabel) {
@@ -1439,19 +1353,19 @@
 
                 let startDate, endDate;
 
-                if (monthsLabel === "August – November") {
+                if (monthsLabel === "Aug – Nov") {
 
                     startDate = new Date(cycleStartYear, 7, 10); // Aug 10
                     endDate = new Date(cycleStartYear, 11, 9);   // Dec 9
 
                 }
-                else if (monthsLabel === "December – March") {
+                else if (monthsLabel === "Dec – Mar") {
 
                     startDate = new Date(cycleStartYear, 11, 10); // Dec 10
                     endDate = new Date(cycleStartYear + 1, 3, 9); // Apr 9
 
                 }
-                else if (monthsLabel === "April – July") {
+                else if (monthsLabel === "Apr – July") {
 
                     startDate = new Date(cycleStartYear + 1, 3, 10); // Apr 10
                     endDate = new Date(cycleStartYear + 1, 7, 9);    // Aug 9
@@ -1652,19 +1566,19 @@
             </div>
             <div class="box" onclick="openQuarter(1)">
                 <h2 style="color: rgb(75, 166, 236);"> Quarter 1</h2>
-                <h2 style="color: rgb(75, 166, 236);">(August – November)</h2>
+                <h2 style="color: rgb(75, 166, 236);">(Aug – Nov)</h2>
                 <h1 id="profitquat1" style="font-size: 24px; font-weight: bold;"></h1>
                 <h1 id="quat1"></h1>
             </div>
             <div class="box" onclick="openQuarter(2)">
                 <h2 style="color: rgb(75, 166, 236);">Quarter 2 </h2>
-                <h2 style="color: rgb(75, 166, 236);">(December – March)</h2>
+                <h2 style="color: rgb(75, 166, 236);">(Dec – Mar)</h2>
                 <h1 id="profitquat2" style="font-size: 24px; font-weight: bold;"></h1>
                 <h1 id="quat2"></h1>
             </div>
             <div class="box" onclick="openQuarter(3)">
                 <h2 style="color: rgb(75, 166, 236);">Quarter 3 </h2>
-                <h2 style="color: rgb(75, 166, 236);">(April – July)</h2>
+                <h2 style="color: rgb(75, 166, 236);">(Apr – July)</h2>
                 <h1 id="profitquat3" style="font-size: 24px; font-weight: bold;"></h1>
                 <h1 id="quat3"></h1>
             </div>
@@ -2402,19 +2316,19 @@
 
                         let startDate, endDate;
 
-                        if (q.months === "August – November") {
+                        if (q.months === "Aug – Nov") {
 
                             startDate = new Date(cycleStartYear, 7, 10); // Aug 10
                             endDate = new Date(cycleStartYear, 11, 9);   // Dec 9
 
                         }
-                        else if (q.months === "December – March") {
+                        else if (q.months === "Dec – Mar") {
 
                             startDate = new Date(cycleStartYear, 11, 10); // Dec 10
                             endDate = new Date(cycleStartYear + 1, 3, 9); // Apr 9
 
                         }
-                        else if (q.months === "April – July") {
+                        else if (q.months === "Apr – July") {
 
                             startDate = new Date(cycleStartYear + 1, 3, 10); // Apr 10
                             endDate = new Date(cycleStartYear + 1, 7, 9);    // Aug 9
