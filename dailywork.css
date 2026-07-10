@@ -653,21 +653,21 @@ span {
       Mobile
 ========================= */
 
-@media (max-width:600px) {
+@media (max-width:800px) {
 
     .lock-card {
-        width: 92%;
+        width: 98%;
         padding: 28px;
     }
 
     .otp-box {
-        width: 45px;
-        height: 55px;
-        font-size: 24px;
+        width: 65px;
+        height: 75px;
+        font-size: 26px;
     }
 
     .lock-card h2 {
-        font-size: 24px;
+        font-size: 26px;
     }
 }
 
