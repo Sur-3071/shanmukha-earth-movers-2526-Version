@@ -466,8 +466,8 @@ span {
 ========================= */
 
 .lock-card {
-    width: 420px;
-    max-width: 92%;
+    width: 750px;
+    max-width: 98%;
     padding: 40px;
     border-radius: 22px;
     background: rgba(255,255,255,.12);
