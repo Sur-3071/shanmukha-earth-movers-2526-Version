@@ -370,10 +370,10 @@
                     const num = Number(value);
 
                     if (num > 0) {
-                        el.innerHTML = "Profit : " + num;
+                        el.innerHTML = "Profit : " + moneyconvert(num);
                         el.style.color = "green";
                     } else {
-                        el.innerHTML = "Loss : " + Math.abs(num);
+                        el.innerHTML = "Loss : " + moneyconvert(Math.abs(num));
                         el.style.color = "red";
                     }
 
@@ -3632,7 +3632,10 @@
             // =========================
             unpaidList.sort((a, b) => a.name.localeCompare(b.name));
             paidList.sort((a, b) => a.name.localeCompare(b.name));
-
+            const unpaidTotal = unpaidList.reduce((sum, item) => sum + Number(item.jcbTotal || 0), 0);
+            const paidTotal = paidList.reduce((sum, item) => sum + Number(item.jcbTotal || 0), 0);
+            const grandTotal = unpaidTotal + paidTotal;
+            // console.log("Grand Total:", grandTotal);
             // =========================
             // TOTALS
             // =========================
@@ -3654,12 +3657,13 @@
                 <th>Days</th>
                 <th>Unpaid</th>
                 <th>Paid</th>
+                <th>Contribution Percentage</th>
+                <th>Status</th>
                 <th>Previous Balance</th>
                 <th>JCB Total</th>
                 <th>JCB Remaining</th>
                 <th>Overall Total</th>
                 <th>Overall Remaining</th>
-                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -3686,12 +3690,19 @@
                 } else {
                     status = "🔴 Pending";
                 }
+
+                var contributionPercentage = 0;
+                if (c.jcbTotal > 0) {
+                    contributionPercentage = ((c.jcbTotal / grandTotal) * 100).toFixed(2) + "%";
+                } else {
+                    contributionPercentage = "---";
+                }
                 tableHTML += `
 <tr>
     <td>${count}</td>
-    <td style="white-space: nowrap;width: max-content;">${c.name}</td>
-    <td style="white-space: nowrap;width: max-content;">${c.Date}</td>
-    <td style="white-space: nowrap;width: max-content;">${status === "🔴 Pending" ? c.daysPassed : "---"}</td>
+    <td style="white-space: nowrap;width: max-content;font-weight:bold;">${c.name}</td>
+    <td style="white-space: nowrap;width: max-content;font-weight:bold;">${formatDate(c.Date)}</td>
+    <td style="white-space: nowrap;width: max-content;font-weight:bold;">${status === "🔴 Pending" ? c.daysPassed : "---"}</td>
 <td>
 <button
 id="UnPaid-${c.name}"
@@ -3725,13 +3736,13 @@ id="UnPaid-${c.name}"
                 Paid Data View
             </button>
                 </td>
-
-                <td>${c.previousBalance}</td>
-                <td>${c.jcbTotal}</td>
-                <td class="blink">${c.jcbRemaining}</td>
-                <td>${c.overallTotal}</td>
-                <td class="blink">${c.overallRemaining}</td>
-                <td style="white-space: nowrap;width: max-content;">${status}</td>
+                <td style="white-space: nowrap;width: max-content;font-weight:bold;">${status}</td>
+                <td style="font-weight:bold;">${contributionPercentage}</td>
+                <td style="font-weight:bold;">${moneyconvert(c.previousBalance)}</td>
+                <td style="font-weight:bold;">${moneyconvert(c.jcbTotal)}</td>
+                <td class="blink" style="font-weight:bold;">${moneyconvert(c.jcbRemaining)}</td>
+                <td style="font-weight:bold;">${moneyconvert(c.overallTotal)}</td>
+                <td class="blink" style="font-weight:bold;">${moneyconvert(c.overallRemaining)}</td>
             </tr>
         `;
             };
@@ -3751,12 +3762,11 @@ id="UnPaid-${c.name}"
             // =========================
             tableHTML += `
         <tr style="font-weight:bold;background:#f2f2f2;">
-            <td colspan="6">TOTAL</td>
-            <td></td>
-            <td>${totalJcb}</td>
-            <td>${totalJcbRem}</td>
-            <td>${totalOverall}</td>
-            <td>${totalOverallRem}</td>
+            <td colspan="8">Total Work Analysis</td>
+            <td style="font-weight:bold;">${moneyconvert(totalJcb)}</td>
+            <td style="font-weight:bold;">${moneyconvert(totalJcbRem)}</td>
+            <td style="font-weight:bold;">${moneyconvert(totalOverall)}</td>
+            <td style="font-weight:bold;">${moneyconvert(totalOverallRem)}</td>
             <td></td>
         </tr>
     `;
@@ -6204,6 +6214,13 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             const adjustedRate = rateValue + misValue;
 
             rateInput.value = adjustedRate;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return "";
+
+            const [year, month, day] = dateString.split("-");
+            return `${day}-${month}-${year}`;
         }
 
     </script>
