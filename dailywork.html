@@ -1719,6 +1719,8 @@
 
                                     <input type="text" id="pay7" name="payid" placeholder="Payment Status" readonly
                                         required>
+                                    <input type="text" id="mis7" name="mis" placeholder="Miscellaneous Amount"
+                                        onchange="adjustRate()" required>
                                     <textarea id="desc7" name="desc" placeholder="Description" rows="20" cols="30"
                                         required>
 </textarea>
@@ -4401,7 +4403,10 @@ id="UnPaid-${c.name}"
                     <b>JCB Trip Price :</b>
                     ${jcbTripPrice}<br>
 
-                    <b>Total JCB Amount :</b>
+                    <b>Adjust Amount :</b>
+                    ${activity.Miscellaneous || 0}<br>
+
+                    <b>JCB Amount :</b>
                     ${totalJcbAmount}<br>
 
                     <b>Drivers :</b><br>
@@ -6186,6 +6191,19 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
                     setTimeout(focusInput, 10);
                 }
             });
+        }
+
+        function adjustRate() {
+
+            const misInput = document.getElementById("mis7");
+            const rateInput = document.getElementById("rate7");
+
+            const misValue = parseInt(misInput.value, 10) || 0;
+            const rateValue = parseInt(rateInput.value, 10) || 0;
+
+            const adjustedRate = rateValue + misValue;
+
+            rateInput.value = adjustedRate;
         }
 
     </script>

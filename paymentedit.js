@@ -41,6 +41,7 @@ document.addEventListener("click", async function (e1) {
         var Contract = data.Contract;
         var Date = data.Date;
         var Ending = data.Ending;
+        var Miscellaneous = data.Miscellaneous || 0;
         var Name = data.Name;
         // var PhoneNumber = data.PhoneNumber;
         var Disel = data.Disel;
@@ -118,6 +119,8 @@ document.addEventListener("click", async function (e1) {
         document.getElementById("worktype7").value = worktype;
 
         document.getElementById("pay7").value = payment;
+
+        document.getElementById("mis7").value = Miscellaneous;
 
         document.getElementById("beta7").value = beta;
 
@@ -323,241 +326,6 @@ function editData17() {
 }
 
 
-
-// document.getElementById('submit8').addEventListener('click', async function (e) {
-//     e.preventDefault();
-//     showProcessingPopup();
-//     // alert("Submit button clicked.");
-
-//     const dat = document.getElementById("dat7").value;
-
-//     const wid = document.getElementById("wid7").value;
-
-//     const name = document.getElementById("name7").value;
-
-//     const villname = document.getElementById("vil7").value;
-
-//     // const pno = document.getElementById("pno7").value;
-
-//     const disel = document.getElementById("dis7").value;
-
-//     var con = document.getElementById("con7").value;
-
-//     var desc = document.getElementById("desc7").value;
-
-//     var stime = document.getElementById("stime7").value;
-
-//     var etime = document.getElementById("etime7").value;
-
-//     var ttime = document.getElementById("ttime7").value;
-
-//     const rate = document.getElementById("rate7").value;
-
-//     var hrsamt = document.getElementById("hrsrate7").value;
-
-//     var trpamt = document.getElementById("trprate7").value;
-
-//     var jcbtrpamt = document.getElementById("jcbtrprate7").value;
-
-//     var trips = document.getElementById("trips7").value;
-
-//     var output = document.getElementById("output7").value;
-
-//     var pay = document.getElementById("pay7").value;
-
-//     const beta = document.getElementById("beta7").value;
-
-//     var hourstrpamt = document.getElementById("trprate17").value;
-
-//     var hoursdrivers = document.getElementById("output17").value;
-
-//     var hourstrips = document.getElementById("trips17").value;
-
-//     var hoursnoncompanytractors =
-//         document.getElementById("hoursnoncompanytractors7").value;
-
-//     var noncompanytractors =
-//         document.getElementById("noncompanytractors7").value;
-
-//     var overallamount = 0;
-//     // alert(trips+" "+con);
-//     if (trips.length > 0 && trips !== "--") {
-//         const jcb = parseInt(jcbtrpamt) || 0;
-//         const tripAmt = parseInt(trpamt) || 0;
-//         const tripCount = parseInt(trips) || 0;
-//         const b = parseInt(beta) || 0;
-
-//         overallamount = (jcb + tripAmt) * tripCount + b - (tripAmt * noncompanytractors);
-
-//     }
-//     else {
-//         // alert(trips+" "+con);
-//         if (con.length > 0 && con !== "--") {
-//             const c = parseInt(con) || 0;
-//             const b = parseInt(beta) || 0;
-
-//             overallamount = c + b;
-
-//         }
-//         else {
-//             const b = parseInt(beta) || 0;
-//             const r = parseInt(rate) || 0;
-//             const hAmt = parseInt(hourstrpamt) || 0;
-//             const hCnt = parseInt(hourstrips) || 0;
-//             const hoursnoncompanytractorstrips = parseInt(hoursnoncompanytractors) || 0;
-
-//             overallamount = b + r + (hAmt * hCnt) - ((hAmt * hoursnoncompanytractorstrips));
-
-//         }
-//     }
-//     // alert(overallamount);
-//     if (stime.length === 0) {
-
-//         stime = "--";
-//         etime = "--";
-//         hrsamt = "--";
-//     }
-//     if (dat.length > 0) {
-//         if (name.length > 0) {
-//             if (villname.length > 0) {
-
-//                 const db1 = DBConstants.DailyWorkDB;
-//                 const db2 = "Work_Count";
-//                 const db3 = "Work_Id";
-//                 const w_id = ref(db, `${db2}`);
-//                 const dataRefset = ref(db, `${db1}/${wid}`);
-//                 var databasecount = ref(db, `${db2}/${db3}`);
-//                 const snapshot = await get(databasecount);
-//                 var workid = parseInt(snapshot.val());
-//                 try {
-//                     if (workid == wid) {
-//                         await set(w_id, {
-//                             Work_Id: parseInt(wid) + 1
-//                         });
-//                     }
-
-//                     const customerData = {
-//                         Date: dat,
-//                         Name: name,
-//                         Villagename: villname,
-//                         PhoneNumber: "**",
-//                         Shift: "**",
-//                         Beta: beta,
-//                         HoursTrips: hourstrips,
-//                         HoursTripsAmount: hourstrpamt,
-//                         HoursDrivers: hoursdrivers,
-//                         Description: desc,
-//                         Contract: con,
-//                         Payment: pay,
-//                         Disel: disel,
-//                         Trips: trips,
-//                         Drivers: output,
-//                         HoursPrice: hrsamt,
-//                         TripsPrice: trpamt,
-//                         JcbTripPrice: jcbtrpamt,
-//                         OverallPrice: overallamount,
-//                         Starting: stime,
-//                         Ending: etime,
-//                         TotalTime: ttime,
-//                         Price: rate
-//                     };
-//                     await set(dataRefset, customerData);
-//                     customerData.workid = wid;
-//                     hideProcessingPopup();
-
-//                     document.getElementById("paymentSuccessPopup5").style.display = "flex";
-//                     // document.getElementById("done").style.display = "block";
-//                     setTimeout(() => {
-//                         document.getElementById("paymentSuccessPopup5").style.display = "none";
-//                     }, 1500);
-
-//                     // let newPaymentStatus = updatedCustomer.paymentStatus;
-
-//                     let unpaidCustomerslistdata =
-//                         JSON.parse(localStorage.getItem("unpaidCustomerslistdata")) || [];
-
-//                     let paidCustomerslistdata =
-//                         JSON.parse(localStorage.getItem("paidCustomerslistdata")) || [];
-
-//                     // Remove customer from both lists first
-//                     unpaidCustomerslistdata =
-//                         unpaidCustomerslistdata.filter(x => x.workid !== wid);
-
-//                     paidCustomerslistdata =
-//                         paidCustomerslistdata.filter(x => x.workid !== wid);
-
-//                     // Add to correct list
-//                     if (customerData.Payment === "Paid") {
-//                         paidCustomerslistdata.push(customerData);
-//                     } else {
-//                         unpaidCustomerslistdata.push(customerData);
-//                     }
-
-//                     localStorage.setItem(
-//                         "unpaidCustomerslistdata",
-//                         JSON.stringify(unpaidCustomerslistdata)
-//                     );
-
-//                     localStorage.setItem(
-//                         "paidCustomerslistdata",
-//                         JSON.stringify(paidCustomerslistdata)
-//                     );
-
-//                     setTimeout(() => {
-//                         document.getElementById("myModal7").style.display = "none";
-//                     }, 1500);
-
-//                     const unpaidclickablecustomerElement = document.getElementById(`UnPaid-${name}`)
-//                     const paidclickablecustomerElement = document.getElementById(`Paid-${name}`)
-
-//                     setTimeout(() => {
-
-//                         closePopup5();
-//                         closePopup6();
-
-//                         const recoveryBtn = document.getElementById("recoveryamount");
-
-//                         if (recoveryBtn) {
-//                             recoveryBtn.click();
-//                         }
-
-//                         setTimeout(() => {
-
-//                             if (paidclickablecustomerElement || unpaidclickablecustomerElement) {
-//                                 if (customerData.Payment === "Paid") {
-//                                     paidclickablecustomerElement.click();
-
-//                                 }
-//                                 else {
-//                                     unpaidclickablecustomerElement.click();
-
-//                                 }
-//                             }
-
-//                         }, 300); // small delay is enough
-
-//                     }, 1500);
-//                 } catch (error) {
-//                     console.error("Error adding document: ", error);
-//                     alert("An error occurred. Please try again.");
-//                 }
-
-
-//             }
-//             else {
-//                 alert("Please Enter Village Name");
-//             }
-//         }
-//         else {
-//             alert("Please Enter Customer Name Or place Or Location Name");
-//         }
-//     }
-//     else {
-//         alert("Please Choose Date");
-//     }
-// });
-
-
 document.getElementById('submit8').addEventListener('click', async function (e) {
     e.preventDefault();
     showProcessingPopup();
@@ -585,6 +353,9 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
     var trips = document.getElementById("trips7").value;
     var output = document.getElementById("output7").value;
     var pay = document.getElementById("pay7").value;
+
+    var mis = document.getElementById("mis7").value;
+
     const beta = document.getElementById("beta7").value;
 
     var hourstrpamt = document.getElementById("trprate17").value;
@@ -698,6 +469,7 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
         jcbtrpamt = "--";
         noncompanytractors = "--";
     }
+    overallamount = overallamount + parseInt(mis);
 
     if (dat.length > 0) {
         if (name.length > 0) {
@@ -743,6 +515,8 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                         Payment: pay,
 
                         Disel: disel,
+
+                        Miscellaneous: mis,
 
                         Trips: trips,
                         Drivers: output,

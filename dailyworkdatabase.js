@@ -949,7 +949,7 @@ function generateCustomerTable1(data) {
 
     out += `<table border="1px" id="customerTable1">
     <tr>
-    <th colspan="13" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red;" id="heading">మొత్తం పని </h1></th>
+    <th colspan="14" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red;" id="heading">మొత్తం పని </h1></th>
     </tr>
         <tr>
             <th>Date</th>
@@ -962,6 +962,7 @@ function generateCustomerTable1(data) {
             <th>TotalTime</th>
             <th>HTrips</th>
             <th>HTripRate</th>
+            <th>Adjust Amount</th>
             <th>Beta</th>
             <th>Total Price</th>
             <th>Final Price</th>
@@ -1157,6 +1158,8 @@ function generateCustomerTable1(data) {
                     uniqueDates.add(activity.Date); // automatically unique
                 }
 
+                finalAmount+=parseInt(activity.Miscellaneous || 0);
+
 
                 const formattedDescription = (activity.Description || "")
                     .split(",")
@@ -1178,11 +1181,14 @@ function generateCustomerTable1(data) {
     <td style="padding:8px; font-size:25px !important;">${activity.TotalTime}</td>
     <td style="padding:8px; font-size:25px !important;">${HoursTrips}</td>
     <td style="padding:8px; color:#2c5aa0; font-size:25px !important;">${HoursTripsAmount}</td>
+    <td style="padding:8px; font-weight:700; font-size:25px !important;">${activity.Miscellaneous || 0}</td>
+
     <td style="padding:8px; font-weight:700; font-size:25px !important;">${beta}</td>
+
 
     <td style="padding:8px; font-size:25px !important;white-space: nowrap;width: max-content;">
         <select class="rateDropdown"
-            onchange="calculateFinalPrice(this,'${beta}', '${HoursTrips}','${tracttrips}', '${HoursTripsAmount}'); formeldger2();"
+            onchange="calculateFinalPrice(this,'${beta+parseInt(activity.Miscellaneous) || 0}', '${HoursTrips}','${tracttrips}', '${HoursTripsAmount}'); formeldger2();"
             ${type === "Contract" ? "disabled" : ""}
             style="
                 padding:6px;
@@ -1229,7 +1235,7 @@ function generateCustomerTable1(data) {
         <td style="font-size:25px !important;">${totaltrips}</td>
         <td style="font-size:25px !important;">${totalcontract}</td>
         <td colspan="3" style="font-size:25px !important;">${hou}:${mint}</td>
-        <td colspan="4" style="font-size:25px !important;">Bill</td>
+        <td colspan="5" style="font-size:25px !important;">Bill</td>
         <td id="totalBill" style="font-size:25px !important;">--</td>
     </tr>`;
     let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">

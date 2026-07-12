@@ -143,6 +143,7 @@ function generateTable(data) {
             <th id="csize">Total Time</th>
             <th id="csize">HoursPrice</th>
             <th id="csize">Driver Beta</th>
+            <th id="csize">Adjust Amount</th>
             <th id="csize">Payment Status</th>
             <th id="csize">Jcb Price</th>
             <th id="csize">Jcb Recovery Amount</th>
@@ -561,6 +562,7 @@ function generateTable(data) {
                         <td>${activity.TotalTime}</td>
                         <td>${activity.HoursPrice}</td>
                         <td>${beta}</td>
+                        <td>${activity.Miscellaneous || 0}</td>
                         <td><button type="button" class="pay" id="${customerPhone}"
             style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
             ${activity.Payment}</td>                        
@@ -589,7 +591,7 @@ function generateTable(data) {
     <td colspan="3" id="col">Drivers</td>
     <td id="am">${totalcontarct}</td>
     <td id="am" colspan="4">${totaltime}</td>
-    <td id="am" colspan="2">Work In Price</td>
+    <td id="am" colspan="3">Work In Price</td>
     <td id="am">${collection}</td>
     <td id="am">${recovery}</td>
     <td id="am">${overallcollection}</td>
@@ -865,6 +867,7 @@ function SearchTable(data) {
             <th id="csize">Total Time</th>
             <th id="csize">HoursPrice</th>
             <th id="csize">Driver Beta</th>
+            <th id="csize">Adjust Amount</th>
             <th id="csize">Payment Status</th>
             <th id="csize">Jcb Price</th>
             <th id="csize">Jcb Recovery Amount</th>
@@ -910,7 +913,7 @@ function SearchTable(data) {
             var overallsubcollections = 0;
 
             // Header row for person
-            out += `<tr><td colspan="21" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
+            out += `<tr><td colspan="22" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
 
             entries.forEach(entry => {
                 const customerPhone = entry.id;
@@ -1069,6 +1072,7 @@ function SearchTable(data) {
                         <td>${activity.TotalTime}</td>
                         <td>${activity.HoursPrice}</td>
                         <td>${activity.Beta}</td>
+                        <td>${activity.Miscellaneous || 0}</td>
                         <td><button type="button" class="pay" id="${customerPhone}"
                         style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
                         ${activity.Payment}</button></td>
@@ -1093,7 +1097,7 @@ function SearchTable(data) {
                 <td colspan="3">Loading</td>
                 <td>${subContract}</td>
                 <td colspan="4">${subTime}</td>
-                <td colspan="2">Sub Total</td>
+                <td colspan="3">Sub Total</td>
                 <td>${subPrice}</td>
                 <td>${subRecovery}</td>
                 <td>${overallsubcollections}</td>
@@ -1261,6 +1265,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
             <th id="csize">Driver Beta</th>
+            <th id="csize">Adjust Amount</th>
             <th id="csize">Price</th>
             <th id="csize">Recovery</th>
         </tr>`;
@@ -1594,6 +1599,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
                         <td style="white-space: nowrap; width: max-content;">${convertTo12Hour(activity.Ending)}</td>
                         <td>${activity.TotalTime}</td>
                         <td>${activity.Beta}</td>
+                        <td>${activity.Miscellaneous || 0}</td>
                         <td>${activity.Price}</td>
                         <td>${amount}</td>
 
@@ -1610,7 +1616,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
             <td id="am">${disel}</td>
             <td id="am">${totaltrips}</td>
             <td id="am">${totalcontarct}</td>
-            <td id="am" colspan="4">${totaltime}</td>
+            <td id="am" colspan="5">${totaltime}</td>
             <td id="am">${collection}</td>
             <td id="am">${recovery}</td>
             </tr>`;
