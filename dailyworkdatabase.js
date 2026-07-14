@@ -144,7 +144,9 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 Price: rate
                             });
                             hideProcessingPopup();
-
+                            SetTimeout(() => {
+                                window.location.reload();
+                            }, 3000);
                             document.getElementById("paymentSuccessPopup3").style.display = "flex";
                             // document.getElementById("done").style.display = "block";
                             setTimeout(() => {

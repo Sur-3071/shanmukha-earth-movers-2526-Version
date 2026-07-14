@@ -3424,7 +3424,7 @@
     </div>
 
     <!-- Lock Screen -->
-    <div class="lock-overlay" id="lockOverlay">
+    <div class="lock-overlay" id="lockOverlay" style="display: none;">
 
         <div class="lock-card" id="lockCard">
 
@@ -5803,238 +5803,6 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             }
         });
 
-        // const CORRECT_PIN = "307143"
-
-        // const pinInput = document.getElementById("pinInput");
-        // const otpBoxes = document.querySelectorAll(".otp-box");
-        // const loginBtn = document.getElementById("loginBtn");
-        // const errorText = document.getElementById("errorText");
-        // const lockOverlay = document.getElementById("lockOverlay");
-        // const lockCard = document.getElementById("lockCard");
-        // const togglePin = document.getElementById("togglePin");
-
-        // let lockTimer;
-
-        // /* Show / Hide PIN Flag */
-        // let showPin = false;
-
-
-        // /* Focus hidden input */
-        // function focusInput() {
-        //     pinInput.focus();
-        // }
-
-        // function updateBoxes() {
-
-        //     if (!pinInput) return;
-
-        //     const pin = pinInput.value;
-
-        //     otpBoxes.forEach((box, index) => {
-
-        //         box.classList.remove("active");
-
-        //         if (index < pin.length) {
-        //             box.textContent = showPin ? pin[index] : "●";
-        //         } else {
-        //             box.textContent = "";
-        //         }
-
-        //     });
-
-        //     if (pin.length < otpBoxes.length) {
-        //         otpBoxes[pin.length].classList.add("active");
-        //     }
-        // }
-
-        // /* Unlock */
-        // function unlockWebsite() {
-
-        //     const pin = pinInput.value;
-
-        //     if (pin.length !== 6) {
-
-        //         errorText.innerHTML = "Please enter 6 digit PIN";
-        //         shakeCard();
-
-        //         return;
-        //     }
-
-        //     if (pin === CORRECT_PIN) {
-
-        //         errorText.innerHTML = "";
-
-        //         lockOverlay.classList.add("hide");
-
-        //         pinInput.value = "";
-
-        //         updateBoxes();
-
-        //         clearTimeout(lockTimer);
-
-        //         lockTimer = setTimeout(() => {
-
-        //             lockOverlay.classList.remove("hide");
-
-        //             pinInput.value = "";
-
-        //             updateBoxes();
-
-        //             focusInput();
-
-        //         }, 5 * 60 * 1000);
-
-        //     } else {
-
-        //         errorText.innerHTML = "Incorrect PIN";
-
-        //         pinInput.value = "";
-
-        //         updateBoxes();
-
-        //         shakeCard();
-        //     }
-
-        // }
-
-        // /* Shake Animation */
-        // function shakeCard() {
-
-        //     lockCard.classList.add("shake");
-
-        //     setTimeout(() => {
-
-        //         lockCard.classList.remove("shake");
-
-        //     }, 500);
-
-        // }
-
-        // /* Input */
-        // document.addEventListener("input", function (e) {
-
-        //     if (!e.target || e.target.id !== "pinInput") {
-        //         return;
-        //     }
-        //     console.log("Input event triggered for pinInput");
-        //     const input = e.target;
-
-        //     input.value = input.value.replace(/\D/g, "").substring(0, 6);
-
-        //     errorText.textContent = "";
-
-        //     updateBoxes();
-
-        // });
-
-
-
-
-        // /* Press Enter */
-        // document.addEventListener("keydown", function (e) {
-
-        //     if (!e.target || e.target.id !== "pinInput") {
-        //         return;
-        //     }
-
-        //     if (e.key === "Enter") {
-
-        //         e.preventDefault();
-
-        //         unlockWebsite();
-
-        //     }
-
-        // });
-
-
-        // /* Click Events */
-        // document.addEventListener("click", function (e) {
-
-        //     /* Continue Button */
-        //     if (e.target.id === "loginBtn") {
-
-        //         unlockWebsite();
-        //         return;
-
-        //     }
-
-        //     /* Show / Hide PIN */
-
-        //     /* Show / Hide PIN */
-        //     if (
-        //         e.target.id === "togglePin" ||
-        //         e.target.closest("#togglePin")
-        //     ) {
-
-        //         showPin = !showPin;
-
-        //         updateBoxes();
-
-        //         if (showPin) {
-
-        //             togglePin.className = "fas fa-eye-slash";
-
-        //         } else {
-
-        //             togglePin.className = "fas fa-eye";
-
-        //         }
-
-        //         focusInput();
-
-        //         return;
-        //     }
-        //     /* Click inside lock card */
-        //     if (e.target.closest(".lock-card")) {
-
-        //         focusInput();
-
-        //     }
-
-        // });
-
-
-        // /* Paste */
-        // document.addEventListener("paste", function (e) {
-
-        //     if (!e.target || e.target.id !== "pinInput") {
-        //         return;
-        //     }
-
-        //     e.preventDefault();
-
-        //     const text = (e.clipboardData || window.clipboardData)
-        //         .getData("text")
-        //         .replace(/\D/g, "")
-        //         .substring(0, 6);
-
-        //     pinInput.value = text;
-
-        //     updateBoxes();
-
-        // });
-
-        // window.addEventListener("DOMContentLoaded", function () {
-
-        //     updateBoxes();
-
-        //     focusInput();
-
-        // });
-
-
-        // /* Keep Focus */
-        // setInterval(function () {
-
-        //     if (!lockOverlay.classList.contains("hide")) {
-
-        //         focusInput();
-
-        //     }
-
-        // }, 1000);
-
         const CORRECT_PIN = "307143";
 
         const pinInput = document.getElementById("pinInput");
@@ -6089,17 +5857,25 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
             if (pin === CORRECT_PIN) {
                 errorText.innerHTML = "";
-                lockOverlay.classList.add("hide");
+
+                const unlockUntil = Date.now() + (5 * 60 * 1000); // 5 minutes
+                localStorage.setItem("unlockUntil", unlockUntil);
+
+                lockOverlay.style.display = "none";
+
                 pinInput.value = "";
                 updateBoxes();
+
                 clearTimeout(lockTimer);
 
                 lockTimer = setTimeout(() => {
-                    lockOverlay.classList.remove("hide");
+                    localStorage.removeItem("unlockUntil");
+                    lockOverlay.style.display = "flex";
                     pinInput.value = "";
                     updateBoxes();
                     focusInput();
-                }, 5 * 60 * 1000);
+                }, unlockUntil - Date.now());
+
             } else {
                 errorText.innerHTML = "Incorrect PIN";
                 pinInput.value = "";
@@ -6188,6 +5964,31 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         /* Initial Setup */
         window.addEventListener("DOMContentLoaded", function () {
+            const unlockUntil = Number(localStorage.getItem("unlockUntil")) || 0;
+
+            if (Date.now() < unlockUntil) {
+
+                lockOverlay.style.display = "none";
+
+                // Remaining time until lock
+                const remaining = unlockUntil - Date.now();
+
+                clearTimeout(lockTimer);
+
+                lockTimer = setTimeout(() => {
+                    localStorage.removeItem("unlockUntil");
+                    lockOverlay.style.display = "flex";
+                    pinInput.value = "";
+                    updateBoxes();
+                    focusInput();
+                }, remaining);
+
+            } else {
+
+                localStorage.removeItem("unlockUntil");
+                lockOverlay.style.display = "flex";
+            }
+
             updateBoxes();
             focusInput();
         });
