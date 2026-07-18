@@ -1756,13 +1756,19 @@
 
                                     <div id="hours7" style="display:none;">
 
-                                        <input type="text" id="hrsrate7" name="hrsrate" placeholder="Hours Price"
-                                            onkeyup="timecal7()" required>
+                                        <!-- <input type="text" id="hrsrate7" name="hrsrate" placeholder="Hours Price"
+                                            onkeyup="timecal7()" required> -->
+                                        <select id="hrsrate7" name="hrsrate" onchange="timecal7()" required>
+                                            <option value="" selected disabled>Select Hours Price</option>
+                                        </select>
 
                                         <div id="loading17">
 
-                                            <input type="text" id="trprate17" name="trprate1" placeholder="Trip Price"
-                                                onkeyup="tripprice17()" required>
+                                            <!-- <input type="text" id="trprate17" name="trprate1" placeholder="Trip Price"
+                                                onkeyup="tripprice17()" required> -->
+                                            <select id="trprate17" name="trprate1" onchange="tripprice17()" required>
+                                                <option value="" selected disabled>Select Trip Price</option>
+                                            </select>
 
                                             <div id="container21">
 
@@ -1808,11 +1814,18 @@
 
                                     <div id="loading7" style="display:none;">
 
-                                        <input type="text" id="jcbtrprate7" name="jcbtrprate"
+                                        <!-- <input type="text" id="jcbtrprate7" name="jcbtrprate"
                                             placeholder="JCB Trip Price" onkeyup="tripprice7()" required>
 
                                         <input type="text" id="trprate7" name="trprate" placeholder="Trip Price"
-                                            required>
+                                            required> -->
+                                        <select id="jcbtrprate7" name="jcbtrprate" onchange="tripprice7()" required>
+                                            <option value="" selected disabled>Select JCB Trip Price</option>
+                                        </select>
+
+                                        <select id="trprate7" name="trprate" required>
+                                            <option value="" selected disabled>Select Trip Price</option>
+                                        </select>
 
                                         <div id="container437">
 
@@ -6004,17 +6017,20 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             });
         }
 
-        function adjustRate() {
+        let originalRate = null;
 
+        function adjustRate() {
             const misInput = document.getElementById("mis7");
             const rateInput = document.getElementById("rate7");
 
+            // Store the original rate only once
+            if (originalRate === null) {
+                originalRate = parseInt(rateInput.value, 10) || 0;
+            }
+
             const misValue = parseInt(misInput.value, 10) || 0;
-            const rateValue = parseInt(rateInput.value, 10) || 0;
 
-            const adjustedRate = rateValue + misValue;
-
-            rateInput.value = adjustedRate;
+            rateInput.value = originalRate + misValue;
         }
 
         function formatDate(dateString) {
@@ -6023,6 +6039,30 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             const [year, month, day] = dateString.split("-");
             return `${day}-${month}-${year}`;
         }
+
+        const selectPrice = document.getElementById("hrsrate7");
+
+        for (let i = 500; i <= 2000; i += 50) {
+            let option = document.createElement("option");
+            option.value = i;
+            option.textContent = i;
+            selectPrice.appendChild(option);
+        }
+
+        function populateDropdown(id) {
+            const select = document.getElementById(id);
+
+            for (let i = 0; i <= 5000; i += 10) {
+                const option = document.createElement("option");
+                option.value = i;
+                option.textContent = i;
+                select.appendChild(option);
+            }
+        }
+
+        populateDropdown("jcbtrprate7");
+        populateDropdown("trprate7");
+        populateDropdown("trprate17");
 
     </script>
 
