@@ -683,18 +683,21 @@ function generateCustomerTable(data) {
     var recovery = 0;
     let out = `<table border="1" id="customerTable1" style="border-collapse: collapse; width: 100%; text-align: center;">
     <tr>
-    <th colspan="13" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
+    <th colspan="16" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
     </tr>
         <tr>
             <th id="csize">Customer Id</th>
             <th id="csize1">Date</th>
             <th id="csize1">Description</th>
             <th id="csize">Drivers</th>
+            <th id="csize">JCB Trip Rate</th>
+            <th id="csize">Tractor Rate</th>
             <th id="csize">Trips</th>
             <th id="csize">Contract</th>
             <th id="csize">Starting Time</th>
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
+            <th id="csize">Hours Price</th>
             <th id="csize">Beta</th>
             <th id="csize">Payment Status</th>
             <th id="csize">JCB Price</th>
@@ -780,7 +783,10 @@ function generateCustomerTable(data) {
                 // =====================================
                 let HoursDrivers = 0;
                 let LDrivers = 0;
-
+                let hourstripsprice = activity.HoursTripsAmount || 0;
+                let loadingtripsprice = activity.TripsPrice || 0;
+                let jcbtripsprice = activity.JcbTripPrice || 0;
+                let actualtripprice = hourstripsprice == 0 ? loadingtripsprice : hourstripsprice;
                 if (activity.HoursDrivers !== undefined &&
                     activity.HoursDrivers !== "undefined" &&
                     activity.HoursDrivers !== null) {
@@ -872,6 +878,13 @@ function generateCustomerTable(data) {
                 </td>
 
                 <td style="padding:4px;font-weight:600; font-size:20px !important;">
+                    ${jcbtripsprice}
+                </td>
+                <td style="padding:4px;font-weight:600; font-size:20px !important;">
+                    ${actualtripprice}
+                </td>
+
+                <td style="padding:4px;font-weight:600; font-size:20px !important;">
                     ${activity.Trips}
                 </td>
 
@@ -889,6 +902,10 @@ function generateCustomerTable(data) {
 
                 <td style="padding:4px;font-weight:600; font-size:20px !important;">
                     ${activity.TotalTime}
+                </td>
+
+                <td style="padding:4px;font-weight:600; font-size:20px !important;">
+                    ${activity.HoursPrice || 0}
                 </td>
 
                 <td style="padding:4px; font-weight:bold; font-size:20px !important;">
@@ -915,11 +932,20 @@ function generateCustomerTable(data) {
     mint = mint - 60 * mintohou;
     hou += mintohou;
     totaltime = hou + ":" + mint;
+
+    const perDayWork = parseInt(uniqueDates.size > 0
+    ? collection / uniqueDates.size
+    : 0);
+
     out += `<tr>
-            <td colspan="4" id="col">Total Work Analaysis For <b>${uniqueDates.size}</b> Days</td>
+            <td colspan="6" id="col">
+                Total Work Analysis For <b>${uniqueDates.size}</b> Days
+                &nbsp; | &nbsp;
+                Per Day Work: <b>₹ ${moneyconvert(perDayWork)}</b>
+            </td>       
             <td  id="am" style="font-size:30px;">${totaltrips}</td>
             <td id="am" style="font-size:30px;">${totalcontarct}</td>
-            <td id="am" colspan="3" style="font-size:30px;">${totaltime}</td>
+            <td id="am" colspan="4" style="font-size:30px;">${totaltime}</td>
             <td id="col">${moneyconvert(overallbeta)}</td>
             <td  id="col" colspan="1">Bill</td>
             <td id="col">${moneyconvert(collection)}</td>
@@ -1160,7 +1186,7 @@ function generateCustomerTable1(data) {
                     uniqueDates.add(activity.Date); // automatically unique
                 }
 
-                finalAmount+=parseInt(activity.Miscellaneous || 0);
+                finalAmount += parseInt(activity.Miscellaneous || 0);
 
 
                 const formattedDescription = (activity.Description || "")
@@ -1190,7 +1216,7 @@ function generateCustomerTable1(data) {
 
     <td style="padding:8px; font-size:25px !important;white-space: nowrap;width: max-content;">
         <select class="rateDropdown"
-            onchange="calculateFinalPrice(this,'${beta+parseInt(activity.Miscellaneous) || 0}', '${HoursTrips}','${tracttrips}', '${HoursTripsAmount}'); formeldger2();"
+            onchange="calculateFinalPrice(this,'${beta + parseInt(activity.Miscellaneous) || 0}', '${HoursTrips}','${tracttrips}', '${HoursTripsAmount}'); formeldger2();"
             ${type === "Contract" ? "disabled" : ""}
             style="
                 padding:6px;
