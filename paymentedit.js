@@ -342,9 +342,9 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
     var stime = document.getElementById("stime7").value;
     var etime = document.getElementById("etime7").value;
     var ttime = document.getElementById("ttime7").value;
-    
+
     // Changed from const to let to allow reassignment in cleanup logic
-    let rate = document.getElementById("rate7").value; 
+    let rate = document.getElementById("rate7").value;
 
     var hrsamt = document.getElementById("hrsrate7").value;
     var trpamt = document.getElementById("trprate7").value;
@@ -386,7 +386,7 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
 
                 overallamount =
                     ((jcb + tripAmt) * tripCount) +
-                    b -
+                    b +parseInt(mis) -
                     (tripAmt * nonCompany);
             }
             break;
@@ -396,7 +396,7 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                 const c = parseInt(con) || 0;
                 const b = parseInt(beta) || 0;
 
-                overallamount = c + b;
+                overallamount = c + b+parseInt(mis);
             }
             break;
 
@@ -469,8 +469,7 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
         jcbtrpamt = "--";
         noncompanytractors = "--";
     }
-    overallamount = overallamount + parseInt(mis);
-
+    overallamount = overallamount;
     if (dat.length > 0) {
         if (name.length > 0) {
             if (villname.length > 0) {

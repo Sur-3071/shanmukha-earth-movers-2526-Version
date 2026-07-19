@@ -715,7 +715,7 @@
                     div.textContent = name;
 
                     div.onclick = () => {
-                        input.value = name;
+                        input.value = name.replace(/\s*\([^)]*\)$/, "");
                         dropdown.style.display = "none";
                         hideCustomerSections();
 
@@ -806,7 +806,7 @@
                 if (data.hasOwnProperty(customerPhone)) {
                     const activity = data[customerPhone];
                     if (customerPhone !== DBConstants.Customers && activity.Name !== undefined) {
-                        names.push(activity.Name);
+                        names.push(activity.Name+" (" + customerPhone + ")");
                     }
                 }
             }
@@ -2675,7 +2675,7 @@
                 </div>
             </div>
 
-            <input type="button" onclick="transalate()" value="Get Customer Data" id="submit4">
+            <input type="button" onclick="transalate()" value="Get Customer Data" id="submit14">
         </form>
     </div>
 
@@ -3577,6 +3577,7 @@
                             daysPassed: getDaysFromDate(c.Date) || 0,
 
                             previousBalance: toNum(extraAmountsCache[name] || 0),
+                            Miscellaneous: 0,
 
                             Totalpaidjcbprice: 0,
                             Totalpaidoverallprice: 0,
@@ -3590,14 +3591,18 @@
 
                         customerMap[name].Totalunpaidjcbprice += toNum(c.Price || 0);
                         customerMap[name].Totalunpaidoverallprice += toNum(c.OverallPrice || 0);
+                        customerMap[name].Miscellaneous += toNum(c.Miscellaneous || 0);
 
                     } else if (c.Payment === "Paid") {
 
                         customerMap[name].Totalpaidjcbprice += toNum(c.Price || 0);
                         customerMap[name].Totalpaidoverallprice += toNum(c.OverallPrice || 0);
+                        customerMap[name].Miscellaneous += toNum(c.Miscellaneous || 0);
+
                     }
                 });
             };
+
 
             // =========================
             // APPLY BOTH LISTS
@@ -3656,6 +3661,8 @@
             let totalJcbRem = 0;
             let totalOverall = 0;
             let totalOverallRem = 0;
+            let totalMiscellaneous = 0;
+            let totalpreviousBalance = 0;
 
             // =========================
             // TABLE START
@@ -3672,6 +3679,7 @@
                 <th>Paid</th>
                 <th>Status</th>
                 <th>Contribution Percentage</th>
+                <th>Adjusted Amount</th>
                 <th>Previous Balance</th>
                 <th>JCB Total</th>
                 <th>JCB Remaining</th>
@@ -3692,6 +3700,8 @@
                 totalJcbRem += c.jcbRemaining;
                 totalOverall += c.overallTotal;
                 totalOverallRem += c.overallRemaining;
+                totalMiscellaneous+= c.Miscellaneous;
+                totalpreviousBalance+= c.previousBalance;
 
                 const unpaid = c.jcbRemaining;
                 const paid = c.paidAmount;
@@ -3751,6 +3761,7 @@ id="UnPaid-${c.name}"
                 </td>
                 <td style="white-space: nowrap;width: max-content;font-weight:bold;">${status}</td>
                 <td style="font-weight:bold;">${contributionPercentage}</td>
+                <td style="font-weight:bold;">${moneyconvert(c.Miscellaneous)}</td>
                 <td style="font-weight:bold;">${moneyconvert(c.previousBalance)}</td>
                 <td style="font-weight:bold;">${moneyconvert(c.jcbTotal)}</td>
                 <td class="blink" style="font-weight:bold;">${moneyconvert(c.jcbRemaining)}</td>
@@ -3776,6 +3787,8 @@ id="UnPaid-${c.name}"
             tableHTML += `
         <tr style="font-weight:bold;background:#f2f2f2;">
             <td colspan="8">Total Work Analysis</td>
+            <td style="font-weight:bold;">${moneyconvert(totalMiscellaneous)}</td>
+            <td style="font-weight:bold;">${moneyconvert(totalpreviousBalance)}</td>
             <td style="font-weight:bold;">${moneyconvert(totalJcb)}</td>
             <td style="font-weight:bold;">${moneyconvert(totalJcbRem)}</td>
             <td style="font-weight:bold;">${moneyconvert(totalOverall)}</td>
@@ -4338,6 +4351,9 @@ id="UnPaid-${c.name}"
                     <b>Total Hours Amount :</b>
                     ${totalHoursAmount}<br>
 
+                    <b>Adjust Amount :</b>
+                    ${activity.Miscellaneous || 0}<br>
+
                     <b>Drivers :</b><br>
                     ${HoursDrivers}<br>
 
@@ -4456,6 +4472,9 @@ id="UnPaid-${c.name}"
                     <b>Total Amount :</b>
                     ${activity.OverallPrice || 0}<br>
 
+                    <b>Adjust Amount :</b>
+                    ${activity.Miscellaneous || 0}<br>
+
                     <b>Description :</b>
                     ${activity.Description || "--"}<br>
 
@@ -4561,7 +4580,7 @@ id="UnPaid-${c.name}"
                     <td class="balance-amount">
                         ${activity.Payment === "Paid"
                             ? 0
-                            : totalAmount}
+                            : (totalAmount <= 0 ? 0 : totalAmount)}
                     </td>
 
                 </tr>

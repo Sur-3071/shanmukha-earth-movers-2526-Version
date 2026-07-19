@@ -309,6 +309,7 @@ document.getElementById('submit3').addEventListener('click', async function (e) 
     }
     else {
         alert("Please Enter Customer Name Or place Or Location Name");
+        hideProcessingPopup();
         datarebuild();
     }
 });
@@ -334,6 +335,7 @@ document.getElementById('submit7').addEventListener('click', async function (e) 
     }
     else {
         alert("Please Enter Customer Name Or place Or Location Name");
+        hideProcessingPopup();
         datarebuild();
     }
 });
@@ -434,6 +436,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
                         Starting: activity.Starting,
                         TotalTime: activity.TotalTime,
                         Trips: activity.Trips,
+                        Miscellaneous: activity.Miscellaneous || 0,
                         Villagename: activity.Villagename,
                         Description: activity.Description,
                         Drivers: activity.Drivers,
@@ -519,7 +522,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
 
 
 
-document.getElementById('submit4').addEventListener('click', async function (e) {
+document.getElementById('submit14').addEventListener('click', async function (e) {
     e.preventDefault();
     // alert("Iam coming...");
     const name = document.getElementById("name3").value;
@@ -529,7 +532,8 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
     }
     else {
         alert("Please Enter Customer Name Or place Or Location Name");
-        datarebuild();
+        hideProcessingPopup();
+        // datarebuild();
     }
 });
 
@@ -544,7 +548,8 @@ document.getElementById('submit5').addEventListener('click', async function (e) 
     }
     else {
         alert("Please Enter Customer Name Or place Or Location Name");
-        datarebuild();
+        hideProcessingPopup();
+        // datarebuild();
     }
 });
 document.getElementById('submit6').addEventListener('click', async function (e) {
@@ -556,7 +561,8 @@ document.getElementById('submit6').addEventListener('click', async function (e) 
     }
     else {
         alert("Please Enter Customer Name Or place Or Location Name");
-        datarebuild();
+        hideProcessingPopup();
+        // datarebuild();
     }
 });
 
@@ -934,8 +940,8 @@ function generateCustomerTable(data) {
     totaltime = hou + ":" + mint;
 
     const perDayWork = parseInt(uniqueDates.size > 0
-    ? collection / uniqueDates.size
-    : 0);
+        ? collection / uniqueDates.size
+        : 0);
 
     out += `<tr>
             <td colspan="6" id="col">

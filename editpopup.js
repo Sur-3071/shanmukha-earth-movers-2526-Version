@@ -18,6 +18,7 @@ const db = getDatabase(app);
 document.getElementById('submit4').addEventListener('click', async function (e) {
     e.preventDefault();
     showProcessingPopup();
+    console.log("Submit button clicked"+e.target.value);
     const dat = document.getElementById("dat").value;
     const wid = document.getElementById("wid").value;
     const name = document.getElementById("name").value;
@@ -34,6 +35,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
     var trpamt = document.getElementById("trprate").value;
     var jcbtrpamt = document.getElementById("jcbtrprate").value;
     var trips = document.getElementById("trips").value;
+    var mis = document.getElementById("mis").value;
     var output = document.getElementById("output").value;
     var pay = document.getElementById("pay").value;
     const beta = document.getElementById("beta").value;
@@ -109,6 +111,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
                         HoursTrips: hourstrips,
                         HoursTripsAmount: hourstrpamt,
                         HoursDrivers: hoursdrivers,
+                        Miscellaneous: mis,
                         Description: desc,
                         Contract: con,
                         Payment: pay,
