@@ -728,15 +728,21 @@
             input.addEventListener("change", hideCustomerSections);
 
             input.addEventListener("click", () => {
-                dropdown.style.display = "block";
-                searchInput.value = "";
-                renderItems();
-                searchInput.focus();
+                if (dropdown.style.display === "block") {
+                    dropdown.style.display = "none";
+                } else {
+                    dropdown.style.display = "block";
+                    searchInput.value = "";
+                    renderItems();
+                    searchInput.focus();
+                }
             });
 
             searchInput.addEventListener("input", e => {
                 renderItems(e.target.value);
             });
+
+
         }
 
         initSearchDropdown({
@@ -806,7 +812,7 @@
                 if (data.hasOwnProperty(customerPhone)) {
                     const activity = data[customerPhone];
                     if (customerPhone !== DBConstants.Customers && activity.Name !== undefined) {
-                        names.push(activity.Name+" (" + customerPhone + ")");
+                        names.push(activity.Name + " (" + customerPhone + ")");
                     }
                 }
             }
@@ -3700,8 +3706,8 @@
                 totalJcbRem += c.jcbRemaining;
                 totalOverall += c.overallTotal;
                 totalOverallRem += c.overallRemaining;
-                totalMiscellaneous+= c.Miscellaneous;
-                totalpreviousBalance+= c.previousBalance;
+                totalMiscellaneous += c.Miscellaneous;
+                totalpreviousBalance += c.previousBalance;
 
                 const unpaid = c.jcbRemaining;
                 const paid = c.paidAmount;
