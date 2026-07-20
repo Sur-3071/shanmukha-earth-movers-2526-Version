@@ -218,8 +218,8 @@ document.getElementById('submit2').addEventListener('click', async function (e) 
     e.preventDefault();
     showProcessingPopup();
     const wid = document.getElementById("cid").value;
-    const name = document.getElementById("name1").value.toUpperCase();
-    const villname = document.getElementById("vil1").value.toUpperCase();
+    const name = document.getElementById("name1").value.trim().toUpperCase();
+    const villname = document.getElementById("vil1").value.trim().toUpperCase();
     if (name.length > 0) {
         if (villname.length > 0) {
             const db1 = DBConstants.Customers;
