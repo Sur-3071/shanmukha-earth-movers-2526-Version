@@ -3068,22 +3068,6 @@
                 <div id="final bill">
                     <div class="image-container">
                         <div class="customer-title"></div>
-                        <!-- <img src="abbulu.png" id="abbulu" style="display: none; height: 150px; width: 500px;">
-                        <img src="chinnodu.png" id="chinnodu" style="display: none; height: 150px; width: 500px;">
-                        <img src="chanti.png" id="chanti" style="display: none; height: 150px; width: 500px;">
-                        <img src="govind.png" id="govind" style="display: none; height: 150px; width: 500px;">
-                        <img src="kick.png" id="kick" style="display: none; height: 150px; width: 500px;">
-                        <img src="nagu1.png" id="nagu1" style="display: none; height: 150px; width: 500px;">
-                        <img src="nagu2.png" id="nagu2" style="display: none; height: 150px; width: 500px;">
-                        <img src="nani.png" id="nani" style="display: none; height: 150px; width: 500px;">
-                        <img src="radha.png" id="radha" style="display: none; height: 150px; width: 500px;">
-                        <img src="raju.png" id="raju" style="display: none; height: 150px; width: 500px;">
-                        <img src="sai.jpg" id="sai" style="display: none; height: 150px; width: 500px;">
-                        <img src="srinu.png" id="srinu" style="display: none; height: 150px; width: 500px;">
-                        <img src="swamy.png" id="swamy" style="display: none; height: 150px; width: 500px;">
-                        <img src="venkanna.png" id="venkanna" style="display: none; height: 150px; width: 500px;">
-                        <img src="chittibabu.png" id="chittibabu" style="display: none; height: 150px; width: 500px;">
-                        <img src="ungarala srinu.png" id="usrinu" style="display: none; height: 150px; width: 500px;"> -->
 
                     </div>
 
@@ -5812,6 +5796,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             if (e.target.name === "driverName[]") {
                 await translateText(e.target);
                 removereadonly();
+                updateTotalTrips();
             }
         });
 
@@ -5820,6 +5805,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             if (e.target.name === "driverName1[]") {
                 await translateText(e.target);
                 removereadonly();
+                updateTotalTrips1();
             }
         });
 
