@@ -3891,7 +3891,19 @@ id="UnPaid-${c.name}"
         }
 
         function printOverviewLedger() {
-            const element = document.getElementById("overview");
+            const overview = document.getElementById("overview");
+            const scrollDiv = document.getElementById("enterdata");
+            const table = scrollDiv.querySelector("table");
+
+            // Save original styles
+            const oldOverflow = scrollDiv.style.overflow;
+            const oldWidth = scrollDiv.style.width;
+            const oldTableWidth = table.style.width;
+
+            // Expand table completely
+            scrollDiv.style.overflow = "visible";
+            scrollDiv.style.width = "auto";
+            table.style.width = "max-content";
 
             const months = [
                 "January", "February", "March", "April", "May", "June",
@@ -3899,28 +3911,41 @@ id="UnPaid-${c.name}"
             ];
 
             const now = new Date();
-            const monthName = months[now.getMonth()];
-            const year = now.getFullYear();
 
-            const fileName = `${monthName}_${year}_Ledger.pdf`;
+            html2pdf().set({
 
-            const opt = {
                 margin: 2,
-                filename: fileName,
-                image: { type: 'jpeg', quality: 0.98 },
+
+                filename: `${months[now.getMonth()]}_${now.getFullYear()}_Ledger.pdf`,
+
+                image: {
+                    type: "jpeg",
+                    quality: 1
+                },
+
                 html2canvas: {
-                    scale: 1.5,
+                    scale: 2,
                     useCORS: true,
+                    windowWidth: table.scrollWidth,
+                    windowHeight: overview.scrollHeight,
+                    scrollX: 0,
                     scrollY: 0
                 },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a2',
-                    orientation: 'landscape'
-                }
-            };
 
-            html2pdf().set(opt).from(element).save();
+                jsPDF: {
+                    unit: "mm",
+                    format: [table.scrollWidth * 0.2645, overview.scrollHeight * 0.2645],
+                    orientation: "landscape"
+                }
+
+            }).from(overview).save().then(() => {
+
+                // Restore original styles
+                scrollDiv.style.overflow = oldOverflow;
+                scrollDiv.style.width = oldWidth;
+                table.style.width = oldTableWidth;
+
+            });
         }
 
         function printLedger() {
