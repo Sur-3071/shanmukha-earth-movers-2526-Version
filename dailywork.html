@@ -3891,19 +3891,25 @@ id="UnPaid-${c.name}"
         }
 
         function printOverviewLedger() {
+
             const overview = document.getElementById("overview");
             const scrollDiv = document.getElementById("enterdata");
             const table = scrollDiv.querySelector("table");
 
             // Save original styles
+            const oldOverviewWidth = overview.style.width;
+            const oldScrollWidth = scrollDiv.style.width;
             const oldOverflow = scrollDiv.style.overflow;
-            const oldWidth = scrollDiv.style.width;
             const oldTableWidth = table.style.width;
 
-            // Expand table completely
+            // Get actual table width
+            const fullWidth = table.scrollWidth + "px";
+
+            // Expand everything
+            overview.style.width = fullWidth;
+            scrollDiv.style.width = fullWidth;
             scrollDiv.style.overflow = "visible";
-            scrollDiv.style.width = "auto";
-            table.style.width = "max-content";
+            table.style.width = fullWidth;
 
             const months = [
                 "January", "February", "March", "April", "May", "June",
@@ -3911,12 +3917,12 @@ id="UnPaid-${c.name}"
             ];
 
             const now = new Date();
+            const fileName = `${months[now.getMonth()]}_${now.getFullYear()}_Ledger.pdf`;
 
-            html2pdf().set({
-
+            const opt = {
                 margin: 2,
 
-                filename: `${months[now.getMonth()]}_${now.getFullYear()}_Ledger.pdf`,
+                filename: fileName,
 
                 image: {
                     type: "jpeg",
@@ -3926,26 +3932,34 @@ id="UnPaid-${c.name}"
                 html2canvas: {
                     scale: 2,
                     useCORS: true,
-                    windowWidth: table.scrollWidth,
-                    windowHeight: overview.scrollHeight,
                     scrollX: 0,
-                    scrollY: 0
+                    scrollY: 0,
+                    windowWidth: table.scrollWidth,
+                    windowHeight: overview.scrollHeight
                 },
 
                 jsPDF: {
                     unit: "mm",
-                    format: [table.scrollWidth * 0.2645, overview.scrollHeight * 0.2645],
+                    format: [
+                        table.scrollWidth * 0.264583,
+                        overview.scrollHeight * 0.264583
+                    ],
                     orientation: "landscape"
                 }
+            };
 
-            }).from(overview).save().then(() => {
+            html2pdf()
+                .set(opt)
+                .from(overview)
+                .save()
+                .then(() => {
 
-                // Restore original styles
-                scrollDiv.style.overflow = oldOverflow;
-                scrollDiv.style.width = oldWidth;
-                table.style.width = oldTableWidth;
-
-            });
+                    // Restore original styles
+                    overview.style.width = oldOverviewWidth;
+                    scrollDiv.style.width = oldScrollWidth;
+                    scrollDiv.style.overflow = oldOverflow;
+                    table.style.width = oldTableWidth;
+                });
         }
 
         function printLedger() {
