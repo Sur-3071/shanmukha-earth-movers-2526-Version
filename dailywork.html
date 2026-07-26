@@ -2794,7 +2794,7 @@
                 💼 ముందస్తు మొత్తం: ₹40,000 |
                 💰 నెలవారీ జీతం: ₹23,000 |
                 🧾 రోజువారీ భత్యం: ₹0 |
-                📅 జాయినింగ్ తేదీ: 20-JULY-2026|
+                📅 జాయినింగ్ తేదీ: 1-August-2026|
             </div>
 
             <div class="driver-image">
@@ -3891,6 +3891,7 @@ id="UnPaid-${c.name}"
         }
 
         function printOverviewLedger() {
+            showProcessingPopup();
 
             const overview = document.getElementById("overview");
             const scrollDiv = document.getElementById("enterdata");
@@ -3960,9 +3961,11 @@ id="UnPaid-${c.name}"
                     scrollDiv.style.overflow = oldOverflow;
                     table.style.width = oldTableWidth;
                 });
+                hideProcessingPopup();
         }
 
         function printLedger() {
+            showProcessingPopup();
 
             document.getElementsByClassName("expense-banner")[0].style.display = "none";
 
@@ -4003,6 +4006,7 @@ id="UnPaid-${c.name}"
             };
 
             html2pdf().set(opt).from(element).save();
+            hideProcessingPopup();
         }
         async function openPopup1() {
             document.getElementById("myModal1").style.display = "flex";

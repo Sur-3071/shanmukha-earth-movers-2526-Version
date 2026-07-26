@@ -348,13 +348,14 @@ function generateTable(data) {
                         padding:10px;
                     ">
                     ${month}
-                    (20th - 19th Cycle)
+                    (1st - 31st Cycle)
                 </td>
             `;
 
             table.appendChild(monthHeader);
 
             let monthTotal = 0;
+            const driverSalary = 23000;  
 
             // ==========================
             // Salary Entries
@@ -386,7 +387,7 @@ function generateTable(data) {
             // ==========================
 
             const allowedLeaves = 2;
-            const perDaySalary = 500;
+            const perDaySalary = parseInt(driverSalary/30); // ₹765 per day
 
             const totalLeaves = monthsMap[month][1];
 
@@ -572,7 +573,7 @@ function generateTable(data) {
                         padding:10px;
                     ">
                     ${month}
-                    (20th - 19th Cycle)
+                    (1st - 31st Cycle)
                 </td>
             `;
 
@@ -693,7 +694,7 @@ function updateMonthCards(monthlySummary) {
             extraLeavesEl.textContent = `${extraLeaves}`;
 
             // Calculate per-day salary
-            const perDaySalary = 500;
+            const perDaySalary = parseInt(driverSalary/30); // ₹765 per day
 
             // Calculate salary cut
             const salaryCutAmount = perDaySalary * extraLeaves;
@@ -705,7 +706,7 @@ function updateMonthCards(monthlySummary) {
             totalsalaryEl.textContent = `₹${totalsalary.toLocaleString("en-IN")}`;
 
             // Calculate remaining salary after deduction
-            const finalRemainingSalary = 23000 - totalsalary;
+            const finalRemainingSalary = driverSalary - totalsalary;
             remainingSalaryEl.textContent = `₹${finalRemainingSalary.toLocaleString("en-IN")}`;
 
         }
@@ -722,8 +723,6 @@ function formatDate(dateString) {
     return `${day}-${month}-${year}`;
 }
 
-// Example
-const formattedDate = formatDate("2026-04-04");
 // console.log(formattedDate);
 
 
