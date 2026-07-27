@@ -3445,22 +3445,19 @@
             <input type="tel" id="pinInput" maxlength="6" inputmode="numeric" autocomplete="new-password"
                 style="opacity: 0; position: absolute; keyboard-behavior: none;">
             <!-- OTP Boxes -->
-            <div class="otp-container">
+            <div class="otp-wrapper">
+                <div class="otp-container">
+                    <div class="otp-box"></div>
+                    <div class="otp-box"></div>
+                    <div class="otp-box"></div>
+                    <div class="otp-box"></div>
+                    <div class="otp-box"></div>
+                    <div class="otp-box"></div>
+                </div>
 
-                <div class="otp-box"></div>
-                <div class="otp-box"></div>
-                <div class="otp-box"></div>
-                <div class="otp-box"></div>
-                <div class="otp-box"></div>
-                <div class="otp-box"></div>
-
-            </div>
-
-            <!-- Eye Icon -->
-            <div class="pin-options">
-
-                <i class="fas fa-eye" id="togglePin" title="Show / Hide PIN"></i>
-
+                <div class="pin-options">
+                    <i class="fas fa-eye" id="togglePin" title="Show / Hide PIN"></i>
+                </div>
             </div>
 
             <!-- Continue Button -->
@@ -3961,7 +3958,7 @@ id="UnPaid-${c.name}"
                     scrollDiv.style.overflow = oldOverflow;
                     table.style.width = oldTableWidth;
                 });
-                hideProcessingPopup();
+            hideProcessingPopup();
         }
 
         function printLedger() {

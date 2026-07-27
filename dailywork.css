@@ -418,36 +418,48 @@ span {
 
 }
 
-#togglePin{
-
-    border:none;
-
-    background:none;
-
-    color:#ffffff;
-
-    cursor:pointer;
-
-    font-size:15px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:8px;
-
-    width:100%;
-
-    transition:.3s;
-
+.otp-wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: 200px;
+    gap: 60px;
 }
 
-#togglePin:hover{
+.otp-container {
+    display: flex;
+    gap: 8px;
+}
 
-    color:#60a5fa;
+.pin-options {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+}
+.pin-options {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 0;
+    margin-left: 10px;
+}
 
+#togglePin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+    transition: color .3s;
+    user-select: none;
+}
+
+#togglePin:hover {
+    color: #60a5fa;
 }
 
 /* =========================
@@ -568,23 +580,6 @@ span {
       Eye Icon
 ========================= */
 
-.pin-options {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 28px;
-}
-
-#togglePin {
-    color: #ffffff;
-    font-size: 26px;
-    cursor: pointer;
-    transition: .3s;
-}
-
-#togglePin:hover {
-    color: #60a5fa;
-    transform: scale(1.15);
-}
 
 /* =========================
       Continue Button
@@ -701,43 +696,6 @@ span {
     }
 }
 
-.pin-options{
-    display:flex;
-    justify-content:flex-end;
-    margin-top:-15px;
-    margin-bottom:20px;
-}
-
-#togglePin{
-    font-size:18px;
-    color:#ffffff;
-    cursor:pointer;
-    transition:.25s;
-}
-
-#togglePin:hover{
-    color:#60a5fa;
-    transform:scale(1.15);
-}
-
-.pin-options{
-    display:flex;
-    justify-content:flex-end;
-    margin-top:-10px;
-    margin-bottom:20px;
-}
-
-#togglePin{
-    font-size:20px;
-    color:#ffffff;
-    cursor:pointer;
-    transition:.25s;
-}
-
-#togglePin:hover{
-    color:#60a5fa;
-    transform:scale(1.15);
-}
 #desc,#output1,#output {
     width: 530px;
     height: 180px;
