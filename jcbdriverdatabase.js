@@ -36,8 +36,6 @@ document.getElementById('submit10').addEventListener('click', async function (e)
     const wid = document.getElementById("wid1").value;
     const purpose = document.getElementById("work1").value;
     const monthname = document.getElementById("monthDropdown").value;
-
-
     document.getElementById("userForm9").reset();
     showProcessingPopup();
     if (dat.length > 0) {
@@ -62,21 +60,25 @@ document.getElementById('submit10').addEventListener('click', async function (e)
                     }, 2500);
 
                 } catch (error) {
+                    hideProcessingPopup();
                     alert("An error occurred. Please try again.");
                 }
             }
             else {
                 alert("Please Enter purpose of Leave");
+                hideProcessingPopup();
                 datarebuild();
             }
         }
         else {
             alert("Please Select Month");
+            hideProcessingPopup();
             datarebuild();
         }
     }
     else {
         alert("Please Choose Date");
+        hideProcessingPopup();
         datarebuild();
     }
     function datarebuild() {
@@ -100,7 +102,7 @@ document.getElementById('submit20').addEventListener('click', async function (e)
     const monthname = document.getElementById("monthDropdown1").value;
     const paymentMethod = document.getElementById("paymentMethod").value;
     const purpose = document.getElementById("reason").value;
-    document.getElementById("userForm8").reset();
+    document.getElementById("userForm18").reset();
     showProcessingPopup();
     if (dat.length > 0) {
         if (monthname.length > 0) {
@@ -127,6 +129,7 @@ document.getElementById('submit20').addEventListener('click', async function (e)
                         }, 2500);
 
                     } catch (error) {
+                        hideProcessingPopup();
                         alert("An error occurred. Please try again.");
                     }
                 }
