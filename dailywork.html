@@ -2482,6 +2482,14 @@
             </div>
         </div>
 
+
+
+    </div>
+
+    <div class="customer-container" id="customer-container" style="display: none; justify-content: center; align-items: center; margin-top: 20px;">
+
+        <div id="customerGrid" class="customer-grid">
+        </div>
     </div>
     <canvas id="myChart" style="display: none;"></canvas>
 
@@ -2602,6 +2610,7 @@
             <input type="button" value="Add New Customer" id="submit2">
         </form>
     </div>
+
     <div id="custamountcontainer" style="display: none;">
         <h1 align="center" style="
         font-family: Georgia, serif;
@@ -2857,7 +2866,7 @@
 
     <!-- Trcator driver bills and all -->
     <div id="tractorDriverSection" style="display: none;">
-        <div id="home">
+        <div id="home1">
 
             <h1 align="center" style="
         font-family: Georgia, serif;
@@ -2969,7 +2978,7 @@
                         <table align="center">
                             <tr>
                                 <td>
-                                    <select id="dname2" onchange="box2()" style="width: 300%;">
+                                    <select id="dname2" onchange="box2()" style="width: 280%;">
                                         <option hidden>select Driver Name</option>
                                         <option>Ungarala Srinu</option>
                                         <option>Chittibabu</option>
@@ -3753,6 +3762,8 @@ id="UnPaid-${c.name}"
                 <td class="blink" style="font-weight:bold;">${moneyconvert(c.overallRemaining)}</td>
             </tr>
         `;
+
+
             };
 
             // =========================
@@ -5215,6 +5226,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('custamountcontainer').style.display = 'none';
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';
@@ -5238,6 +5250,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('custamountcontainer').style.display = 'none';
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';
@@ -5260,6 +5273,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('custamountcontainer').style.display = 'none';
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';
@@ -5284,6 +5298,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custamountcontainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';
             document.getElementById('customerallamt').style.display = 'none';
@@ -5306,6 +5321,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custamountcontainer').style.display = 'block';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';
             document.getElementById('customerallamt').style.display = 'none';
@@ -5317,6 +5333,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         });
         document.getElementById('analytics').addEventListener('click', function () {
+
             document.getElementById("formContainer8").style.display = "none";
             document.getElementById("jcbdriversalary").style.display = "none";
             document.getElementById("tractorDriverSection").style.display = "none";
@@ -5326,6 +5343,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'block';
             document.getElementById('myChart').style.display = 'block';
+            document.getElementById('customer-container').style.display = 'block';
             document.getElementById('prevyear').style.display = 'block';
             document.getElementById('custamountcontainer').style.display = 'none'
             document.getElementById('customerdata').style.display = 'none';
@@ -5335,8 +5353,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('nodata').style.display = 'none';
             document.getElementById('customerreceipt').style.display = 'none';
             let elements = document.getElementsByClassName("heading");
-
-
+            loadCustomerData();
         });
         document.getElementById('cusdta').addEventListener('click', function () {
             document.getElementById("formContainer8").style.display = "none";
@@ -5349,6 +5366,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('custamountcontainer').style.display = 'none';
             document.getElementById('customerdata').style.display = 'block';
             document.getElementById('customeralldata').style.display = 'block';
@@ -5369,6 +5387,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('custamountcontainer').style.display = 'none';
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';
@@ -5387,6 +5406,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('custamountcontainer').style.display = 'none';
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';
@@ -5408,6 +5428,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('custamountcontainer').style.display = 'none';
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';
@@ -5428,6 +5449,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('custamountcontainer').style.display = 'none';
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';
@@ -5448,6 +5470,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('custamountcontainer').style.display = 'none';
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';
@@ -5466,6 +5489,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             document.getElementById('custContainer').style.display = 'none';
             document.getElementById('daycnt').style.display = 'none';
             document.getElementById('myChart').style.display = 'none';
+            document.getElementById('customer-container').style.display = 'none';
             document.getElementById('custamountcontainer').style.display = 'none';
             document.getElementById('customerdata').style.display = 'none';
             document.getElementById('customeralldata').style.display = 'none';
@@ -6111,6 +6135,509 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
         populateDropdown("jcbtrprate7");
         populateDropdown("trprate7");
         populateDropdown("trprate17");
+
+        /*========================================
+            PART 1
+            LOAD & PROCESS DATA
+    ========================================*/
+
+        let allCustomers = [];
+        let filteredCustomers = [];
+
+        const PAID_KEY = "paidCustomerslistdata";
+        const UNPAID_KEY = "unpaidCustomerslistdata";
+        const EXTRA_KEY = "extraAmountsCache";
+
+        function getStorageData(key) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : {};
+            } catch (error) {
+                console.error("Storage Error:", error);
+                return {};
+            }
+        }
+
+        function loadCustomerData() {
+            const paidCustomers = getStorageData(PAID_KEY);
+            const unpaidCustomers = getStorageData(UNPAID_KEY);
+            const extraAmountsCache = getStorageData(EXTRA_KEY);
+
+            processCustomers(
+                Array.isArray(paidCustomers) ? paidCustomers : [],
+                Array.isArray(unpaidCustomers) ? unpaidCustomers : [],
+                extraAmountsCache
+            );
+        }
+
+        function processCustomers(paidCustomers, unpaidCustomers, extraAmountsCache) {
+
+            const customerMap = new Map();
+
+            paidCustomers.forEach(item => {
+
+                const name = item.Name?.trim() || "UNKNOWN";
+
+                if (!customerMap.has(name)) {
+                    customerMap.set(name, createCustomer(item));
+                }
+
+                const customer = customerMap.get(name);
+
+                customer.paymentStatus = "PAID";
+                customer.paidAmount += Number(item.Price || 0);
+
+                addWorkDetails(customer, item);
+            });
+
+            unpaidCustomers.forEach(item => {
+
+                const name = item.Name?.trim() || "UNKNOWN";
+
+                if (!customerMap.has(name)) {
+                    customerMap.set(name, createCustomer(item));
+                }
+
+                const customer = customerMap.get(name);
+
+                customer.paymentStatus = "UNPAID";
+                customer.pendingAmount += Number(
+                    item.Price || item.OverallPrice || 0
+                );
+
+                addWorkDetails(customer, item);
+            });
+
+            Object.keys(extraAmountsCache).forEach(name => {
+
+                const customerName = name.trim();
+
+                if (customerMap.has(customerName)) {
+
+                    customerMap.get(customerName).previousBalance =
+                        Number(extraAmountsCache[name] || 0);
+
+                }
+
+            });
+
+            allCustomers = Array.from(customerMap.values());
+
+            calculateCustomerValues();
+
+            allCustomers.sort((a, b) => {
+
+                if (a.paymentStatus === "UNPAID" && b.paymentStatus === "PAID") {
+                    return -1;
+                }
+
+                if (a.paymentStatus === "PAID" && b.paymentStatus === "UNPAID") {
+                    return 1;
+                }
+
+                return a.name.localeCompare(b.name);
+
+            });
+
+            filteredCustomers = [...allCustomers];
+
+            renderCustomerCards();
+        }
+
+        function createCustomer(item) {
+
+            return {
+                name: item.Name || "-",
+                village: item.Villagename || "-",
+                paymentStatus: item.Payment?.toUpperCase() || "PAID",
+                paidAmount: 0,
+                pendingAmount: 0,
+                previousBalance: 0,
+                adjustedAmount: 0,
+                workDates: [],
+                totalDaysWorked: 0,
+                latestWorkedDate: "-",
+                finalPendingAmount: 0,
+                totalWorkAmount: 0
+            };
+
+        }
+
+        function addWorkDetails(customer, item) {
+
+            customer.adjustedAmount += Math.abs(
+                Number(item.Miscellaneous || 0)
+            );
+
+            if (item.Date) {
+                customer.workDates.push(item.Date);
+            }
+
+        }
+
+        function calculateCustomerValues() {
+
+            allCustomers.forEach(customer => {
+
+                customer.finalPendingAmount =
+                    customer.pendingAmount -
+                    customer.previousBalance;
+
+                if (customer.finalPendingAmount < 0) {
+                    customer.finalPendingAmount = 0;
+                }
+
+                customer.totalWorkAmount =
+                    customer.paidAmount +
+                    customer.finalPendingAmount;
+
+                const uniqueDates = [
+                    ...new Set(customer.workDates)
+                ];
+
+                customer.totalDaysWorked =
+                    uniqueDates.length;
+
+                if (uniqueDates.length > 0) {
+
+                    uniqueDates.sort(
+                        (a, b) => new Date(b) - new Date(a)
+                    );
+
+                    customer.latestWorkedDate =
+                        formatDate(uniqueDates[0]);
+
+                }
+
+            });
+
+        }
+
+        function formatDate(date) {
+
+            const d = new Date(date);
+
+            return `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${d.getFullYear()}`;
+
+        }
+
+        function formatAmount(value) {
+
+            return new Intl.NumberFormat(
+                "en-IN",
+                {
+                    style: "currency",
+                    currency: "INR",
+                    maximumFractionDigits: 0
+                }
+            ).format(value || 0);
+
+        }
+
+        /*========================================
+                PART 2
+                RENDER CUSTOMER CARDS
+        ========================================*/
+
+        function renderCustomerCards() {
+
+            const container = document.getElementById("customerGrid");
+
+            if (!container) {
+                console.error("customerGrid not found");
+                return;
+            }
+
+            container.innerHTML = "";
+
+            filteredCustomers.forEach((customer, index) => {
+
+                const statusClass =
+                    customer.paymentStatus === "PAID"
+                        ? "paid"
+                        : "unpaid";
+
+
+                const card = document.createElement("div");
+
+                card.className = "customer-card";
+
+                card.style.animationDelay =
+                    `${index * 0.05}s`;
+
+
+                card.innerHTML = `
+
+        <div class="card-top">
+
+            <div class="avatar">
+                ${getInitials(customer.name)}
+            </div>
+
+            <div class="customer-title">
+
+                <h3>${customer.name}</h3>
+
+                <p>${customer.village}</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-info">
+
+            <div class="info-box">
+                <label>Paid Amount</label>
+                <h2 class="paid">
+                    ${formatAmount(customer.paidAmount)}
+                </h2>
+            </div>
+
+
+            <div class="info-box">
+                <label>Pending Amount</label>
+                <h2 class="unpaid">
+                    ${formatAmount(customer.finalPendingAmount)}
+                </h2>
+            </div>
+
+
+            <div class="info-box">
+                <label>Previous Balance</label>
+                <h3 class="previous">
+                    ${formatAmount(customer.previousBalance)}
+                </h3>
+            </div>
+
+
+            <div class="info-box">
+                <label>Adjusted Amount</label>
+                <h3 class="adjusted">
+                    ${formatAmount(customer.adjustedAmount)}
+                </h3>
+            </div>
+
+
+            <div class="info-box">
+                <label>Total Days Worked</label>
+                <h3 class="days">
+                    ${customer.totalDaysWorked} Days
+                </h3>
+            </div>
+
+
+            <div class="info-box">
+                <label>Total Work Amount</label>
+                <h3 class="due">
+                    ${formatAmount(customer.totalWorkAmount)}
+                </h3>
+            </div>
+
+        </div>
+
+
+        <div class="work-status">
+
+            <div>
+                <label>Latest Worked Date</label>
+                <h3>
+                    ${customer.latestWorkedDate}
+                </h3>
+            </div>
+
+
+            <div>
+                <label>Payment Status</label>
+                <h3 class="${statusClass}">
+                    ${customer.paymentStatus}
+                </h3>
+            </div>
+
+        </div>
+
+
+        <div class="card-footer">
+
+            <button onclick="viewCustomerHistory('${customer.name}')">
+                VIEW HISTORY
+            </button>
+
+        </div>
+
+        `;
+
+
+                container.appendChild(card);
+
+            });
+
+
+            enableCardDrag();
+
+        }
+
+
+        /*========================================
+                GET INITIALS
+        ========================================*/
+
+        function getInitials(name) {
+
+            if (!name) {
+                return "C";
+            }
+
+            const words = name.trim().split(" ");
+
+            if (words.length === 1) {
+                return words[0]
+                    .substring(0, 2)
+                    .toUpperCase();
+            }
+
+            return (
+                words[0][0] +
+                words[1][0]
+            ).toUpperCase();
+
+        }
+
+
+
+        /*========================================
+                CARD DRAG SCROLL
+        ========================================*/
+
+        function enableCardDrag() {
+
+            const slider = document.querySelector(".customer-grid");
+
+            if (!slider) {
+                return;
+            }
+
+            let isDown = false;
+            let startX = 0;
+            let startScroll = 0;
+            let currentMove = 0;
+            let animationFrame;
+
+
+            slider.addEventListener("mousedown", e => {
+
+                isDown = true;
+
+                slider.classList.add("active");
+
+                startX = e.pageX;
+
+                startScroll = slider.scrollLeft;
+
+                cancelAnimationFrame(animationFrame);
+
+            });
+
+
+            slider.addEventListener("mouseleave", () => {
+
+                isDown = false;
+
+                slider.classList.remove("active");
+
+            });
+
+
+            slider.addEventListener("mouseup", () => {
+
+                isDown = false;
+
+                slider.classList.remove("active");
+
+            });
+
+
+            slider.addEventListener("mousemove", e => {
+
+                if (!isDown) {
+                    return;
+                }
+
+
+                e.preventDefault();
+
+
+                const distance =
+                    e.pageX - startX;
+
+
+                /*
+                    Reduce speed here
+        
+                    1   = slow
+                    1.5 = normal
+                    2   = fast
+                */
+
+                currentMove =
+                    startScroll - (distance * 3);
+
+
+                cancelAnimationFrame(animationFrame);
+
+
+                animationFrame =
+                    requestAnimationFrame(() => {
+
+                        slider.scrollLeft =
+                            currentMove;
+
+                    });
+
+            });
+
+
+
+            /* MOBILE TOUCH */
+
+            let touchStart = 0;
+            let touchScroll = 0;
+
+
+            slider.addEventListener("touchstart", e => {
+
+                touchStart =
+                    e.touches[0].pageX;
+
+
+                touchScroll =
+                    slider.scrollLeft;
+
+
+            }, {
+                passive: true
+            });
+
+
+
+            slider.addEventListener("touchmove", e => {
+
+
+                const move =
+                    e.touches[0].pageX -
+                    touchStart;
+
+
+
+                slider.scrollLeft =
+                    touchScroll - (move * 1.2);
+
+
+            }, {
+                passive: true
+            });
+
+        }
 
     </script>
 
