@@ -2606,7 +2606,7 @@
         <form id="userForm2">
             <input type="text" id="name1" name="name" placeholder="Customer Name" required>
             <input type="text" id="vil1" class=village name="vil" placeholder="Village" required>
-            <input type="text" id="cid" name="cid" placeholder="Customer Id" required readonly>
+            <input type="text" id="cid" name="cid" placeholder="Customer Id" required>
             <input type="button" value="Add New Customer" id="submit2">
         </form>
     </div>
@@ -2800,7 +2800,7 @@
                 💼 ముందస్తు మొత్తం: ₹40,000 |
                 💰 నెలవారీ జీతం: ₹23,000 |
                 🧾 రోజువారీ భత్యం: ₹0 |
-                📅 జాయినింగ్ తేదీ: 1-August-2026|
+                📅 జాయినింగ్ తేదీ: 06-August-2026|
             </div>
 
             <div class="driver-image">
@@ -3304,9 +3304,9 @@
             Open 2024 - 2025 Analysis
         </div>
 
-        <!-- <div onclick="toggleYear('year2', this)" class="year-btn" data-text="2025 - 2026">
+        <div onclick="toggleYear('year2', this)" class="year-btn" data-text="2025 - 2026">
             Open 2025 - 2026 Analysis
-        </div> -->
+        </div>
 
     </div>
     <div id="prevyear">
@@ -3317,12 +3317,12 @@
             <img src="2024-jcb-bar.png" class="year-img">
         </div>
 
-        <!-- <div id="year2" class="year-content">
+        <div id="year2" class="year-content">
             <h1 class="financial-title">2025 - 2026 Financial Year Work Status</h1>
 
-            <img src="2025-work done.png" class="year-img">
-            <img src="2025-jcb-bar.png" class="year-img">
-        </div> -->
+            <img src="25-26 work over view.png" class="year-img">
+            <img src="25-26 graph work.png" class="year-img">
+        </div>
     </div>
 
     <div id="paymentSuccessPopup1" class="payment-popup">
@@ -3701,10 +3701,14 @@
 
                 let status = "";
 
-                if (c.jcbRemaining === 0 && c.overallRemaining === 0) {
+                if (c.jcbRemaining === 0 && c.overallRemaining === 0 && Math.abs(c.Miscellaneous) <=1000) {
                     status = "🥇 Golden Customer";
                 } else {
-                    status = "🔴 Pending";
+                    if(Math.abs(c.Miscellaneous) > 1000){
+                        status = "🟡 IP Customer";
+                    } else {
+                        status = "🔴 Pending";
+                    }
                 }
 
                 var contributionPercentage = 0;
@@ -6185,7 +6189,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
                 const customer = customerMap.get(name);
 
                 customer.paymentStatus = "PAID";
-                customer.paidAmount += Number(item.Price || 0);
+                customer.paidAmount += Number(item.OverallPrice || 0);
 
                 addWorkDetails(customer, item);
             });
@@ -6202,7 +6206,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
                 customer.paymentStatus = "UNPAID";
                 customer.pendingAmount += Number(
-                    item.Price || item.OverallPrice || 0
+                    item.OverallPrice || 0
                 );
 
                 addWorkDetails(customer, item);

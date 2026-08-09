@@ -304,6 +304,7 @@ document.getElementById('submit3').addEventListener('click', async function (e) 
         }
         else {
             alert("Please Enter Amount");
+            hideProcessingPopup();
             datarebuild();
         }
     }
@@ -330,6 +331,7 @@ document.getElementById('submit7').addEventListener('click', async function (e) 
         }
         else {
             alert("Please Enter Amount");
+            hideProcessingPopup();
             datarebuild();
         }
     }
@@ -379,10 +381,12 @@ async function FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount)
             changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount);
 
         } else {
-            alert("No data available");
+            alert("No Work data available for this customer");
+            hideProcessingPopup();
         }
     } catch (error) {
         alert("Error occurred while fetching data");
+        hideProcessingPopup();
     }
 }
 async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount) {

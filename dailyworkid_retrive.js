@@ -787,25 +787,39 @@ document.getElementById("name1").addEventListener("change", async function (e1) 
     }
 });
 
-document.getElementById("name2").addEventListener("change", async function (e1) {
-    e1.preventDefault(); // Prevent default form submission behavior
+// document.getElementById("name2").addEventListener("change", async function (e1) {
+//     e1.preventDefault(); // Prevent default form submission behavior
+//     try {
+//         // Access the database and retrieve data
+//         const db1 = DBConstants.CustomersAmount_Id;
+//         const db3 = DBConstants.CustomersAmount;
+//         const dataRefget = ref(db2, `${db3}/${db1}`);
+//         const snapshot = await get(dataRefget);
+//         selectVillage1();
+//         // Check if data exists
+//         if (snapshot.exists()) {
+//             const data = snapshot.val();
+//             // console.log(data);
+//             document.getElementById("cid1").value = data;
+//         } else {
+//             alert("No data available");
+//         }
+//     } catch (error) {
+//         console.error("Error occurred while fetching data: ", error);
+//     }
+// });
+document.getElementById("name2").addEventListener("change", function (e1) {
+    e1.preventDefault();
+
     try {
-        // Access the database and retrieve data
-        const db1 = DBConstants.CustomersAmount_Id;
-        const db3 = DBConstants.CustomersAmount;
-        const dataRefget = ref(db2, `${db3}/${db1}`);
-        const snapshot = await get(dataRefget);
+        // Generate unique ID using current date & time
+        GetUniqueId("cid1");
+
+        // Continue existing functionality
         selectVillage1();
-        // Check if data exists
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            // console.log(data);
-            document.getElementById("cid1").value = data;
-        } else {
-            alert("No data available");
-        }
+
     } catch (error) {
-        console.error("Error occurred while fetching data: ", error);
+        console.error("Error occurred while generating system ID: ", error);
     }
 });
 
@@ -966,3 +980,9 @@ document.addEventListener(
             }
         }
     });
+
+
+function GetUniqueId(outputId) {
+    let id = Date.now();
+    document.getElementById(outputId).value = id;
+}

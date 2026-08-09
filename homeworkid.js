@@ -14,24 +14,41 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // Get a reference to the database service
 
-document.getElementById("name8").addEventListener("change", async function (e1) {
-    e1.preventDefault(); // Prevent default form submission behavior
-    try {
-        // Access the database and retrieve data
-        const db2 = getDatabase(app);
-        const db1 = DBConstants.Homeexpenses;
-        const db3= "Home";
-        const dataRefget = ref(db2, `${db1}/${db3}`);
-        const snapshot = await get(dataRefget);
+// document.getElementById("name8").addEventListener("change", async function (e1) {
+//     e1.preventDefault(); // Prevent default form submission behavior
+//     try {
+//         // Access the database and retrieve data
+//         const db2 = getDatabase(app);
+//         const db1 = DBConstants.Homeexpenses;
+//         const db3= "Home";
+//         const dataRefget = ref(db2, `${db1}/${db3}`);
+//         const snapshot = await get(dataRefget);
 
-        // Check if data exists
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            document.getElementById("wid8").value=data;
-        } else {
-            alert("No data available");
-        }
+//         // Check if data exists
+//         if (snapshot.exists()) {
+//             const data = snapshot.val();
+//             document.getElementById("wid8").value=data;
+//         } else {
+//             alert("No data available");
+//         }
+//     } catch (error) {
+//         console.error("Error occurred while fetching data: ", error);
+//     }
+// });
+
+document.getElementById("name8").addEventListener("change", function (e1) {
+    e1.preventDefault();
+
+    try {
+        // Generate unique ID using current date & time
+        GetUniqueExpenseId("wid8");
+
     } catch (error) {
-        console.error("Error occurred while fetching data: ", error);
+        console.error("Error occurred while generating system ID: ", error);
     }
 });
+
+function GetUniqueExpenseId(outputId) {
+    let id = Date.now();
+    document.getElementById(outputId).value = id;
+}

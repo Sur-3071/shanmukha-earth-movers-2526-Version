@@ -83,7 +83,18 @@ function showEmptyState() {
     if (salaryDiv) salaryDiv.innerHTML = message;
     if (leaveDiv) leaveDiv.innerHTML = message;
 
-    resetSummaryMetrics(0, 0, 0);
+    const today = new Date();
+    const joiningDate = new Date("2026-08-06"); // Assuming joining date is Aug 6, 2026
+    today.setHours(0, 0, 0, 0);
+    joiningDate.setHours(0, 0, 0, 0);
+
+    // If today is before Aug 6, 2026, daysWorked is 0.
+    // Otherwise, count days elapsed from Aug 6, 2026 to today minus total leaves.
+    const totalElapsed = today >= joiningDate
+        ? Math.floor((today - joiningDate) / (1000 * 60 * 60 * 24)) + 1
+        : 0;
+
+    resetSummaryMetrics(totalElapsed, 0, 0);
 }
 
 function generateTable(data) {
@@ -123,7 +134,7 @@ function generateTable(data) {
 
     const driverSalary = 23000;
     const allowedLeaves = 2;
-    const perDaySalary = Math.round(driverSalary / 30); // ₹767/day
+    const perDaySalary = 755; // ₹755/day
 
     let grandTotalPaid = 0;
     let grandTotalLeaves = 0;
@@ -165,7 +176,7 @@ function generateTable(data) {
             // Month Divider Row
             const monthHeader = document.createElement("tr");
             monthHeader.className = "month-header-row";
-            monthHeader.innerHTML = `<td colspan="4">${month} (1st - 31st Cycle)</td>`;
+            monthHeader.innerHTML = `<td colspan="4">${month} (6th - 5th Cycle)</td>`;
             tbody.appendChild(monthHeader);
 
             let monthPaidTotal = 0;
@@ -259,7 +270,7 @@ function generateTable(data) {
 
             const monthHeader = document.createElement("tr");
             monthHeader.className = "month-header-row";
-            monthHeader.innerHTML = `<td colspan="2">${month} (1st - 31st Cycle)</td>`;
+            monthHeader.innerHTML = `<td colspan="2">${month} (6th - 5th Cycle)</td>`;
             tbody.appendChild(monthHeader);
 
             leaveEntries.forEach(entry => {
@@ -300,24 +311,23 @@ function generateTable(data) {
 
     // Total working days active calculation
     const today = new Date();
-    const joiningDate = new Date("2026-08-01");
+    const joiningDate = new Date("2026-08-06"); // Assuming joining date is Aug 6, 2026
     today.setHours(0, 0, 0, 0);
     joiningDate.setHours(0, 0, 0, 0);
 
-    // If today is before Aug 1, 2026, daysWorked is 0.
-    // Otherwise, count days elapsed from Aug 1, 2026 to today minus total leaves.
+    // If today is before Aug 6, 2026, daysWorked is 0.
+    // Otherwise, count days elapsed from Aug 6, 2026 to today minus total leaves.
     const totalElapsed = today >= joiningDate
         ? Math.floor((today - joiningDate) / (1000 * 60 * 60 * 24)) + 1
         : 0;
 
-    const daysWorked = Math.max(0, totalElapsed - grandTotalLeaves);
-    resetSummaryMetrics(daysWorked, grandTotalPaid, grandTotalLeaves);
+    resetSummaryMetrics(totalElapsed, grandTotalPaid, grandTotalLeaves);
 }
 
 function updateMonthCards(monthsMap) {
     const driverSalary = 23000;
     const allowedLeaves = 2;
-    const perDaySalary = Math.round(driverSalary / 30);
+    const perDaySalary = 755; // ₹755/day
 
     Object.keys(monthsMap).forEach(month => {
         const card = document.getElementById(`card-${month}`);
