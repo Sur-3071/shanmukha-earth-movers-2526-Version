@@ -1041,8 +1041,43 @@
             const sortedDates = l.sort((a, b) => new Date(a) - new Date(b));
             var dat1 = sortedDates[0];
             var dat2 = year + "-" + month + "-" + day;
-            var compareDate = '2026-08-10';
-            var fallbackDate = '2025-08-10';
+
+            const today1 = new Date();
+
+            const currentYear1 = today1.getFullYear();
+            const currentMonth = today1.getMonth(); // August = 7
+            const currentDay = today1.getDate();
+
+            var compareDate;
+            var fallbackDate;
+
+            if (currentMonth === 7 && currentDay >= 10) {
+
+                // August 10 onwards
+                compareDate = `${currentYear1 + 1}-08-10`;
+                fallbackDate = `${currentYear1}-08-10`;
+
+            } else if (currentMonth === 7 && currentDay < 10) {
+
+                // August 1 to August 9
+                compareDate = `${currentYear1}-08-10`;
+                fallbackDate = `${currentYear1 - 1}-08-10`;
+
+            } else if (currentMonth < 7) {
+
+                // January to July
+                compareDate = `${currentYear1}-08-10`;
+                fallbackDate = `${currentYear1 - 1}-08-10`;
+
+            } else {
+
+                // September to December
+                compareDate = `${currentYear1 + 1}-08-10`;
+                fallbackDate = `${currentYear1}-08-10`;
+            }
+
+            console.log("Compare Date:", compareDate);
+            console.log("Fallback Date:", fallbackDate);
 
             var d1 = new Date(dat2);
             var d2 = new Date(compareDate);
@@ -2486,7 +2521,8 @@
 
     </div>
 
-    <div class="customer-container" id="customer-container" style="display: none; justify-content: center; align-items: center; margin-top: 20px;">
+    <div class="customer-container" id="customer-container"
+        style="display: none; justify-content: center; align-items: center; margin-top: 20px;">
 
         <div id="customerGrid" class="customer-grid">
         </div>
@@ -3701,10 +3737,10 @@
 
                 let status = "";
 
-                if (c.jcbRemaining === 0 && c.overallRemaining === 0 && Math.abs(c.Miscellaneous) <=1000) {
+                if (c.jcbRemaining === 0 && c.overallRemaining === 0 && Math.abs(c.Miscellaneous) <= 1000) {
                     status = "🥇 Golden Customer";
                 } else {
-                    if(Math.abs(c.Miscellaneous) > 1000){
+                    if (Math.abs(c.Miscellaneous) > 1000) {
                         status = "🟡 IP Customer";
                     } else {
                         status = "🔴 Pending";

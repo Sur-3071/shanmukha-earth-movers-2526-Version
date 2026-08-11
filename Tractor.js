@@ -108,22 +108,6 @@ function addamount() {
     }
 }
 
-// function transalate() {
-
-//     let convert = document.getElementById("cname");
-//     let content = document.getElementById("cname").value;
-//     let transLINK = `https://api.mymemory.translated.net/get?q=${content}&langpair=en-GB|te-IN`;
-
-//     fetch(transLINK)
-//         .then(response => response.json())
-//         .then(data => {
-//             // Handle the translated data here
-//             convert.innerHTML = "";
-//             let text = data.responseData.translatedText;
-//             // alert(text);
-//             convert.value = text;
-//         });
-// }
 
 async function transalate() {
     try {
@@ -153,21 +137,6 @@ async function transalate() {
         console.error(error);
     }
 }
-// function transalatepur() {
-//     let convert = document.getElementById("pur");
-//     let content = document.getElementById("pur").value;
-//     let transLINK = `https://api.mymemory.translated.net/get?q=${content}&langpair=en-GB|te-IN`;
-
-//     fetch(transLINK)
-//         .then(response => response.json())
-//         .then(data => {
-//             // Handle the translated data here
-//             convert.innerHTML = "";
-//             let text = data.responseData.translatedText;
-//             // alert(text);
-//             convert.value = text;
-//         });
-// }
 
 async function transalatepur() {
     try {
@@ -243,161 +212,447 @@ function removedone1() {
         v7.style.display = "none";
     }, 2000);
 }
-function displayUpdatedtripsdata(data) {
+// function displayUpdatedtripsdata(data) {
+//     showProcessingPopup();
+//     document.getElementById("screenshot").style.display = "block";
+//     var r = document.getElementById("tripsdata");
+//     r.innerHTML = "";
+
+//     // Initialize the table structure
+//     var out = `<table border="1px" class="blodfont">
+//     <tr>
+//         <th style="font-weight:bold;font-size:25px">తోలకం</th>
+//         <th style="font-weight:bold;font-size:25px;">తేదీ</th>
+//         <th style="font-weight:bold;font-size:25px">వినియోగదారుని పేరు</th>
+//         <th style="font-weight:bold;font-size:25px">పగలు/రాత్రి</th>
+//         <th style="font-weight:bold;font-size:25px">ధర</th>
+//         <th style="font-weight:bold;font-size:25px">ట్రిప్పులు</th>
+//         <th style="font-weight:bold;font-size:25px">మొత్తం</th>
+//     </tr>`;
+
+
+//     let sno = 1;
+//     let totaltrips = 0;
+//     let s = 0;
+
+//     // assuming `data` is snapshot.val()
+//     for (const key in data) {
+//         if (data.hasOwnProperty(key)) {
+
+//             const record = data[key];
+
+//             const date = record.Date;
+//             const name = record.CustomerName;
+//             const shift = record.Shift;
+//             const drivername = record.Driver;
+
+//             const trips = parseInt(record.Trips) || 0;
+//             const amount = parseInt(record.Price) || 0;
+
+//             totaltrips += trips;
+//             s += trips * amount;
+
+//             out += `
+//         <tr>
+//             <td style="font-weight:bold;font-size:35px">${sno}</td>
+//             <td style="font-weight:bold;font-size:35px;white-space: nowrap;width: max-content;">${formatDateToNormal(date)}</td>
+//             <td style="font-weight:bold;font-size:35px">${name}</td>
+//             <td style="font-weight:bold;font-size:35px">${shift}</td>
+//             <td style="display:none;">${drivername}</td>
+//             <td style="font-weight:bold;font-size:35px">${amount}</td>
+//             <td style="font-weight:bold;font-size:35px">${trips}</td>
+//             <td style="font-weight:bold;font-size:35px">${trips * amount}</td>
+//         </tr>`;
+
+//             sno++;
+//         }
+//     }
+
+//     // Total row
+//     out += `
+// <tr>
+//     <td colspan="5" style="font-weight:bold;font-size:25px">
+//         ట్రిప్పులు మొత్తానికి అయిన డబ్బులు
+//     </td>
+//     <td style="font-weight:bold;font-size:25px">${totaltrips}</td>
+//     <td style="font-weight:bold;font-size:25px">${s}</td>
+// </tr>
+// `;
+
+//     // Close table
+//     out += "</table>";
+//     hideProcessingPopup();
+//     // Render
+//     r.innerHTML = out;
+//     r.style.display = "block";
+// }
+
+function displayUpdatedtripsdata(data,drivername) {
     showProcessingPopup();
+
     document.getElementById("screenshot").style.display = "block";
+
     var r = document.getElementById("tripsdata");
     r.innerHTML = "";
 
-    // Initialize the table structure
-    var out = `<table border="1px" class="blodfont">
-    <tr>
-        <th style="font-weight:bold;font-size:25px">తోలకం</th>
-        <th style="font-weight:bold;font-size:25px;">తేదీ</th>
-        <th style="font-weight:bold;font-size:25px">వినియోగదారుని పేరు</th>
-        <th style="font-weight:bold;font-size:25px">పగలు/రాత్రి</th>
-        <th style="font-weight:bold;font-size:25px">ధర</th>
-        <th style="font-weight:bold;font-size:25px">ట్రిప్పులు</th>
-        <th style="font-weight:bold;font-size:25px">మొత్తం</th>
-    </tr>`;
+    // Convert Firebase object into array
+    const records = [];
 
-
-    let sno = 1;
-    let totaltrips = 0;
-    let s = 0;
-
-    // assuming `data` is snapshot.val()
     for (const key in data) {
         if (data.hasOwnProperty(key)) {
-
-            const record = data[key];
-
-            const date = record.Date;
-            const name = record.CustomerName;
-            const shift = record.Shift;
-            const drivername = record.Driver;
-
-            const trips = parseInt(record.Trips) || 0;
-            const amount = parseInt(record.Price) || 0;
-
-            totaltrips += trips;
-            s += trips * amount;
-
-            out += `
-        <tr>
-            <td style="font-weight:bold;font-size:35px">${sno}</td>
-            <td style="font-weight:bold;font-size:35px;white-space: nowrap;width: max-content;">${formatDateToNormal(date)}</td>
-            <td style="font-weight:bold;font-size:35px">${name}</td>
-            <td style="font-weight:bold;font-size:35px">${shift}</td>
-            <td style="display:none;">${drivername}</td>
-            <td style="font-weight:bold;font-size:35px">${amount}</td>
-            <td style="font-weight:bold;font-size:35px">${trips}</td>
-            <td style="font-weight:bold;font-size:35px">${trips * amount}</td>
-        </tr>`;
-
-            sno++;
+            records.push(data[key]);
         }
     }
 
-    // Total row
-    out += `
-<tr>
-    <td colspan="5" style="font-weight:bold;font-size:25px">
-        ట్రిప్పులు మొత్తానికి అయిన డబ్బులు
-    </td>
-    <td style="font-weight:bold;font-size:25px">${totaltrips}</td>
-    <td style="font-weight:bold;font-size:25px">${s}</td>
-</tr>
-`;
+    // Sort by Date: oldest -> newest
+    records.sort((a, b) => {
+        const dateA = new Date(a.Date);
+        const dateB = new Date(b.Date);
 
-    // Close table
-    out += "</table>";
-    hideProcessingPopup();
-    // Render
-    r.innerHTML = out;
-    r.style.display = "block";
-}
-function displaytripsdata(data, drivername) {
-    // alert("parrel call");
-    showProcessingPopup();
-    driver = drivername;
-    document.getElementById("screenshot").style.display = "block";
-    var r = document.getElementById("tripsdata");
-    r.innerHTML = "";
+        return dateA - dateB;
+    });
 
-    // Initialize the table structure
-    var out = `<table border="1px" class="blodfont">
-    <tr>
-        <th style="font-weight:bold;font-size:25px">తోలకం</th>
-        <th style="font-weight:bold;font-size:25px">తోలకం ID</th>
-        <th style="font-weight:bold;font-size:25px">తేదీ</th>
-        <th style="font-weight:bold;font-size:25px">వినియోగదారుని పేరు</th>
-        <th style="font-weight:bold;font-size:25px">పగలు/రాత్రి</th>
-        <th style="font-weight:bold;font-size:25px">సవరించు</th>
-        <th style="font-weight:bold;font-size:25px">ధర</th>
-        <th style="font-weight:bold;font-size:25px">ట్రిప్పులు</th>
-        <th style="font-weight:bold;font-size:25px">మొత్తం</th>
-    </tr>`;
+    // Initialize table structure
+    var out = `
+        <table border="1px" class="blodfont">
+            <tr>
+                <th style="font-weight:bold;font-size:25px">తోలకం</th>
+                <th style="font-weight:bold;font-size:25px;">తేదీ</th>
+                <th style="font-weight:bold;font-size:25px">వినియోగదారుని పేరు</th>
+                <th style="font-weight:bold;font-size:25px">పగలు/రాత్రి</th>
+                <th style="display:none;">Driver</th>
+                <th style="font-weight:bold;font-size:25px">ధర</th>
+                <th style="font-weight:bold;font-size:25px">ట్రిప్పులు</th>
+                <th style="font-weight:bold;font-size:25px">మొత్తం</th>
+            </tr>
+    `;
 
     let sno = 1;
     let totaltrips = 0;
     let s = 0;
 
-    // assuming `data` is snapshot.val()
-    for (const key in data) {
-        if (data.hasOwnProperty(key)) {
+    // Process sorted records
+    records.forEach(record => {
 
-            const record = data[key];
+        const date = record.Date;
+        const name = record.CustomerName;
+        const shift = record.Shift;
+        const drivername = record.Driver;
 
-            const date = record.Date;
-            const name = record.CustomerName;
-            const shift = record.Shift;
-            const drivername = record.Driver;
+        const trips = parseInt(record.Trips) || 0;
+        const amount = parseInt(record.Price) || 0;
 
-            const trips = parseInt(record.Trips) || 0;
-            const amount = parseInt(record.Price) || 0;
+        totaltrips += trips;
+        s += trips * amount;
 
-            totaltrips += trips;
-            s += trips * amount;
+        out += `
+            <tr>
+                <td style="font-weight:bold;font-size:35px">${sno}</td>
 
-            out += `
+                <td style="
+                    font-weight:bold;
+                    font-size:35px;
+                    white-space:nowrap;
+                    width:max-content;
+                ">
+                    ${formatDateToNormal(date)}
+                </td>
+
+                <td style="font-weight:bold;font-size:35px">
+                    ${name}
+                </td>
+
+                <td style="font-weight:bold;font-size:35px">
+                    ${shift}
+                </td>
+
+                <td style="display:none;">
+                    ${drivername}
+                </td>
+
+                <td style="font-weight:bold;font-size:35px">
+                    ${amount}
+                </td>
+
+                <td style="font-weight:bold;font-size:35px">
+                    ${trips}
+                </td>
+
+                <td style="font-weight:bold;font-size:35px">
+                    ${trips * amount}
+                </td>
+            </tr>
+        `;
+
+        sno++;
+    });
+
+    // Total row
+    out += `
         <tr>
-            <td style="font-weight:bold;font-size:25px;padding:15px">${sno}</td>
-            <td style="font-weight:bold;font-size:25px;padding:15px">${key}</td>
-            <td style="font-weight:bold;font-size:25px;padding:15px;white-space: nowrap;width: max-content;">${formatDateToNormal(date)}</td>
-            <td style="font-weight:bold;font-size:25px;padding:15px">${name}</td>
-            <td style="font-weight:bold;font-size:25px;padding:15px">${shift}</td>
-            <td style="display:none;">${drivername}</td>
-            <td style="font-weight:bold;font-size:25px;padding:15px">
-                <button type="button" class="edit" onclick="openPopup12(this)">Edit</button>
+            <td colspan="5"
+                style="font-weight:bold;font-size:35px;text-align:right;">
+                ట్రిప్పులు మొత్తానికి అయిన డబ్బులు
             </td>
-            <td style="font-weight:bold;font-size:25px;padding:15px">${amount}</td>
-            <td style="font-weight:bold;font-size:25px;padding:15px">${trips}</td>
-            <td style="font-weight:bold;font-size:25px;padding:15px">${trips * amount}</td>
-        </tr>`;
 
-            sno++;
-        }
-    }
+            <td style="font-weight:bold;font-size:35px;">
+                ${totaltrips}
+            </td>
 
-    // Total row
-    out += `
-<tr>
-    <td colspan="7" style="font-weight:bold;font-size:25px">
-        ట్రిప్పులు మొత్తానికి అయిన డబ్బులు
-    </td>
-    <td style="font-weight:bold;font-size:25px">${totaltrips}</td>
-    <td style="font-weight:bold;font-size:25px">${s}</td>
-</tr>
-`;
+            <td style="font-weight:bold;font-size:35px;">
+                ${s}
+            </td>
+        </tr>
+    `;
 
     // Close table
     out += "</table>";
-    hideProcessingPopup();
+
     // Render
     r.innerHTML = out;
     r.style.display = "block";
 
+    hideProcessingPopup();
+}
+
+// function displaytripsdata(data, drivername) {
+//     // alert("parrel call");
+//     showProcessingPopup();
+//     driver = drivername;
+//     document.getElementById("screenshot").style.display = "block";
+//     var r = document.getElementById("tripsdata");
+//     r.innerHTML = "";
+
+//     // Initialize the table structure
+//     var out = `<table border="1px" class="blodfont">
+//     <tr>
+//         <th style="font-weight:bold;font-size:25px">తోలకం</th>
+//         <th style="font-weight:bold;font-size:25px">తోలకం ID</th>
+//         <th style="font-weight:bold;font-size:25px">తేదీ</th>
+//         <th style="font-weight:bold;font-size:25px">వినియోగదారుని పేరు</th>
+//         <th style="font-weight:bold;font-size:25px">పగలు/రాత్రి</th>
+//         <th style="font-weight:bold;font-size:25px">సవరించు</th>
+//         <th style="font-weight:bold;font-size:25px">ధర</th>
+//         <th style="font-weight:bold;font-size:25px">ట్రిప్పులు</th>
+//         <th style="font-weight:bold;font-size:25px">మొత్తం</th>
+//     </tr>`;
+
+//     let sno = 1;
+//     let totaltrips = 0;
+//     let s = 0;
+
+//     // assuming `data` is snapshot.val()
+//     for (const key in data) {
+//         if (data.hasOwnProperty(key)) {
+
+//             const record = data[key];
+
+//             const date = record.Date;
+//             const name = record.CustomerName;
+//             const shift = record.Shift;
+//             const drivername = record.Driver;
+
+//             const trips = parseInt(record.Trips) || 0;
+//             const amount = parseInt(record.Price) || 0;
+
+//             totaltrips += trips;
+//             s += trips * amount;
+
+//             out += `
+//         <tr>
+//             <td style="font-weight:bold;font-size:25px;padding:15px">${sno}</td>
+//             <td style="font-weight:bold;font-size:25px;padding:15px">${key}</td>
+//             <td style="font-weight:bold;font-size:25px;padding:15px;white-space: nowrap;width: max-content;">${formatDateToNormal(date)}</td>
+//             <td style="font-weight:bold;font-size:25px;padding:15px">${name}</td>
+//             <td style="font-weight:bold;font-size:25px;padding:15px">${shift}</td>
+//             <td style="display:none;">${drivername}</td>
+//             <td style="font-weight:bold;font-size:25px;padding:15px">
+//                 <button type="button" class="edit" onclick="openPopup12(this)">Edit</button>
+//             </td>
+//             <td style="font-weight:bold;font-size:25px;padding:15px">${amount}</td>
+//             <td style="font-weight:bold;font-size:25px;padding:15px">${trips}</td>
+//             <td style="font-weight:bold;font-size:25px;padding:15px">${trips * amount}</td>
+//         </tr>`;
+
+//             sno++;
+//         }
+//     }
+
+//     // Total row
+//     out += `
+// <tr>
+//     <td colspan="7" style="font-weight:bold;font-size:25px">
+//         ట్రిప్పులు మొత్తానికి అయిన డబ్బులు
+//     </td>
+//     <td style="font-weight:bold;font-size:25px">${totaltrips}</td>
+//     <td style="font-weight:bold;font-size:25px">${s}</td>
+// </tr>
+// `;
+
+//     // Close table
+//     out += "</table>";
+//     hideProcessingPopup();
+//     // Render
+//     r.innerHTML = out;
+//     r.style.display = "block";
+
+// }
+
+
+function displaytripsdata(data, drivername) {
+
+    showProcessingPopup();
+
+    driver = drivername;
+
+    document.getElementById("screenshot").style.display = "block";
+
+    var r = document.getElementById("tripsdata");
+    r.innerHTML = "";
+
+    // Convert Firebase object into an array
+    const records = [];
+
+    for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+
+            records.push({
+                key: key,
+                record: data[key]
+            });
+        }
+    }
+
+    // Sort by Date: oldest -> newest
+    records.sort((a, b) => {
+
+        const dateA = new Date(a.record.Date);
+        const dateB = new Date(b.record.Date);
+
+        return dateA - dateB;
+    });
+
+    // Initialize table structure
+    var out = `
+        <table border="1px" class="blodfont">
+            <tr>
+                <th style="font-weight:bold;font-size:25px">తోలకం</th>
+                <th style="font-weight:bold;font-size:25px">తోలకం ID</th>
+                <th style="font-weight:bold;font-size:25px">తేదీ</th>
+                <th style="font-weight:bold;font-size:25px">వినియోగదారుని పేరు</th>
+                <th style="font-weight:bold;font-size:25px">పగలు/రాత్రి</th>
+                <th style="font-weight:bold;font-size:25px">సవరించు</th>
+                <th style="font-weight:bold;font-size:25px">ధర</th>
+                <th style="font-weight:bold;font-size:25px">ట్రిప్పులు</th>
+                <th style="font-weight:bold;font-size:25px">మొత్తం</th>
+            </tr>
+    `;
+
+    let sno = 1;
+    let totaltrips = 0;
+    let s = 0;
+
+    // Process sorted records
+    records.forEach(item => {
+
+        const key = item.key;
+        const record = item.record;
+
+        const date = record.Date;
+        const name = record.CustomerName;
+        const shift = record.Shift;
+        const recordDriverName = record.Driver;
+
+        const trips = parseInt(record.Trips) || 0;
+        const amount = parseInt(record.Price) || 0;
+
+        totaltrips += trips;
+        s += trips * amount;
+
+        out += `
+            <tr>
+                <td style="font-weight:bold;font-size:25px;padding:15px">
+                    ${sno}
+                </td>
+
+                <td style="font-weight:bold;font-size:25px;padding:15px">
+                    ${key}
+                </td>
+
+                <td style="
+                    font-weight:bold;
+                    font-size:25px;
+                    padding:15px;
+                    white-space:nowrap;
+                    width:max-content;
+                ">
+                    ${formatDateToNormal(date)}
+                </td>
+
+                <td style="font-weight:bold;font-size:25px;padding:15px">
+                    ${name}
+                </td>
+
+                <td style="font-weight:bold;font-size:25px;padding:15px">
+                    ${shift}
+                </td>
+
+                <td style="display:none;">
+                    ${recordDriverName}
+                </td>
+
+                <td style="font-weight:bold;font-size:25px;padding:15px">
+                    <button 
+                        type="button" 
+                        class="edit" 
+                        onclick="openPopup12(this)">
+                        Edit
+                    </button>
+                </td>
+
+                <td style="font-weight:bold;font-size:25px;padding:15px">
+                    ${amount}
+                </td>
+
+                <td style="font-weight:bold;font-size:25px;padding:15px">
+                    ${trips}
+                </td>
+
+                <td style="font-weight:bold;font-size:25px;padding:15px">
+                    ${trips * amount}
+                </td>
+            </tr>
+        `;
+
+        sno++;
+    });
+
+    // Total row
+    out += `
+        <tr>
+            <td colspan="7"
+                style="font-weight:bold;font-size:25px;padding:15px;text-align:right;">
+                మొత్తం
+            </td>
+
+            <td style="font-weight:bold;font-size:25px;padding:15px">
+                ${totaltrips}
+            </td>
+
+            <td style="font-weight:bold;font-size:25px;padding:15px">
+                ${s}
+            </td>
+        </tr>
+    `;
+
+    // Close table
+    out += "</table>";
+
+    hideProcessingPopup();
+
+    // Render
+    r.innerHTML = out;
+    r.style.display = "block";
 }
 
 

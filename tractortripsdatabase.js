@@ -222,6 +222,7 @@ getDataBtn.addEventListener('click', async function () {
 updatebtn.addEventListener('click', async function () {
 
     const drivername = document.getElementById("dname2").value.trim();
+    document.querySelector(".customer-title").textContent = drivername;
     const db1 = DBConstants.TractorTrips;
     showProcessingPopup();
     if (!drivername || drivername === "select Driver Name") {
