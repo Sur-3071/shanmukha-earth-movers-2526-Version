@@ -398,10 +398,6 @@
             checkQuarterResult();
         };
 
-
-
-
-
         const names = [];
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -418,30 +414,32 @@
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     generateTable(data);
-                } else {
-                    alert("No data available.");
                 }
             } catch (error) {
                 alert("Error occurred while fetching data 3071ram");
             }
         }
+
         async function Expensescal() {
-
             try {
+                // Validate database path/name
+                if (!DBConstants || !DBConstants.Homeexpenses) {
+                    generateExpensesTable({});
+                    return;
+                }
 
-                // Access the database and retrieve data
                 const dataRefget = ref(db2, DBConstants.Homeexpenses);
                 const snapshot = await get(dataRefget);
 
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     generateExpensesTable(data);
-                    // createexpensestable(data);
                 } else {
-                    alert("No data available.");
+                    generateExpensesTable({});
                 }
+
             } catch (error) {
-                alert("Error occurred while fetching data 30713");
+                alert("Expenses Not Available");
             }
         }
 
@@ -1076,9 +1074,6 @@
                 fallbackDate = `${currentYear1}-08-10`;
             }
 
-            console.log("Compare Date:", compareDate);
-            console.log("Fallback Date:", fallbackDate);
-
             var d1 = new Date(dat2);
             var d2 = new Date(compareDate);
 
@@ -1480,7 +1475,7 @@
 <body style="background-color: antiquewhite;">
     <div id="home">
         <div id="com">
-            <img src="companyimage.png">
+            <img src="IMAGE43.png" alt="Company Logo" id="companylogo">
         </div>
     </div>
     <div id="cho">

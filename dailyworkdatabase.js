@@ -468,35 +468,20 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
     }
     else {
         const db1 = DBConstants.CustomersAmount;
-        const db3 = DBConstants.CustomersAmount_Id;
-        const w_id = ref(db, `${db1}/${db3}`);
-        const work_snapshot = await get(w_id);
+        const workid = wid;
+        const dataRefset = ref(db, `${db1}/${name}/${workid}`);
 
-        if (work_snapshot.exists()) {
-            var workid = parseInt(work_snapshot.val());
-            const dataRefset = ref(db, `${db1}/${name}/${workid}`);
-            try {
-                if (workid === parseInt(wid)) {
-                    await set(w_id, workid + 1);
-                }
 
-                await set(dataRefset, {
-                    Date: dte,
-                    Name: name,
-                    Villagename: villname,
-                    Amouont: Amount
-                });
-                setTimeout(() => {
-                    location.reload();
-                }, 10000);
-            } catch (error) {
-                console.log("Error updating Firebase data:", error);
-            }
-        }
-        else {
-            alert(" Work Id Error ");
-            datarebuild();
-        }
+        await set(dataRefset, {
+            Date: dte,
+            Name: name,
+            Villagename: villname,
+            Amount: Amount
+        });
+        setTimeout(() => {
+            location.reload();
+        }, 10000);
+
         // Save leftover amount as ExtraAmount
         const extraRef = ref(db, `${db2}/${name}/ExtraAmount`);
         await set(extraRef, totalded);
@@ -1356,7 +1341,7 @@ function generateCustomeramtTable(data, amt) {
             var rec = 0;
             if (activity.Name !== undefined && customerPhone !== "ExtraAmount" && activity.Name.toLowerCase().trim() == formname.trim()) {
                 // console.log(activity.Name);
-                collection1 += parseInt(activity.Amouont);
+                collection1 += parseInt(activity.Amount);
                 out1 += `<tr>
                         <td style="font-size:25px !important;">${customerPhone}</td>
                         <td style="font-size:25px !important;">${activity.Date}</td>
@@ -1364,7 +1349,7 @@ function generateCustomeramtTable(data, amt) {
                         ? activity.Name
                         : activity.Name + " Garu"}</td>
                         <td style="font-size:25px !important;">${activity.Villagename}</td>
-                        <td style="font-size:20px !important;">${moneyconvert(parseInt(activity.Amouont))}</td>
+                        <td style="font-size:20px !important;">${moneyconvert(parseInt(activity.Amount))}</td>
                     </tr>`;
 
 

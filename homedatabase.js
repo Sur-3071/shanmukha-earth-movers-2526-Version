@@ -39,6 +39,7 @@ document.getElementById('submit9').addEventListener('click', async function (e) 
         setTimeout(function () {
             var v7 = document.getElementById("done8");
             v7.style.display = "none";
+            window.location.reload();
         }, 3000);
     }
 
@@ -46,95 +47,74 @@ document.getElementById('submit9').addEventListener('click', async function (e) 
         if (name.length > 0) {
             if (disel.length > 0) {
                 const db1 = DBConstants.Homeexpenses;
-                const db2 = "Home";
 
-                const w_id = ref(db, `${db1}/${db2}`);
                 const dataRefset = ref(db, `${db1}/${wid}`);
-
-                const work_databasecount = ref(db, `${db1}/${db2}`); // Corrected variable naming
-                const work_snapshot = await get(work_databasecount);
-
-                // Ensure `work_snapshot.val()` is not null or undefined before using it
-                if (work_snapshot.exists()) {
-                    var workid = parseInt(work_snapshot.val());
-
-                    try {
-                        // Ensure `wid` is defined and properly compared
-                        if (workid === parseInt(wid)) {
-                            await set(w_id, workid + 1); // Updated logic for clarity
-                        }
-                        if (ptype === "Farming") {
-                            var far = disel;
+                
+                if (ptype === "Farming") {
+                    var far = disel;
+                    var jcb = 0;
+                    var home = 0;
+                    var sal = 0;
+                    var salexp = 0;
+                }
+                else {
+                    if (ptype === "Jcb") {
+                        var far = 0;
+                        var jcb = disel;
+                        var home = 0;
+                        var sal = 0;
+                        var salexp = 0;
+                    }
+                    else {
+                        if (ptype === "Home") {
+                            var far = 0;
                             var jcb = 0;
-                            var home = 0;
+                            var home = disel;
                             var sal = 0;
                             var salexp = 0;
                         }
                         else {
-                            if (ptype === "Jcb") {
+                            if (ptype === "Salary") {
                                 var far = 0;
-                                var jcb = disel;
+                                var jcb = 0;
                                 var home = 0;
-                                var sal = 0;
+                                var sal = disel;
                                 var salexp = 0;
                             }
                             else {
-                                if (ptype === "Home") {
-                                    var far = 0;
-                                    var jcb = 0;
-                                    var home = disel;
-                                    var sal = 0;
-                                    var salexp = 0;
-                                }
-                                else {
-                                    if (ptype === "Salary") {
-                                        var far = 0;
-                                        var jcb = 0;
-                                        var home = 0;
-                                        var sal = disel;
-                                        var salexp = 0;
-                                    }
-                                    else {
-                                        var far = 0;
-                                        var jcb = 0;
-                                        var home = 0;
-                                        var sal = 0;
-                                        var salexp = disel;
-                                    }
-                                }
+                                var far = 0;
+                                var jcb = 0;
+                                var home = 0;
+                                var sal = 0;
+                                var salexp = disel;
                             }
                         }
-                        if (ptype === "Salary" || ptype === "Salary Expenses") {
-                            disel = 0;
-                        }
-                        await set(dataRefset, {
-                            Date: dat,
-                            Name: name,
-                            Price: disel,
-                            Farming: far,
-                            Salary: sal,
-                            SalaryExp: salexp,
-                            Jcb: jcb,
-                            Home: home,
-                            Type: ptype,
-                            PersonType: pertype
-                        });
-                        hideProcessingPopup();
-
-                        document.getElementById("paymentSuccessPopup5").style.display = "flex";
-                        // document.getElementById("done").style.display = "block";
-                        setTimeout(() => {
-                            document.getElementById("paymentSuccessPopup5").style.display = "none";
-                        }, 3000); // Ensure this function is defined elsewhere
-                    } catch (error) {
-                        hideProcessingPopup();
-                        console.log("Error updating Firebase data:", error);
                     }
-                } else {
-                    hideProcessingPopup();
-                    alert("Snapshot does not exist or is invalid");
-                    datarebuild();
                 }
+                if (ptype === "Salary" || ptype === "Salary Expenses") {
+                    disel = 0;
+                }
+                await set(dataRefset, {
+                    Date: dat,
+                    Name: name,
+                    Price: disel,
+                    Farming: far,
+                    Salary: sal,
+                    SalaryExp: salexp,
+                    Jcb: jcb,
+                    Home: home,
+                    Type: ptype,
+                    PersonType: pertype
+                });
+                hideProcessingPopup();
+
+                document.getElementById("paymentSuccessPopup5").style.display = "flex";
+                // document.getElementById("done").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("paymentSuccessPopup5").style.display = "none";
+                }, 3000); // Ensure this function is defined elsewhere
+
+
             } else {
                 hideProcessingPopup();
                 alert("Amount is empty");
