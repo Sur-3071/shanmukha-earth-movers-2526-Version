@@ -870,6 +870,10 @@ document.addEventListener(
                     "vil6"
                 ).value = villageName;
 
+                document.getElementById(
+                    "cid6"
+                ).value = GetSystemIdforPayments("cid6");
+
                 // =============================
                 // TODAY DATE
                 // =============================
@@ -936,40 +940,40 @@ document.addEventListener(
                 // GET ID
                 // =============================
 
-                const db1 =
-                    DBConstants
-                        .CustomersAmount_Id;
+                // const db1 =
+                //     DBConstants
+                //         .CustomersAmount_Id;
 
-                const db3 =
-                    DBConstants
-                        .CustomersAmount;
+                // const db3 =
+                //     DBConstants
+                //         .CustomersAmount;
 
-                const dataRefget =
-                    ref(
-                        db2,
-                        `${db3}/${db1}`
-                    );
+                // const dataRefget =
+                //     ref(
+                //         db2,
+                //         `${db3}/${db1}`
+                //     );
 
-                const snapshot =
-                    await get(dataRefget);
+                // const snapshot =
+                //     await get(dataRefget);
 
-                if (
-                    snapshot.exists()
-                ) {
+                // if (
+                //     snapshot.exists()
+                // ) {
 
-                    const data =
-                        snapshot.val();
+                //     const data =
+                //         snapshot.val();
 
-                    document.getElementById(
-                        "cid6"
-                    ).value = data;
+                //     document.getElementById(
+                //         "cid6"
+                //     ).value = data;
 
-                } else {
+                // } else {
 
-                    alert(
-                        "No data available"
-                    );
-                }
+                //     alert(
+                //         "No data available"
+                //     );
+                // }
 
             } catch (error) {
 

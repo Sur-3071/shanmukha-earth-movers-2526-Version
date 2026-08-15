@@ -5662,6 +5662,12 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
             }
         }
 
+        function GetSystemIdforPayments(outputId) {
+            // alert("yes " + outputId);
+            const id = Date.now();
+           return id;
+        }
+
         function showPage(pageId) {
 
             const pages = ['list1', 'list2', 'list3', 'summaryDiv'];
