@@ -300,7 +300,7 @@ document.getElementById('submit3').addEventListener('click', async function (e) 
     document.getElementById("userForm3").reset();
     if (name.length > 0) {
         if (Amount.length > 0) {
-            getExtraAmount(Amount, name, wid, dte, villname);
+            getExtraAmount(Amount, name, wid, dte, villname, "Overall Payment");
         }
         else {
             alert("Please Enter Amount");
@@ -327,7 +327,7 @@ document.getElementById('submit7').addEventListener('click', async function (e) 
     document.getElementById("userForm6").reset();
     if (name.length > 0) {
         if (Amount.length > 0) {
-            getExtraAmount(Amount, name, wid, dte, villname);
+            getExtraAmount(Amount, name, wid, dte, villname, "Overall Payment");
         }
         else {
             alert("Please Enter Amount");
@@ -342,7 +342,7 @@ document.getElementById('submit7').addEventListener('click', async function (e) 
     }
 });
 
-async function getExtraAmount(Amount, name, wid, dte, villname) {
+export async function getExtraAmount(Amount, name, wid, dte, villname, paymentType) {
     const db1 = DBConstants.CustomersAmount;
     const db2 = "ExtraAmount";
     const db3 = name;
@@ -356,29 +356,36 @@ async function getExtraAmount(Amount, name, wid, dte, villname) {
     }
 
     const Extraamount = ref(db, `${db1}/${db3}/${db2}`);
+
     const amount_snapshot = await get(Extraamount);
 
     if (amount_snapshot.exists()) {
         // alert("iam coming 2");
         var extramoney = parseInt(amount_snapshot.val());
+        if (paymentType === "Individual Payment" && extramoney > 0) {
+            alert("Previous amount is found. Please use Overall Payment.Method");
+            return false;
+        }
+        if (paymentType === "Individual Payment") {
+            return true;
+        }
         var totalded = parseInt(extramoney) + parseInt(Amount);
         // console.log(totalded);
-        FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount)
+        FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount, paymentType)
     }
 
 }
-async function FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount) {
+async function FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount, paymentType) {
 
     try {
         // Access the database and retrieve data
         const db2 = getDatabase(app);
         const dataRefget = ref(db2, DBConstants.DailyWorkDB);
         const snapshot = await get(dataRefget);
-
         // Check if data exists
         if (snapshot.exists()) {
             const data = snapshot.val();
-            changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount);
+            changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount, paymentType);
 
         } else {
             alert("No Work data available for this customer");
@@ -389,11 +396,12 @@ async function FindAllDataofcustomer(name, totalded, wid, dte, villname, Amount)
         hideProcessingPopup();
     }
 }
-async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount) {
+async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villname, Amount, paymentType) {
     const db1 = DBConstants.DailyWorkDB;
     // alert("this is the customet payment");
     const db2 = DBConstants.CustomersAmount;
     // alert("Iam coming");
+    // console.log("Data for customer:", data);
     var k = 0;
     for (const workId in data) {
         if (data.hasOwnProperty(workId)) {
@@ -425,8 +433,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
                     if (activity.JcbTripPrice !== undefined) {
                         jcbtripprice = activity.JcbTripPrice;
                     }
-                    // alert(jcbtripprice + " " + activity.JcbTripPrice !== undefined);
-                    // Update full object, just changing Payment to "Paid"
+
                     const updatedData = {
                         Contract: activity.Contract,
                         Date: activity.Date,
@@ -471,12 +478,12 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
         const workid = wid;
         const dataRefset = ref(db, `${db1}/${name}/${workid}`);
 
-
         await set(dataRefset, {
             Date: dte,
             Name: name,
             Villagename: villname,
-            Amount: Amount
+            Amount: Amount,
+            PaymentType: paymentType
         });
         setTimeout(() => {
             location.reload();
@@ -715,7 +722,7 @@ function generateCustomerTable(data) {
     var rowCount = 0; // 🔥 added for page control
     const uniqueDates = new Set();
 
-
+    var headname = "";
     for (const customerPhone in data) {
 
         if (data.hasOwnProperty(customerPhone)) {
@@ -724,6 +731,14 @@ function generateCustomerTable(data) {
             var editid = customerPhone + "v";
 
             if (activity.Name.toLowerCase().trim() == formname.trim()) {
+
+                headname = activity.Name;
+                if (headname.toLowerCase() === "biyyam reddy") {
+                    headname = "Bhaskar Reddy Garu Rajamundry";
+                }
+                headname += " GARU ";
+                headname += "(" + activity.Villagename + ")";
+
 
                 // =====================================
                 // BUILD KEY MAP (INSIDE LOOP)
@@ -947,10 +962,12 @@ function generateCustomerTable(data) {
             <td id="col">${moneyconvert(overallamount)}</td>
             </tr>`;
     out += `</table>`;
+    let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
+${headname}</h1>`;
     hideProcessingPopup();
     document.getElementById("customeralldata2").innerHTML = "";
     document.getElementById("customeralldata").innerHTML =
-        `<div class="table-scroll-only">${out}</div>`;
+        `<div class="table-scroll-only">${heading + out}</div>`;
     document.getElementById("cusname").style.display = "block";
     document.getElementById("customeralldata").style.display = "block";
     document.getElementById("ledger").style.display = "block";
@@ -1010,6 +1027,8 @@ function generateCustomerTable1(data) {
                 if (headname.toLowerCase() === "biyyam reddy") {
                     headname = "Bhaskar Reddy Garu Rajamundry";
                 }
+                headname += " GARU ";
+                headname += "(" + activity.Villagename + ")";
 
                 let totalMins = 0;
                 if (activity.TotalTime !== "--") {
@@ -1262,7 +1281,7 @@ function generateCustomerTable1(data) {
         <td id="totalBill" style="font-size:25px !important;">--</td>
     </tr>`;
     let heading = `<h1 id="customerHeading" style="text-align:center;font-size:45px;font-weight:bold;color:green;">
-${headname} GARU</h1>`;
+${headname}</h1>`;
     hideProcessingPopup();
 
 
@@ -1326,10 +1345,9 @@ function generateCustomeramtTable(data, amt) {
     <th colspan="5" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">ఇచ్చిన మొత్తం డబ్బులు</h1></th>
     </tr>
         <tr>
-            <th id="csize">Customer Id</th>
+            <th id="csize">Payment Id</th>
             <th id="csize1" style="min-width: 150px;">Date</th>
-            <th id="csize1">Customer Name</th>
-            <th id="csize1">Village</th>
+            <th id="csize1">Paid Via</th>
             <th id="csize">Amount</th>
         </tr>`;
     var l = [];
@@ -1339,26 +1357,24 @@ function generateCustomeramtTable(data, amt) {
         if (data.hasOwnProperty(customerPhone)) {
             const activity = data[customerPhone];
             var rec = 0;
+
             if (activity.Name !== undefined && customerPhone !== "ExtraAmount" && activity.Name.toLowerCase().trim() == formname.trim()) {
                 // console.log(activity.Name);
                 collection1 += parseInt(activity.Amount);
                 out1 += `<tr>
-                        <td style="font-size:25px !important;">${customerPhone}</td>
-                        <td style="font-size:25px !important;">${activity.Date}</td>
-                        <td style="font-size:25px !important;">${activity.Name.toLowerCase().includes("garu")
-                        ? activity.Name
-                        : activity.Name + " Garu"}</td>
-                        <td style="font-size:25px !important;">${activity.Villagename}</td>
-                        <td style="font-size:20px !important;">${moneyconvert(parseInt(activity.Amount))}</td>
-                    </tr>`;
+                        <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${customerPhone}</td>
+                        <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${activity.Date}</td>
+                        <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${activity.PaymentType}</td>
 
+                        <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${moneyconvert(parseInt(activity.Amount))}</td>
+                    </tr>`;
 
             }
         }
     }
     // console.log(collection1);
     out1 += `<tr>
-            <td colspan="4" id="col" style="padding:8px; font-size:25px !important;">Total Amount Given</td>
+            <td colspan="3" id="col" style="padding:8px; font-size:25px !important;">Total Amount Given</td>
             <td id="am" style="padding:8px; font-size:25px !important;">${moneyconvert(collection1)}</td>
             </tr>`;
     out1 += `</table>`;

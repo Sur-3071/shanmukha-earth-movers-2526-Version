@@ -3732,14 +3732,20 @@
 
                 let status = "";
 
-                if (c.jcbRemaining === 0 && c.overallRemaining === 0 && Math.abs(c.Miscellaneous) <= 1000) {
+                if (
+                    c.jcbRemaining === 0 &&
+                    c.overallRemaining === 0 &&
+                    Math.abs(c.Miscellaneous) <= 1000
+                ) {
                     status = "🥇 Golden Customer";
-                } else {
-                    if (Math.abs(c.Miscellaneous) > 1000) {
+                } else if (Math.abs(c.Miscellaneous) > 1000) {
+                    if (c.jcbRemaining === 0 && c.overallRemaining === 0) {
                         status = "🟡 IP Customer";
                     } else {
-                        status = "🔴 Pending";
+                        status = "🟡🔴 Pending";
                     }
+                } else {
+                    status = "🟢🔴 Pending";
                 }
 
                 var contributionPercentage = 0;
@@ -3753,7 +3759,7 @@
     <td>${count}</td>
     <td style="white-space: nowrap;width: max-content;font-weight:bold;">${c.name}</td>
     <td style="white-space: nowrap;width: max-content;font-weight:bold;">${formatDate(c.Date)}</td>
-    <td style="white-space: nowrap;width: max-content;font-weight:bold;">${status === "🔴 Pending" ? c.daysPassed : "---"}</td>
+    <td style="white-space: nowrap;width: max-content;font-weight:bold;">${status === "🟢🔴 Pending" || status === "🟡🔴 Pending" ? c.daysPassed : "---"}</td>
 <td>
 <button
 id="UnPaid-${c.name}"
@@ -5665,7 +5671,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
         function GetSystemIdforPayments(outputId) {
             // alert("yes " + outputId);
             const id = Date.now();
-           return id;
+            return id;
         }
 
         function showPage(pageId) {
@@ -6701,6 +6707,8 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
     <script src="dailywork.js"></script>
     <script type="module" src="dailyworkretrive.js"></script>
     <script type="module" src="dailywork.js"></script>
+    <script type="module" src="dailyworkid_retrive.js"></script>
+
 </body>
 
 </html>
