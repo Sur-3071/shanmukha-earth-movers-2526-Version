@@ -364,6 +364,7 @@ export async function getExtraAmount(Amount, name, wid, dte, villname, paymentTy
         var extramoney = parseInt(amount_snapshot.val());
         if (paymentType === "Individual Payment" && extramoney > 0) {
             alert("Previous amount is found. Please use Overall Payment.Method");
+            hideProcessingPopup();
             return false;
         }
         if (paymentType === "Individual Payment") {
