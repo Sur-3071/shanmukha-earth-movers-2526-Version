@@ -147,9 +147,6 @@ document.addEventListener("click", async function (e) {
                 hideProcessingPopup();
                 return;
             }
-            setTimeout(() => {
-                location.reload();
-            }, 5000);
         }
         if (newStatus === "Paid") {
             const result = await getExtraAmount(
@@ -174,9 +171,6 @@ document.addEventListener("click", async function (e) {
                     Amount: WorkAmount,
                     PaymentType: "Individual Payment"
                 });
-                setTimeout(() => {
-                    location.reload();
-                }, 5000);
             }
         }
 
