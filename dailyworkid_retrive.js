@@ -45,13 +45,12 @@ async function deleteWork(customerName, workId) {
         const snapshot = await get(workRef);
 
         if (!snapshot.exists()) {
-            alert("Cannot delete: Transcation is Modified Using Overall Payment Method.");
-            return false;
+            alert("Cannot Change Status: This transaction was paid via Overall Payment."); return false;
         }
 
         await remove(workRef);
 
-        console.log("Work deleted successfully");
+
         return true;
 
     } catch (error) {
@@ -148,9 +147,12 @@ document.addEventListener("click", async function (e) {
                 hideProcessingPopup();
                 return;
             }
+            setTimeout(() => {
+                location.reload();
+            }, 5000);
         }
         if (newStatus === "Paid") {
-            const result = getExtraAmount(
+            const result = await getExtraAmount(
                 WorkAmount,
                 CustomerName,
                 customerId,
@@ -174,7 +176,7 @@ document.addEventListener("click", async function (e) {
                 });
                 setTimeout(() => {
                     location.reload();
-                }, 10000);
+                }, 5000);
             }
         }
 
