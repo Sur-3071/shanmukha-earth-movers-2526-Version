@@ -1339,73 +1339,211 @@ function moneyconvert(number) {
     return formatted;
 }
 
+// function generateCustomeramtTable(data, amt) {
+//     var collection1 = 0;
+//     let out1 = `<table border="1px">
+//     <tr>
+//     <th colspan="5" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">ఇచ్చిన మొత్తం డబ్బులు</h1></th>
+//     </tr>
+//         <tr>
+//             <th id="csize">Payment Id</th>
+//             <th id="csize1" style="min-width: 150px;">Date</th>
+//             <th id="csize1">Paid Via</th>
+//             <th id="csize">Amount</th>
+//         </tr>`;
+//     var l = [];
+//     // alert("jii");
+//     var formname = document.getElementById("name3").value.toLowerCase();
+//     for (const customerPhone in data) {
+//         if (data.hasOwnProperty(customerPhone)) {
+//             const activity = data[customerPhone];
+//             var rec = 0;
+
+//             if (activity.Name !== undefined && customerPhone !== "ExtraAmount" && activity.Name.toLowerCase().trim() == formname.trim()) {
+//                 // console.log(activity.Name);
+//                 collection1 += parseInt(activity.Amount);
+//                 out1 += `<tr>
+//                         <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${customerPhone}</td>
+//                         <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${activity.Date}</td>
+//                         <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${activity.PaymentType}</td>
+
+//                         <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${moneyconvert(parseInt(activity.Amount))}</td>
+//                     </tr>`;
+
+//             }
+//         }
+//     }
+//     // console.log(collection1);
+//     out1 += `<tr>
+//             <td colspan="3" id="col" style="padding:8px; font-size:25px !important;">Total Amount Given</td>
+//             <td id="am" style="padding:8px; font-size:25px !important;">${moneyconvert(collection1)}</td>
+//             </tr>`;
+//     out1 += `</table>`;
+//     document.getElementById("customerallamt2").innerHTML = "";
+//     document.getElementById("customerallamt").innerHTML = out1;
+//     document.getElementById("customerallamt").style.display = "block";
+//     document.getElementById("printBtn").style.display = "block";
+//     // document.getElementsByClassName("heading")[2].style.display = "block";
+
+
+//     let led = `<table border="1px">
+//     <tr>
+//     <th colspan="3" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">ఇవ్వాల్సినా  డబ్బులు</h1></th>
+//     </tr>
+//      <tr>
+//         <th id="bal1">Total Work</th>
+//         <th id="bal1">Collected Money</th>
+//         <th id="bal1">Balanace</th>
+
+//     </tr>`;
+//     led += `<tr>
+//     <td class="lsize" style="font-size:40px; font-weight: bold;">${moneyconvert(amt)}</td>
+//     <td style="font-size:40px; font-weight: bold;">${moneyconvert(collection1)}</td>
+//     <td style="font-size:40px; font-weight: bold;">${moneyconvert(amt - collection1)}</td>
+//     </tr>`;
+//     led += `</table>`;
+//     document.getElementById("ledger2").innerHTML = "";
+//     document.getElementById("ledger").innerHTML = led;
+// }
+
 function generateCustomeramtTable(data, amt) {
     var collection1 = 0;
-    let out1 = `<table border="1px">
-    <tr>
-    <th colspan="5" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">ఇచ్చిన మొత్తం డబ్బులు</h1></th>
+
+    let out1 = `<table border="1px"> 
+    <tr> 
+        <th colspan="5" style="background-color:rgb(95, 237, 228);">
+            <h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">
+                ఇచ్చిన మొత్తం డబ్బులు
+            </h1>
+        </th> 
     </tr>
-        <tr>
-            <th id="csize">Payment Id</th>
-            <th id="csize1" style="min-width: 150px;">Date</th>
-            <th id="csize1">Paid Via</th>
-            <th id="csize">Amount</th>
-        </tr>`;
-    var l = [];
-    // alert("jii");
+    <tr> 
+        <th id="csize">Payment Id</th> 
+        <th id="csize1" style="min-width: 150px;">Date</th> 
+        <th id="csize1">Paid Via</th> 
+        <th id="csize">Amount</th> 
+    </tr>`;
+
     var formname = document.getElementById("name3").value.toLowerCase();
+
+    // Store matching payments
+    let payments = [];
+
     for (const customerPhone in data) {
         if (data.hasOwnProperty(customerPhone)) {
+
             const activity = data[customerPhone];
-            var rec = 0;
 
-            if (activity.Name !== undefined && customerPhone !== "ExtraAmount" && activity.Name.toLowerCase().trim() == formname.trim()) {
-                // console.log(activity.Name);
-                collection1 += parseInt(activity.Amount);
-                out1 += `<tr>
-                        <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${customerPhone}</td>
-                        <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${activity.Date}</td>
-                        <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${activity.PaymentType}</td>
+            if (
+                activity.Name !== undefined &&
+                customerPhone !== "ExtraAmount" &&
+                activity.Name.toLowerCase().trim() == formname.trim()
+            ) {
 
-                        <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${moneyconvert(parseInt(activity.Amount))}</td>
-                    </tr>`;
-
+                payments.push({
+                    paymentId: customerPhone,
+                    date: activity.Date,
+                    paymentType: activity.PaymentType,
+                    amount: parseInt(activity.Amount)
+                });
             }
         }
     }
-    // console.log(collection1);
-    out1 += `<tr>
-            <td colspan="3" id="col" style="padding:8px; font-size:25px !important;">Total Amount Given</td>
-            <td id="am" style="padding:8px; font-size:25px !important;">${moneyconvert(collection1)}</td>
-            </tr>`;
+
+    // Reverse the payment order
+    payments.reverse();
+
+    // Generate table rows
+    for (const payment of payments) {
+
+        collection1 += payment.amount;
+
+        // Convert YYYY-MM-DD to DD-MM-YYYY
+        let formattedDate = payment.date;
+
+        if (payment.date) {
+            const parts = payment.date.split("-");
+
+            if (parts.length === 3) {
+                formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+            }
+        }
+
+        out1 += `<tr> 
+            <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">
+                ${payment.paymentId}
+            </td> 
+
+            <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">
+                ${formattedDate}
+            </td> 
+
+            <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">
+                ${payment.paymentType}
+            </td> 
+
+            <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">
+                ${moneyconvert(payment.amount)}
+            </td> 
+        </tr>`;
+    }
+
+    // Total Amount
+    out1 += `<tr> 
+        <td colspan="3" id="col" style="padding:8px; font-size:25px !important;">
+            Total Amount Given
+        </td> 
+
+        <td id="am" style="padding:8px; font-size:25px !important;">
+            ${moneyconvert(collection1)}
+        </td> 
+    </tr>`;
+
     out1 += `</table>`;
+
+    // Display payment table
     document.getElementById("customerallamt2").innerHTML = "";
     document.getElementById("customerallamt").innerHTML = out1;
     document.getElementById("customerallamt").style.display = "block";
     document.getElementById("printBtn").style.display = "block";
-    // document.getElementsByClassName("heading")[2].style.display = "block";
 
 
-    let led = `<table border="1px">
-    <tr>
-    <th colspan="3" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">ఇవ్వాల్సినా  డబ్బులు</h1></th>
+    // =========================
+    // LEDGER TABLE
+    // =========================
+
+    let led = `<table border="1px"> 
+    <tr> 
+        <th colspan="3" style="background-color:rgb(95, 237, 228);">
+            <h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">
+                ఇవ్వాల్సినా డబ్బులు
+            </h1>
+        </th> 
     </tr>
-     <tr>
-        <th id="bal1">Total Work</th>
-        <th id="bal1">Collected Money</th>
-        <th id="bal1">Balanace</th>
 
+    <tr> 
+        <th id="bal1">Total Work</th> 
+        <th id="bal1">Collected Money</th> 
+        <th id="bal1">Balance</th> 
     </tr>`;
-    led += `<tr>
-    <td class="lsize" style="font-size:40px; font-weight: bold;">${moneyconvert(amt)}</td>
-    <td style="font-size:40px; font-weight: bold;">${moneyconvert(collection1)}</td>
-    <td style="font-size:40px; font-weight: bold;">${moneyconvert(amt - collection1)}</td>
+
+    led += `<tr> 
+        <td class="lsize" style="font-size:40px; font-weight: bold;">
+            ${moneyconvert(amt)}
+        </td> 
+
+        <td style="font-size:40px; font-weight: bold;">
+            ${moneyconvert(collection1)}
+        </td> 
+
+        <td style="font-size:40px; font-weight: bold;">
+            ${moneyconvert(amt - collection1)}
+        </td> 
     </tr>`;
+
     led += `</table>`;
+
+    // Display ledger
     document.getElementById("ledger2").innerHTML = "";
     document.getElementById("ledger").innerHTML = led;
-    // document.getElementsByClassName("heading")[3].style.display = "block";
-    // document.getElementsByClassName("heading")[4].style.display = "block";
-
-
 }
