@@ -308,7 +308,7 @@ function generateTable(data) {
             const monthHeader = document.createElement("tr");
             monthHeader.innerHTML = `
                 <td colspan="4" style="background:#1976d2; color:white; font-weight:bold; text-align:center; font-size:18px; padding:10px;">
-                    ${month} (1st - 31st Cycle)
+                    ${month} (6th - 5th Cycle)
                 </td>
             `;
             table.appendChild(monthHeader);
@@ -419,7 +419,7 @@ function generateTable(data) {
             const monthHeader = document.createElement("tr");
             monthHeader.innerHTML = `
                 <td colspan="2" style="background:#43a047; color:white; font-weight:bold; text-align:center; font-size:18px; padding:10px;">
-                    ${month} (1st - 31st Cycle)
+                    ${month} (6th - 5th Cycle)
                 </td>
             `;
             table.appendChild(monthHeader);
