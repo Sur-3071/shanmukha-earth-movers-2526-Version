@@ -1846,12 +1846,6 @@
                                     <!-- LOADING -->
 
                                     <div id="loading7" style="display:none;">
-
-                                        <!-- <input type="text" id="jcbtrprate7" name="jcbtrprate"
-                                            placeholder="JCB Trip Price" onkeyup="tripprice7()" required>
-
-                                        <input type="text" id="trprate7" name="trprate" placeholder="Trip Price"
-                                            required> -->
                                         <select id="jcbtrprate7" name="jcbtrprate" onchange="tripprice7()" required>
                                             <option value="" selected disabled>Select JCB Trip Price</option>
                                         </select>
@@ -6137,19 +6131,24 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
         }
 
         let originalRate = null;
+        let oldMiscellaneous = 0;
 
         function adjustRate() {
             const misInput = document.getElementById("mis7");
             const rateInput = document.getElementById("rate7");
 
-            // Store the original rate only once
+            const currentMisc = parseInt(misInput.value, 10) || 0;
+
+            // First time editing this record
             if (originalRate === null) {
-                originalRate = parseInt(rateInput.value, 10) || 0;
+                const currentRate = parseInt(rateInput.value, 10) || 0;
+
+                // Remove the old miscellaneous amount
+                originalRate = currentRate - oldMiscellaneous;
             }
 
-            const misValue = parseInt(misInput.value, 10) || 0;
-
-            rateInput.value = originalRate + misValue;
+            // Always calculate from the original/base rate
+            rateInput.value = originalRate + currentMisc;
         }
 
         function formatDate(dateString) {

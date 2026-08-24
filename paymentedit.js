@@ -81,6 +81,7 @@ document.addEventListener("click", async function (e1) {
         }
         // alert(worktype);
         // var worktype="Contarct";
+        oldMiscellaneous=Miscellaneous;
         document.getElementById("userForm").reset();
 
         document.getElementById("dat7").value = Date;
@@ -329,6 +330,7 @@ function editData17() {
 document.getElementById('submit8').addEventListener('click', async function (e) {
     e.preventDefault();
     showProcessingPopup();
+    originalRate = null;
 
     const dat = document.getElementById("dat7").value;
     const wid = document.getElementById("wid7").value;
