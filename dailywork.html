@@ -6311,9 +6311,9 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         function addWorkDetails(customer, item) {
 
-            customer.adjustedAmount += Math.abs(
-                Number(item.Miscellaneous || 0)
-            );
+            customer.adjustedAmount +=
+                Number(item.Miscellaneous || 0
+                );
 
             if (item.Date) {
                 customer.workDates.push(item.Date);
@@ -6459,7 +6459,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
             <div class="info-box">
                 <label>Adjusted Amount</label>
-                <h3 class="adjusted">
+                <h3 class="adjusted ${customer.adjustedAmount < 0 ? 'negative' : 'positive'}">
                     ${formatAmount(customer.adjustedAmount)}
                 </h3>
             </div>

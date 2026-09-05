@@ -199,6 +199,14 @@ body {
     font-weight: bold;
 }
 
+.adjusted.negative {
+    color: red;
+}
+
+.adjusted.positive {
+    color: green;
+}
+
 .days {
     color: #3949AB;
     font-weight: bold;
