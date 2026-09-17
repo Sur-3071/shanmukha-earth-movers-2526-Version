@@ -94,7 +94,7 @@ document.addEventListener("click", async function (e1) {
 
         document.getElementById("hrsrate7").value = hrsamt;
 
-        document.getElementById("dis7").value = Disel;
+        document.getElementById("dis7").value = Disel==0?"":Disel;
 
         document.getElementById("con7").value = Contract;
         // alert(desc);
@@ -121,9 +121,9 @@ document.addEventListener("click", async function (e1) {
 
         document.getElementById("pay7").value = payment;
 
-        document.getElementById("mis7").value = Miscellaneous;
+        document.getElementById("mis7").value = Miscellaneous==0?"":Miscellaneous;
 
-        document.getElementById("beta7").value = beta;
+        document.getElementById("beta7").value = beta==0?"":beta;
 
         document.getElementById("trprate17").value = hourstrpamt;
 
@@ -252,7 +252,7 @@ function editData7() {
     });
 
     document.getElementById("noncompanytractors7").value =
-        nonpaytrips;
+        nonpaytrips == 0 ? "" : nonpaytrips;
 }
 
 
@@ -322,7 +322,7 @@ function editData17() {
 
         document.getElementById(
             "hoursnoncompanytractors7"
-        ).value = nonpaytrips;
+        ).value = nonpaytrips == 0 ? "" : nonpaytrips;
     });
 }
 
@@ -336,7 +336,7 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
     const wid = document.getElementById("wid7").value;
     const name = document.getElementById("name7").value;
     const villname = document.getElementById("vil7").value;
-    const disel = document.getElementById("dis7").value;
+    const disel = document.getElementById("dis7").value || 0;
 
     var con = document.getElementById("con7").value;
     var desc = document.getElementById("desc7").value;
@@ -356,19 +356,19 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
     var output = document.getElementById("output7").value;
     var pay = document.getElementById("pay7").value;
 
-    var mis = document.getElementById("mis7").value;
+    var mis = document.getElementById("mis7").value || 0;
 
-    const beta = document.getElementById("beta7").value;
+    const beta = document.getElementById("beta7").value || 0;
 
     var hourstrpamt = document.getElementById("trprate17").value;
     var hoursdrivers = document.getElementById("output17").value;
     var hourstrips = document.getElementById("trips17").value;
 
     var hoursnoncompanytractors =
-        document.getElementById("hoursnoncompanytractors7").value;
+        document.getElementById("hoursnoncompanytractors7").value || 0;
 
     var noncompanytractors =
-        document.getElementById("noncompanytractors7").value;
+        document.getElementById("noncompanytractors7").value || 0;
 
     // NEW FIELD
     const workType = document.getElementById("worktype7").value;

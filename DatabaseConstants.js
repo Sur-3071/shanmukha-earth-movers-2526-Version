@@ -17,7 +17,8 @@ const DBConstants = {
     MAINTENANCE: 400,
     JCB_EMI: 1800,
     HOME: 665,
-    OPERATOR: 835
+    OPERATOR: 835,
+    TokenExpiryTime: 2500
 
 };
 

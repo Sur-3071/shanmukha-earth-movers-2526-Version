@@ -1754,6 +1754,8 @@
                                         required>
                                     <input type="text" id="mis7" name="mis" placeholder="Miscellaneous Amount"
                                         onchange="adjustRate()" required>
+                                    <input type="text" id="beta7" name="beta" placeholder="Other Expenses"
+                                    onchange="timecal7()">
                                     <textarea id="desc7" name="desc" placeholder="Description" rows="20" cols="30"
                                         required>
 </textarea>
@@ -1778,9 +1780,6 @@
                                         </option>
 
                                     </select>
-
-                                    <input type="text" id="beta7" name="beta" placeholder="Driver Beta"
-                                        onchange="timecal7()">
 
 
 
@@ -2555,7 +2554,7 @@
             <input type="text" id="vill" name="vill" placeholder="Village Name" required readonly>
             <input type="tel" id="dis" name="dis" placeholder="Enter Disel Amount" required>
             <input type="text" id="wid" name="wid" placeholder="Work Id" required readonly>
-            <input type="text" id="beta" name="beta" placeholder="Driver Beta" onchange="timecal()">
+            <input type="text" id="beta" name="beta" placeholder="Other Expenses" onchange="timecal()">
             <textarea id="desc" name="desc" placeholder="Description" required>
 </textarea>
             <select id="worktype" required onchange="addflow()">
@@ -3154,7 +3153,7 @@
                 border-radius: 6px;
                 box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
             ">
-                    Data Editing
+                    Data Editing1
                 </h1>
 
                 <span class="close">&times;</span>
@@ -3173,7 +3172,7 @@
                             <option>Loading</option>
                             <option>Contract</option>
                         </select>
-                        <input type="text" id="beta" name="beta" placeholder="Driver Beta" onchange="timecal()">
+                        <input type="text" id="beta" name="beta" placeholder="Other Expenses" onchange="timecal()">
                         <div id="hours" style="display: none;">
                             <input type="text" id="hrsrate" name="hrsrate" placeholder="Hours Price" onkeyup="timecal()"
                                 required>
@@ -4439,7 +4438,7 @@ id="UnPaid-${c.name}"
                     <b>Total Time :</b>
                     ${activity.TotalTime || "--"}<br>
 
-                    <b>Beta :</b>
+                    <b>Other Expenses :</b>
                     ${activity.Beta || 0}
                 `;
                     }
@@ -4524,7 +4523,7 @@ id="UnPaid-${c.name}"
                     <b>Drivers :</b><br>
                     ${LDrivers}<br>
 
-                    <b>Beta :</b>
+                    <b>Other Expenses :</b>
                     ${activity.Beta || 0}
                 `;
                     }
@@ -4551,7 +4550,7 @@ id="UnPaid-${c.name}"
                     <b>Description :</b>
                     ${activity.Description || "--"}<br>
 
-                    <b>Beta :</b>
+                    <b>Other Expenses :</b>
                     ${activity.Beta || 0}
                 `;
                     }
@@ -5242,7 +5241,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
 
     <script>
-
+        
 
         function moneyconvert(number) {
             let formatted = number.toLocaleString('en-IN');
@@ -5973,6 +5972,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         /* Unlock */
         function unlockWebsite() {
+            
             const pin = pinInput.value;
 
             if (pin.length !== 6) {

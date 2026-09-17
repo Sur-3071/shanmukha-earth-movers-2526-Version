@@ -142,7 +142,7 @@ function generateTable(data) {
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
             <th id="csize">HoursPrice</th>
-            <th id="csize">Driver Beta</th>
+            <th id="csize">Other Expenses</th>
             <th id="csize">Adjust Amount</th>
             <th id="csize">Payment Status</th>
             <th id="csize">Jcb Price</th>
@@ -172,69 +172,6 @@ function generateTable(data) {
             var overallrecovery = activity.Payment === "Paid" ? 0 : activity.OverallPrice;
             var balanaceamount = 0;
             var customerName = activity.Name;
-            // var HoursDrivers = 0;
-            // if (activity.HoursDrivers !== undefined && activity.HoursDrivers !== "undefined" && activity.HoursDrivers !== null) {
-            //     let str = activity.HoursDrivers || "";
-            //     // alert(str);
-            //     let count = 0;
-
-            //     for (let i = 0; i < str.length; i++) {
-            //         if (str[i] === "=") {
-            //             count++;
-            //         }
-            //     }
-
-            //     if (count > 1) {
-
-            //         let arr = str.split(" ").filter(Boolean);
-            //         // console.log(arr);
-            //         let result = "";
-
-            //         for (let i = 0; i < arr.length; i += 3) {
-            //             if (arr[i] && arr[i + 2]) {       // <— check before adding
-            //                 result += arr[i] + " = " + arr[i + 2] + "\n";
-            //             }
-            //         }
-            //         // console.log(result);
-
-            //         result = result.replace(/\n/g, "<br>");
-            //         HoursDrivers = result;
-
-            //     }
-            //     else {
-            //         HoursDrivers = str;
-            //     }
-
-            // }
-            // // console.log(activity.Drivers);
-            // var LDrivers = 0;
-            // if (activity.Drivers !== undefined) {
-            //     let str = activity.Drivers;
-            //     let count1 = 0;
-
-            //     for (let i = 0; i < str.length; i++) {
-            //         if (str[i] === "=") {
-            //             count1++;
-            //         }
-            //     }
-            //     if (count1 > 1) {
-            //         // alert("yes more then two drivers");
-            //         let arr = str.split(" ").filter(Boolean);
-            //         let result = "";
-
-            //         for (let i = 0; i < arr.length; i += 3) {
-            //             if (arr[i] && arr[i + 2]) {       // <— check before adding
-            //                 result += arr[i] + " = " + arr[i + 2] + "\n";
-            //             }
-            //         }
-
-            //         result = result.replace(/\n/g, "<br>");
-            //         LDrivers = result;
-            //     }
-            //     else {
-            //         LDrivers = str;
-            //     }
-            // }
 
             //================ DESCRIPTION MAPPING =================
 
@@ -866,7 +803,7 @@ function SearchTable(data) {
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
             <th id="csize">HoursPrice</th>
-            <th id="csize">Driver Beta</th>
+            <th id="csize">Other Expenses</th>
             <th id="csize">Adjust Amount</th>
             <th id="csize">Payment Status</th>
             <th id="csize">Jcb Price</th>
@@ -1264,7 +1201,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
             <th id="csize">Starting Time</th>
             <th id="csize">Ending Time</th>
             <th id="csize">Total Time</th>
-            <th id="csize">Driver Beta</th>
+            <th id="csize">Other Expenses</th>
             <th id="csize">Adjust Amount</th>
             <th id="csize">Price</th>
             <th id="csize">Recovery</th>
