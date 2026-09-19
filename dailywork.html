@@ -1754,8 +1754,29 @@
                                         required>
                                     <input type="text" id="mis7" name="mis" placeholder="Miscellaneous Amount"
                                         onchange="adjustRate()" required>
-                                    <input type="text" id="beta7" name="beta" placeholder="Other Expenses"
-                                    onchange="timecal7()">
+                                        <div class="expense-section">
+
+                                            <div class="expense-header">
+                                                <span>Other Expenses</span>
+
+                                                <button type="button" onclick="addExpense7()">
+                                                    + New Expense
+                                                </button>
+                                            </div>
+
+                                            <div id="expenseList7"></div>
+
+                                        </div>
+
+                                        <input
+                                            type="text"
+                                            id="beta7"
+                                            name="beta"
+                                            placeholder="Other Expenses"
+                                            onchange="timecal7()"
+                                            readonly
+                                        >
+
                                     <textarea id="desc7" name="desc" placeholder="Description" rows="20" cols="30"
                                         required>
 </textarea>
@@ -1977,6 +1998,123 @@
 
             </div>
             <script>
+
+                function addExpense7() {
+                    createExpenseRow7();
+                }
+
+
+                function createExpenseRow7(description = "", amount = "") {
+
+                    const expenseList = document.getElementById("expenseList7");
+
+                    const row = document.createElement("div");
+
+                    row.className = "expense-row";
+
+                    row.innerHTML = `
+        <input
+            type="text"
+            class="expense-description7"
+            placeholder="Description"
+            value="${description}"
+        >
+
+        <input
+            type="number"
+            class="expense-amount7"
+            placeholder="Amount"
+            min="0"
+            step="0.01"
+            value="${amount}"
+        >
+
+        <button
+            type="button"
+            class="delete-expense"
+            onclick="removeExpense7(this)"
+        >
+            ✕
+        </button>
+    `;
+
+                    const amountInput =
+                        row.querySelector(".expense-amount7");
+
+                    amountInput.addEventListener(
+                        "input",
+                        updateExpenseTotal7
+                    );
+
+                    expenseList.appendChild(row);
+                }
+
+
+                function removeExpense7(button) {
+
+                    button.closest(".expense-row").remove();
+
+                    updateExpenseTotal7();
+                }
+
+
+                function updateExpenseTotal7() {
+
+                    const amountInputs =
+                        document.querySelectorAll(
+                            "#expenseList7 .expense-amount7"
+                        );
+
+                    let total = 0;
+
+                    amountInputs.forEach(input => {
+
+                        const amount = parseFloat(input.value);
+
+                        if (!isNaN(amount)) {
+                            total += amount;
+                        }
+                    });
+
+                    total =
+                        Math.round((total + Number.EPSILON) * 100) / 100;
+
+                    document.getElementById("beta7").value =
+                        total.toFixed(2);
+
+                    timecal7();
+                }
+                function removeExpense7(button) {
+
+                    button.parentElement.remove();
+
+                    updateExpenseTotal7();
+                }
+
+                function updateExpenseTotal7() {
+
+                    const amounts =
+                        document.querySelectorAll(".expense-amount7");
+
+                    let total = 0;
+
+                    amounts.forEach(input => {
+
+                        const amount = parseFloat(input.value);
+
+                        if (!isNaN(amount)) {
+                            total += amount;
+                        }
+                    });
+
+                    // Avoid floating-point issues
+                    total = Math.round((total + Number.EPSILON) * 100) / 100;
+
+                    document.getElementById("beta7").value =
+                        total.toFixed(2);
+
+                    timecal7();
+                }
 
                 setTimeout(() => {
 
@@ -2554,6 +2692,16 @@
             <input type="text" id="vill" name="vill" placeholder="Village Name" required readonly>
             <input type="tel" id="dis" name="dis" placeholder="Enter Disel Amount" required>
             <input type="text" id="wid" name="wid" placeholder="Work Id" required readonly>
+            <div class="expense-section">
+
+                <div class="expense-header">
+                    <span>Other Expenses</span>
+                    <button type="button" onclick="addExpense()">+ New Expense</button>
+                </div>
+
+                <div id="expenseList"></div>
+
+            </div>
             <input type="text" id="beta" name="beta" placeholder="Other Expenses" onchange="timecal()">
             <textarea id="desc" name="desc" placeholder="Description" required>
 </textarea>
@@ -3518,6 +3666,73 @@
     <script src="proxyurl.js"></script>
     <script>
 
+        function addExpense() {
+
+            const expenseList = document.getElementById("expenseList");
+
+            const row = document.createElement("div");
+            row.className = "expense-row";
+
+            row.innerHTML = `
+        <input
+            type="text"
+            class="expense-description"
+            placeholder="Description"
+        >
+
+        <input
+            type="number"
+            class="expense-amount"
+            placeholder="Amount"
+            min="0"
+            step="0.01"
+            oninput="updateExpenseTotal()"
+        >
+
+        <button
+            type="button"
+            class="delete-expense"
+            onclick="removeExpense(this)"
+        >
+            ✕
+        </button>
+    `;
+
+            expenseList.appendChild(row);
+
+            updateExpenseTotal();
+        }
+
+
+        function removeExpense(button) {
+
+            button.parentElement.remove();
+
+            updateExpenseTotal();
+        }
+
+
+        function updateExpenseTotal() {
+
+            const amounts = document.querySelectorAll(".expense-amount");
+
+            let total = 0;
+
+            amounts.forEach(input => {
+
+                const amount = parseFloat(input.value);
+
+                if (!isNaN(amount)) {
+                    total += amount;
+                }
+
+            });
+
+            document.getElementById("beta").value = total.toFixed(2);
+
+            // Call your existing function
+            timecal();
+        }
 
         function showProcessingPopup() {
             // alert("its getting");
@@ -5241,7 +5456,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
 
     <script>
-        
+
 
         function moneyconvert(number) {
             let formatted = number.toLocaleString('en-IN');
@@ -5972,7 +6187,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         /* Unlock */
         function unlockWebsite() {
-            
+
             const pin = pinInput.value;
 
             if (pin.length !== 6) {

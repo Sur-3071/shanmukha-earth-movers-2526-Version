@@ -83,6 +83,8 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
         hrsamt = "--";
     }
 
+    const expenses = getAllExpenses();
+
     if (dat.length > 0) {
         if (name.length > 0) {
             if (villname.length > 0) {
@@ -108,6 +110,7 @@ document.getElementById('submit4').addEventListener('click', async function (e) 
                         PhoneNumber: "**",
                         Shift: "**",
                         Beta: beta,
+                        OtherExpenses: expenses,
                         HoursTrips: hourstrips,
                         HoursTripsAmount: hourstrpamt,
                         HoursDrivers: hoursdrivers,

@@ -52,6 +52,7 @@ document.addEventListener("click", async function (e1) {
             var desc = data.Description
         }
 
+
         // var Shift = data.Shift;
         var output = data.Drivers;
         var Starting = data.Starting;
@@ -63,6 +64,9 @@ document.addEventListener("click", async function (e1) {
         var Villagename = data.Villagename;
         // alert(data.Beta==="undefined"?0:data.Beta);
         var beta = data.Beta === "undefined" || data.Beta === undefined ? 0 : data.Beta;
+        // console.log("Saved expenses:", data.OtherExpenses);OtherExpenses
+
+        loadExpenses7(data.OtherExpenses);
         var hourstrpamt = data.HoursTripsAmount === "undefined" || data.HoursTripsAmount === undefined ? 0 : data.HoursTripsAmount;
         var hoursdrivers = data.HoursDrivers === "undefined" || data.HoursDrivers === undefined ? 0 : data.HoursDrivers;
         var hourstrips = data.HoursTrips === "undefined" || data.HoursTrips === undefined ? 0 : data.HoursTrips;
@@ -81,7 +85,7 @@ document.addEventListener("click", async function (e1) {
         }
         // alert(worktype);
         // var worktype="Contarct";
-        oldMiscellaneous=Miscellaneous;
+        oldMiscellaneous = Miscellaneous;
         document.getElementById("userForm").reset();
 
         document.getElementById("dat7").value = Date;
@@ -94,7 +98,7 @@ document.addEventListener("click", async function (e1) {
 
         document.getElementById("hrsrate7").value = hrsamt;
 
-        document.getElementById("dis7").value = Disel==0?"":Disel;
+        document.getElementById("dis7").value = Disel == 0 ? "" : Disel;
 
         document.getElementById("con7").value = Contract;
         // alert(desc);
@@ -121,9 +125,9 @@ document.addEventListener("click", async function (e1) {
 
         document.getElementById("pay7").value = payment;
 
-        document.getElementById("mis7").value = Miscellaneous==0?"":Miscellaneous;
+        document.getElementById("mis7").value = Miscellaneous == 0 ? "" : Miscellaneous;
 
-        document.getElementById("beta7").value = beta==0?"":beta;
+        document.getElementById("beta7").value = beta == 0 ? "" : beta;
 
         document.getElementById("trprate17").value = hourstrpamt;
 
@@ -255,7 +259,49 @@ function editData7() {
         nonpaytrips == 0 ? "" : nonpaytrips;
 }
 
+function loadExpenses7(expenseString) {
 
+    const expenseList =
+        document.getElementById("expenseList7");
+
+    // Clear existing rows
+    expenseList.innerHTML = "";
+
+    if (!expenseString) {
+
+        document.getElementById("beta7").value = "0.00";
+
+        return;
+    }
+
+    let expenses = [];
+
+    try {
+
+        expenses = JSON.parse(expenseString);
+
+    } catch (error) {
+
+        console.error("Invalid expense data:", error);
+
+        document.getElementById("beta7").value = "0.00";
+
+        return;
+    }
+
+    // Create one input row for every saved expense
+    expenses.forEach(expense => {
+
+        createExpenseRow7(
+            expense.description,
+            expense.amount
+        );
+
+    });
+
+    // Calculate total
+    updateExpenseTotal7();
+}
 
 
 function editData17() {
@@ -375,6 +421,10 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
 
     let overallamount = 0;
 
+    const expenses = getAllExpenses7();
+
+    const expenseString = JSON.stringify(expenses);
+
     // Calculate amount based on Work Type
     switch (workType) {
 
@@ -388,7 +438,7 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
 
                 overallamount =
                     ((jcb + tripAmt) * tripCount) +
-                    b +parseInt(mis) -
+                    b + parseInt(mis) -
                     (tripAmt * nonCompany);
             }
             break;
@@ -398,7 +448,7 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                 const c = parseInt(con) || 0;
                 const b = parseInt(beta) || 0;
 
-                overallamount = c + b+parseInt(mis);
+                overallamount = c + b + parseInt(mis);
             }
             break;
 
@@ -502,7 +552,7 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
                         Villagename: villname,
                         PhoneNumber: "**",
                         Shift: "**",
-
+                        OtherExpenses: expenseString,
                         Beta: beta,
 
                         HoursTrips: hourstrips,
@@ -643,4 +693,39 @@ document.getElementById('submit8').addEventListener('click', async function (e) 
     }
 
 });
+
+function getAllExpenses7() {
+
+    const rows = document.querySelectorAll(
+        "#expenseList7 .expense-row"
+    );
+
+    const expenses = [];
+
+    rows.forEach(row => {
+
+        const descriptionInput =
+            row.querySelector(".expense-description7");
+
+        const amountInput =
+            row.querySelector(".expense-amount7");
+
+        const description =
+            descriptionInput.value.trim();
+
+        const amount =
+            parseFloat(amountInput.value);
+
+        // Only store valid entries
+        if (description !== "" && !isNaN(amount)) {
+
+            expenses.push({
+                description: description,
+                amount: amount
+            });
+        }
+    });
+
+    return expenses;
+}
 

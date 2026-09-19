@@ -45,6 +45,11 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
     var noncompanytractorstrips = document.getElementById("noncompanytractors").value || "0";
     var hoursnoncompanytractorstrips = document.getElementById("hoursnoncompanytractors").value || "0";
     // alert(beta,hourstrpamt,hoursdrivers,hourstrips);
+    const expenses = getAllExpenses();
+
+    const expenseString = JSON.stringify(expenses);
+
+    console.log(expenseString);
     var overallamount = 0;
     document.getElementById("userForm1").reset();
     // setTimeout(() => {
@@ -123,6 +128,7 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
                                 Name: name,
                                 Villagename: villname,
                                 PhoneNumber: pno,
+                                OtherExpenses: expenseString,
                                 Beta: beta,
                                 HoursTrips: hourstrips,
                                 HoursTripsAmount: hourstrpamt,
@@ -212,6 +218,36 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
         document.getElementById("trips").value = trips;
     }
 });
+
+function getAllExpenses() {
+
+    const rows = document.querySelectorAll(".expense-row");
+
+    const expenses = [];
+
+    rows.forEach(row => {
+
+        const descriptionInput =
+            row.querySelector(".expense-description");
+
+        const amountInput =
+            row.querySelector(".expense-amount");
+
+        const description = descriptionInput.value.trim();
+        const amount = parseFloat(amountInput.value);
+
+        // Store only valid expenses
+        if (description !== "" && !isNaN(amount)) {
+
+            expenses.push({
+                description: description,
+                amount: amount
+            });
+        }
+    });
+
+    return expenses;
+}
 
 
 document.getElementById('submit2').addEventListener('click', async function (e) {
@@ -434,6 +470,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
                     if (activity.JcbTripPrice !== undefined) {
                         jcbtripprice = activity.JcbTripPrice;
                     }
+                    const expenses = getAllExpenses();
 
                     const updatedData = {
                         Contract: activity.Contract,
@@ -455,6 +492,7 @@ async function changecustomerpaymentstatus(data, name, totalded, wid, dte, villn
                         HoursPrice: activity.HoursPrice,
                         TripsPrice: activity.TripsPrice,
                         Beta: beta,
+                        OtherExpenses: expenses,
                         OverallPrice: activity.OverallPrice,
                         HoursTrips: HoursTrips,
                         HoursTripsAmount: HoursTripsAmount,
@@ -534,6 +572,41 @@ document.getElementById('submit14').addEventListener('click', async function (e)
     }
 });
 
+function getAllExpensesTable(expenses) {
+    let totalAmount = 0;
+
+    let rows = expenses.map(expense => {
+        totalAmount += Number(expense.amount) || 0;
+
+        return `
+            <tr>
+                <td>${expense.description || ""}</td>
+                <td>₹${Number(expense.amount) || 0}</td>
+            </tr>
+        `;
+    }).join("");
+
+    return `
+        <table class="expense-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                ${rows}
+
+                <tr class="total-row">
+                    <td><strong>Total Amount</strong></td>
+                    <td><strong>₹${totalAmount}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    `;
+}
+
 document.getElementById('submit5').addEventListener('click', async function (e) {
     e.preventDefault();
     const name = document.getElementById("name4").value;
@@ -602,9 +675,11 @@ async function RePrint51() {
             // generateTable(data);
         } else {
             alert("No data available");
+            hideProcessingPopup();
         }
     } catch (error) {
         alert("Error occurred while fetching data for Fetching Customer Bill Data");
+        hideProcessingPopup();
     }
 }
 async function RePrint6(amt) {
@@ -627,6 +702,7 @@ async function RePrint6(amt) {
         }
     } catch (error) {
         alert("Error occurred while fetching data for Fetching Customer Amount Data");
+        hideProcessingPopup();
     }
 }
 
@@ -646,9 +722,11 @@ async function RePrint7() {
             // generateTable(data);
         } else {
             alert("No data available ");
+            hideProcessingPopup();
         }
     } catch (error) {
         alert("Error occurred while fetching data ");
+        hideProcessingPopup();
     }
 }
 
@@ -686,12 +764,13 @@ function generateCustomerTable(data) {
     var recovery = 0;
     let out = `<table border="1" id="customerTable1" style="border-collapse: collapse; width: 100%; text-align: center;">
     <tr>
-    <th colspan="16" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
+    <th colspan="17" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
     </tr>
         <tr>
             <th id="csize">Customer Id</th>
             <th id="csize1">Date</th>
             <th id="csize1">Description</th>
+            <th id="csize1">Expenses Description</th>
             <th id="csize">Drivers</th>
             <th id="csize">JCB Trip Rate</th>
             <th id="csize">Tractor Rate</th>
@@ -860,6 +939,20 @@ function generateCustomerTable(data) {
                     overallbeta += parseInt(beta);
                 }
 
+                var ExpensesDescription = "--";
+
+                if (activity.OtherExpenses) {
+                    try {
+                        var expenses = JSON.parse(activity.OtherExpenses);
+
+                        if (Array.isArray(expenses) && expenses.length > 0) {
+                            ExpensesDescription = getAllExpensesTable(expenses);
+                        }
+                    } catch (error) {
+                        console.error("Invalid OtherExpenses:", error);
+                    }
+                }
+
                 const formattedDescription = (activity.Description || "")
                     .split(",")
                     .map((item, index) => `${index + 1}. ${item.trim()}`)
@@ -882,6 +975,10 @@ function generateCustomerTable(data) {
 
                 <td style="text-align:left;padding:4px;font-weight:600; font-size:20px !important;white-space: nowrap;width: max-content;">
                     ${formattedDescription}
+                </td>
+
+                <td style="text-align:left;padding:4px;font-weight:600; font-size:20px !important;white-space: nowrap;width: max-content;">
+                    ${ExpensesDescription}
                 </td>
 
                 <td style="text-align:left;padding:4px;font-weight:600; font-size:20px !important; min-width:150px;white-space: nowrap;width: max-content;">
@@ -949,7 +1046,7 @@ function generateCustomerTable(data) {
         : 0);
 
     out += `<tr>
-            <td colspan="6" id="col">
+            <td colspan="7" id="col">
                 Total Work Analysis For <b>${uniqueDates.size}</b> Days
                 &nbsp; | &nbsp;
                 Per Day Work: <b>₹ ${moneyconvert(perDayWork)}</b>
@@ -990,11 +1087,12 @@ function generateCustomerTable1(data) {
 
     out += `<table border="1px" id="customerTable1">
     <tr>
-    <th colspan="14" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red;" id="heading">మొత్తం పని </h1></th>
+    <th colspan="15" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red;" id="heading">మొత్తం పని </h1></th>
     </tr>
         <tr>
             <th>Date</th>
             <th>Description</th>
+            <th>Expenses Description</th>
             <th>Drivers Names</th>
             <th>Trips</th>
             <th>Contract</th>
@@ -1203,6 +1301,20 @@ function generateCustomerTable1(data) {
 
                 finalAmount += parseInt(activity.Miscellaneous || 0);
 
+                var ExpensesDescription = "--";
+
+                if (activity.OtherExpenses) {
+                    try {
+                        var expenses = JSON.parse(activity.OtherExpenses);
+
+                        if (Array.isArray(expenses) && expenses.length > 0) {
+                            ExpensesDescription = getAllExpensesTable(expenses);
+                        }
+                    } catch (error) {
+                        console.error("Invalid OtherExpenses:", error);
+                    }
+                }
+
 
                 const formattedDescription = (activity.Description || "")
                     .split(",")
@@ -1216,6 +1328,7 @@ function generateCustomerTable1(data) {
 
     <td style="padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${formatDate(activity.Date)}</td>
     <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${formattedDescription}</td>
+    <td style="text-align:left;padding:8px;font-size:25px !important;white-space: nowrap;width: max-content;">${ExpensesDescription}</td>
     <td style="text-align:left;padding:8px; font-size:25px !important;white-space: nowrap;width: max-content;">${driverNames}</td>
     <td style="padding:8px; font-size:25px !important;">${activity.Trips}</td>
     <td style="padding:8px; font-size:25px !important;">${activity.Contract}</td>
@@ -1274,7 +1387,7 @@ function generateCustomerTable1(data) {
     hou += mintohou;
 
     out += `<tr>
-        <td colspan="3" style="font-size:25px !important;">Total Work Analaysis For <b>${uniqueDates.size}</b> Days</td>
+        <td colspan="4" style="font-size:25px !important;">Total Work Analaysis For <b>${uniqueDates.size}</b> Days</td>
         <td style="font-size:25px !important;">${totaltrips}</td>
         <td style="font-size:25px !important;">${totalcontract}</td>
         <td colspan="3" style="font-size:25px !important;">${hou}:${mint}</td>

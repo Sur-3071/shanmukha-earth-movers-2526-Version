@@ -111,6 +111,41 @@ function getCachedExtraAmount(name) {
 
 await loadAllExtraAmountsOnce();
 
+function getAllExpensesTable(expenses) {
+    let totalAmount = 0;
+
+    let rows = expenses.map(expense => {
+        totalAmount += Number(expense.amount) || 0;
+
+        return `
+            <tr>
+                <td>${expense.description || ""}</td>
+                <td>₹${Number(expense.amount) || 0}</td>
+            </tr>
+        `;
+    }).join("");
+
+    return `
+        <table class="expense-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                ${rows}
+
+                <tr class="total-row">
+                    <td><strong>Total Amount</strong></td>
+                    <td><strong>₹${totalAmount}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    `;
+}
+
 
 function generateTable(data) {
     showProcessingPopup();
@@ -132,6 +167,7 @@ function generateTable(data) {
             <th id="csize1">Customer Name</th>
             <th id="csize1">Village</th>
             <th id="csize1">Description</th>
+            <th id="csize1">Expenses Description</th>
             <th id="csize">Disel</th>
             <th id="csize">Trips</th>
             <th id="csize2">Drivers</th>
@@ -422,6 +458,20 @@ function generateTable(data) {
             recovery += parseInt(amount);
             overallrecoveryamount += parseInt(overallrecovery);
 
+            var ExpensesDescription = "--";
+
+            if (activity.OtherExpenses) {
+                try {
+                    var expenses = JSON.parse(activity.OtherExpenses);
+
+                    if (Array.isArray(expenses) && expenses.length > 0) {
+                        ExpensesDescription = getAllExpensesTable(expenses);
+                    }
+                } catch (error) {
+                    console.error("Invalid OtherExpenses:", error);
+                }
+            }
+
 
             if (activity.Trips !== "--") {
                 totaltrips += parseInt(activity.Trips);
@@ -488,6 +538,7 @@ function generateTable(data) {
                         <td>${activity.Name}</td>
                         <td>${activity.Villagename}</td>
                         <td style="white-space: nowrap; width: max-content; text-align: left;">${formattedDescription}</td>
+                        <td style="white-space: nowrap; width: max-content; text-align: left;">${ExpensesDescription}</td>
                         <td>${activity.Disel}</td>
                         <td>${totaltractortrips}</td>
                         <td style="white-space: nowrap; width: max-content; text-align: left;">${drivers}</td>
@@ -500,9 +551,15 @@ function generateTable(data) {
                         <td>${activity.HoursPrice}</td>
                         <td>${beta}</td>
                         <td>${activity.Miscellaneous || 0}</td>
-                        <td><button type="button" class="pay" id="${customerPhone}"
-            style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
-            ${activity.Payment}</td>                        
+                        <td>
+                            <span style="background-color: ${bgColor}; 
+                                        color: white; 
+                                        padding: 5px 12px; 
+                                        border-radius: 5px; 
+                                        font-weight: bold;">
+                                ${activity.Payment}
+                            </span>
+                        </td>                       
                         <td>${totalamount}</td>
                         <td>${amount}</td>
                         <td>${overallpricemoney}</td>
@@ -522,7 +579,7 @@ function generateTable(data) {
     hou += mintohou;
     totaltime = hou + ":" + mint;
     out += `<tr>
-    <td colspan="5" id="col">Total Work Analaysis</td>
+    <td colspan="6" id="col">Total Work Analaysis</td>
     <td id="am">${disel}</td>
     <td  id="am">${totaltrips}</td>
     <td colspan="3" id="col">Drivers</td>
@@ -793,6 +850,7 @@ function SearchTable(data) {
             <th id="csize1">Customer Name</th>
             <th id="csize1">Village</th>
             <th id="csize1">Description</th>
+            <th id="csize1">Expenses Description</th>
             <th id="csize">Disel</th>
             <th id="csize">Trips</th>
             <th id="csize2">Drivers</th>
@@ -850,7 +908,7 @@ function SearchTable(data) {
             var overallsubcollections = 0;
 
             // Header row for person
-            out += `<tr><td colspan="22" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
+            out += `<tr><td colspan="23" style="background-color:#e0e0e0; font-weight:bold;">${personName}</td></tr>`;
 
             entries.forEach(entry => {
                 const customerPhone = entry.id;
@@ -986,6 +1044,20 @@ function SearchTable(data) {
                 }
                 // alert("hi");
 
+                var ExpensesDescription = "--";
+
+                if (activity.OtherExpenses) {
+                    try {
+                        var expenses = JSON.parse(activity.OtherExpenses);
+
+                        if (Array.isArray(expenses) && expenses.length > 0) {
+                            ExpensesDescription = getAllExpensesTable(expenses);
+                        }
+                    } catch (error) {
+                        console.error("Invalid OtherExpenses:", error);
+                    }
+                }
+
                 recovery += amount;
                 subRecovery += amount;
                 overallcollections += isNaN(activity.OverallPrice) ? 0 : activity.OverallPrice;
@@ -998,6 +1070,7 @@ function SearchTable(data) {
                         <td>${activity.Name}</td>
                         <td>${activity.Villagename}</td>
                         <td>${activity.Description}</td>
+                        <td>${ExpensesDescription}</td>
                         <td>${activity.Disel}</td>
                         <td>${activity.Trips}</td>
                         <td>${drivers}</td>
@@ -1010,9 +1083,15 @@ function SearchTable(data) {
                         <td>${activity.HoursPrice}</td>
                         <td>${activity.Beta}</td>
                         <td>${activity.Miscellaneous || 0}</td>
-                        <td><button type="button" class="pay" id="${customerPhone}"
-                        style="background-color: ${bgColor}; color: white; padding: 5px 12px; border: none; border-radius: 5px; font-weight: bold;">
-                        ${activity.Payment}</button></td>
+                        <td>
+                            <span style="background-color: ${bgColor}; 
+                                        color: white; 
+                                        padding: 5px 12px; 
+                                        border-radius: 5px; 
+                                        font-weight: bold;">
+                                ${activity.Payment}
+                            </span>
+                        </td>
                         <td>${activity.Price}</td>
                         <td>${amount}</td>
                         <td>${activity.OverallPrice}</td>
@@ -1028,7 +1107,7 @@ function SearchTable(data) {
 
             // Subtotal row
             out += `<tr style="background-color:#f0f0f0; font-weight:bold;">
-                <td colspan="5">Subtotal for ${personName}</td>
+                <td colspan="6">Subtotal for ${personName}</td>
                 <td>${subDisel}</td>
                 <td>${subTrips}</td>
                 <td colspan="3">Loading</td>
@@ -1050,7 +1129,7 @@ function SearchTable(data) {
 
         // Grand total row
         out += `<tr style="background-color:#d0ffd0; font-weight:bold;">
-            <td colspan="5" id="col">Total Work Analysis</td>
+            <td colspan="6" id="col">Total Work Analysis</td>
             <td id="am">${disel}</td>
             <td id="am">${totaltrips}</td>
             <td colspan="3">Loading</td>
@@ -1194,6 +1273,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
             <th id="csize1">Customer Name</th>
             <th id="csize1">Village</th>
             <th id="csize1">Description</th>
+            <th id="csize1">Expenses Description</th>
             <th id="csize1">Drivers</th>
             <th id="csize1">Disel</th>
             <th id="csize">Trips</th>
@@ -1516,6 +1596,20 @@ function generateTableByDate(data, startdate, enddate, data1) {
                     drivers = drivers.split("<br>").filter(x => x.trim() !== "").map((x, i) => (i + 1) + ". " + x.trim()).join("<br>");
                 }
 
+                var ExpensesDescription = "--";
+
+                if (activity.OtherExpenses) {
+                    try {
+                        var expenses = JSON.parse(activity.OtherExpenses);
+
+                        if (Array.isArray(expenses) && expenses.length > 0) {
+                            ExpensesDescription = getAllExpensesTable(expenses);
+                        }
+                    } catch (error) {
+                        console.error("Invalid OtherExpenses:", error);
+                    }
+                }
+
                 const formattedDescription = (activity.Description || "")
                     .split(",")
                     .slice(0, -1) // Removes the last item
@@ -1528,6 +1622,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
                         <td style="white-space: nowrap; width: max-content;">${activity.Name}</td>
                         <td>${activity.Villagename}</td>
                         <td style="white-space: nowrap; width: max-content; text-align: left;">${formattedDescription}</td>
+                        <td style="white-space: nowrap; width: max-content; text-align: left;">${ExpensesDescription}</td>
                         <td style="white-space: nowrap; width: max-content; text-align: left;">${drivers}</td>
                         <td>${activity.Disel}</td>
                         <td>${activity.Trips}</td>
@@ -1549,7 +1644,7 @@ function generateTableByDate(data, startdate, enddate, data1) {
     hou += mintohou;
     totaltime = hou + ":" + mint;
     out += `<tr>
-           <td colspan="6" id="col">Total Work Analaysis</td>
+           <td colspan="7" id="col">Total Work Analaysis</td>
             <td id="am">${disel}</td>
             <td id="am">${totaltrips}</td>
             <td id="am">${totalcontarct}</td>
