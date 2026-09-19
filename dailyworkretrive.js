@@ -119,6 +119,7 @@ function getAllExpensesTable(expenses) {
 
         return `
             <tr>
+                <td>${expense.type || ""}</td>
                 <td>${expense.description || ""}</td>
                 <td>₹${Number(expense.amount) || 0}</td>
             </tr>
@@ -129,6 +130,7 @@ function getAllExpensesTable(expenses) {
         <table class="expense-table">
             <thead>
                 <tr>
+                    <th>Expense Type</th>
                     <th>Description</th>
                     <th>Amount</th>
                 </tr>
@@ -138,7 +140,7 @@ function getAllExpensesTable(expenses) {
                 ${rows}
 
                 <tr class="total-row">
-                    <td><strong>Total Amount</strong></td>
+                    <td colSpan="2"><strong>Total Amount</strong></td>
                     <td><strong>₹${totalAmount}</strong></td>
                 </tr>
             </tbody>

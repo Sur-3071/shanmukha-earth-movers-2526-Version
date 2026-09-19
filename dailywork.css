@@ -236,7 +236,24 @@ body {
     flex: 2;
 }
 
+.expense-type
+{
+    flex: 1;
+}
+
 .expense-amount {
+    flex: 1;
+}
+.expense-description7 {
+    flex: 2;
+}
+
+.expense-type7
+{
+    flex: 1;
+}
+
+.expense-amount7 {
     flex: 1;
 }
 

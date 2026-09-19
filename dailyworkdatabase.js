@@ -222,10 +222,13 @@ document.getElementById('submit1').addEventListener('click', async function (e) 
 function getAllExpenses() {
 
     const rows = document.querySelectorAll(".expense-row");
-
+ 
     const expenses = [];
 
     rows.forEach(row => {
+
+        const expenseType =
+            row.querySelector(".expense-type");
 
         const descriptionInput =
             row.querySelector(".expense-description");
@@ -233,13 +236,15 @@ function getAllExpenses() {
         const amountInput =
             row.querySelector(".expense-amount");
 
+
+        const type = expenseType.value.trim();
         const description = descriptionInput.value.trim();
         const amount = parseFloat(amountInput.value);
 
         // Store only valid expenses
-        if (description !== "" && !isNaN(amount)) {
-
+        if (type !== "" && description !== "" && !isNaN(amount)) {
             expenses.push({
+                type: type,
                 description: description,
                 amount: amount
             });
@@ -580,6 +585,7 @@ function getAllExpensesTable(expenses) {
 
         return `
             <tr>
+                <td>${expense.type || ""}</td>
                 <td>${expense.description || ""}</td>
                 <td>₹${Number(expense.amount) || 0}</td>
             </tr>
@@ -590,6 +596,7 @@ function getAllExpensesTable(expenses) {
         <table class="expense-table">
             <thead>
                 <tr>
+                    <th>Expense Type</th>
                     <th>Description</th>
                     <th>Amount</th>
                 </tr>
@@ -599,7 +606,7 @@ function getAllExpensesTable(expenses) {
                 ${rows}
 
                 <tr class="total-row">
-                    <td><strong>Total Amount</strong></td>
+                    <td colSpan="2"><strong>Total Amount</strong></td>
                     <td><strong>₹${totalAmount}</strong></td>
                 </tr>
             </tbody>
@@ -1048,8 +1055,6 @@ function generateCustomerTable(data) {
     out += `<tr>
             <td colspan="7" id="col">
                 Total Work Analysis For <b>${uniqueDates.size}</b> Days
-                &nbsp; | &nbsp;
-                Per Day Work: <b>₹ ${moneyconvert(perDayWork)}</b>
             </td>       
             <td  id="am" style="font-size:30px;">${totaltrips}</td>
             <td id="am" style="font-size:30px;">${totalcontarct}</td>

@@ -39,13 +39,13 @@ function timecal() {
             var triprate = parseInt(document.getElementById("trips").value || "0");
             var jcbtriprate = parseInt(document.getElementById("jcbtrprate").value || "0");
             var trippri = (triprate * jcbtriprate);
-            rate = (isNaN(trippri) ? beta : parseInt(trippri) + beta);
+            rate = (isNaN(trippri) ? 0 : parseInt(trippri));
             document.getElementById("rate").value = rate;
         }
         else {
             if (type === "Contract") {
                 var conamouont = parseInt(document.getElementById("con").value || "0");
-                rate = (isNaN(conamouont) ? beta : parseInt(conamouont) + beta);
+                rate = (isNaN(conamouont) ? 0 : parseInt(conamouont));
                 document.getElementById("rate").value = rate;
 
             }
@@ -58,7 +58,7 @@ function timecal() {
 function conprice() {
     var beta = parseInt(document.getElementById("beta").value || "0");
     var c1 = document.getElementById("con").value || "0";
-    document.getElementById("rate").value = parseInt(c1) + beta;
+    document.getElementById("rate").value = parseInt(c1) + 0;
 }
 function removedone() {
     setTimeout(function () {
@@ -406,7 +406,7 @@ function tripprice() {
 
     const totalAmount = totalTrips * ratePerTrip;
 
-    document.getElementById("rate").value = beta + totalAmount;
+    document.getElementById("rate").value = 0 + totalAmount;
 
     // generateOutput();
 
@@ -613,7 +613,7 @@ function timecal7() {
 
         var trippri = (triprate * jcbtriprate);
 
-        rate = (isNaN(trippri) ? beta : parseInt(trippri) + beta);
+        rate = (isNaN(trippri) ? 0 : parseInt(trippri) + 0);
 
         document.getElementById("rate7").value = rate;
 
@@ -624,8 +624,8 @@ function timecal7() {
             parseInt(document.getElementById("con7").value || "0");
 
         rate = (isNaN(conamouont)
-            ? beta
-            : parseInt(conamouont) + beta);
+            ? 0
+            : parseInt(conamouont) + 0);
 
         document.getElementById("rate7").value = rate;
     }
@@ -635,14 +635,14 @@ function timecal7() {
 
 function conprice7() {
 
-    var beta =
-        parseInt(document.getElementById("beta7").value || "0");
+    // var beta =
+    //     parseInt(document.getElementById("beta7").value || "0");
 
     var c1 =
         document.getElementById("con7").value || "0";
 
     document.getElementById("rate7").value =
-        parseInt(c1) + beta;
+        parseInt(c1);
 }
 
 function removedone7() {
@@ -912,18 +912,17 @@ function tripprice7() {
 
     const tripsField = document.getElementById("trips7");
     const jcbRateField = document.getElementById("jcbtrprate7");
-    const betaField = document.getElementById("beta7");
     const rateField = document.getElementById("rate7");
 
-    if (!tripsField || !jcbRateField || !betaField || !rateField) {
+    if (!tripsField || !jcbRateField  || !rateField) {
         return;
     }
 
     const totalTrips = parseInt(tripsField.value) || 0;
     const jcbRate = parseInt(jcbRateField.value) || 0;
-    const beta = parseInt(betaField.value) || 0;
+    // const beta = parseInt(betaField.value) || 0;
 
-    const totalAmount = (totalTrips * jcbRate) + beta;
+    const totalAmount = (totalTrips * jcbRate);
 
     rateField.value = totalAmount;
 

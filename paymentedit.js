@@ -293,6 +293,7 @@ function loadExpenses7(expenseString) {
     expenses.forEach(expense => {
 
         createExpenseRow7(
+            expense.type,
             expense.description,
             expense.amount
         );
@@ -704,11 +705,16 @@ function getAllExpenses7() {
 
     rows.forEach(row => {
 
+         const expenseType =
+            row.querySelector(".expense-type7");
+
         const descriptionInput =
             row.querySelector(".expense-description7");
 
         const amountInput =
             row.querySelector(".expense-amount7");
+
+        const type = expenseType.value.trim();
 
         const description =
             descriptionInput.value.trim();
@@ -717,9 +723,10 @@ function getAllExpenses7() {
             parseFloat(amountInput.value);
 
         // Only store valid entries
-        if (description !== "" && !isNaN(amount)) {
+        if (type !== "" && description !== "" && !isNaN(amount)) {
 
             expenses.push({
+                type: type,
                 description: description,
                 amount: amount
             });

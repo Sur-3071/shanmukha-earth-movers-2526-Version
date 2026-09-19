@@ -849,10 +849,19 @@
             const unpaidcustomerslist = [];
             const paidcustomerslist = [];
             const workeddays = new Set();
+            var customerWorkedDays = {};
             for (const customerPhone in data) {
                 if (data.hasOwnProperty(customerPhone)) {
                     var activity = data[customerPhone];
                     workeddays.add(activity.Date);
+                    const nameofthecustomer = activity.Name;
+
+                    if (!customerWorkedDays[nameofthecustomer]) {
+                        customerWorkedDays[nameofthecustomer] = new Set();
+                    }
+
+                    customerWorkedDays[nameofthecustomer].add(activity.Date);
+                    // console.log("Customer Worked Days:", customerWorkedDays);
 
                     if (activity.Payment === "UnPaid") {
                         // alert("1");
@@ -869,6 +878,7 @@
                             // alert("3-1");
                             unpaidCustomers[name].jcbPrice += jcb;
                             unpaidCustomers[name].overallPrice += overall;
+                            unpaidCustomers[name].daysWorked = customerWorkedDays[name].size;
 
                         } else {
 
@@ -886,6 +896,7 @@
                                 jcbPrice: jcb,
                                 Date: reversedDate,
                                 daysPassed: daysCompleted,
+                                daysWorked: customerWorkedDays[name].size,
                                 overallPrice: overall
                             };
 
@@ -899,7 +910,7 @@
 
 
                     var customerName = activity.Name;
-
+                    // alert("ok");
 
                     var amount = activity.Payment === "Paid" ? 0 : parseInt(activity.Price);
                     var overalldueamount = activity.Payment === "Paid" ? 0 : parseInt(activity.OverallPrice);
@@ -1754,28 +1765,22 @@
                                         required>
                                     <input type="text" id="mis7" name="mis" placeholder="Miscellaneous Amount"
                                         onchange="adjustRate()" required>
-                                        <div class="expense-section">
+                                    <div class="expense-section">
 
-                                            <div class="expense-header">
-                                                <span>Other Expenses</span>
+                                        <div class="expense-header">
+                                            <span>Other Expenses</span>
 
-                                                <button type="button" onclick="addExpense7()">
-                                                    + New Expense
-                                                </button>
-                                            </div>
-
-                                            <div id="expenseList7"></div>
-
+                                            <button type="button" onclick="addExpense7()">
+                                                + New Expense
+                                            </button>
                                         </div>
 
-                                        <input
-                                            type="text"
-                                            id="beta7"
-                                            name="beta"
-                                            placeholder="Other Expenses"
-                                            onchange="timecal7()"
-                                            readonly
-                                        >
+                                        <div id="expenseList7"></div>
+
+                                    </div>
+
+                                    <input type="text" id="beta7" name="beta" placeholder="Other Expenses"
+                                        onchange="timecal7()" readonly>
 
                                     <textarea id="desc7" name="desc" placeholder="Description" rows="20" cols="30"
                                         required>
@@ -2004,7 +2009,7 @@
                 }
 
 
-                function createExpenseRow7(description = "", amount = "") {
+                function createExpenseRow7(expenseType = "", description = "", amount = "") {
 
                     const expenseList = document.getElementById("expenseList7");
 
@@ -2013,6 +2018,12 @@
                     row.className = "expense-row";
 
                     row.innerHTML = `
+                    <input
+            type="text"
+            class="expense-type7"
+            placeholder="Expense Type"
+            value="${expenseType}"
+        >
         <input
             type="text"
             class="expense-description7"
@@ -3676,6 +3687,11 @@
             row.innerHTML = `
         <input
             type="text"
+            class="expense-type"
+            placeholder="Expense Type"
+        >
+        <input
+            type="text"
             class="expense-description"
             placeholder="Description"
         >
@@ -3793,20 +3809,33 @@
                 JSON.parse(localStorage.getItem("extraAmountsCache")) || {};
 
             const customerMap = {};
+            const customerWorkedDays = {};
 
             // =========================
             // BUILD DATA (YOUR NEW LOGIC)
             // =========================
             const addRecords = (list) => {
                 list.forEach(c => {
+                    // console.log(c);
 
                     const name = c.Name;
+                    const nameofthecustomer = c.Name || "";
 
+                    if (nameofthecustomer !== "") {
+                        if (!customerWorkedDays[nameofthecustomer]) {
+                            customerWorkedDays[nameofthecustomer] = new Set();
+                        }
+
+                        customerWorkedDays[nameofthecustomer].add(c.Date);
+                    }
+                    // console.log(customerWorkedDays[nameofthecustomer]);
+                    // alert("ok");
                     if (!customerMap[name]) {
                         customerMap[name] = {
                             name,
                             Date: c.Date || "",
                             daysPassed: getDaysFromDate(c.Date) || 0,
+                            daysWorked: customerWorkedDays[name] ? customerWorkedDays[name].size : 0,
 
                             previousBalance: toNum(extraAmountsCache[name] || 0),
                             Miscellaneous: 0,
@@ -3818,6 +3847,7 @@
                             Totalunpaidoverallprice: 0
                         };
                     }
+                    customerMap[name].daysWorked = customerWorkedDays[name] ? customerWorkedDays[name].size : 0;
 
                     if (c.Payment === "UnPaid") {
 
@@ -3846,7 +3876,7 @@
             // CALCULATE FINAL VALUES
             // =========================
             Object.values(customerMap).forEach(c => {
-
+                // // console.log("Calculating totals for customer:", c.daysWorked);
                 const totalJcb = c.Totalpaidjcbprice + c.Totalunpaidjcbprice;
                 const totalOverall = c.Totalpaidoverallprice + c.Totalunpaidoverallprice;
 
@@ -3910,6 +3940,8 @@
                 <th>Unpaid</th>
                 <th>Paid</th>
                 <th>Status</th>
+                <th>Days Worked</th>
+                <th>PerDay JCB Cost</th>
                 <th>Contribution Percentage</th>
                 <th>Adjusted Amount</th>
                 <th>Previous Balance</th>
@@ -3927,6 +3959,7 @@
             // =========================
             var count = 0;
             const renderRow = (c) => {
+                // console.log("Rendering row for customer:", c);
                 count++;
                 totalJcb += c.jcbTotal;
                 totalJcbRem += c.jcbRemaining;
@@ -3962,6 +3995,7 @@
                 } else {
                     contributionPercentage = "---";
                 }
+                // alert("Days Worked: " + c.daysWorked);
                 tableHTML += `
 <tr>
     <td>${count}</td>
@@ -3969,6 +4003,7 @@
     <td style="white-space: nowrap;width: max-content;font-weight:bold;">${formatDate(c.Date)}</td>
     <td style="white-space: nowrap;width: max-content;font-weight:bold;">${status === "🟢🔴 Pending" || status === "🟡🔴 Pending" ? c.daysPassed : "---"}</td>
 <td>
+    
 <button
 id="UnPaid-${c.name}"
     onclick="openPopup6('${c.name}', ${c.previousBalance || 0}, 'UNPAID')"
@@ -4002,14 +4037,16 @@ id="UnPaid-${c.name}"
             </button>
                 </td>
                 <td style="white-space: nowrap;width: max-content;font-weight:bold;">${status}</td>
-                <td style="font-weight:bold;">${contributionPercentage}</td>
-                <td style="font-weight:bold;">${moneyconvert(c.Miscellaneous)}</td>
-                <td style="font-weight:bold;">${moneyconvert(c.previousBalance)}</td>
-                <td style="font-weight:bold;">${moneyconvert(c.jcbTotal)}</td>
-                <td class="blink" style="font-weight:bold;">${moneyconvert(c.jcbRemaining)}</td>
-                <td style="font-weight:bold;">${moneyconvert(c.overallTotal)}</td>
-                <td class="blink" style="font-weight:bold;">${moneyconvert(c.overallRemaining)}</td>
-            </tr>
+                <td style="white-space: nowrap;width: max-content;font-weight:bold;">${c.daysWorked} days</td>
+                <td style="white-space: nowrap;width: max-content;font-weight:bold;"">₹ ${moneyconvert(parseInt((c.jcbTotal) / c.daysWorked))}</td>
+                <td style="white-space: nowrap;width: max-content;font-weight:bold;">${contributionPercentage}</td>
+                <td style="white-space: nowrap;width: max-content;font-weight:bold;">₹ ${moneyconvert(c.Miscellaneous)}</td>
+                <td style="white-space: nowrap;width: max-content;font-weight:bold;">₹ ${moneyconvert(c.previousBalance)}</td> 
+                <td style="white-space: nowrap;width: max-content;font-weight:bold;">₹ ${moneyconvert(c.jcbTotal)}</td>
+                <td class="blink" style="white-space: nowrap;width: max-content;font-weight:bold;">₹ ${moneyconvert(c.jcbRemaining)}</td>
+                <td style="white-space: nowrap;width: max-content;font-weight:bold;">₹ ${moneyconvert(c.overallTotal)}</td>
+                <td class="blink" style="white-space: nowrap;width: max-content;font-weight:bold;">₹ ${moneyconvert(c.overallRemaining)}</td>
+            </tr> 
         `;
 
 
@@ -4030,13 +4067,13 @@ id="UnPaid-${c.name}"
             // =========================
             tableHTML += `
         <tr style="font-weight:bold;background:#f2f2f2;">
-            <td colspan="8">Total Work Analysis</td>
-            <td style="font-weight:bold;">${moneyconvert(totalMiscellaneous)}</td>
-            <td style="font-weight:bold;">${moneyconvert(totalpreviousBalance)}</td>
-            <td style="font-weight:bold;">${moneyconvert(totalJcb)}</td>
-            <td style="font-weight:bold;">${moneyconvert(totalJcbRem)}</td>
-            <td style="font-weight:bold;">${moneyconvert(totalOverall)}</td>
-            <td style="font-weight:bold;">${moneyconvert(totalOverallRem)}</td>
+            <td colspan="10" style="font-weight: bold; font-size: 36px !important;">Total Work Analysis</td>
+            <td style="white-space: nowrap; width: max-content; font-weight: bold; font-size: 25px !important;">₹ ${moneyconvert(totalMiscellaneous)}</td>
+            <td style="white-space: nowrap; width: max-content; font-weight: bold; font-size: 25px !important;">₹ ${moneyconvert(totalpreviousBalance)}</td>
+            <td style="white-space: nowrap; width: max-content; font-weight: bold; color: green; font-size: 25px !important;">₹ ${moneyconvert(totalJcb)}</td>
+            <td style="white-space: nowrap; width: max-content; font-weight: bold; color: red; font-size: 25px !important;">₹ ${moneyconvert(totalJcbRem)}</td>
+            <td style="white-space: nowrap; width: max-content; font-weight: bold; color: green; font-size: 25px !important;">₹ ${moneyconvert(totalOverall)}</td>
+            <td style="white-space: nowrap; width: max-content; font-weight: bold; color: red; font-size: 25px !important;">₹ ${moneyconvert(totalOverallRem)}</td>
             <td></td>
         </tr>
     `;
