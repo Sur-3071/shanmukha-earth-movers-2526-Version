@@ -94,6 +94,53 @@ body {
     background: linear-gradient(90deg,#2E7D32,#66BB6A);
 }
 
+#list4 {
+    width: 100%;
+    margin: 20px auto;
+}
+
+#list4 h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#list4 table {
+    margin: 0 auto;
+    border-spacing: 0 12px;
+}
+
+#list4 td {
+    text-align: center;
+}
+
+#list4 input,
+#list4 select {
+    width: 250px;
+    height: 42px;
+    padding: 8px 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+#list4 input:focus,
+#list4 select:focus {
+    border-color: #333;
+}
+
+#list4 .sub {
+    width: 250px;
+    height: 42px;
+    margin-top: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
 
 /* CUSTOMER HEADER */
 
@@ -252,6 +299,7 @@ body {
 {
     flex: 1;
 }
+
 
 .expense-amount7 {
     flex: 1;

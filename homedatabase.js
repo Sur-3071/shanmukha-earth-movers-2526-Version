@@ -114,6 +114,10 @@ document.getElementById('submit9').addEventListener('click', async function (e) 
                     document.getElementById("paymentSuccessPopup5").style.display = "none";
                 }, 3000); // Ensure this function is defined elsewhere
 
+                setTimeout(function () {
+                    window.location.reload();
+                }, 3000);
+
 
             } else {
                 hideProcessingPopup();

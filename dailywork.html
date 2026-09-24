@@ -134,12 +134,18 @@
 
                         const row = tripsData[id];
 
+                        var totalAmount = 0;
+
                         const driver = row.Driver;
+                        if (driver === "Sai Teja Parts") {
+                            totalAmount = Number(row.Amount || 0);
+                        }
+                        else {
+                            const price = Number(row.Price || 0);
+                            const trips = Number(row.Trips || 0);
 
-                        const price = Number(row.Price || 0);
-                        const trips = Number(row.Trips || 0);
-
-                        const totalAmount = price * trips;
+                            totalAmount = price * trips;
+                        }
 
                         if (!summary[driver]) {
 
@@ -3074,10 +3080,10 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <div align="center" id="show">
                 <button type="button" id="b1" onclick="showPage('list1')">Add Data</button>
-                <button type="button" id="b2" onclick="showPage('list2')">Driver Data</button>
-                <button type="button" id="b3" onclick="showPage('list3')">Money Data</button>
-                <button type="button" id="allSummaryBtn" onclick="showPage('summaryDiv')">All Tractors Pending
-                    Bills</button>
+                <button type="button" id="b1" onclick="showPage('list4')">Add Parts Data</button>
+                <button type="button" id="b2" onclick="showPage('list2')">Get Driver Data</button>
+                <button type="button" id="b3" onclick="showPage('list3')">Add Money Data</button>
+                <button type="button" id="allSummaryBtn" onclick="showPage('summaryDiv')">All Pending Bills</button>
 
 
             </div>
@@ -3098,15 +3104,12 @@
                                         <option hidden>select Driver Name</option>
                                         <option>Ungarala Srinu</option>
                                         <option>Chittibabu</option>
-                                        <option>Batchu Raju</option>
+                                        <option>Radhakrishna</option>
                                         <option>Sai</option>
                                         <option>venkanna</option>
+                                        <option>Batchu Raju</option>
                                         <option>Vuppurolu swamy </option>
-                                        <option>Chinnodu</option>
-                                        <option>Abbulu</option>
                                         <option>Bindanapu Suri Babu</option>
-                                        <option>Nagu</option>
-                                        <option>Radhakrishna</option>
                                         <option>Ravuri Suri Babu</option>
 
                                     </select>
@@ -3165,15 +3168,13 @@
                                         <option hidden>select Driver Name</option>
                                         <option>Ungarala Srinu</option>
                                         <option>Chittibabu</option>
-                                        <option>Batchu Raju</option>
+                                        <option>Radhakrishna</option>
                                         <option>Sai</option>
                                         <option>venkanna</option>
+                                        <option>Batchu Raju</option>
+                                        <option>Sai Teja Parts</option>
                                         <option>Vuppurolu swamy </option>
-                                        <option>Chinnodu</option>
-                                        <option>Abbulu</option>
                                         <option>Bindanapu Suri Babu</option>
-                                        <option>Nagu</option>
-                                        <option>Radhakrishna</option>
                                         <option>Ravuri Suri Babu</option>
 
                                     </select>
@@ -3212,15 +3213,13 @@
                                         <option hidden>select Driver Name</option>
                                         <option>Ungarala Srinu</option>
                                         <option>Chittibabu</option>
-                                        <option>Batchu Raju</option>
+                                        <option>Radhakrishna</option>
                                         <option>Sai</option>
                                         <option>venkanna</option>
+                                        <option>Batchu Raju</option>
+                                        <option>Sai Teja Parts</option>
                                         <option>Vuppurolu swamy </option>
-                                        <option>Chinnodu</option>
-                                        <option>Abbulu</option>
                                         <option>Bindanapu Suri Babu</option>
-                                        <option>Nagu</option>
-                                        <option>Radhakrishna</option>
                                         <option>Ravuri Suri Babu</option>
 
                                     </select>
@@ -3249,6 +3248,63 @@
                             </tr>
                         </table>
                     </form>
+                </div>
+
+                <div id="list4" align="center" style="display: none;">
+
+                    <h1 align="center">Sai Teja Parts Data</h1>
+
+                    <form id="form4">
+
+                        <table>
+
+                            <tr>
+                                <td>
+                                    <input type="date" id="tractd3" placeholder="Enter Today Date">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <input type="text" id="wid40" placeholder="System Id" readonly>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <select id="ptype">
+                                        <option hidden>Select Person Type</option>
+                                        <option>Dady</option>
+                                        <option>Suresh</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <input type="text" id="description" placeholder="Enter Description">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <input type="text" id="partsamount" placeholder="Enter Amount">
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td>
+                                    <button type="button" value="submit" class="sub" id="amountdataentry2">
+                                        Enter Data
+                                    </button>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </form>
+
                 </div>
             </div>
             <img src="done1.png" id="done10" style="display: none; margin: 0 auto; height: 100px; width: 100px;">
@@ -5921,7 +5977,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         function showPage(pageId) {
 
-            const pages = ['list1', 'list2', 'list3', 'summaryDiv'];
+            const pages = ['list1', 'list2', 'list3', 'list4','list5', 'summaryDiv'];
 
             // Reset all forms
             document.querySelectorAll("form").forEach(form => {

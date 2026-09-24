@@ -66,6 +66,194 @@ document.getElementById('submit').addEventListener('click', function (e) {
     }
 });
 
+document.getElementById('amountdataentry2').addEventListener('click', function (e) {
+
+    e.preventDefault();
+
+    showProcessingPopup();
+
+    const d = document.getElementById("tractd3").value;
+    const person = document.getElementById("ptype").value;
+    const description = document.getElementById("description").value;
+    const partsamount = document.getElementById("partsamount").value;
+    const wid = document.getElementById("wid40").value;
+
+    const db1 = DBConstants.TractorTrips;
+
+
+    if (
+        d.length > 0 &&
+        person.length > 0 &&
+        description.length > 0 &&
+        partsamount.length > 0
+    ) {
+
+        // Firebase reference
+        const dataRefset = ref(db, `${db1}/${wid}`);
+        const db3 = DBConstants.Homeexpenses;
+
+        const dataRefsetexpenses = ref(db, `${db3}/${wid}`);
+
+        set(dataRefsetexpenses, {
+            Date: d,
+            Name: "Sai Teja Parts"+"==>"+description,
+            Price: partsamount,
+            Farming: 0,
+            Salary: 0,
+            SalaryExp: 0,
+            Jcb: partsamount,
+            Home: 0,
+            Type: "Jcb",
+            PersonType: person
+        });
+
+        // Save Parts Data
+        set(dataRefset, {
+
+            Date: d,
+            Driver: "Sai Teja Parts",
+            person: person,
+            Description: description,
+            Amount: partsamount
+
+        })
+            .then(() => {
+
+                hideProcessingPopup();
+                document.getElementById("form4").reset();
+                // Reset form
+                document.getElementById("form2").reset();
+
+                // Success popup
+                document.getElementById("paymentSuccessPopup5").style.display = "flex";
+
+                setTimeout(() => {
+                    document.getElementById("paymentSuccessPopup5").style.display = "none";
+                }, 3000);
+
+                // Generate/Get next System ID
+                GetSystemId("wid40");
+
+            })
+            .catch((error) => {
+
+                hideProcessingPopup();
+
+                console.error("Error adding document: ", error);
+
+                alert("An error occurred. Please try again.");
+
+            });
+
+    }
+    else {
+
+        hideProcessingPopup();
+
+        alert("Please Enter All The Fields Properly");
+
+    }
+
+});
+
+export function editPartsData() {
+       
+
+    showProcessingPopup();
+
+    const d = document.getElementById("partsEditDate").value;
+    const person = document.getElementById("editPerson").value;
+    const description = document.getElementById("editDescription").value;
+    const partsamount = document.getElementById("editPartsAmount").value;
+    const wid = document.getElementById("partsSystemId").value;
+
+    const db1 = DBConstants.TractorTrips;
+    const db3 = DBConstants.Homeexpenses;
+
+    if (
+        d.length > 0 &&
+        person.length > 0 &&
+        description.length > 0 &&
+        partsamount.length > 0 &&
+        wid.length > 0
+    ) {
+
+        // Tractor Trips reference
+        const dataRefset = ref(db, `${db1}/${wid}`);
+
+        // Home Expenses reference
+        const dataRefsetexpenses = ref(db, `${db3}/${wid}`);
+
+
+        // Update Tractor Trips / Sai Teja Parts Data
+        const partsData = {
+            Date: d,
+            Driver: "Sai Teja Parts",
+            person: person,
+            Description: description,
+            Amount: partsamount
+        };
+
+
+        // Update Home Expenses Data
+        const expensesData = {
+            Date: d,
+            Name: "Sai Teja Parts" + "==>" + description,
+            Price: partsamount,
+            Farming: 0,
+            Salary: 0,
+            SalaryExp: 0,
+            Jcb: partsamount,
+            Home: 0,
+            Type: "Jcb",
+            PersonType: person
+        };
+
+
+        // Update both databases
+        Promise.all([
+            set(dataRefset, partsData),
+            set(dataRefsetexpenses, expensesData)
+        ])
+        .then(() => {
+
+            hideProcessingPopup();
+
+            getDataBtn.click();
+
+            // Close edit popup
+            closePopup1();
+
+            // Success popup
+            document.getElementById("paymentSuccessPopup5").style.display = "flex";
+
+            setTimeout(() => {
+                document.getElementById("paymentSuccessPopup5").style.display = "none";
+            }, 3000);
+
+        })
+        .catch((error) => {
+
+            hideProcessingPopup();
+
+            console.error("Error updating document: ", error);
+
+            alert("An error occurred. Please try again.");
+
+        });
+
+    }
+    else {
+
+        hideProcessingPopup();
+
+        alert("Please Enter All The Fields Properly");
+
+    }
+}
+
+window.editPartsData = editPartsData;
+
 export function editDriverData(e) {
     // alert("Editing data...");
     e.preventDefault();
@@ -260,7 +448,7 @@ updatebtn.addEventListener('click', async function () {
             return;
         }
         hideProcessingPopup();
-        displayUpdatedtripsdata(filteredData)
+        displayUpdatedtripsdata(filteredData, drivername);
 
     } catch (error) {
         hideProcessingPopup();
