@@ -253,41 +253,54 @@
     </tr>
 `;
 
-            Object.keys(summary).forEach(driver => {
+Object.keys(summary)
+    .map(driver => {
+        const total = summary[driver].totalEarned;
+        const given = summary[driver].totalGiven;
+        const balance = total - given;
 
-                const total = summary[driver].totalEarned;
-                const given = summary[driver].totalGiven;
-                const balance = total - given;
+        return {
+            driver,
+            total,
+            given,
+            balance
+        };
+    })
+    .filter(item => item.balance !== 0) // Ignore balance = 0
+    .sort((a, b) => b.balance - a.balance) // Higher balance → lower balance
+    .forEach(item => {
 
-                // Add to grand totals
-                grandTotal += total;
-                grandGiven += given;
-                grandBalance += balance;
+        const { driver, total, given, balance } = item;
 
-                html += `
-        <tr style="font-size:20px;font-weight:500;">
-            <td style="padding:12px;">
-                ${driver}
-            </td>
+        // Add to grand totals
+        grandTotal += total;
+        grandGiven += given;
+        grandBalance += balance;
 
-            <td style="padding:12px;">
-                ₹${total.toLocaleString()}
-            </td>
+        html += `
+            <tr style="font-size:20px;font-weight:500;">
+                <td style="padding:12px;">
+                    ${driver}
+                </td>
 
-            <td style="padding:12px;">
-                ₹${given.toLocaleString()}
-            </td>
+                <td style="padding:12px;">
+                    ₹${total.toLocaleString()}
+                </td>
 
-            <td style="
-                padding:12px;
-                font-weight:bold;
-                color:${balance >= 0 ? 'green' : 'red'};
-            ">
-                ₹${balance.toLocaleString()}
-            </td>
-        </tr>
+                <td style="padding:12px;">
+                    ₹${given.toLocaleString()}
+                </td>
+
+                <td style="
+                    padding:12px;
+                    font-weight:bold;
+                    color:${balance >= 0 ? 'green' : 'red'};
+                ">
+                    ₹${balance.toLocaleString()}
+                </td>
+            </tr>
         `;
-            });
+    });
 
             // Grand Total Row
             html += `
