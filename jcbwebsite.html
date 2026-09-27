@@ -1131,7 +1131,7 @@
             display: grid;
 
             grid-template-columns:
-                repeat(auto-fit, minmax(330px, 1fr));
+                repeat(auto-fit, minmax(250px, 1fr));
 
             gap: 25px;
         }
@@ -2357,6 +2357,87 @@
             .business-offers .service-price-card p {
                 font-size: 13px;
                 line-height: 1.5;
+            }
+        }
+
+        /* ================= FOOTER ================= */
+
+        .footer {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 18px 25px;
+            background: #1b1b1b;
+            color: #ffffff;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .footer-brand {
+            white-space: nowrap;
+            font-size: 15px;
+        }
+
+        .footer-services {
+            white-space: nowrap;
+            color: #d0d0d0;
+        }
+
+        .footer-contact {
+            white-space: nowrap;
+        }
+
+        .footer-contact a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-contact span {
+            margin: 0 5px;
+            color: #888;
+        }
+
+        .footer-copy {
+            white-space: nowrap;
+            color: #aaa;
+            font-size: 12px;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 768px) {
+
+            .footer {
+                padding: 14px 10px;
+                gap: 10px;
+
+                /* Keep everything in ONE horizontal row */
+                flex-wrap: nowrap;
+
+                font-size: 10px;
+            }
+
+            .footer-brand {
+                font-size: 10px;
+            }
+
+            .footer-services {
+                font-size: 9px;
+            }
+
+            .footer-contact {
+                font-size: 9px;
+            }
+
+            .footer-copy {
+                font-size: 8px;
             }
         }
     </style>
@@ -3956,27 +4037,28 @@
 
     <!-- ================= FOOTER ================= -->
 
-    <footer>
+    <footer class="footer">
 
-        <p>
+        <div class="footer-brand">
             🚜 <strong>SHANMUKHA EARTH MOVERS</strong>
-        </p>
+        </div>
 
-        <p>
+        <div class="footer-services">
             JCB • Tractor • Earth Works • Construction Support
-        </p>
+        </div>
 
-        <p>
-            📞 9573217538 | 9515343071
-        </p>
+        <div class="footer-contact">
+            📞 <a href="tel:9573217538">9573217538</a>
+            <span>|</span>
+            <a href="tel:9515343071">9515343071</a>
+        </div>
 
-        <br>
-
-        <p>
+        <div class="footer-copy">
             © 2026 Shanmukha Earth Movers. All Rights Reserved.
-        </p>
+        </div>
 
     </footer>
+
 
 
     <!-- ================= MOBILE BAR ================= -->
