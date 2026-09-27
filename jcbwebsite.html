@@ -637,155 +637,6 @@
         }
 
 
-
-        /* ========================================================= */
-        /*                    RESPONSIVE                             */
-        /* ========================================================= */
-
-
-        /* ---------- TABLET ---------- */
-
-        @media (max-width: 1100px) {
-
-            .service-price-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .pricing-details-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .prebooking-card-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .offer-terms-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-        }
-
-
-        /* ---------- MOBILE ---------- */
-
-        @media (max-width: 768px) {
-
-            .business-offers {
-                padding: 60px 20px;
-            }
-
-
-            .offers-section-title h2 {
-                font-size: 30px;
-            }
-
-
-            .offers-section-title p {
-                font-size: 16px;
-            }
-
-
-            .service-price-grid {
-                grid-template-columns: repeat(2, 1fr);
-
-                gap: 16px;
-            }
-
-
-            .service-price-card {
-                min-height: 330px;
-
-                padding: 25px 15px;
-            }
-
-
-            .important-pricing {
-                padding: 25px 18px;
-            }
-
-
-            .pricing-details-grid {
-                grid-template-columns: 1fr;
-            }
-
-
-            .prebooking-title h3 {
-                font-size: 27px;
-            }
-
-
-            .prebooking-card-grid {
-                grid-template-columns: repeat(2, 1fr);
-
-                gap: 16px;
-            }
-
-
-            .prebooking-offer-card {
-                min-height: 320px !important;
-
-                padding: 25px 15px !important;
-            }
-
-
-            .offer-terms-section {
-                padding: 25px 18px;
-            }
-
-
-            .offer-terms-grid {
-                grid-template-columns: 1fr;
-            }
-
-
-            .offers-cta {
-                padding: 30px 18px;
-            }
-
-
-            .offers-cta h3 {
-                font-size: 23px;
-            }
-
-        }
-
-
-        /* ---------- SMALL MOBILE ---------- */
-
-        @media (max-width: 500px) {
-
-            .service-price-grid {
-                grid-template-columns: 1fr;
-            }
-
-
-            .prebooking-card-grid {
-                grid-template-columns: 1fr;
-            }
-
-
-            .prebooking-offer-card {
-                min-height: auto !important;
-            }
-
-
-            .offers-section-title h2 {
-                font-size: 26px;
-            }
-
-
-            .prebooking-title h3 {
-                font-size: 24px;
-            }
-
-
-            .important-pricing-title h3 {
-                font-size: 23px;
-            }
-
-        }
-
-
         /* =====================================================
    HEADER
 ===================================================== */
@@ -1193,90 +1044,6 @@
         .offer-terms li:last-child {
             border-bottom: none;
         }
-
-
-        /* ================= RESPONSIVE ================= */
-
-        @media (max-width: 1100px) {
-
-            .offer-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .pricing-note-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-
-        @media (max-width: 768px) {
-
-            .offer {
-                padding: 60px 20px;
-            }
-
-            .offer-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
-            }
-
-            .offer-card {
-                padding: 24px 15px;
-            }
-
-            .offer-icon {
-                font-size: 42px;
-            }
-
-            .offer-card h3 {
-                font-size: 19px;
-            }
-
-            .offer-price {
-                font-size: 24px;
-            }
-
-            .offer-card p {
-                min-height: auto;
-            }
-
-            .pricing-note {
-                padding: 25px 18px;
-            }
-
-            .pricing-note-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .offer-terms {
-                padding: 25px 18px;
-            }
-        }
-
-
-        @media (max-width: 500px) {
-
-            .offer-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .offer-card {
-                padding: 28px 20px;
-            }
-
-            .offer-price {
-                font-size: 28px;
-            }
-
-            .pricing-note h3 {
-                font-size: 22px;
-            }
-
-            .offer-terms h3 {
-                font-size: 23px;
-            }
-        }
-
 
         /* =====================================================
    BUTTONS
@@ -1815,272 +1582,758 @@
             display: none;
         }
 
+        /* =========================================================
+   FINAL ANDROID / MOBILE RESPONSIVE CSS
+   Put this at the VERY END of your <style>
+   ========================================================= */
 
-        /* =====================================================
-   TABLET
-===================================================== */
+        @media screen and (max-width: 768px) {
 
-        @media (max-width: 1100px) {
+            /* ---------- GLOBAL ---------- */
 
-            .gallery-grid {
-                grid-template-columns: repeat(3, 1fr);
+            html,
+            body {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
             }
 
-        }
-
-
-        /* =====================================================
-   TABLET / SMALL LAPTOP
-===================================================== */
-
-        @media (max-width: 900px) {
-
-            .about-container {
-                grid-template-columns: 1fr;
+            * {
+                max-width: 100%;
             }
 
-            .contact-grid {
-                grid-template-columns: 1fr;
+            body {
+                font-size: 15px;
+                line-height: 1.55;
             }
 
-            iframe {
-                height: 400px;
+            img {
+                max-width: 100%;
+                height: auto;
             }
 
-        }
 
-
-        /* =====================================================
-   MOBILE
-===================================================== */
-
-        @media (max-width: 768px) {
-
-            /* Header */
+            /* ---------- HEADER ---------- */
 
             header {
-                padding: 14px 5%;
+                width: 100%;
+                padding: 12px 16px;
+                min-height: 58px;
             }
 
             .logo {
-                font-size: 18px;
+                font-size: 17px;
+                white-space: nowrap;
             }
 
             nav {
-                display: none;
+                display: none !important;
             }
 
 
-            /* Hero */
+            /* ---------- PROPRIETOR ---------- */
+
+            .proprietor {
+                margin: 15px 0 25px;
+                padding: 0 15px;
+            }
+
+            .proprietor img {
+                width: 125px;
+                height: 125px;
+                border-width: 4px;
+            }
+
+            .proprietor h3 {
+                font-size: 20px;
+            }
+
+            .proprietor p {
+                font-size: 14px;
+            }
+
+
+            /* =====================================================
+       HERO
+       ===================================================== */
 
             .hero {
-                min-height: 85vh;
+                width: 100%;
+                min-height: 78vh;
+                padding: 45px 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                background-position: center center;
+            }
 
-                padding: 50px 6%;
+            .hero-content {
+                width: 100%;
+                max-width: 100%;
+            }
 
-                background-position: center;
+            /* IMPORTANT:
+       Your original CSS had font-size:100px.
+       This overrides it.
+    */
+
+            .hero h1 {
+                width: 100% !important;
+                max-width: 100% !important;
+
+                white-space: nowrap !important;
+
+                font-size: clamp(18px, 6vw, 30px) !important;
+
+                line-height: 1.15;
+                text-align: center;
+
+                margin: 0 auto 15px;
+
+                overflow: hidden;
+                text-overflow: clip;
             }
 
             .hero h2 {
-                font-size: 24px;
+                font-size: clamp(19px, 5vw, 25px);
+                line-height: 1.3;
+                margin-bottom: 12px;
             }
 
             .hero p {
-                font-size: 17px;
+                font-size: 15px;
+                line-height: 1.6;
+                margin-bottom: 22px;
             }
 
 
-            /* Sections */
+            /* ---------- BUTTONS ---------- */
+
+            .buttons {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .buttons .btn,
+            .hero .btn {
+                width: 100%;
+                min-width: 0;
+                padding: 13px 16px;
+                font-size: 15px;
+                text-align: center;
+                box-sizing: border-box;
+            }
+
+
+            /* ---------- COMMON SECTIONS ---------- */
 
             section {
-                padding: 50px 5%;
+                width: 100%;
+                padding: 45px 16px;
             }
 
             .section-title {
-                margin-bottom: 30px;
+                margin-bottom: 28px;
             }
 
             .section-title h2 {
+                font-size: clamp(25px, 7vw, 30px);
+                line-height: 1.25;
+            }
+
+            .section-title p {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+
+
+            /* =====================================================
+       SERVICES
+       ===================================================== */
+
+            .service-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px;
+            }
+
+            .service-card {
+                width: 100%;
+                padding: 24px 18px;
+            }
+
+            .service-icon {
+                font-size: 45px;
+            }
+
+            .service-card h3 {
+                font-size: 19px;
+            }
+
+
+            /* =====================================================
+       OFFER / PRICING
+       ===================================================== */
+
+            .offer {
+                width: 100%;
+                padding: 45px 16px;
+            }
+
+            .offer h2 {
+                font-size: clamp(27px, 7vw, 32px);
+                line-height: 1.25;
+            }
+
+            .offer-grid {
+                width: 100%;
+                grid-template-columns: 1fr !important;
+                gap: 16px;
+                margin-top: 25px;
+            }
+
+            .offer-card {
+                width: 100%;
+                padding: 25px 18px;
+                border-radius: 16px;
+            }
+
+            .offer-icon {
+                font-size: 42px;
+            }
+
+            .offer-card h3 {
+                font-size: 19px;
+            }
+
+            .offer-price {
+                font-size: 26px;
+            }
+
+            .offer-price span {
+                font-size: 13px;
+            }
+
+            .offer-card p {
+                min-height: auto !important;
+                font-size: 14px;
+            }
+
+            .offer-tag {
+                font-size: 12px;
+            }
+
+
+            /* ---------- PRICING NOTE ---------- */
+
+            .pricing-note {
+                width: 100%;
+                margin-top: 30px;
+                padding: 22px 15px;
+                border-radius: 16px;
+            }
+
+            .pricing-note h3 {
+                font-size: 21px;
+                line-height: 1.3;
+                margin-bottom: 20px;
+            }
+
+            .pricing-note-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+
+            .pricing-note-grid>div {
+                padding: 17px 14px;
+            }
+
+            .pricing-note-grid strong {
+                font-size: 16px;
+            }
+
+            .pricing-note-grid p {
+                font-size: 13px;
+            }
+
+
+            /* ---------- OFFER TERMS ---------- */
+
+            .offer-terms {
+                width: 100%;
+                margin-top: 25px;
+                padding: 22px 16px;
+                border-radius: 16px;
+            }
+
+            .offer-terms h3 {
+                font-size: 22px;
+                line-height: 1.3;
+            }
+
+            .offer-terms>p {
+                font-size: 14px;
+            }
+
+            .offer-terms li {
+                font-size: 14px;
+                padding: 9px 0;
+            }
+
+
+            /* =====================================================
+       BUSINESS OFFERS
+       ===================================================== */
+
+            .business-offers {
+                width: 100%;
+                padding: 45px 16px;
+            }
+
+            .offers-section-title {
+                margin-bottom: 28px;
+            }
+
+            .offers-section-title h2 {
+                font-size: clamp(25px, 7vw, 30px);
+                line-height: 1.25;
+            }
+
+            .offers-section-title p {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+
+            .service-price-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px;
+            }
+
+            .service-price-card {
+                width: 100%;
+                min-height: auto;
+                padding: 25px 18px;
+            }
+
+            .service-price-icon {
+                font-size: 42px;
+            }
+
+            .service-price-card h3 {
+                font-size: 19px;
+            }
+
+            .service-price {
+                font-size: 26px;
+            }
+
+            .service-price-card p {
+                font-size: 14px;
+            }
+
+
+            /* ---------- IMPORTANT PRICING ---------- */
+
+            .important-pricing {
+                width: 100%;
+                margin-top: 30px;
+                padding: 22px 15px;
+                border-radius: 17px;
+            }
+
+            .important-pricing-title {
+                margin-bottom: 22px;
+            }
+
+            .important-pricing-title h3 {
+                font-size: 21px;
+                line-height: 1.3;
+            }
+
+            .pricing-details-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+
+            .pricing-detail-card {
+                padding: 20px 15px;
+            }
+
+            .pricing-detail-icon {
+                font-size: 35px;
+            }
+
+            .pricing-detail-card h4 {
+                font-size: 17px;
+            }
+
+            .pricing-detail-card p {
+                font-size: 13px;
+            }
+
+
+            /* ---------- PRE BOOKING ---------- */
+
+            .prebooking-section {
+                width: 100%;
+                margin-top: 35px;
+            }
+
+            .prebooking-title {
+                margin-bottom: 25px;
+            }
+
+            .prebooking-title h3 {
+                font-size: 24px;
+                line-height: 1.3;
+            }
+
+            .prebooking-title p {
+                font-size: 14px;
+            }
+
+            .prebooking-card-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px;
+            }
+
+            .prebooking-offer-card {
+                width: 100%;
+                min-height: auto !important;
+                padding: 25px 18px !important;
+            }
+
+            .prebooking-card-icon {
+                font-size: 40px;
+            }
+
+            .prebooking-offer-card h4 {
+                font-size: 19px;
+            }
+
+            .prebooking-offer-card p {
+                font-size: 14px;
+            }
+
+
+            /* ---------- OFFER TERMS SECTION ---------- */
+
+            .offer-terms-section {
+                width: 100%;
+                margin-top: 35px;
+                padding: 22px 15px;
+                border-radius: 17px;
+            }
+
+            .offer-terms-section>h3 {
+                font-size: 22px;
+                line-height: 1.3;
+            }
+
+            .offer-terms-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+
+            .offer-term-card {
+                padding: 20px 15px;
+            }
+
+            .offer-term-card span {
                 font-size: 30px;
             }
 
+            .offer-term-card h4 {
+                font-size: 17px;
+            }
 
-            /* Services */
-
-            .service-grid {
-                grid-template-columns: 1fr;
+            .offer-term-card p {
+                font-size: 13px;
             }
 
 
-            /* Gallery */
+            /* ---------- CTA ---------- */
+
+            .offers-cta {
+                width: 100%;
+                margin-top: 30px;
+                padding: 28px 16px;
+                border-radius: 17px;
+            }
+
+            .offers-cta-icon {
+                font-size: 40px;
+            }
+
+            .offers-cta h3 {
+                font-size: 22px;
+                line-height: 1.3;
+            }
+
+            .offers-cta p {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            .offers-whatsapp-btn {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 13px 18px;
+                font-size: 15px;
+            }
+
+
+            /* =====================================================
+       GALLERY
+       ===================================================== */
 
             .gallery-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr !important;
+                gap: 16px;
+            }
 
-                gap: 15px;
+            .gallery-item {
+                width: 100%;
             }
 
             .gallery-item img {
-                height: 200px;
+                width: 100%;
+                height: 220px !important;
+                object-fit: cover;
             }
 
             .gallery-caption {
-                padding: 12px;
+                padding: 13px;
             }
 
             .gallery-caption h3 {
                 font-size: 18px;
             }
 
+            .gallery-caption p {
+                font-size: 13px;
+            }
 
-            /* About */
+
+            /* =====================================================
+       WHY CHOOSE US
+       ===================================================== */
+
+            .why-grid {
+                grid-template-columns: 1fr !important;
+                gap: 15px;
+            }
+
+            .why-card {
+                padding: 22px 16px;
+            }
+
+            .why-card span {
+                font-size: 35px;
+            }
+
+
+            /* =====================================================
+       ABOUT
+       ===================================================== */
+
+            .about-container {
+                grid-template-columns: 1fr !important;
+                gap: 25px;
+            }
+
+            .about img {
+                width: 100%;
+                max-width: 100%;
+                border-radius: 15px;
+            }
 
             .about h2 {
-                font-size: 30px;
+                font-size: 28px;
+                line-height: 1.3;
             }
 
             .about p {
-                font-size: 17px;
+                font-size: 15px;
+                line-height: 1.7;
             }
 
 
-            /* Contact */
+            /* =====================================================
+       CONTACT
+       ===================================================== */
 
             .contact-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
+                gap: 20px;
+            }
+
+            .contact-card {
+                width: 100%;
+                padding: 22px 17px;
+            }
+
+            .contact-item {
+                font-size: 15px;
+                line-height: 1.6;
+                overflow-wrap: anywhere;
+            }
+
+            iframe {
+                width: 100%;
+                min-height: 300px;
+                height: 300px;
+                border-radius: 12px;
             }
 
 
-            /* Proprietor */
+            /* =====================================================
+       ENQUIRY FORM
+       ===================================================== */
 
-            .proprietor img {
-                width: 150px;
-                height: 150px;
-            }
-
-
-            /* Offer */
-
-            .offer h2 {
-                font-size: 32px;
-            }
-
-            .offer-box {
-                padding: 25px 18px;
-            }
-
-            .offer-box h3 {
-                font-size: 24px;
-            }
-
-
-            /* Buttons */
-
-            .buttons {
+            .enquiry {
                 width: 100%;
             }
 
-            .buttons .btn {
-                flex: 1;
-
-                text-align: center;
-
-                min-width: 130px;
-            }
-
-
-            /* Enquiry */
-
             .enquiry h2 {
-                font-size: 30px;
+                font-size: 27px;
+                line-height: 1.3;
+            }
+
+            .enquiry p {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            form {
+                width: 100%;
+                gap: 12px;
+            }
+
+            input,
+            textarea,
+            select {
+                width: 100%;
+                font-size: 16px;
+                padding: 14px;
+                box-sizing: border-box;
+            }
+
+            textarea {
+                height: 110px;
+            }
+
+            .submit-btn {
+                width: 100%;
+                padding: 14px;
+                font-size: 16px;
             }
 
 
-            /* Mobile bottom bar */
+            /* =====================================================
+       MOBILE BOTTOM BAR
+       ===================================================== */
 
             .mobile-bar {
-                position: fixed;
-
-                bottom: 0;
-
-                left: 0;
-
-                right: 0;
-
-                display: flex;
-
-                z-index: 2000;
-
-                box-shadow:
-                    0 -3px 15px rgba(0, 0, 0, 0.25);
+                display: flex !important;
+                width: 100%;
+                height: 58px;
             }
 
             .mobile-bar a {
                 width: 50%;
-
-                padding: 15px;
-
-                text-align: center;
-
-                text-decoration: none;
-
-                font-weight: bold;
-
-                color: white;
-            }
-
-            .mobile-call {
-                background: #111;
-            }
-
-            .mobile-whatsapp {
-                background: #25D366;
+                padding: 16px 10px;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
 
-            /* Footer */
+            /* ---------- FOOTER ---------- */
 
             footer {
-                padding-bottom: 80px;
+                padding: 25px 15px 80px;
+                font-size: 13px;
             }
-
         }
 
 
-        /* =====================================================
-   SMALL MOBILE
-===================================================== */
+        /* =========================================================
+   VERY SMALL ANDROID PHONES
+   320px - 380px
+   ========================================================= */
 
-        @media (max-width: 768px) {
+        @media screen and (max-width: 380px) {
 
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .gallery-item img {
-                height: 240px;
-            }
-
-
-
-            .hero h2 {
-                font-size: 21px;
-            }
-
-            .btn {
-                width: 100%;
-
-                text-align: center;
+            .hero {
+                min-height: 75vh;
+                padding: 35px 12px;
             }
 
             .hero h1 {
-                white-space: nowrap;
-                text-align: center;
-                font-size: clamp(16px, 5vw, 40px);
-                width: 100%;
-                margin: 0;
+                font-size: 17px !important;
+                letter-spacing: -0.3px;
             }
 
+            .hero h2 {
+                font-size: 18px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            section,
+            .offer,
+            .business-offers {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .section-title h2,
+            .offers-section-title h2 {
+                font-size: 24px;
+            }
+
+            .service-card,
+            .offer-card,
+            .service-price-card,
+            .prebooking-offer-card {
+                padding-left: 14px !important;
+                padding-right: 14px !important;
+            }
+
+            .gallery-item img {
+                height: 200px !important;
+            }
+        }
+
+
+        /* =========================================================
+   LANDSCAPE ANDROID PHONES
+   ========================================================= */
+
+        @media screen and (max-width: 768px) and (orientation: landscape) {
+
+            .hero {
+                min-height: 100vh;
+                padding: 35px 20px;
+            }
+
+            .hero h1 {
+                font-size: 22px !important;
+            }
+
+            .hero h2 {
+                font-size: 20px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
