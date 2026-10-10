@@ -1,0 +1,414 @@
+ * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f7fb;
+        }
+
+        .company-header {
+            width: 100%;
+            text-align: center;
+            padding: 15px 20px;
+
+            font-family:
+                "Noto Sans Telugu",
+                "Nirmala UI",
+                sans-serif;
+
+            background: linear-gradient(
+                135deg,
+                #fff8e1,
+                #ffffff,
+                #e8f5e9
+            );
+
+            border-bottom: 4px solid #f57c00;
+
+            box-shadow:
+                0 5px 18px rgba(0, 0, 0, 0.12);
+
+            animation: headerFade 1s ease-out;
+
+            overflow: hidden;
+        }
+
+
+        /* =================================
+           COMPANY NAME
+        ================================= */
+
+        .company-title {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 22px;
+
+            margin-bottom: 10px;
+        }
+
+
+        /* GOD IMAGES */
+
+        .god-image {
+
+            width: 58px;
+
+            height: 58px;
+
+            object-fit: contain;
+
+            filter:
+                drop-shadow(
+                    0 3px 3px
+                    rgba(0, 0, 0, 0.25)
+                );
+
+            animation:
+                godFloat 3s ease-in-out infinite;
+        }
+
+
+        /* COMPANY NAME */
+
+        .company-name {
+
+            margin: 0;
+
+            font-size: 56px;
+
+            font-weight: 900;
+
+            white-space: nowrap;
+
+            background: linear-gradient(
+                90deg,
+                #d84315,
+                #ff9800,
+                #e65100
+            );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            animation:
+                titleGlow 2.5s ease-in-out infinite;
+        }
+
+
+        /* =================================
+           BOTTOM INFORMATION ROW
+        ================================= */
+
+        .info-row {
+
+            width: 100%;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                auto
+                1fr;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 0 5px;
+
+            animation:
+                slideUp 1.2s ease-out;
+        }
+
+
+        /* PROPRIETOR */
+
+        .proprietor {
+
+            text-align: left;
+
+            color: #6a1b9a;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        /* =================================
+           SERVICES
+        ================================= */
+
+        .services {
+
+            text-align: center;
+
+            font-size: 18px;
+
+            font-weight: 900;
+
+            letter-spacing: 0.5px;
+
+            white-space: nowrap;
+
+            color: #ffffff;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #e65100,
+                    #ff9800,
+                    #e65100
+                );
+
+            padding: 6px 18px;
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 3px 8px
+                rgba(230, 81, 0, 0.30);
+
+            animation:
+                servicePulse 3s ease-in-out infinite;
+        }
+
+
+        .services span {
+
+            margin: 0 4px;
+
+        }
+
+
+        /* PHONE */
+
+        .phone {
+
+            text-align: right;
+
+            color: #2e7d32;
+
+            font-size: 17px;
+
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+
+        /* =================================
+           ANIMATIONS
+        ================================= */
+
+        @keyframes headerFade {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(-15px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        @keyframes slideUp {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        @keyframes godFloat {
+
+            0%, 100% {
+                transform:
+                    translateY(0);
+            }
+
+            50% {
+                transform:
+                    translateY(-5px);
+            }
+        }
+
+
+        @keyframes titleGlow {
+
+            0%, 100% {
+                filter:
+                    brightness(1);
+            }
+
+            50% {
+                filter:
+                    brightness(1.15);
+            }
+        }
+
+
+        @keyframes servicePulse {
+
+            0%, 100% {
+                transform:
+                    scale(1);
+            }
+
+            50% {
+                transform:
+                    scale(1.03);
+            }
+        }
+
+
+        /* =================================
+           MOBILE
+        ================================= */
+
+        @media (max-width: 600px) {
+
+            .company-header {
+
+                padding:
+                    10px 7px;
+            }
+
+
+            .company-title {
+
+                gap: 8px;
+
+                margin-bottom: 8px;
+            }
+
+
+            .god-image {
+
+                width: 37px;
+
+                height: 37px;
+            }
+
+
+            .company-name {
+
+                font-size: 24px;
+            }
+
+
+            .info-row {
+
+                grid-template-columns:
+                    1fr
+                    auto
+                    1fr;
+
+                gap: 5px;
+
+                padding: 0;
+            }
+
+
+            .proprietor {
+
+                font-size: 21px;
+
+                text-align: left;
+            }
+
+
+            .services {
+
+                font-size: 15px;
+
+                padding:
+                    5px 8px;
+
+                border-radius: 18px;
+
+                letter-spacing: 0;
+            }
+
+
+            .services span {
+
+                margin: 0 1px;
+            }
+
+
+            .phone {
+
+                font-size: 21px;
+
+                text-align: right;
+            }
+        }
+
+
+        /* =================================
+           VERY SMALL PHONES
+        ================================= */
+
+        @media (max-width: 380px) {
+
+            .god-image {
+
+                width: 31px;
+
+                height: 31px;
+            }
+
+
+            .company-name {
+
+                font-size: 20px;
+            }
+
+
+            .proprietor {
+
+                font-size: 9px;
+            }
+
+
+            .services {
+
+                font-size: 9px;
+
+                padding:
+                    4px 6px;
+            }
+
+
+            .phone {
+
+                font-size: 9px;
+            }
+        }

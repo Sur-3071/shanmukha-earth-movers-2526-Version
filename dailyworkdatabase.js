@@ -770,6 +770,7 @@ function generateCustomerTable(data) {
     var collection = 0;
     var recovery = 0;
     let out = `<table border="1" id="customerTable1" style="border-collapse: collapse; width: 100%; text-align: center;">
+    
     <tr>
     <th colspan="17" style="background-color:rgb(95, 237, 228);"><h1 style="text-align:center;font-size:50px;font-weight: bold;color:red">మొత్తం పని</h1></th>
     </tr>
