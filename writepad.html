@@ -1,0 +1,602 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handwritten Notes Generator</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Patrick+Hand&family=Kalam:wght@300;400;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #edf3fc;
+    color: #20304a;
+}
+
+header {
+    background: #203958;
+    color: white;
+    padding: 22px 30px;
+}
+
+header h1 {
+    margin: 0 0 6px;
+    font-size: 28px;
+}
+
+header p {
+    margin: 0;
+    color: #dce8fa;
+}
+
+.app {
+    max-width: 1400px;
+    margin: auto;
+    padding: 24px;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.controls {
+    background: white;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px #243a5810;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 9px;
+}
+
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 16px;
+}
+
+textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+button {
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.write-btn {
+    color: white;
+    background: #1769e0;
+    flex: 1;
+}
+
+.clear-btn {
+    background: #e8eef8;
+    color: #29466f;
+}
+
+.print-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: #e8eef8;
+    color: #29466f;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.setting {
+    margin-top: 20px;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: #1769e0;
+}
+
+.colors {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.color {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: 50%;
+    border: 2px solid white;
+    outline: 1px solid #d2dbea;
+}
+
+.color.active {
+    outline: 3px solid #1769e0;
+}
+
+.preview-title {
+    margin: 0 0 12px;
+    font-size: 18px;
+}
+
+/* Notebook paper */
+.paper {
+    --line-height: 42px;
+    position: relative;
+    min-height: 750px;
+    padding: 38px 30px 40px 76px;
+    overflow: hidden;
+
+    background-color: #fffefa;
+    background-image:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent calc(var(--line-height) - 1px),
+            #b9d6ef var(--line-height)
+        );
+
+    border: 1px solid #e0e5eb;
+    border-radius: 5px;
+    box-shadow: 0 8px 25px #23395720;
+}
+
+/* Red notebook margin */
+.paper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 57px;
+    width: 2px;
+    background: #efaaaa;
+}
+
+/* Every sentence gets its own horizontal row */
+.written-line {
+    position: relative;
+    min-height: var(--line-height);
+    margin: 0;
+    padding: 0;
+    color: #173f91;
+
+    font-family: 'Caveat', cursive;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: var(--line-height);
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+/* Animated pen hand */
+.pen-hand {
+    position: absolute;
+    z-index: 5;
+    font-family: sans-serif;
+    font-size: 32px;
+    line-height: 1;
+    pointer-events: none;
+    transform: translate(-5px, -5px) rotate(-8deg);
+    transition: left 35ms linear, top 35ms linear;
+    filter: drop-shadow(1px 2px 1px #0002);
+    display: none;
+}
+
+.status {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 12px;
+}
+
+.tip {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f0f5ff;
+    color: #587096;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+@media (max-width: 800px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .paper {
+        padding-left: 58px;
+        min-height: 600px;
+    }
+
+    .paper::before {
+        left: 42px;
+    }
+
+    .written-line {
+        font-size: 27px;
+    }
+}
+
+@media print {
+    body {
+        background: white;
+    }
+
+    header,
+    .controls,
+    .preview-title,
+    .status,
+    .pen-hand {
+        display: none !important;
+    }
+
+    .app {
+        padding: 0;
+    }
+
+    .layout {
+        display: block;
+    }
+
+    .paper {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        min-height: 100vh;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>✍️ Suresh Tech Note Pad Writer</h1>
+    <p>Type a sentence and watch it being written on notebook paper.</p>
+</header>
+
+<div class="app">
+    <div class="layout">
+
+        <!-- LEFT SIDE CONTROLS -->
+        <section class="controls">
+
+            <label for="sentence">Enter your sentence</label>
+
+            <textarea
+                id="sentence"
+                placeholder="Example: A static variable belongs to the class."
+            ></textarea>
+
+            <div class="buttons">
+                <button class="write-btn" id="writeBtn">
+                    ✍️ Write
+                </button>
+
+                <button class="clear-btn" id="clearBtn">
+                    Clear paper
+                </button>
+            </div>
+
+            <div class="setting">
+                <label for="fontStyle">Handwriting style</label>
+
+                <select id="fontStyle">
+                    <option value="'Caveat', cursive">Style 1 - Natural</option>
+                    <option value="'Patrick Hand', cursive">Style 2 - Neat</option>
+                    <option value="'Kalam', cursive">Style 3 - Rounded</option>
+                </select>
+            </div>
+
+            <div class="setting">
+                <label for="writingSize">Writing size</label>
+
+                <input
+                    type="range"
+                    id="writingSize"
+                    min="22"
+                    max="40"
+                    value="30"
+                >
+
+                <span id="sizeValue">30 px</span>
+            </div>
+
+            <div class="setting">
+                <label>Ink color</label>
+
+                <div class="colors">
+                    <button class="color active"
+                        style="background:#173f91"
+                        data-color="#173f91"
+                        aria-label="Blue ink"></button>
+
+                    <button class="color"
+                        style="background:#111111"
+                        data-color="#111111"
+                        aria-label="Black ink"></button>
+
+                    <button class="color"
+                        style="background:#d92727"
+                        data-color="#d92727"
+                        aria-label="Red ink"></button>
+
+                    <button class="color"
+                        style="background:#168744"
+                        data-color="#168744"
+                        aria-label="Green ink"></button>
+
+                    <button class="color"
+                        style="background:#8024c7"
+                        data-color="#8024c7"
+                        aria-label="Purple ink"></button>
+                </div>
+            </div>
+
+            <div class="setting">
+                <label for="speed">Writing speed</label>
+
+                <input
+                    type="range"
+                    id="speed"
+                    min="10"
+                    max="120"
+                    value="45"
+                >
+
+                <span id="speedValue">Normal</span>
+            </div>
+
+            <button class="print-btn" id="printBtn">
+                Print / Save as PDF
+            </button>
+
+            <div class="tip">
+                💡 Enter one sentence and click Write. The animated pen
+                writes from left to right. When finished, the input box
+                clears automatically. Enter another sentence and it will
+                appear on the next available line.
+            </div>
+
+            <div class="status" id="status">
+                Ready to write.
+            </div>
+
+        </section>
+
+        <!-- RIGHT SIDE NOTEBOOK -->
+        <section>
+            <h2 class="preview-title">📒 Your Notebook</h2>
+
+            <div class="paper" id="paper">
+                <div id="writingArea"></div>
+
+                <div class="pen-hand" id="penHand">✍️</div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<script>
+const sentenceInput = document.getElementById("sentence");
+const writeBtn = document.getElementById("writeBtn");
+const clearBtn = document.getElementById("clearBtn");
+const paper = document.getElementById("paper");
+const writingArea = document.getElementById("writingArea");
+const penHand = document.getElementById("penHand");
+const statusText = document.getElementById("status");
+
+const fontStyle = document.getElementById("fontStyle");
+const writingSize = document.getElementById("writingSize");
+const sizeValue = document.getElementById("sizeValue");
+const speedInput = document.getElementById("speed");
+const speedValue = document.getElementById("speedValue");
+
+let inkColor = "#173f91";
+let isWriting = false;
+let cancelWriting = false;
+
+// Apply handwriting settings to existing and future lines.
+function updateStyle() {
+    document.querySelectorAll(".written-line").forEach(line => {
+        line.style.fontFamily = fontStyle.value;
+        line.style.fontSize = writingSize.value + "px";
+        line.style.color = inkColor;
+    });
+
+    sizeValue.textContent = writingSize.value + " px";
+
+    const speed = Number(speedInput.value);
+
+    if (speed < 35) {
+        speedValue.textContent = "Fast";
+    } else if (speed < 80) {
+        speedValue.textContent = "Normal";
+    } else {
+        speedValue.textContent = "Slow";
+    }
+}
+
+fontStyle.addEventListener("change", updateStyle);
+writingSize.addEventListener("input", updateStyle);
+speedInput.addEventListener("input", updateStyle);
+
+// Choose ink color.
+document.querySelectorAll(".color").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".color").forEach(item => {
+            item.classList.remove("active");
+        });
+
+        button.classList.add("active");
+        inkColor = button.dataset.color;
+        updateStyle();
+    });
+});
+
+// Small delay helper for the writing animation.
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Move the hand to the end of the latest visible character.
+function moveHandToCharacter(line, characterIndex) {
+    const textNode = line.firstChild;
+
+    if (!textNode || characterIndex <= 0) {
+        return;
+    }
+
+    const range = document.createRange();
+
+    range.setStart(textNode, characterIndex);
+    range.setEnd(textNode, characterIndex);
+
+    const rect = range.getBoundingClientRect();
+    const paperRect = paper.getBoundingClientRect();
+
+    // Use the character's position so the hand follows the line
+    // horizontally and also follows wrapped lines.
+    penHand.style.left =
+        (rect.left - paperRect.left + paper.scrollLeft) + "px";
+
+    penHand.style.top =
+        (rect.top - paperRect.top + paper.scrollTop) + "px";
+}
+
+// Write characters one by one, left to right.
+async function writeSentence(text) {
+    if (isWriting) return;
+
+    isWriting = true;
+    cancelWriting = false;
+    writeBtn.disabled = true;
+    writeBtn.textContent = "Writing...";
+
+    // Create a new horizontal sentence line.
+    const line = document.createElement("p");
+    line.className = "written-line";
+    line.style.fontFamily = fontStyle.value;
+    line.style.fontSize = writingSize.value + "px";
+    line.style.color = inkColor;
+
+    // Start with an empty text node so we can reveal characters.
+    line.textContent = "";
+    const textNode = document.createTextNode("");
+    line.appendChild(textNode);
+    writingArea.appendChild(line);
+
+    penHand.style.display = "block";
+
+    // Start near the beginning of the new line.
+    await wait(80);
+
+    for (let i = 0; i < text.length; i++) {
+        if (cancelWriting) break;
+
+        textNode.textContent += text[i];
+
+        // Let the browser measure the newly added character.
+        moveHandToCharacter(line, textNode.textContent.length);
+
+        // Keep the latest writing visible as the page grows.
+        const paperBottom = paper.getBoundingClientRect().bottom;
+        const lineBottom = line.getBoundingClientRect().bottom;
+
+        if (lineBottom > paperBottom - 25) {
+            paper.style.minHeight =
+                (paper.scrollHeight + 100) + "px";
+        }
+
+        paper.scrollIntoView({
+            behavior: "auto",
+            block: "nearest"
+        });
+
+        await wait(Number(speedInput.value));
+    }
+
+    // Keep the written sentence and hide the pen when finished.
+    penHand.style.display = "none";
+
+    sentenceInput.value = "";
+    sentenceInput.focus();
+
+    statusText.textContent = cancelWriting
+        ? "Writing stopped."
+        : "Sentence written successfully! Enter the next sentence.";
+
+    isWriting = false;
+    writeBtn.disabled = false;
+    writeBtn.textContent = "✍️ Write";
+}
+
+// Write button.
+writeBtn.addEventListener("click", async () => {
+    const text = sentenceInput.value.trim();
+
+    if (!text) {
+        statusText.textContent = "Please enter a sentence first.";
+        sentenceInput.focus();
+        return;
+    }
+
+    await writeSentence(text);
+});
+
+// Press Ctrl+Enter to write.
+sentenceInput.addEventListener("keydown", event => {
+    if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+        event.preventDefault();
+        writeBtn.click();
+    }
+});
+
+// Clear all written sentences.
+clearBtn.addEventListener("click", () => {
+    cancelWriting = true;
+    writingArea.replaceChildren();
+    penHand.style.display = "none";
+
+    // Restore the paper's default height.
+    paper.style.minHeight = "750px";
+
+    statusText.textContent = "Paper cleared. Ready to write.";
+});
+
+// Print the notebook or save it as PDF.
+document.getElementById("printBtn").addEventListener("click", () => {
+    window.print();
+});
+
+updateStyle();
+</script>
+
+</body>
+</html>

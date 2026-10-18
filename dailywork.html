@@ -4046,10 +4046,10 @@ Object.keys(summary)
                 if (
                     c.jcbRemaining === 0 &&
                     c.overallRemaining === 0 &&
-                    Math.abs(c.Miscellaneous) <= 1000
+                    c.Miscellaneous > -1000
                 ) {
                     status = "🥇 Golden Customer";
-                } else if (Math.abs(c.Miscellaneous) > 1000) {
+                } else if (c.Miscellaneous < -1000) {
                     if (c.jcbRemaining === 0 && c.overallRemaining === 0) {
                         status = "🟡 IP Customer";
                     } else {
