@@ -254,31 +254,31 @@
     </tr>
 `;
 
-Object.keys(summary)
-    .map(driver => {
-        const total = summary[driver].totalEarned;
-        const given = summary[driver].totalGiven;
-        const balance = total - given;
+            Object.keys(summary)
+                .map(driver => {
+                    const total = summary[driver].totalEarned;
+                    const given = summary[driver].totalGiven;
+                    const balance = total - given;
 
-        return {
-            driver,
-            total,
-            given,
-            balance
-        };
-    })
-    .filter(item => item.balance !== 0) // Ignore balance = 0
-    .sort((a, b) => b.balance - a.balance) // Higher balance → lower balance
-    .forEach(item => {
+                    return {
+                        driver,
+                        total,
+                        given,
+                        balance
+                    };
+                })
+                .filter(item => item.balance !== 0) // Ignore balance = 0
+                .sort((a, b) => b.balance - a.balance) // Higher balance → lower balance
+                .forEach(item => {
 
-        const { driver, total, given, balance } = item;
+                    const { driver, total, given, balance } = item;
 
-        // Add to grand totals
-        grandTotal += total;
-        grandGiven += given;
-        grandBalance += balance;
+                    // Add to grand totals
+                    grandTotal += total;
+                    grandGiven += given;
+                    grandBalance += balance;
 
-        html += `
+                    html += `
             <tr style="font-size:20px;font-weight:500;">
                 <td style="padding:12px;">
                     ${driver}
@@ -301,7 +301,7 @@ Object.keys(summary)
                 </td>
             </tr>
         `;
-    });
+                });
 
             // Grand Total Row
             html += `
@@ -2804,7 +2804,7 @@ Object.keys(summary)
         border: 3px solid #fff;
         margin-bottom: 100px;
     ">
-            New Customer Registeration
+            New Customer Registration
         </h1>
         <form id="userForm2">
             <input type="text" id="name1" name="name" placeholder="Customer Name" required>
@@ -5991,7 +5991,7 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         function showPage(pageId) {
 
-            const pages = ['list1', 'list2', 'list3', 'list4','list5', 'summaryDiv'];
+            const pages = ['list1', 'list2', 'list3', 'list4', 'list5', 'summaryDiv'];
 
             // Reset all forms
             document.querySelectorAll("form").forEach(form => {
@@ -7007,6 +7007,40 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
 
         }
 
+        document.addEventListener("mouseover", function (event) {
+
+            const chip = event.target.closest(".date-chip");
+
+            if (!chip || chip.dataset.tooltipAdded) return;
+
+            const dateText = chip.textContent.trim();
+            const [day, month, year] = dateText.split("-").map(Number);
+
+            const date = new Date(year, month - 1, day);
+
+            if (
+                date.getDate() !== day ||
+                date.getMonth() !== month - 1 ||
+                date.getFullYear() !== year
+            ) {
+                return;
+            }
+
+            const suffix =
+                day >= 11 && day <= 13 ? "th" :
+                    day % 10 === 1 ? "st" :
+                        day % 10 === 2 ? "nd" :
+                            day % 10 === 3 ? "rd" : "th";
+
+            const monthName = date.toLocaleString("en-US", {
+                month: "long"
+            });
+
+            chip.dataset.tooltip = `${day}${suffix} ${monthName} ${year}`;
+            chip.dataset.tooltipAdded = "true";
+
+        });
+
     </script>
 
 
@@ -7029,6 +7063,8 @@ ${nameDateMap[name] ? nameDateMap[name].size : 0}
     <script type="module" src="dailyworkretrive.js"></script>
     <script type="module" src="dailywork.js"></script>
     <script type="module" src="dailyworkid_retrive.js"></script>
+
+
 
 </body>
 

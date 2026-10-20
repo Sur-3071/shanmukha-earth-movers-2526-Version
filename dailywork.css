@@ -1657,6 +1657,45 @@ h2 {
     align-items: center;
 }
 
+.date-chip {
+    position: relative;
+    cursor: pointer;
+}
+
+.date-chip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    background: #222;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.date-chip:hover::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    border: 6px solid transparent;
+    border-top-color: #222;
+    pointer-events: none;
+    z-index: 9999;
+}
+
 .popup-box {
     background: white;
     padding: 25px;
