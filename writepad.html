@@ -1,602 +1,724 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Handwritten Notes Generator</title>
-
+<title>Suresh.Tech Note Pad Writer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&family=Patrick+Hand&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Patrick+Hand&family=Kalam:wght@300;400;700&display=swap');
+:root {
+    --navy-dark: #122238;
+    --navy-mid: #1a3352;
+    --blue-accent: #1769e0;
+    --blue-hover: #1254b7;
+    --ink: #1760c5;
+    --paper-bg: #fffefa;
+    --paper-line: #cbe0f5;
+    --margin-red: #f2a4ad;
+    --panel-border: #d4e3f5;
+    --topbar-height: 54px;
+    --bottombar-height: 74px;
+}
 
-* {
+* { box-sizing: border-box; }
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #e2ecf8;
+    color: var(--navy-dark);
+}
+
+/* ---------------- TOPBAR ---------------- */
+.topbar {
+    height: var(--topbar-height);
+    background: linear-gradient(135deg, var(--navy-dark), var(--navy-mid));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    gap: 10px;
+    box-shadow: 0 2px 10px rgba(10, 25, 45, 0.25);
+    z-index: 30;
+    position: relative;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.brand-icon { font-size: 20px; }
+.brand-title {
+    font-family: 'Kalam', cursive;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.top-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 2px 0;
+}
+.top-controls::-webkit-scrollbar { display: none; }
+
+.control-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 3px 8px;
+    border-radius: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    white-space: nowrap;
+}
+.control-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #bcd5f5;
+    font-weight: 600;
+}
+
+select.top-select {
+    background: #ffffff;
+    color: var(--navy-dark);
+    border: none;
+    border-radius: 5px;
+    padding: 3px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+}
+
+.color-dots {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.color-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    padding: 0;
+}
+.color-dot:hover { transform: scale(1.15); }
+.color-dot.active {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px var(--blue-accent);
+}
+
+.speed-range {
+    width: 60px;
+    accent-color: var(--blue-accent);
+    cursor: pointer;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.btn-primary {
+    background: var(--blue-accent);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(23, 105, 224, 0.4);
+}
+.btn-primary:hover:not(:disabled) {
+    background: var(--blue-hover);
+    transform: translateY(-1px);
+}
+.btn-danger {
+    background: #394b61;
+    color: #f1f5f9;
+    border: 1px solid #4f647d;
+}
+.btn-danger:hover:not(:disabled) {
+    background: #e11d48;
+    color: #fff;
+    border-color: #e11d48;
+}
+.btn-secondary {
+    background: #ffffff;
+    color: var(--navy-mid);
+}
+.btn-secondary:hover:not(:disabled) {
+    background: #f0f5fc;
+}
+
+/* ---------------- MAIN VIEWPORT & NOTEBOOK PAGES ---------------- */
+.main-stage {
+    height: calc(100vh - var(--topbar-height) - var(--bottombar-height));
+    width: 100%;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
     box-sizing: border-box;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #edf3fc;
-    color: #20304a;
-}
-
-header {
-    background: #203958;
-    color: white;
-    padding: 22px 30px;
-}
-
-header h1 {
-    margin: 0 0 6px;
-    font-size: 28px;
-}
-
-header p {
-    margin: 0;
-    color: #dce8fa;
-}
-
-.app {
-    max-width: 1400px;
-    margin: auto;
-    padding: 24px;
-}
-
-.layout {
-    display: grid;
-    grid-template-columns: 320px minmax(0, 1fr);
-    gap: 22px;
-    align-items: start;
-}
-
-.controls {
-    background: white;
-    padding: 22px;
-    border-radius: 14px;
-    box-shadow: 0 5px 20px #243a5810;
-}
-
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 9px;
-}
-
-textarea,
-select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    font-size: 15px;
-    margin-bottom: 16px;
-}
-
-textarea {
-    height: 150px;
-    resize: vertical;
-}
-
-button {
-    padding: 12px 15px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 15px;
-}
-
-.write-btn {
-    color: white;
-    background: #1769e0;
-    flex: 1;
-}
-
-.clear-btn {
-    background: #e8eef8;
-    color: #29466f;
-}
-
-.print-btn {
-    width: 100%;
-    margin-top: 10px;
-    background: #e8eef8;
-    color: #29466f;
-}
-
-.buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.setting {
-    margin-top: 20px;
-}
-
-input[type="range"] {
-    width: 100%;
-    accent-color: #1769e0;
-}
-
-.colors {
+.notebook-container {
     display: flex;
     gap: 12px;
-    margin-top: 10px;
-}
-
-.color {
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    border-radius: 50%;
-    border: 2px solid white;
-    outline: 1px solid #d2dbea;
-}
-
-.color.active {
-    outline: 3px solid #1769e0;
-}
-
-.preview-title {
-    margin: 0 0 12px;
-    font-size: 18px;
-}
-
-/* Notebook paper */
-.paper {
-    --line-height: 42px;
+    height: 100%;
+    width: 100%;
+    max-width: 1600px;
+    justify-content: center;
+    align-items: stretch;
     position: relative;
-    min-height: 750px;
-    padding: 38px 30px 40px 76px;
-    overflow: hidden;
-
-    background-color: #fffefa;
-    background-image:
-        repeating-linear-gradient(
-            to bottom,
-            transparent 0,
-            transparent calc(var(--line-height) - 1px),
-            #b9d6ef var(--line-height)
-        );
-
-    border: 1px solid #e0e5eb;
-    border-radius: 5px;
-    box-shadow: 0 8px 25px #23395720;
 }
 
-/* Red notebook margin */
-.paper::before {
+.notebook-page {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    background-color: var(--paper-bg);
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(18, 34, 56, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    --line-height: 28px;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent calc(var(--line-height) - 1px),
+        var(--paper-line) var(--line-height)
+    );
+}
+
+/* Notebook Page Margins */
+.notebook-page::before {
     content: "";
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 57px;
+    top: 0; bottom: 0; left: 36px;
     width: 2px;
-    background: #efaaaa;
+    background: var(--margin-red);
+    z-index: 2;
+    pointer-events: none;
 }
 
-/* Every sentence gets its own horizontal row */
-.written-line {
+.page-header-decor {
+    position: absolute;
+    top: 6px;
+    right: 18px;
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    color: #94a3b8;
+    z-index: 2;
+    pointer-events: none;
+    user-select: none;
+}
+
+.page-content {
     position: relative;
-    min-height: var(--line-height);
+    z-index: 1;
+    padding: 28px 28px 12px 48px; /* Refined top and right padding for natural alignment */
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.written-line {
     margin: 0;
     padding: 0;
-    color: #173f91;
-
-    font-family: 'Caveat', cursive;
-    font-size: 30px;
-    font-weight: 500;
-    line-height: var(--line-height);
-
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-    word-break: normal;
+    color: var(--ink);
+    font-family: 'Kalam', cursive;
+    font-size: 22px;
+    line-height: 28px;
+    height: 28px;
+    white-space: pre;
+    overflow: hidden;
+    word-break: break-all;
 }
 
-/* Animated pen hand */
+/* Writing Pen Cursor Indicator */
 .pen-hand {
     position: absolute;
-    z-index: 5;
-    font-family: sans-serif;
-    font-size: 32px;
-    line-height: 1;
-    pointer-events: none;
-    transform: translate(-5px, -5px) rotate(-8deg);
-    transition: left 35ms linear, top 35ms linear;
-    filter: drop-shadow(1px 2px 1px #0002);
+    z-index: 10;
     display: none;
+    pointer-events: none;
+    font-size: 22px;
+    transform: translate(-4px, -10px) rotate(-10deg);
+    transition: left 0.03s linear, top 0.03s linear;
+    filter: drop-shadow(2px 3px 2px rgba(0,0,0,0.18));
 }
 
-.status {
-    font-size: 13px;
-    color: #64748b;
-    margin-top: 12px;
+/* ---------------- BOTTOM PANEL ---------------- */
+.bottom-panel {
+    height: var(--bottombar-height);
+    background: #ffffff;
+    border-top: 1px solid var(--panel-border);
+    padding: 6px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 -4px 15px rgba(18, 34, 56, 0.05);
+    position: relative;
+    z-index: 20;
 }
 
-.tip {
-    margin-top: 20px;
-    padding: 12px;
+.input-container {
+    flex: 1;
+    height: 100%;
+    position: relative;
+}
+
+#sentence {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    border: 1px solid #cce0f5;
     border-radius: 8px;
-    background: #f0f5ff;
-    color: #587096;
+    padding: 8px 12px;
+    font-family: 'Inter', sans-serif;
     font-size: 13px;
-    line-height: 1.6;
+    color: var(--navy-dark);
+    outline: none;
+    background: #f8fbff;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.03);
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+#sentence:focus {
+    border-color: var(--blue-accent);
+    background: #ffffff;
+}
+
+.status-badge {
+    font-size: 11px;
+    color: #536b88;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #edf4fc;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* ---------------- PRINT RULES ---------------- */
+@media print {
+    @page {
+        size: A4 landscape;
+        margin: 8mm;
+    }
+    body {
+        background: #ffffff !important;
+        overflow: visible !important;
+    }
+    .topbar, .bottom-panel, .pen-hand, .status-badge {
+        display: none !important;
+    }
+    .main-stage {
+        height: auto !important;
+        padding: 0 !important;
+    }
+    .notebook-container {
+        gap: 10px !important;
+    }
+    .notebook-page {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+        break-inside: avoid;
+    }
 }
 
 @media (max-width: 800px) {
-    .layout {
-        grid-template-columns: 1fr;
-    }
-
-    .paper {
-        padding-left: 58px;
-        min-height: 600px;
-    }
-
-    .paper::before {
-        left: 42px;
-    }
-
-    .written-line {
-        font-size: 27px;
-    }
-}
-
-@media print {
-    body {
-        background: white;
-    }
-
-    header,
-    .controls,
-    .preview-title,
-    .status,
-    .pen-hand {
-        display: none !important;
-    }
-
-    .app {
-        padding: 0;
-    }
-
-    .layout {
-        display: block;
-    }
-
-    .paper {
-        box-shadow: none;
-        border: none;
-        border-radius: 0;
-        min-height: 100vh;
-    }
+    .control-label { display: none; }
+    .brand-title { font-size: 16px; }
+    .btn span { display: none; }
+    .btn { padding: 0 8px; }
 }
 </style>
 </head>
-
 <body>
 
-<header>
-    <h1>✍️ Suresh Tech Note Pad Writer</h1>
-    <p>Type a sentence and watch it being written on notebook paper.</p>
+<!-- TOPBAR / CONTROL TOOLBAR -->
+<header class="topbar">
+    <div class="brand">
+        <span class="brand-icon" aria-hidden="true">📝</span>
+        <span class="brand-title">Suresh.Tech</span>
+    </div>
+
+    <div class="top-controls">
+        <!-- Style -->
+        <div class="control-item">
+            <span class="control-label">Style</span>
+            <select id="fontStyle" class="top-select">
+                <option value="'Kalam', cursive">Neat (Rounded)</option>
+                <option value="'Caveat', cursive">Natural</option>
+                <option value="'Patrick Hand', cursive">Simple &amp; Clean</option>
+            </select>
+        </div>
+
+        <!-- Base Size -->
+        <div class="control-item">
+            <span class="control-label">Base Size</span>
+            <select id="writingSize" class="top-select">
+                <option value="22" selected>Medium (22px)</option>
+                <option value="26">Large (26px)</option>
+                <option value="18">Small (18px)</option>
+            </select>
+        </div>
+
+        <!-- Ink Color -->
+        <div class="control-item">
+            <span class="control-label">Ink</span>
+            <div class="color-dots" id="colorPalette">
+                <button class="color-dot active" style="background:#1760c5" data-color="#1760c5" title="Blue"></button>
+                <button class="color-dot" style="background:#111111" data-color="#111111" title="Black"></button>
+                <button class="color-dot" style="background:#ef3038" data-color="#ef3038" title="Red"></button>
+                <button class="color-dot" style="background:#168744" data-color="#168744" title="Green"></button>
+                <button class="color-dot" style="background:#8024c7" data-color="#8024c7" title="Purple"></button>
+            </div>
+        </div>
+
+        <!-- Speed -->
+        <div class="control-item">
+            <span class="control-label">Speed</span>
+            <input type="range" id="speed" class="speed-range" min="5" max="80" value="25" title="Writing Speed">
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="top-actions">
+        <button class="btn btn-primary" id="writeBtn" type="button">✍️ <span>Write</span></button>
+        <button class="btn btn-danger" id="clearBtn" type="button">🗑️ <span>Clear</span></button>
+        <button class="btn btn-secondary" id="printBtn" type="button">🖨️ <span>PDF / Print</span></button>
+    </div>
 </header>
 
-<div class="app">
-    <div class="layout">
-
-        <!-- LEFT SIDE CONTROLS -->
-        <section class="controls">
-
-            <label for="sentence">Enter your sentence</label>
-
-            <textarea
-                id="sentence"
-                placeholder="Example: A static variable belongs to the class."
-            ></textarea>
-
-            <div class="buttons">
-                <button class="write-btn" id="writeBtn">
-                    ✍️ Write
-                </button>
-
-                <button class="clear-btn" id="clearBtn">
-                    Clear paper
-                </button>
-            </div>
-
-            <div class="setting">
-                <label for="fontStyle">Handwriting style</label>
-
-                <select id="fontStyle">
-                    <option value="'Caveat', cursive">Style 1 - Natural</option>
-                    <option value="'Patrick Hand', cursive">Style 2 - Neat</option>
-                    <option value="'Kalam', cursive">Style 3 - Rounded</option>
-                </select>
-            </div>
-
-            <div class="setting">
-                <label for="writingSize">Writing size</label>
-
-                <input
-                    type="range"
-                    id="writingSize"
-                    min="22"
-                    max="40"
-                    value="30"
-                >
-
-                <span id="sizeValue">30 px</span>
-            </div>
-
-            <div class="setting">
-                <label>Ink color</label>
-
-                <div class="colors">
-                    <button class="color active"
-                        style="background:#173f91"
-                        data-color="#173f91"
-                        aria-label="Blue ink"></button>
-
-                    <button class="color"
-                        style="background:#111111"
-                        data-color="#111111"
-                        aria-label="Black ink"></button>
-
-                    <button class="color"
-                        style="background:#d92727"
-                        data-color="#d92727"
-                        aria-label="Red ink"></button>
-
-                    <button class="color"
-                        style="background:#168744"
-                        data-color="#168744"
-                        aria-label="Green ink"></button>
-
-                    <button class="color"
-                        style="background:#8024c7"
-                        data-color="#8024c7"
-                        aria-label="Purple ink"></button>
-                </div>
-            </div>
-
-            <div class="setting">
-                <label for="speed">Writing speed</label>
-
-                <input
-                    type="range"
-                    id="speed"
-                    min="10"
-                    max="120"
-                    value="45"
-                >
-
-                <span id="speedValue">Normal</span>
-            </div>
-
-            <button class="print-btn" id="printBtn">
-                Print / Save as PDF
-            </button>
-
-            <div class="tip">
-                💡 Enter one sentence and click Write. The animated pen
-                writes from left to right. When finished, the input box
-                clears automatically. Enter another sentence and it will
-                appear on the next available line.
-            </div>
-
-            <div class="status" id="status">
-                Ready to write.
-            </div>
-
-        </section>
-
-        <!-- RIGHT SIDE NOTEBOOK -->
-        <section>
-            <h2 class="preview-title">📒 Your Notebook</h2>
-
-            <div class="paper" id="paper">
-                <div id="writingArea"></div>
-
-                <div class="pen-hand" id="penHand">✍️</div>
-            </div>
-        </section>
-
+<!-- MAIN NOTEBOOK STAGE -->
+<main class="main-stage" id="mainStage">
+    <div class="notebook-container" id="notebookContainer">
+        <!-- Notebook pages are auto-generated dynamically here -->
     </div>
-</div>
+    <div class="pen-hand" id="penHand" aria-hidden="true">✍️</div>
+</main>
+
+<!-- BOTTOM TEXTAREA PANEL -->
+<footer class="bottom-panel">
+    <div class="input-container">
+        <textarea id="sentence" placeholder="Type or paste text here... (Press Ctrl + Enter to write)"></textarea>
+    </div>
+    <div class="status-badge" id="statusBadge">Screen Fit: Ready</div>
+</footer>
 
 <script>
-const sentenceInput = document.getElementById("sentence");
-const writeBtn = document.getElementById("writeBtn");
-const clearBtn = document.getElementById("clearBtn");
-const paper = document.getElementById("paper");
-const writingArea = document.getElementById("writingArea");
-const penHand = document.getElementById("penHand");
-const statusText = document.getElementById("status");
+// State & DOM Elements
+const fontStyleSelect = document.getElementById('fontStyle');
+const writingSizeSelect = document.getElementById('writingSize');
+const speedInput = document.getElementById('speed');
+const writeBtn = document.getElementById('writeBtn');
+const clearBtn = document.getElementById('clearBtn');
+const printBtn = document.getElementById('printBtn');
+const sentenceInput = document.getElementById('sentence');
+const statusBadge = document.getElementById('statusBadge');
+const notebookContainer = document.getElementById('notebookContainer');
+const penHand = document.getElementById('penHand');
+const mainStage = document.getElementById('mainStage');
 
-const fontStyle = document.getElementById("fontStyle");
-const writingSize = document.getElementById("writingSize");
-const sizeValue = document.getElementById("sizeValue");
-const speedInput = document.getElementById("speed");
-const speedValue = document.getElementById("speedValue");
-
-let inkColor = "#173f91";
+let currentInkColor = '#1760c5';
 let isWriting = false;
 let cancelWriting = false;
 
-// Apply handwriting settings to existing and future lines.
-function updateStyle() {
-    document.querySelectorAll(".written-line").forEach(line => {
-        line.style.fontFamily = fontStyle.value;
-        line.style.fontSize = writingSize.value + "px";
-        line.style.color = inkColor;
-    });
-
-    sizeValue.textContent = writingSize.value + " px";
-
-    const speed = Number(speedInput.value);
-
-    if (speed < 35) {
-        speedValue.textContent = "Fast";
-    } else if (speed < 80) {
-        speedValue.textContent = "Normal";
-    } else {
-        speedValue.textContent = "Slow";
-    }
-}
-
-fontStyle.addEventListener("change", updateStyle);
-writingSize.addEventListener("input", updateStyle);
-speedInput.addEventListener("input", updateStyle);
-
-// Choose ink color.
-document.querySelectorAll(".color").forEach(button => {
-    button.addEventListener("click", () => {
-        document.querySelectorAll(".color").forEach(item => {
-            item.classList.remove("active");
-        });
-
-        button.classList.add("active");
-        inkColor = button.dataset.color;
-        updateStyle();
+// Color Palette Selector
+document.querySelectorAll('#colorPalette .color-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+        document.querySelectorAll('#colorPalette .color-dot').forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+        currentInkColor = dot.dataset.color;
+        applyStyleUpdates();
     });
 });
 
-// Small delay helper for the writing animation.
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Move the hand to the end of the latest visible character.
-function moveHandToCharacter(line, characterIndex) {
-    const textNode = line.firstChild;
+// Calculate max lines per column with tighter, natural 28px line height
+function calculateMaxLinesPerColumn() {
+    const stageHeight = mainStage.clientHeight - 20;
+    const lineHeight = 28; 
+    const headerOffset = 40; 
+    return Math.max(2, Math.floor((stageHeight - headerOffset) / lineHeight));
+}
 
-    if (!textNode || characterIndex <= 0) {
+// Helper to create page/column element
+function createPageElement(colIndex, totalCols) {
+    const page = document.createElement('div');
+    page.className = 'notebook-page';
+    
+    const headerDecor = document.createElement('div');
+    headerDecor.className = 'page-header-decor';
+    headerDecor.textContent = `Part ${colIndex + 1} of ${totalCols}`;
+    
+    const content = document.createElement('div');
+    content.className = 'page-content';
+    content.id = `pageContent_${colIndex}`;
+
+    page.appendChild(headerDecor);
+    page.appendChild(content);
+    return page;
+}
+
+function setupPages(numPages) {
+    notebookContainer.innerHTML = '';
+    for (let i = 0; i < numPages; i++) {
+        const pageEl = createPageElement(i, numPages);
+        notebookContainer.appendChild(pageEl);
+    }
+}
+
+function applyStyleUpdates() {
+    document.querySelectorAll('.written-line').forEach(line => {
+        line.style.fontFamily = fontStyleSelect.value;
+        line.style.color = currentInkColor;
+    });
+}
+
+// Move Pen Emoji to current typing position
+function movePenToChar(lineElement, charIdx) {
+    if (!lineElement) return;
+    const range = document.createRange();
+    const textNode = lineElement.firstChild;
+    if (!textNode || textNode.textContent.length === 0) {
+        const rect = lineElement.getBoundingClientRect();
+        const stageRect = mainStage.getBoundingClientRect();
+        penHand.style.left = (rect.left - stageRect.left + 44) + 'px';
+        penHand.style.top = (rect.top - stageRect.top) + 'px';
+        penHand.style.display = 'block';
+        return;
+    }
+    
+    const safeIdx = Math.min(charIdx, textNode.textContent.length);
+    try {
+        range.setStart(textNode, safeIdx);
+        range.setEnd(textNode, safeIdx);
+        const rect = range.getBoundingClientRect();
+        const stageRect = mainStage.getBoundingClientRect();
+        penHand.style.left = (rect.left - stageRect.left + 6) + 'px';
+        penHand.style.top = (rect.top - stageRect.top - 4) + 'px';
+        penHand.style.display = 'block';
+    } catch (e) {
+        // Fallback positioning
+    }
+}
+
+// Wrap text into lines based on column width and font size
+function wrapTextToLines(text, columnWidthPx, fontSizePx) {
+    const charWidthEst = fontSizePx * 0.50; 
+    const maxCharsPerLine = Math.max(8, Math.floor((columnWidthPx - 76) / charWidthEst));
+    const rawLines = text.split('\n');
+    const processedLines = [];
+
+    rawLines.forEach(rawLine => {
+        if (rawLine === '') {
+            processedLines.push('');
+            return;
+        }
+        let current = rawLine;
+        while (current.length > maxCharsPerLine) {
+            let breakIdx = current.lastIndexOf(' ', maxCharsPerLine);
+            if (breakIdx <= 0) breakIdx = maxCharsPerLine;
+            processedLines.push(current.substring(0, breakIdx));
+            current = current.substring(breakIdx).trimStart();
+        }
+        if (current.length > 0) {
+            processedLines.push(current);
+        }
+    });
+
+    return processedLines;
+}
+
+// SCREEN-FIT CALCULATOR: Determines needed columns (1, 2, or 3) & font scaling
+function computeLayoutPlan(text, baseFontSize) {
+    const stageWidth = mainStage.clientWidth;
+    const maxLinesPerCol = calculateMaxLinesPerColumn();
+    
+    const fontSizesToTry = [baseFontSize, 20, 18, 16, 14, 12];
+
+    for (let fontSize of fontSizesToTry) {
+        // Try 1 Column
+        let colWidth = stageWidth;
+        let lines = wrapTextToLines(text, colWidth, fontSize);
+        if (lines.length <= maxLinesPerCol) {
+            return { columns: 1, fontSize: fontSize, lines: lines };
+        }
+
+        // Try 2 Columns
+        colWidth = (stageWidth / 2) - 12;
+        lines = wrapTextToLines(text, colWidth, fontSize);
+        if (lines.length <= maxLinesPerCol * 2) {
+            return { columns: 2, fontSize: fontSize, lines: lines };
+        }
+
+        // Try 3 Columns
+        colWidth = (stageWidth / 3) - 16;
+        lines = wrapTextToLines(text, colWidth, fontSize);
+        if (lines.length <= maxLinesPerCol * 3) {
+            return { columns: 3, fontSize: fontSize, lines: lines };
+        }
+    }
+
+    // Fallback for massive text content: 3 columns with 12px min size
+    const minFont = 12;
+    const colWidth = (stageWidth / 3) - 16;
+    const lines = wrapTextToLines(text, colWidth, minFont);
+    return { columns: 3, fontSize: minFont, lines: lines };
+}
+
+// Core Animated Writing Engine
+async function startWritingProcess() {
+    const rawText = sentenceInput.value.trim();
+    if (!rawText) {
+        statusBadge.textContent = 'Please enter text first.';
         return;
     }
 
-    const range = document.createRange();
-
-    range.setStart(textNode, characterIndex);
-    range.setEnd(textNode, characterIndex);
-
-    const rect = range.getBoundingClientRect();
-    const paperRect = paper.getBoundingClientRect();
-
-    // Use the character's position so the hand follows the line
-    // horizontally and also follows wrapped lines.
-    penHand.style.left =
-        (rect.left - paperRect.left + paper.scrollLeft) + "px";
-
-    penHand.style.top =
-        (rect.top - paperRect.top + paper.scrollTop) + "px";
-}
-
-// Write characters one by one, left to right.
-async function writeSentence(text) {
     if (isWriting) return;
-
     isWriting = true;
     cancelWriting = false;
     writeBtn.disabled = true;
-    writeBtn.textContent = "Writing...";
 
-    // Create a new horizontal sentence line.
-    const line = document.createElement("p");
-    line.className = "written-line";
-    line.style.fontFamily = fontStyle.value;
-    line.style.fontSize = writingSize.value + "px";
-    line.style.color = inkColor;
+    const baseFontSize = parseInt(writingSizeSelect.value, 10);
+    const layout = computeLayoutPlan(rawText, baseFontSize);
 
-    // Start with an empty text node so we can reveal characters.
-    line.textContent = "";
-    const textNode = document.createTextNode("");
-    line.appendChild(textNode);
-    writingArea.appendChild(line);
+    setupPages(layout.columns);
+    statusBadge.textContent = `Fit: ${layout.columns} ${layout.columns === 1 ? 'Page' : 'Parts'} (${layout.fontSize}px)`;
 
-    penHand.style.display = "block";
+    const maxLinesPerCol = calculateMaxLinesPerColumn();
+    const allLines = layout.lines;
+    let currentLineIdx = 0;
 
-    // Start near the beginning of the new line.
-    await wait(80);
-
-    for (let i = 0; i < text.length; i++) {
+    for (let colIdx = 0; colIdx < layout.columns; colIdx++) {
         if (cancelWriting) break;
 
-        textNode.textContent += text[i];
+        const pageContentContainer = document.getElementById(`pageContent_${colIdx}`);
+        let linesInThisCol = 0;
 
-        // Let the browser measure the newly added character.
-        moveHandToCharacter(line, textNode.textContent.length);
+        while (currentLineIdx < allLines.length && linesInThisCol < maxLinesPerCol) {
+            if (cancelWriting) break;
 
-        // Keep the latest writing visible as the page grows.
-        const paperBottom = paper.getBoundingClientRect().bottom;
-        const lineBottom = line.getBoundingClientRect().bottom;
+            const lineText = allLines[currentLineIdx];
+            const lineEl = document.createElement('p');
+            lineEl.className = 'written-line';
+            lineEl.style.fontFamily = fontStyleSelect.value;
+            lineEl.style.fontSize = layout.fontSize + 'px';
+            lineEl.style.color = currentInkColor;
 
-        if (lineBottom > paperBottom - 25) {
-            paper.style.minHeight =
-                (paper.scrollHeight + 100) + "px";
+            const textNode = document.createTextNode('');
+            lineEl.appendChild(textNode);
+            pageContentContainer.appendChild(lineEl);
+
+            if (lineText.length === 0) {
+                lineEl.innerHTML = '&nbsp;';
+                await wait(parseInt(speedInput.value, 10));
+            } else {
+                for (let c = 0; c < lineText.length; c++) {
+                    if (cancelWriting) break;
+                    textNode.textContent += lineText[c];
+                    movePenToChar(lineEl, c + 1);
+                    await wait(parseInt(speedInput.value, 10));
+                }
+            }
+
+            linesInThisCol++;
+            currentLineIdx++;
         }
-
-        paper.scrollIntoView({
-            behavior: "auto",
-            block: "nearest"
-        });
-
-        await wait(Number(speedInput.value));
     }
 
-    // Keep the written sentence and hide the pen when finished.
-    penHand.style.display = "none";
-
-    sentenceInput.value = "";
-    sentenceInput.focus();
-
-    statusText.textContent = cancelWriting
-        ? "Writing stopped."
-        : "Sentence written successfully! Enter the next sentence.";
-
+    penHand.style.display = 'none';
     isWriting = false;
     writeBtn.disabled = false;
-    writeBtn.textContent = "✍️ Write";
+    if (!cancelWriting) {
+        statusBadge.textContent = `Complete (${layout.columns} Parts, ${layout.fontSize}px)`;
+        sentenceInput.value = '';
+    } else {
+        statusBadge.textContent = 'Stopped';
+    }
 }
 
-// Write button.
-writeBtn.addEventListener("click", async () => {
-    const text = sentenceInput.value.trim();
+// Event Listeners
+writeBtn.addEventListener('click', startWritingProcess);
 
-    if (!text) {
-        statusText.textContent = "Please enter a sentence first.";
-        sentenceInput.focus();
-        return;
-    }
-
-    await writeSentence(text);
-});
-
-// Press Ctrl+Enter to write.
-sentenceInput.addEventListener("keydown", event => {
-    if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
-        event.preventDefault();
-        writeBtn.click();
-    }
-});
-
-// Clear all written sentences.
-clearBtn.addEventListener("click", () => {
+clearBtn.addEventListener('click', () => {
     cancelWriting = true;
-    writingArea.replaceChildren();
-    penHand.style.display = "none";
-
-    // Restore the paper's default height.
-    paper.style.minHeight = "750px";
-
-    statusText.textContent = "Paper cleared. Ready to write.";
+    isWriting = false;
+    writeBtn.disabled = false;
+    penHand.style.display = 'none';
+    setupPages(1);
+    statusBadge.textContent = 'Screen Fit: Ready';
 });
 
-// Print the notebook or save it as PDF.
-document.getElementById("printBtn").addEventListener("click", () => {
+printBtn.addEventListener('click', () => {
     window.print();
 });
 
-updateStyle();
-</script>
+fontStyleSelect.addEventListener('change', applyStyleUpdates);
+writingSizeSelect.addEventListener('change', () => {
+    if (!isWriting && sentenceInput.value.trim().length > 0) {
+        startWritingProcess();
+    }
+});
 
+sentenceInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        startWritingProcess();
+    }
+});
+
+window.addEventListener('resize', () => {
+    if (!isWriting && notebookContainer.children.length === 0) {
+        setupPages(1);
+    }
+});
+
+// Initialize
+setupPages(1);
+</script>
 </body>
 </html>
