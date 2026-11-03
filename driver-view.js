@@ -19,31 +19,170 @@ const monthOrder = [
     "July", "August", "September", "October", "November", "December"
 ];
 
+const JOINING_DATE = new Date(2026, 7, 6); // 06-August-2026
+
 document.addEventListener('DOMContentLoaded', async () => {
     showProcessingPopup();
     renderMonthCardsSkeleton();
     enableMouseDragScroll();
 
+    let driverData = {};
+    let dailyWorkData = {};
+    let noWorkDays = 0;
+
     try {
-        const dbPath = (typeof DBConstants !== 'undefined' && DBConstants.JcbDriverDB)
-            ? DBConstants.JcbDriverDB
-            : "JcbDriverDB";
+        // Fetch Driver Salary & Leave Data
+        const driverPath = DBConstants.JcbDriverDB || "JcbDriverDB";
+        const driverSnapshot = await get(ref(db, driverPath));
 
-        const dataRef = ref(db, dbPath);
-        const snapshot = await get(dataRef);
-
-        if (snapshot.exists() && snapshot.val()) {
-            generateTable(snapshot.val());
-        } else {
-            showEmptyState();
+        if (driverSnapshot.exists()) {
+            driverData = driverSnapshot.val() || {};
         }
+
+        // Fetch Daily Work Data
+        const dailyWorkPath = DBConstants.DailyWorkDB
+            || "Daily Work-2026-2027";
+
+        const dailyWorkSnapshot = await get(ref(db, dailyWorkPath));
+
+        if (dailyWorkSnapshot.exists()) {
+            dailyWorkData = dailyWorkSnapshot.val() || {};
+        }
+
+        // Calculate No Work Days using both datasets
+        noWorkDays = calculateNoWorkDays(driverData, dailyWorkData);
+
+
+        if (Object.keys(driverData).length > 0) {
+            generateTable(driverData, noWorkDays);
+        } else {
+            showEmptyState(noWorkDays);
+        }
+
     } catch (error) {
         console.error("Firebase Fetch Error:", error);
-        showEmptyState();
+        showEmptyState(0);
     } finally {
         hideProcessingPopup();
     }
 });
+
+
+/* =========================================
+   NO WORK DAYS CALCULATION
+========================================= */
+
+function calculateNoWorkDays(driverData, dailyWorkData) {
+
+    // 1. Collect all dates on which daily work was recorded.
+    const workDates = new Set();
+
+    Object.values(dailyWorkData || {}).forEach(record => {
+
+        if (record && record.Date) {
+
+            const dateKey = normalizeDate(record.Date);
+
+            if (dateKey) {
+                workDates.add(dateKey);
+            }
+        }
+    });
+
+    // 2. Collect actual leave dates of this driver.
+    const leaveDates = new Set();
+
+    const leaves = driverData && driverData.Leaves
+        ? driverData.Leaves
+        : {};
+
+    Object.values(leaves).forEach(leave => {
+
+        if (leave && leave.Date) {
+
+            const dateKey = normalizeDate(leave.Date);
+
+            if (dateKey) {
+                leaveDates.add(dateKey);
+            }
+        }
+    });
+
+    // 3. Check every date from joining date to today.
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const checkDate = new Date(JOINING_DATE);
+    checkDate.setHours(0, 0, 0, 0);
+
+    let totalNoWorkDays = 0;
+
+    while (checkDate <= today) {
+
+        const formattedDate = formatDateKey(checkDate);
+
+        const hasWork = workDates.has(formattedDate);
+        const isDriverOnLeave = leaveDates.has(formattedDate);
+
+        // Count if:
+        // A. No work was recorded on this date.
+        // OR
+        // B. This actual driver was on leave on this date.
+        if (!hasWork || isDriverOnLeave) {
+            totalNoWorkDays++;
+        }
+
+        checkDate.setDate(checkDate.getDate() + 1);
+    }
+
+    return totalNoWorkDays;
+}
+
+
+// Convert any supported date value into YYYY-MM-DD.
+function normalizeDate(value) {
+
+    if (!value) return null;
+
+    const dateString = String(value).trim().split('T')[0];
+
+    // Already YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+        return dateString;
+    }
+
+    // DD-MM-YYYY
+    const dmy = dateString.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+
+    if (dmy) {
+        return `${dmy[3]}-${dmy[2]}-${dmy[1]}`;
+    }
+
+    // DD/MM/YYYY
+    const slashDate = dateString.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+
+    if (slashDate) {
+        return `${slashDate[3]}-${slashDate[2]}-${slashDate[1]}`;
+    }
+
+    return null;
+}
+
+
+// Format JavaScript Date into YYYY-MM-DD.
+function formatDateKey(date) {
+
+    return [
+        date.getFullYear(),
+        String(date.getMonth() + 1).padStart(2, "0"),
+        String(date.getDate()).padStart(2, "0")
+    ].join("-");
+}
+
+
+/* =========================================
+   LOADER
+========================================= */
 
 function showProcessingPopup() {
     const loader = document.getElementById('pageLoader');
@@ -55,51 +194,107 @@ function hideProcessingPopup() {
     if (loader) loader.style.display = 'none';
 }
 
+
+/* =========================================
+   MONTH CARDS
+========================================= */
+
 function renderMonthCardsSkeleton() {
+
     const wrapper = document.getElementById("monthGridView");
     if (!wrapper) return;
 
     wrapper.innerHTML = monthOrder.map(month => `
         <div class="month-card-view" id="card-${month}">
             <h3>${month}</h3>
-            <div class="month-item">Salary Taken: <span class="salary">₹0</span></div>
-            <div class="month-item">Leaves Taken: <span class="leaves total-leaves">0</span></div>
-            <div class="month-item">Allowed Leaves: <span>2</span></div>
-            <div class="month-item">Remaining Leaves: <span class="remaining-leaves">2</span></div>
-            <div class="month-item">Extra Leaves: <span class="extra-leaves">0</span></div>
-            <div class="month-item">Salary Cut: <span class="cut-salary">₹0</span></div>
-            <div class="month-item">Total Salary: <span class="total-salary">₹0</span></div>
-            <div class="month-item">Remaining Balance: <span class="remaining-salary">₹23,000</span></div>
+
+            <div class="month-item">
+                Salary Taken:
+                <span class="salary">₹0</span>
+            </div>
+
+            <div class="month-item">
+                Leaves Taken:
+                <span class="leaves total-leaves">0</span>
+            </div>
+
+            <div class="month-item">
+                Allowed Leaves:
+                <span>2</span>
+            </div>
+
+            <div class="month-item">
+                Remaining Leaves:
+                <span class="remaining-leaves">2</span>
+            </div>
+
+            <div class="month-item">
+                Extra Leaves:
+                <span class="extra-leaves">0</span>
+            </div>
+
+            <div class="month-item">
+                Salary Cut:
+                <span class="cut-salary">₹0</span>
+            </div>
+
+            <div class="month-item">
+                Total Salary:
+                <span class="total-salary">₹0</span>
+            </div>
+
+            <div class="month-item">
+                Remaining Balance:
+                <span class="remaining-salary">₹23,000</span>
+            </div>
         </div>
     `).join('');
 }
 
-function showEmptyState() {
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+function showEmptyState(noWorkDays = 0) {
+
     const salaryDiv = document.getElementById("salaryTableContainer");
     const leaveDiv = document.getElementById("leaveTableContainer");
 
-    const message = `<div class="empty-state-box">No records found for this driver.</div>`;
+    const message = `
+        <div class="empty-state-box">
+            No records found for this driver.
+        </div>
+    `;
 
     if (salaryDiv) salaryDiv.innerHTML = message;
     if (leaveDiv) leaveDiv.innerHTML = message;
 
     const today = new Date();
-    const joiningDate = new Date("2026-08-06"); // Assuming joining date is Aug 6, 2026
     today.setHours(0, 0, 0, 0);
+
+    const joiningDate = new Date(JOINING_DATE);
     joiningDate.setHours(0, 0, 0, 0);
 
-    // If today is before Aug 6, 2026, daysWorked is 0.
-    // Otherwise, count days elapsed from Aug 6, 2026 to today minus total leaves.
     const totalElapsed = today >= joiningDate
         ? Math.floor((today - joiningDate) / (1000 * 60 * 60 * 24)) + 1
         : 0;
 
-    resetSummaryMetrics(totalElapsed, 0, 0);
+    resetSummaryMetrics(totalElapsed, 0, 0, noWorkDays);
 }
 
-function generateTable(data) {
+
+/* =========================================
+   GENERATE SALARY AND LEAVE TABLES
+========================================= */
+
+function generateTable(data, noWorkDays = 0) {
+
     const monthsMap = {};
-    monthOrder.forEach(m => monthsMap[m] = [0, 0]); // [Salary Paid, Leaves Count]
+
+    monthOrder.forEach(month => {
+        monthsMap[month] = [0, 0];
+    });
 
     const salaryDiv = document.getElementById("salaryTableContainer");
     const leaveDiv = document.getElementById("leaveTableContainer");
@@ -107,26 +302,43 @@ function generateTable(data) {
     if (salaryDiv) salaryDiv.innerHTML = "";
     if (leaveDiv) leaveDiv.innerHTML = "";
 
-    // 1. Grouping Data
+    // Group Leave Data
     const leaveGroups = {};
+
     if (data.Leaves) {
+
         Object.values(data.Leaves).forEach(entry => {
+
             if (entry && entry.Month && monthsMap[entry.Month]) {
+
                 monthsMap[entry.Month][1]++;
-                if (!leaveGroups[entry.Month]) leaveGroups[entry.Month] = [];
+
+                if (!leaveGroups[entry.Month]) {
+                    leaveGroups[entry.Month] = [];
+                }
+
                 leaveGroups[entry.Month].push(entry);
             }
         });
     }
 
+    // Group Salary Data
     const salaryGroups = {};
+
     if (data.Salary) {
+
         Object.values(data.Salary).forEach(entry => {
+
             if (entry && entry.Month && monthsMap[entry.Month]) {
+
                 const salaryVal = parseFloat(entry.Salary) || 0;
+
                 monthsMap[entry.Month][0] += salaryVal;
 
-                if (!salaryGroups[entry.Month]) salaryGroups[entry.Month] = [];
+                if (!salaryGroups[entry.Month]) {
+                    salaryGroups[entry.Month] = [];
+                }
+
                 salaryGroups[entry.Month].push(entry);
             }
         });
@@ -134,25 +346,31 @@ function generateTable(data) {
 
     const driverSalary = 23000;
     const allowedLeaves = 2;
-    const perDaySalary = 755; // ₹755/day
+    const perDaySalary = 755;
 
     let grandTotalPaid = 0;
     let grandTotalLeaves = 0;
 
-    // 2. Salary Table Construction
-    if ((data.Salary && Object.keys(data.Salary).length > 0) || (data.Leaves && Object.keys(data.Leaves).length > 0)) {
+    // Salary Table
+    if (
+        (data.Salary && Object.keys(data.Salary).length > 0) ||
+        (data.Leaves && Object.keys(data.Leaves).length > 0)
+    ) {
+
         const box = document.createElement("div");
         box.className = "table-box";
 
         const title = document.createElement("div");
         title.className = "table-title";
         title.innerHTML = "💰 Salary Payment Log";
+
         box.appendChild(title);
 
         const scrollContainer = document.createElement("div");
         scrollContainer.className = "table-scroll-container";
 
         const table = document.createElement("table");
+
         table.innerHTML = `
             <thead>
                 <tr>
@@ -167,91 +385,151 @@ function generateTable(data) {
 
         const tbody = table.querySelector("tbody");
 
-        monthOrder.forEach((month) => {
+        monthOrder.forEach(month => {
+
             const salaryEntries = salaryGroups[month] || [];
             const leaveEntries = leaveGroups[month] || [];
 
-            if (salaryEntries.length === 0 && leaveEntries.length === 0) return;
+            if (
+                salaryEntries.length === 0 &&
+                leaveEntries.length === 0
+            ) {
+                return;
+            }
 
-            // Month Divider Row
             const monthHeader = document.createElement("tr");
             monthHeader.className = "month-header-row";
-            monthHeader.innerHTML = `<td colspan="4">${month} (6th - 5th Cycle)</td>`;
+
+            monthHeader.innerHTML = `
+                <td colspan="4">
+                    ${month} (6th - 5th Cycle)
+                </td>
+            `;
+
             tbody.appendChild(monthHeader);
 
             let monthPaidTotal = 0;
 
             salaryEntries.forEach(entry => {
+
                 const amount = parseFloat(entry.Salary) || 0;
+
                 monthPaidTotal += amount;
 
                 const row = document.createElement("tr");
+
                 row.innerHTML = `
-                    <td style="white-space: nowrap;">${formatDate(entry.Date)}</td>
+                    <td style="white-space: nowrap;">
+                        ${formatDate(entry.Date)}
+                    </td>
+
                     <td>${entry.PaymentMethod || 'PhonePe'}</td>
+
                     <td>${entry.Purpose || 'Salary Payment'}</td>
-                    <td style="font-weight: 600; color: var(--success);">₹${amount.toLocaleString("en-IN")}</td>
+
+                    <td style="font-weight: 600; color: var(--success);">
+                        ₹${amount.toLocaleString("en-IN")}
+                    </td>
                 `;
+
                 tbody.appendChild(row);
             });
 
             // Salary Cut Calculation
             const totalLeaves = monthsMap[month][1];
-            const extraLeaves = Math.max(0, totalLeaves - allowedLeaves);
+
+            const extraLeaves = Math.max(
+                0,
+                totalLeaves - allowedLeaves
+            );
+
             const salaryCut = extraLeaves * perDaySalary;
 
             if (salaryCut > 0) {
+
                 const cutRow = document.createElement("tr");
+
                 cutRow.innerHTML = `
-                    <td colspan="3" style="color: var(--danger); font-weight: 600;">
+                    <td colspan="3"
+                        style="color: var(--danger); font-weight: 600;">
                         Salary Cut (${extraLeaves} Extra Leave${extraLeaves > 1 ? "s" : ""})
                     </td>
-                    <td style="color: var(--danger); font-weight: 700;">₹${salaryCut.toLocaleString("en-IN")}</td>
+
+                    <td style="color: var(--danger); font-weight: 700;">
+                        ₹${salaryCut.toLocaleString("en-IN")}
+                    </td>
                 `;
+
                 tbody.appendChild(cutRow);
             }
 
             const finalMonthTotal = monthPaidTotal + salaryCut;
+
             grandTotalPaid += finalMonthTotal;
 
             const subtotalRow = document.createElement("tr");
+
             subtotalRow.innerHTML = `
-                <td colspan="3" style="font-weight: 700; color: #a5b4fc;">${month} Total Effective Deduction</td>
-                <td style="font-weight: 700; color: #a5b4fc;">₹${finalMonthTotal.toLocaleString("en-IN")}</td>
+                <td colspan="3"
+                    style="font-weight: 700; color: #a5b4fc;">
+                    ${month} Total Effective Deduction
+                </td>
+
+                <td style="font-weight: 700; color: #a5b4fc;">
+                    ₹${finalMonthTotal.toLocaleString("en-IN")}
+                </td>
             `;
+
             tbody.appendChild(subtotalRow);
         });
 
-        // Overall Total Row
         const totalRow = document.createElement("tr");
         totalRow.className = "total-row";
+
         totalRow.innerHTML = `
             <td colspan="3">Overall Total</td>
-            <td style="color: var(--success);">₹${grandTotalPaid.toLocaleString("en-IN")}</td>
+
+            <td style="color: var(--success);">
+                ₹${grandTotalPaid.toLocaleString("en-IN")}
+            </td>
         `;
+
         tbody.appendChild(totalRow);
 
         scrollContainer.appendChild(table);
         box.appendChild(scrollContainer);
-        if (salaryDiv) salaryDiv.appendChild(box);
+
+        if (salaryDiv) {
+            salaryDiv.appendChild(box);
+        }
+
     } else if (salaryDiv) {
-        salaryDiv.innerHTML = `<div class="empty-state-box">No Salary Records Found</div>`;
+
+        salaryDiv.innerHTML = `
+            <div class="empty-state-box">
+                No Salary Records Found
+            </div>
+        `;
     }
 
-    // 3. Leave Table Construction
+
+    // Leave Table
     if (data.Leaves && Object.keys(data.Leaves).length > 0) {
+
         const box = document.createElement("div");
         box.className = "table-box";
 
         const title = document.createElement("div");
         title.className = "table-title";
         title.innerHTML = "🌴 Leave History";
+
         box.appendChild(title);
 
         const scrollContainer = document.createElement("div");
         scrollContainer.className = "table-scroll-container";
 
         const table = document.createElement("table");
+
         table.innerHTML = `
             <thead>
                 <tr>
@@ -264,74 +542,124 @@ function generateTable(data) {
 
         const tbody = table.querySelector("tbody");
 
-        monthOrder.forEach((month) => {
+        monthOrder.forEach(month => {
+
             const leaveEntries = leaveGroups[month] || [];
+
             if (leaveEntries.length === 0) return;
 
             const monthHeader = document.createElement("tr");
             monthHeader.className = "month-header-row";
-            monthHeader.innerHTML = `<td colspan="2">${month} (6th - 5th Cycle)</td>`;
+
+            monthHeader.innerHTML = `
+                <td colspan="2">
+                    ${month} (6th - 5th Cycle)
+                </td>
+            `;
+
             tbody.appendChild(monthHeader);
 
             leaveEntries.forEach(entry => {
+
                 const row = document.createElement("tr");
+
                 row.innerHTML = `
-                    <td style="white-space: nowrap;">${formatDate(entry.Date)}</td>
+                    <td style="white-space: nowrap;">
+                        ${formatDate(entry.Date)}
+                    </td>
+
                     <td>${entry.Purpose || 'Personal Work'}</td>
                 `;
+
                 tbody.appendChild(row);
+
                 grandTotalLeaves++;
             });
 
             const subtotalRow = document.createElement("tr");
+
             subtotalRow.innerHTML = `
-                <td style="font-weight: 700; color: var(--warning);">${month} Total Leaves</td>
-                <td style="font-weight: 700; color: var(--warning);">${leaveEntries.length}</td>
+                <td style="font-weight: 700; color: var(--warning);">
+                    ${month} Total Leaves
+                </td>
+
+                <td style="font-weight: 700; color: var(--warning);">
+                    ${leaveEntries.length}
+                </td>
             `;
+
             tbody.appendChild(subtotalRow);
         });
 
         const totalRow = document.createElement("tr");
         totalRow.className = "total-row";
+
         totalRow.innerHTML = `
             <td>Overall Leaves</td>
-            <td style="color: var(--warning);">${grandTotalLeaves} Days</td>
+
+            <td style="color: var(--warning);">
+                ${grandTotalLeaves} Days
+            </td>
         `;
+
         tbody.appendChild(totalRow);
 
         scrollContainer.appendChild(table);
         box.appendChild(scrollContainer);
-        if (leaveDiv) leaveDiv.appendChild(box);
+
+        if (leaveDiv) {
+            leaveDiv.appendChild(box);
+        }
+
     } else if (leaveDiv) {
-        leaveDiv.innerHTML = `<div class="empty-state-box">No Leave Records Found</div>`;
+
+        leaveDiv.innerHTML = `
+            <div class="empty-state-box">
+                No Leave Records Found
+            </div>
+        `;
     }
 
-    // Update Summary Metrics & Month Cards
+    // Update Month Cards
     updateMonthCards(monthsMap);
 
-    // Total working days active calculation
+    // Calculate Total Elapsed Days
     const today = new Date();
-    const joiningDate = new Date("2026-08-06"); // Assuming joining date is Aug 6, 2026
     today.setHours(0, 0, 0, 0);
+
+    const joiningDate = new Date(JOINING_DATE);
     joiningDate.setHours(0, 0, 0, 0);
 
-    // If today is before Aug 6, 2026, daysWorked is 0.
-    // Otherwise, count days elapsed from Aug 6, 2026 to today minus total leaves.
     const totalElapsed = today >= joiningDate
         ? Math.floor((today - joiningDate) / (1000 * 60 * 60 * 24)) + 1
         : 0;
 
-    resetSummaryMetrics(totalElapsed, grandTotalPaid, grandTotalLeaves);
+    // Update all Summary Metrics
+    resetSummaryMetrics(
+        totalElapsed,
+        grandTotalPaid,
+        grandTotalLeaves,
+        noWorkDays
+    );
 }
 
+
+/* =========================================
+   UPDATE MONTH CARDS
+========================================= */
+
 function updateMonthCards(monthsMap) {
+
     const driverSalary = 23000;
     const allowedLeaves = 2;
-    const perDaySalary = 755; // ₹755/day
+    const perDaySalary = 755;
 
     Object.keys(monthsMap).forEach(month => {
+
         const card = document.getElementById(`card-${month}`);
+
         if (card) {
+
             const salaryEl = card.querySelector(".salary");
             const totalsalaryEl = card.querySelector(".total-salary");
             const salarycut = card.querySelector(".cut-salary");
@@ -343,35 +671,103 @@ function updateMonthCards(monthsMap) {
             const totalSalaryTaken = monthsMap[month][0];
             const totalLeaves = monthsMap[month][1];
 
-            const extraLeaves = Math.max(0, totalLeaves - allowedLeaves);
-            const remainingLeaves = Math.max(0, allowedLeaves - totalLeaves);
-            const salaryCutAmount = perDaySalary * extraLeaves;
-            const totalEffectiveSalary = totalSalaryTaken + salaryCutAmount;
-            const finalRemainingSalary = driverSalary - totalEffectiveSalary;
+            const extraLeaves = Math.max(
+                0,
+                totalLeaves - allowedLeaves
+            );
 
-            if (salaryEl) salaryEl.textContent = `₹${totalSalaryTaken.toLocaleString("en-IN")}`;
-            if (leavesEl) leavesEl.textContent = `${totalLeaves}`;
-            if (remainingLeavesEl) remainingLeavesEl.textContent = `${remainingLeaves}`;
-            if (extraLeavesEl) extraLeavesEl.textContent = `${extraLeaves}`;
-            if (salarycut) salarycut.textContent = `₹${salaryCutAmount.toLocaleString("en-IN")}`;
-            if (totalsalaryEl) totalsalaryEl.textContent = `₹${totalEffectiveSalary.toLocaleString("en-IN")}`;
-            if (remainingSalaryEl) remainingSalaryEl.textContent = `₹${finalRemainingSalary.toLocaleString("en-IN")}`;
+            const remainingLeaves = Math.max(
+                0,
+                allowedLeaves - totalLeaves
+            );
+
+            const salaryCutAmount = perDaySalary * extraLeaves;
+
+            const totalEffectiveSalary =
+                totalSalaryTaken + salaryCutAmount;
+
+            const finalRemainingSalary =
+                driverSalary - totalEffectiveSalary;
+
+            if (salaryEl) {
+                salaryEl.textContent =
+                    `₹${totalSalaryTaken.toLocaleString("en-IN")}`;
+            }
+
+            if (leavesEl) {
+                leavesEl.textContent = `${totalLeaves}`;
+            }
+
+            if (remainingLeavesEl) {
+                remainingLeavesEl.textContent = `${remainingLeaves}`;
+            }
+
+            if (extraLeavesEl) {
+                extraLeavesEl.textContent = `${extraLeaves}`;
+            }
+
+            if (salarycut) {
+                salarycut.textContent =
+                    `₹${salaryCutAmount.toLocaleString("en-IN")}`;
+            }
+
+            if (totalsalaryEl) {
+                totalsalaryEl.textContent =
+                    `₹${totalEffectiveSalary.toLocaleString("en-IN")}`;
+            }
+
+            if (remainingSalaryEl) {
+                remainingSalaryEl.textContent =
+                    `₹${finalRemainingSalary.toLocaleString("en-IN")}`;
+            }
         }
     });
 }
 
-function resetSummaryMetrics(daysWorked, totalSalary, totalLeaves) {
+
+/* =========================================
+   SUMMARY METRICS
+========================================= */
+
+function resetSummaryMetrics(
+    daysWorked,
+    totalSalary,
+    totalLeaves,
+    noWorkDays = 0
+) {
+
     const daysEl = document.getElementById("summaryDaysWorked");
     const salaryEl = document.getElementById("summarySalary");
     const leavesEl = document.getElementById("summaryLeaves");
+    const noWorkEl = document.getElementById("summaryNoWorkDays");
 
-    if (daysEl) daysEl.textContent = `${daysWorked} Days`;
-    if (salaryEl) salaryEl.textContent = `₹${totalSalary.toLocaleString("en-IN")}`;
-    if (leavesEl) leavesEl.textContent = `${totalLeaves} Days`;
+    if (daysEl) {
+        daysEl.textContent = `${daysWorked} Days`;
+    }
+
+    if (salaryEl) {
+        salaryEl.textContent =
+            `₹${totalSalary.toLocaleString("en-IN")}`;
+    }
+
+    if (leavesEl) {
+        leavesEl.textContent = `${totalLeaves} Days`;
+    }
+
+    if (noWorkEl) {
+        noWorkEl.textContent = `${noWorkDays-totalLeaves} Days`;
+    }
 }
 
+
+/* =========================================
+   MOUSE DRAG SCROLL
+========================================= */
+
 function enableMouseDragScroll() {
+
     const slider = document.getElementById('monthGridView');
+
     if (!slider) return;
 
     let isDown = false;
@@ -379,45 +775,61 @@ function enableMouseDragScroll() {
     let scrollLeft;
 
     slider.addEventListener('mousedown', (e) => {
+
         isDown = true;
+
         startX = e.pageX - slider.offsetLeft;
+
         scrollLeft = slider.scrollLeft;
+
         slider.style.cursor = 'grabbing';
     });
 
     slider.addEventListener('mouseleave', () => {
+
         isDown = false;
+
         slider.style.cursor = 'grab';
     });
 
     slider.addEventListener('mouseup', () => {
+
         isDown = false;
+
         slider.style.cursor = 'grab';
     });
 
     slider.addEventListener('mousemove', (e) => {
+
         if (!isDown) return;
+
         e.preventDefault();
+
         const x = e.pageX - slider.offsetLeft;
+
         const walk = (x - startX) * 2;
+
         slider.scrollLeft = scrollLeft - walk;
     });
 }
 
+
+/* =========================================
+   DATE FORMATTING
+========================================= */
+
 function formatDate(dateString) {
+
     if (!dateString) return "N/A";
 
-    const parts = String(dateString).split('T')[0].split('-');
-    if (parts.length === 3 && parts[0].length === 4) {
-        return `${parts[2].padStart(2, '0')}-${parts[1].padStart(2, '0')}-${parts[0]}`;
+    const normalized = normalizeDate(dateString);
+
+    if (normalized) {
+
+        const [year, month, day] = normalized.split("-");
+
+        return `${day}-${month}-${year}`;
     }
 
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) return dateString;
-
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-
-    return `${day}-${month}-${year}`;
+    return dateString;
 }

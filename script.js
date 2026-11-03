@@ -9,7 +9,7 @@ let state = { debts: [], transactions: [], contributionStartDate: DEFAULT_CYCLE_
 let modalAction = null;
 let editingDebtId = null;
 let editingContributionId = null;
-let editingPaymentId = null;
+let editingHouseholdExpenseId = null;
 
 function uid() { return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`; }
 function todayISO() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
@@ -108,8 +108,9 @@ function getTotals() {
   // This is a recorded/projected balance, not cash physically available today.
   const contributions=state.transactions.filter(t=>t.type==="Contribution").reduce((s,t)=>s+(Number(t.amount)||0),0);
   const payments=state.transactions.filter(t=>t.type==="Payment").reduce((s,t)=>s+(Number(t.amount)||0),0);
+  const householdExpenses=state.transactions.filter(t=>t.type==="HouseholdExpense").reduce((s,t)=>s+(Number(t.amount)||0),0);
   const outstanding=state.debts.reduce((s,d)=>s+debtSnapshot(d,today).total,0);
-  return {contributions,payments,balance:contributions-payments,outstanding};
+  return {contributions,payments,householdExpenses,balance:contributions-payments-householdExpenses,outstanding};
 }
 // Monthly interest is charged only after each completed anniversary period.
 // Remaining days in an incomplete month do not accrue partial interest.
@@ -208,9 +209,11 @@ function renderReportOverview() {
   document.getElementById("reportInterestRemaining").textContent=money(interestRemaining);
   document.getElementById("reportCleared").textContent=money(totalCleared);
   document.getElementById("reportBalance").textContent=money(totals.balance);
+  document.getElementById("reportHouseholdExpenses").textContent=money(totals.householdExpenses);
+  // document.getElementById("reportHouseholdRemaining").textContent=money(totals.balance);
   document.getElementById("reportAsOf").textContent=`Calculated as of ${formatDate(today)}`;
 }
-function renderAll() { renderReportOverview();renderDebtSelect();renderDebtCards();renderDebtReport();renderDebtPaymentHistory();renderMonthlyReport();renderHistory();document.getElementById("paymentAvailable").textContent=money(getTotals().balance); }
+function renderAll() { renderReportOverview();renderDebtSelect();renderDebtCards();renderDebtReport();renderDebtPaymentHistory();renderMonthlyReport();renderHouseholdExpenseHistory();renderHistory();document.getElementById("paymentAvailable").textContent=money(getTotals().balance);document.getElementById("householdAvailable").textContent=money(getTotals().balance); }
 function renderDebtSelect() { const select=document.getElementById("paymentDebt"), prev=select.value;select.replaceChildren();state.debts.forEach(d=>{const snap=debtSnapshot(d,todayISO()),o=document.createElement("option");o.value=d.id;o.textContent=`${d.name} — ${money(snap.total)} outstanding`;o.disabled=snap.total<=0;select.appendChild(o);});if([...select.options].some(o=>o.value===prev&&!o.disabled))select.value=prev;updatePaymentLimit(); }
 function updatePaymentLimit() { const d=state.debts.find(x=>String(x.id)===document.getElementById("paymentDebt").value),input=document.getElementById("paymentAmount");
  // Do not set a native max: it prevents the submit handler from running, so the
@@ -240,7 +243,7 @@ function renderDebtPaymentHistory() {
  body.replaceChildren();foot.replaceChildren();
  const payments=state.transactions.filter(t=>t.type==="Payment").sort((a,b)=>b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id)));
  let total=0;
- if(!payments.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=5;td.textContent="No debt payments recorded yet.";tr.append(td);body.append(tr);}
+ if(!payments.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=4;td.textContent="No debt payments recorded yet.";tr.append(td);body.append(tr);}
  payments.forEach(tx=>{
   const debt=state.debts.find(d=>String(d.id)===String(tx.debtId));
   const amount=Number(tx.amount)||0;total+=amount;
@@ -248,13 +251,10 @@ function renderDebtPaymentHistory() {
   const status=outstanding===null?"Debt unavailable":outstanding<=0.005?"Fully cleared":"Partially paid";
   const tr=document.createElement("tr");
   [formatDate(tx.date),debt?.name||"Deleted debt",money(amount),status].forEach(value=>{const td=document.createElement("td");td.textContent=value;tr.append(td);});
-  const actions=document.createElement("td");
-  const edit=document.createElement("button");edit.type="button";edit.className="button secondary table-action";edit.textContent="Edit";edit.addEventListener("click",()=>editPayment(tx.id));
-  const del=document.createElement("button");del.type="button";del.className="button danger table-action";del.textContent="Delete";del.addEventListener("click",()=>deletePayment(tx.id));
-  actions.append(edit,del);tr.append(actions);body.append(tr);
+  body.append(tr);
  });
  const tr=document.createElement("tr");tr.className="grand-total-row";
- ["GRAND TOTAL","All debt payments",money(total),`${payments.length} payment${payments.length===1?"":"s"}`,"—"].forEach(value=>{const td=document.createElement("td");td.textContent=value;tr.append(td);});
+ ["GRAND TOTAL","All debt payments",money(total),`${payments.length} payment${payments.length===1?"":"s"}`].forEach(value=>{const td=document.createElement("td");td.textContent=value;tr.append(td);});
  foot.append(tr);
 }
 
@@ -269,31 +269,46 @@ function buildMonthlyRows(person) {
 }
 function renderMonthlyReport() { renderPersonRows("Dad","dadMonthlyBody");renderPersonRows("Me","meMonthlyBody"); }
 function renderPersonRows(person,bodyId) { const body=document.getElementById(bodyId);body.replaceChildren();const rows=buildMonthlyRows(person);const totals=rows.reduce((a,r)=>{a.target+=r.target;a.contributed+=r.contributed;a.previousPending+=r.previousPending;a.pendingCleared+=r.pendingCleared;a.shortfall+=r.currentShortfall;a.carryUsed+=r.carryUsed;a.finalPending=r.finalPending;a.carry=r.remainingCarryForward;return a;},{target:0,contributed:0,previousPending:0,pendingCleared:0,shortfall:0,carryUsed:0,finalPending:0,carry:0});if(!rows.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=10;td.textContent="Monthly tracking starts on the selected contribution start date.";tr.append(td);body.append(tr);}else rows.forEach(r=>{const tr=document.createElement("tr");[monthLabel(r.key),money(r.target),money(r.contributed),money(r.previousPending),money(r.pendingCleared),money(r.currentShortfall),money(r.carryUsed),money(r.finalPending),money(r.remainingCarryForward),r.status].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td);});body.append(tr);});const foot=document.getElementById(person==="Dad"?"dadMonthlyFoot":"meMonthlyFoot");foot.replaceChildren();const tr=document.createElement("tr");tr.className="grand-total-row";["GRAND TOTAL",money(totals.target),money(totals.contributed),money(totals.previousPending),money(totals.pendingCleared),money(totals.shortfall),money(totals.carryUsed),money(totals.finalPending),money(totals.carry),"—"].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td);});foot.append(tr); }
+function renderHouseholdExpenseHistory() {
+ const body=document.getElementById("householdExpenseBody");body.replaceChildren();
+ const expenses=state.transactions.filter(t=>t.type==="HouseholdExpense").sort((a,b)=>b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id)));
+ let total=0;
+ if(!expenses.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=4;td.textContent="No household expenses recorded yet.";tr.append(td);body.append(tr);}
+ expenses.forEach(tx=>{
+  total+=Number(tx.amount)||0;const tr=document.createElement("tr");
+  [formatDate(tx.date),tx.note||"—",money(tx.amount)].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td);});
+  const actions=document.createElement("td");
+  const edit=document.createElement("button");edit.type="button";edit.className="button secondary table-action";edit.textContent="Edit";edit.addEventListener("click",()=>editHouseholdExpense(tx.id));
+  const del=document.createElement("button");del.type="button";del.className="button danger table-action";del.textContent="Delete";del.addEventListener("click",()=>deleteHouseholdExpense(tx.id));
+  actions.append(edit,del);tr.append(actions);body.append(tr);
+ });
+ const foot=document.getElementById("householdExpenseFoot");foot.replaceChildren();const tr=document.createElement("tr");tr.className="grand-total-row";
+ ["GRAND TOTAL","All household expenses",money(total),`${expenses.length} expense${expenses.length===1?"":"s"}`].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td);});foot.append(tr);
+}
+
 function renderHistory() {
  const body=document.getElementById("historyBody");body.replaceChildren();
  const txs=[...state.transactions].sort((a,b)=>b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id)));
- let contributions=0,payments=0;
+ let contributions=0,payments=0,householdExpenses=0;
  if(!txs.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=6;td.textContent="No transactions recorded yet.";tr.append(td);body.append(tr);}
  else txs.forEach(t=>{
   const debt=state.debts.find(d=>String(d.id)===String(t.debtId));
   if(t.type==="Contribution")contributions+=Number(t.amount)||0;
   if(t.type==="Payment")payments+=Number(t.amount)||0;
+  if(t.type==="HouseholdExpense")householdExpenses+=Number(t.amount)||0;
   const tr=document.createElement("tr");
-  [formatDate(t.date),t.type,t.type==="Contribution"?t.person:(debt?.name||"Deleted debt"),money(t.amount),t.note||"—"].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td);});
+  const personOrDebt=t.type==="Contribution"?t.person:t.type==="HouseholdExpense"?"Household":(debt?.name||"Deleted debt");
+  [formatDate(t.date),t.type,personOrDebt,money(t.amount),t.note||"—"].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td);});
   const actions=document.createElement("td");
-  if(t.type==="Contribution"){
-   const edit=document.createElement("button");edit.type="button";edit.className="button secondary table-action";edit.textContent="Edit";edit.addEventListener("click",()=>editContribution(t.id));
-   const del=document.createElement("button");del.type="button";del.className="button danger table-action";del.textContent="Delete";del.addEventListener("click",()=>deleteContribution(t.id));
+  if(t.type==="Contribution"||t.type==="HouseholdExpense"){
+   const edit=document.createElement("button");edit.type="button";edit.className="button secondary table-action";edit.textContent="Edit";edit.addEventListener("click",()=>t.type==="Contribution"?editContribution(t.id):editHouseholdExpense(t.id));
+   const del=document.createElement("button");del.type="button";del.className="button danger table-action";del.textContent="Delete";del.addEventListener("click",()=>t.type==="Contribution"?deleteContribution(t.id):deleteHouseholdExpense(t.id));
    actions.append(edit,del);
-  } else {
-   const edit=document.createElement("button");edit.type="button";edit.className="button secondary table-action";edit.textContent="Edit";edit.addEventListener("click",()=>editPayment(t.id));
-   const del=document.createElement("button");del.type="button";del.className="button danger table-action";del.textContent="Delete";del.addEventListener("click",()=>deletePayment(t.id));
-   actions.append(edit,del);
-  }
+  } else actions.textContent="—";
   tr.append(actions);body.append(tr);
  });
  const foot=document.getElementById("historyFoot");foot.replaceChildren();const tr=document.createElement("tr");tr.className="grand-total-row";
- ["GRAND TOTAL","—","Contributions / Payments",money(contributions),`Net cash: ${money(contributions-payments)} · Payments: ${money(payments)}`,"—"].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td);});foot.append(tr);
+ ["GRAND TOTAL","—","Contributions / Payments / Household",money(contributions),`Payments: ${money(payments)} · Household expenses: ${money(householdExpenses)} · Net balance: ${money(contributions-payments-householdExpenses)}`,"—"].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td);});foot.append(tr);
 }
 
 // Center-screen processing overlay for all transaction submissions.
@@ -330,7 +345,7 @@ async function runWithButtonFeedback(button, successText, action) {
 }
 
 // Debt creation
- document.getElementById("debtStartDate").value=todayISO();document.getElementById("contributionDate").value=todayISO();document.getElementById("paymentDate").value=todayISO();
+ document.getElementById("debtStartDate").value=todayISO();document.getElementById("contributionDate").value=todayISO();document.getElementById("paymentDate").value=todayISO();document.getElementById("householdExpenseDate").value=todayISO();
 document.getElementById("debtForm").addEventListener("submit",async e=>{
  e.preventDefault();
  const form=e.currentTarget;
@@ -360,6 +375,7 @@ function editDebt(id) {
  setView("createDebtView");
  document.getElementById("debtName").focus();
 }
+
 function resetDebtForm(){editingDebtId=null;const form=document.getElementById("debtForm");form.reset();document.getElementById("debtStartDate").value=todayISO();document.getElementById("debtSubmitButton").textContent="Save Debt";document.getElementById("cancelDebtEdit").classList.add("hidden");updateInterestRateLabel();}
 document.getElementById("cancelDebtEdit").addEventListener("click",resetDebtForm);
 function updateInterestRateLabel(){document.getElementById("debtRateLabel").textContent="Interest rate per 30 days (%)";document.getElementById("debtRate").placeholder="2";}
@@ -409,87 +425,77 @@ document.getElementById("contributionForm").addEventListener("submit",async e=>{
   resetContributionForm();renderAll();return true;
  });
 });
-function resetPaymentForm(){
- editingPaymentId=null;
- const form=document.getElementById("paymentForm");form.reset();
- document.getElementById("paymentDate").value=todayISO();
- document.getElementById("paymentSubmitButton").textContent="Confirm Debt Payment";
- document.getElementById("cancelPaymentEdit").classList.add("hidden");
- renderDebtSelect();
+function resetHouseholdExpenseForm(){
+ editingHouseholdExpenseId=null;document.getElementById("householdExpenseForm").reset();
+ document.getElementById("householdExpenseDate").value=todayISO();
+ document.getElementById("householdExpenseSubmitButton").textContent="Save Household Expense";
+ document.getElementById("cancelHouseholdExpenseEdit").classList.add("hidden");
 }
-function editPayment(id){
- const tx=state.transactions.find(t=>String(t.id)===String(id)&&t.type==="Payment");if(!tx)return;
- const debt=state.debts.find(d=>String(d.id)===String(tx.debtId));
- if(!debt){showModal("Debt unavailable","This payment is linked to a debt that no longer exists. You can delete this payment, but it cannot be edited until the debt is restored.");return;}
- editingPaymentId=String(tx.id);
- renderDebtSelect();
- const select=document.getElementById("paymentDebt");
- if(![...select.options].some(o=>o.value===String(debt.id))){const option=document.createElement("option");option.value=debt.id;option.textContent=`${debt.name} — existing payment`;select.append(option);}
- select.value=String(debt.id);
- document.getElementById("paymentAmount").value=tx.amount;
- document.getElementById("paymentDate").value=tx.date;
- document.getElementById("paymentNote").value=tx.note||"";
- document.getElementById("paymentSubmitButton").textContent="Update Debt Payment";
- document.getElementById("cancelPaymentEdit").classList.remove("hidden");
- setView("clearDebtView");
- window.scrollTo({top:0,behavior:"smooth"});
+function editHouseholdExpense(id){
+ const tx=state.transactions.find(t=>String(t.id)===String(id)&&t.type==="HouseholdExpense");if(!tx)return;
+ editingHouseholdExpenseId=String(tx.id);document.getElementById("householdExpenseAmount").value=tx.amount;
+ document.getElementById("householdExpenseDate").value=tx.date;document.getElementById("householdExpenseNote").value=tx.note||"";
+ document.getElementById("householdExpenseSubmitButton").textContent="Update Household Expense";
+ document.getElementById("cancelHouseholdExpenseEdit").classList.remove("hidden");setView("householdExpenseView");window.scrollTo({top:0,behavior:"smooth"});
 }
-function deletePayment(id){
- const tx=state.transactions.find(t=>String(t.id)===String(id)&&t.type==="Payment");if(!tx)return;
- const debt=state.debts.find(d=>String(d.id)===String(tx.debtId));
- showModal("Delete debt payment?",`Are you sure you want to delete the ${money(tx.amount)} payment${debt?` for ${debt.name}`:""} dated ${formatDate(tx.date)}? This will recalculate debt balances, interest, reports and available cash.`,async()=>{
+function deleteHouseholdExpense(id){
+ const tx=state.transactions.find(t=>String(t.id)===String(id)&&t.type==="HouseholdExpense");if(!tx)return;
+ showModal("Delete household expense?",`Delete the ${money(tx.amount)} household expense dated ${formatDate(tx.date)}? The amount will be added back to your available balance.`,async()=>{
   const previous=state.transactions;state.transactions=state.transactions.filter(t=>String(t.id)!==String(id));
   try{await saveState();renderAll();}catch(error){state.transactions=previous;throw error;}
  },true);
 }
-document.getElementById("cancelPaymentEdit").addEventListener("click",resetPaymentForm);
-
-document.getElementById("paymentForm").addEventListener("submit",async e=>{
- e.preventDefault();const form=e.currentTarget;
- const isEdit=Boolean(editingPaymentId);
- const oldIndex=isEdit?state.transactions.findIndex(t=>String(t.id)===String(editingPaymentId)&&t.type==="Payment"):-1;
- if(isEdit&&oldIndex<0){showModal("Payment not found","This debt payment no longer exists. Refresh the report and try again.");resetPaymentForm();return;}
- const oldTx=isEdit?{...state.transactions[oldIndex]}:null;
- const debt=state.debts.find(d=>String(d.id)===document.getElementById("paymentDebt").value);
- const amount=Number(document.getElementById("paymentAmount").value),date=document.getElementById("paymentDate").value;
- const available=getTotals().balance+(isEdit?(Number(oldTx.amount)||0):0);
- if(!debt){showModal("Select a debt","Create or select a debt before recording a payment.");return;}
- if(!(amount>0)||!Number.isFinite(amount)||!date||date>todayISO()){showModal("Invalid payment","Enter a positive payment and a date that is today or earlier.");return;}
- if(date<debt.startDate){showModal("Invalid payment date","Payment date cannot be before the debt start date.");return;}
- if(amount>available+0.001){showModal("No available balance",`You cannot make this payment because it is higher than your available balance. Available balance excluding the payment being edited: ${money(available)}.`);return;}
- // Calculate the selected debt's outstanding amount without the old version of this payment.
- let snapshot;
- if(isEdit){const current=state.transactions;state.transactions=current.filter(t=>String(t.id)!==String(editingPaymentId));snapshot=debtSnapshot(debt,date);state.transactions=current;}
- else snapshot=debtSnapshot(debt,date);
- if(amount>snapshot.total+0.001){showModal("Payment too high",`Outstanding amount on ${formatDate(date)} before this payment is ${money(snapshot.total)}.`);return;}
- const tx={id:isEdit?editingPaymentId:uid(),type:"Payment",debtId:debt.id,amount,date,note:document.getElementById("paymentNote").value.trim()};
- const button=e.submitter||document.getElementById("paymentSubmitButton");
- await runWithButtonFeedback(button,isEdit?"Debt payment updated":"Payment saved",async()=>{
-  if(isEdit)state.transactions[oldIndex]=tx;else state.transactions.push(tx);
-  try{await saveState();}catch(error){if(isEdit)state.transactions[oldIndex]=oldTx;else state.transactions.pop();throw error;}
-  resetPaymentForm();renderAll();return true;
+document.getElementById("cancelHouseholdExpenseEdit").addEventListener("click",resetHouseholdExpenseForm);
+document.getElementById("householdExpenseForm").addEventListener("submit",async e=>{
+ e.preventDefault();const amount=Number(document.getElementById("householdExpenseAmount").value),date=document.getElementById("householdExpenseDate").value,note=document.getElementById("householdExpenseNote").value.trim();
+ if(!(amount>0)||!Number.isFinite(amount)||!date||date>todayISO()||!note){showModal("Invalid household expense","Enter a positive amount, a description, and a date that is today or earlier.");return;}
+ const isEdit=Boolean(editingHouseholdExpenseId),index=isEdit?state.transactions.findIndex(t=>String(t.id)===String(editingHouseholdExpenseId)&&t.type==="HouseholdExpense"):-1;
+ if(isEdit&&index<0){showModal("Expense not found","This household expense no longer exists. Refresh the report and try again.");resetHouseholdExpenseForm();return;}
+ const currentExpense=isEdit?Number(state.transactions[index].amount)||0:0,available=getTotals().balance+currentExpense;
+ if(amount>available+0.001){showModal("Insufficient available balance",`This expense is higher than the available balance. Available balance for this expense: ${money(available)}.`);return;}
+ const tx={id:isEdit?editingHouseholdExpenseId:uid(),type:"HouseholdExpense",amount,date,note};
+ const previous=isEdit?{...state.transactions[index]}:null;const button=e.submitter||document.getElementById("householdExpenseSubmitButton");
+ await runWithButtonFeedback(button,isEdit?"Household expense updated":"Household expense saved",async()=>{
+  if(isEdit)state.transactions[index]=tx;else state.transactions.push(tx);
+  try{await saveState();}catch(error){if(isEdit)state.transactions[index]=previous;else state.transactions.pop();throw error;}
+  resetHouseholdExpenseForm();renderAll();return true;
  });
 });
 
-// Report-page bulk reset controls. Each action clears only its own record category.
+document.getElementById("paymentForm").addEventListener("submit",async e=>{
+ e.preventDefault();const form=e.currentTarget;
+ const debt=state.debts.find(d=>String(d.id)===document.getElementById("paymentDebt").value);
+ const amount=Number(document.getElementById("paymentAmount").value),date=document.getElementById("paymentDate").value,available=getTotals().balance;
+ if(!debt){showModal("Select a debt","Create or select a debt before recording a payment.");return;}
+ if(!(amount>0)||!Number.isFinite(amount)||!date||date>todayISO()){showModal("Invalid payment","Enter a positive payment and a date that is today or earlier.");return;}
+ if(date<debt.startDate){showModal("Invalid payment date","Payment date cannot be before the debt start date.");return;}
+ if(amount>available+0.001){showModal("No available balance",`You cannot make this payment because it is higher than your available balance. Available balance: ${money(available)}. Please enter an amount within the available balance.`);return;}
+ const snap=debtSnapshot(debt,date);if(amount>snap.total+0.001){showModal("Payment too high",`Outstanding amount on ${formatDate(date)} is ${money(snap.total)}.`);return;}
+ const tx={id:uid(),type:"Payment",debtId:debt.id,amount,date,note:document.getElementById("paymentNote").value.trim()};
+ const button=e.submitter||form.querySelector('button[type="submit"]');
+ const ok=await runWithButtonFeedback(button,"Payment saved",async()=>{state.transactions.push(tx);try{await saveState();}catch(error){state.transactions.pop();throw error;}form.reset();document.getElementById("paymentDate").value=todayISO();document.getElementById("householdExpenseDate").value=todayISO();renderAll();return true;});
+ 
+});
+
+// Report-page bulk reset controls. Each destructive action requires confirmation.
 async function applyBulkReset(label, mutate){
  const previous={debts:state.debts,transactions:state.transactions,contributionStartDate:state.contributionStartDate};
  mutate();
- try{await saveState();resetContributionForm();resetPaymentForm();renderAll();showModal("Records updated",label);}
+ try{await saveState();resetContributionForm();renderAll();showModal("Records updated",label);}
  catch(error){state.debts=previous.debts;state.transactions=previous.transactions;state.contributionStartDate=previous.contributionStartDate;throw error;}
 }
 document.getElementById("resetDebtsBtn").addEventListener("click",()=>{
- showModal("Reset all created debts?","This permanently deletes all debt records from Firebase. Contribution history and debt cleared/payment history will be kept as separate historical records (payments for removed debts will display as Deleted debt). Are you sure you want to proceed?",()=>applyBulkReset("All created debt records have been removed. Contribution history and debt payment history were kept.",()=>{state.debts=[];}),true);
+ showModal("Reset all debts?","This permanently deletes every debt and its linked payment transactions from Firebase. Contribution records will be kept. Are you sure you want to proceed?",()=>applyBulkReset("All debts and their related payments have been removed. Contributions were kept.",()=>{state.debts=[];state.transactions=state.transactions.filter(t=>t.type!=="Payment");}),true);
 });
 document.getElementById("resetContributionsBtn").addEventListener("click",()=>{
- showModal("Reset all contribution history?","This permanently deletes only contribution records from Firebase. Created debts and debt cleared/payment history will be kept. Your available balance may change. Are you sure?",()=>applyBulkReset("All contribution history has been removed. Created debts and debt payment history were kept.",()=>{state.transactions=state.transactions.filter(t=>t.type!=="Contribution");}),true);
+ showModal("Reset all contributions?","This permanently deletes every contribution transaction from Firebase. Debts and debt payment records will be kept. Your available balance may change. Are you sure?",()=>applyBulkReset("All contribution records have been removed. Debts and payments were kept.",()=>{state.transactions=state.transactions.filter(t=>t.type!=="Contribution");}),true);
 });
 document.getElementById("resetPaymentsBtn").addEventListener("click",()=>{
- showModal("Reset debt cleared history?","This permanently deletes only debt payment/cleared-history records from Firebase. Created debts and contribution history will be kept. Debt balances and interest reports will be recalculated. Are you sure?",()=>applyBulkReset("All debt cleared/payment history has been removed. Created debts and contribution history were kept.",()=>{state.transactions=state.transactions.filter(t=>t.type!=="Payment");}),true);
+ showModal("Reset debt cleared history?","This permanently deletes all debt payment and clearance transactions from Firebase. Your debts, contributions, and household expenses will be kept. Debt outstanding amounts and available balance will be recalculated. Are you sure you want to proceed?",()=>applyBulkReset("All debt cleared history has been removed. Debts, contributions, and household expenses were kept.",()=>{state.transactions=state.transactions.filter(t=>t.type!=="Payment");}),true);
 });
 
 function csvEscape(v){return `"${String(v??"").replace(/"/g,'""')}"`;}
-document.getElementById("exportBtn").addEventListener("click",()=>{const rows=[["Debt","Purpose","Principal","Accrued Interest","Interest Mode / Daily Interest","Debt Start Date","Total Days","Months + Days","Total Outstanding"]];state.debts.forEach(d=>{const s=debtSnapshot(d,todayISO());rows.push([d.name,d.purpose,s.principal.toFixed(2),s.interest.toFixed(2),`Daily prorated rate ${Number(d.rate).toFixed(2)}% / 30 days; ${s.dailyInterest.toFixed(4)} per day`,d.startDate,s.days,s.duration,s.total.toFixed(2)]);});rows.push([], ["Transaction Date","Type","Person / Debt","Amount","Details"]);state.transactions.forEach(t=>{const d=state.debts.find(x=>String(x.id)===String(t.debtId));rows.push([t.date,t.type,t.type==="Contribution"?t.person:(d?.name||"Deleted debt"),t.amount.toFixed(2),t.note]);});const csv=rows.map(row=>row.map(csvEscape).join(",")).join("\r\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`debt-tracker-${todayISO()}.csv`;a.click();URL.revokeObjectURL(url);});
+document.getElementById("exportBtn").addEventListener("click",()=>{const rows=[["Debt","Purpose","Principal","Accrued Interest","Interest Mode / Daily Interest","Debt Start Date","Total Days","Months + Days","Total Outstanding"]];state.debts.forEach(d=>{const s=debtSnapshot(d,todayISO());rows.push([d.name,d.purpose,s.principal.toFixed(2),s.interest.toFixed(2),`Daily prorated rate ${Number(d.rate).toFixed(2)}% / 30 days; ${s.dailyInterest.toFixed(4)} per day`,d.startDate,s.days,s.duration,s.total.toFixed(2)]);});rows.push([], ["Transaction Date","Type","Person / Debt","Amount","Details"]);state.transactions.forEach(t=>{const d=state.debts.find(x=>String(x.id)===String(t.debtId));rows.push([t.date,t.type,t.type==="Contribution"?t.person:t.type==="HouseholdExpense"?"Household":(d?.name||"Deleted debt"),t.amount.toFixed(2),t.note]);});const csv=rows.map(row=>row.map(csvEscape).join(",")).join("\r\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`debt-tracker-${todayISO()}.csv`;a.click();URL.revokeObjectURL(url);});
 
 // Contribution-cycle start date is configurable and saved separately from debt data.
 const cycleStartInput=document.getElementById("contributionStartDate");
@@ -498,7 +504,6 @@ document.getElementById("cycleDuePill").textContent=`Cycle starts on day ${Numbe
 document.getElementById("saveCycleStart").addEventListener("click",()=>{
  const value=cycleStartInput.value;
  if(!value){showModal("Start date required","Choose a contribution tracking start date.");return;}
- if(value>todayISO()){showModal("Invalid start date","Contribution tracking start date cannot be in the future.");return;}
  const previousCycleStart=state.contributionStartDate;state.contributionStartDate=value;saveState().then(()=>{document.getElementById("cycleDuePill").textContent=`Cycle starts on day ${Number(value.slice(8,10))} each month`;renderMonthlyReport();showModal("Start date updated","Contribution cycles will now be calculated from the selected date. Existing contributions before this date will not be included.");}).catch(error=>{state.contributionStartDate=previousCycleStart;console.error(error);showModal("Firebase save failed","Could not save the contribution start date. Check your connection and database rules.");});
 });
 // Light/dark theme preference.
