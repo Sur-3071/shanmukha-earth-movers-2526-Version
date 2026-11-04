@@ -346,7 +346,7 @@ function generateTable(data, noWorkDays = 0) {
 
     const driverSalary = 23000;
     const allowedLeaves = 2;
-    const perDaySalary = 755;
+    const perDaySalary = Math.round(driverSalary / 30);
 
     let grandTotalPaid = 0;
     let grandTotalLeaves = 0;
@@ -652,7 +652,7 @@ function updateMonthCards(monthsMap) {
 
     const driverSalary = 23000;
     const allowedLeaves = 2;
-    const perDaySalary = 755;
+    const perDaySalary = Math.round(driverSalary / 30);
 
     Object.keys(monthsMap).forEach(month => {
 
